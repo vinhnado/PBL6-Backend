@@ -3,7 +3,7 @@ import { MovieService } from '../../services/Movie/MovieService';
 
 const movieService = MovieService.getInstance();
 
-export class MovieController {
+class MovieController {
 	getMovies = async (req: Request, res: Response) => {
 		try {
 			const movies = await movieService.getAllMovies1();
@@ -27,3 +27,5 @@ export class MovieController {
 		}
 	};
 }
+
+export default new MovieController();
