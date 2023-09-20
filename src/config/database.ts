@@ -15,9 +15,19 @@ class Database {
 	private POSTGRES_USER = process.env.POSTGRES_USER as string;
 	private POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD as string;
 
-	constructor() {
+	private static instance: Database | null = null;
+
+	private constructor() {
 		this.connectToPostgreSQL();
 	}
+
+	public static getInstance(): Database {
+		if (!Database.instance) {
+			Database.instance = new Database();
+		}
+		return Database.instance;
+	}
+
 	private async connectToPostgreSQL() {
 		this.sequelize = new Sequelize({
 			database: this.POSTGRES_DB,

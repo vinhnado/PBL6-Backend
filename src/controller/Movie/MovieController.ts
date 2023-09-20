@@ -4,6 +4,15 @@ import { MovieService } from '../../services/Movie/MovieService';
 const movieService = MovieService.getInstance();
 
 class MovieController {
+	getMovieByGenres = async (req: Request, res: Response) => {
+		const genre = req.params.genre;
+		try {
+			const movies = await movieService.getMoviesByGenre(genre);
+			return res.json(movies);
+		} catch (err) {
+			console.log(err);
+		}
+	};
 	getMovies = async (req: Request, res: Response) => {
 		try {
 			const movies = await movieService.getAllMovies1();
