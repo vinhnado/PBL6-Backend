@@ -17,7 +17,6 @@ const Movie_1 = require("../../models/Movie");
 const Genre_1 = require("../../models/Genre");
 const database_1 = __importDefault(require("../../config/database"));
 const sequelize_1 = require("sequelize");
-const db = new database_1.default();
 class MovieRepository {
     constructor() { }
     static getInstance() {
@@ -59,7 +58,7 @@ class MovieRepository {
         JOIN
             "Genre" ON "MovieGenre"."genreId" = "Genre".genre_id;
 `;
-                const movies = yield ((_a = db.sequelize) === null || _a === void 0 ? void 0 : _a.query(sql, {
+                const movies = yield ((_a = MovieRepository.db.sequelize) === null || _a === void 0 ? void 0 : _a.query(sql, {
                     type: sequelize_1.QueryTypes.SELECT,
                 }));
                 return movies;
@@ -149,4 +148,5 @@ class MovieRepository {
     }
 }
 exports.MovieRepository = MovieRepository;
+MovieRepository.db = database_1.default.getInstance();
 MovieRepository.instance = null;
