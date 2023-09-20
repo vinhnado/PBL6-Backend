@@ -5,9 +5,9 @@ import { IMovieRepository } from './IMovieRepository';
 import Database from '../../config/database';
 import { QueryTypes } from 'sequelize';
 
-const db = new Database();
-
 export class MovieRepository implements IMovieRepository {
+	private static db = Database.getInstance();
+
 	private static instance: MovieRepository | null = null;
 
 	private constructor() {}
@@ -49,7 +49,7 @@ export class MovieRepository implements IMovieRepository {
             "Genre" ON "MovieGenre"."genreId" = "Genre".genre_id;
 `;
 
-			const movies: any = await db.sequelize?.query(sql, {
+			const movies: any = await MovieRepository.db.sequelize?.query(sql, {
 				type: QueryTypes.SELECT,
 			});
 			return movies;
@@ -63,6 +63,7 @@ export class MovieRepository implements IMovieRepository {
 			const movie = await Movie.findByPk(id, {
 				include: Genre,
 			});
+
 			return movie || null;
 		} catch (error: any) {
 			throw new Error('Không thể lấy thông tin phim: ' + error.message);
@@ -75,7 +76,6 @@ export class MovieRepository implements IMovieRepository {
 				where: { name: genreName },
 				include: Movie, // Kèm theo thông tin về các phim thuộc thể loại này
 			});
-
 			if (!genre) {
 				return [];
 			}

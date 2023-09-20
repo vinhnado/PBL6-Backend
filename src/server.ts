@@ -12,8 +12,8 @@ class App {
 	}
 
 	protected databaseSync(): void {
-		const db = new Database();
-		db.sequelize!.sync();
+		const movieRepository = Database.getInstance();
+		movieRepository.sequelize!.sync();
 	}
 
 	protected routes(): void {
