@@ -44,7 +44,7 @@ export class Movie extends Model {
 		type: DataType.DATE(),
 		field: Movie.MOVIE_RELEASE_DATE,
 	})
-	release_date!: Date;
+	releaseDate!: Date;
 
 	@Column({
 		type: DataType.STRING(1000),
