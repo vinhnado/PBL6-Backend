@@ -7,15 +7,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Movie = void 0;
+const MovieEpisode_1 = require("./MovieEpisode");
 const sequelize_typescript_1 = require("sequelize-typescript");
 const Genre_1 = require("./Genre");
 const MovieGenre_1 = require("./MovieGenre");
 const Actor_1 = require("./Actor");
 const MovieActor_1 = require("./MovieActor");
+const Director_1 = require("./Director");
+const MovieDirector_1 = require("./MovieDirector");
 let Movie = class Movie extends sequelize_typescript_1.Model {
 };
 exports.Movie = Movie;
-Movie.MOVIE_TABLE_NAME = 'Movie';
+Movie.MOVIE_TABLE_NAME = 'Movies';
 Movie.MOVIE_ID = 'movie_id';
 Movie.MOVIE_TITLE = 'title';
 Movie.MOVIE_DESCRIPTION = 'description';
@@ -94,6 +97,12 @@ __decorate([
 __decorate([
     (0, sequelize_typescript_1.BelongsToMany)(() => Actor_1.Actor, () => MovieActor_1.MovieActor)
 ], Movie.prototype, "actors", void 0);
+__decorate([
+    (0, sequelize_typescript_1.BelongsToMany)(() => Director_1.Director, () => MovieDirector_1.MovieDirector)
+], Movie.prototype, "directors", void 0);
+__decorate([
+    (0, sequelize_typescript_1.HasMany)(() => MovieEpisode_1.MovieEpisode)
+], Movie.prototype, "movieEpisodes", void 0);
 exports.Movie = Movie = __decorate([
     (0, sequelize_typescript_1.Table)({
         tableName: Movie.MOVIE_TABLE_NAME,

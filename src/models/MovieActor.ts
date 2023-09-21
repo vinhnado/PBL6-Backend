@@ -13,9 +13,9 @@ import { Actor } from './Actor';
 	timestamps: true,
 })
 export class MovieActor extends Model {
-	public static MOVIEACTOR_TABLE_NAME = 'MovieActors' as string;
-	public static MOVIEACTOR_MOVIE_ID = 'movie_id' as string;
-	public static MOVIEACTOR_ACTORP_ID = 'actor_id' as string;
+	private static MOVIEACTOR_TABLE_NAME = 'MovieActors' as string;
+	private static MOVIEACTOR_MOVIE_ID = 'movie_id' as string;
+	private static MOVIEACTOR_ACTORP_ID = 'actor_id' as string;
 
 	@ForeignKey(() => Movie)
 	@Column({

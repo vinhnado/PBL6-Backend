@@ -1,21 +1,25 @@
+import { MovieEpisode } from './MovieEpisode';
 import {
 	Model,
 	Table,
 	Column,
 	DataType,
 	BelongsToMany,
+	HasMany,
 } from 'sequelize-typescript';
 import { Genre } from './Genre';
 import { MovieGenre } from './MovieGenre';
 import { Actor } from './Actor';
 import { MovieActor } from './MovieActor';
+import { Director } from './Director';
+import { MovieDirector } from './MovieDirector';
 
 @Table({
 	tableName: Movie.MOVIE_TABLE_NAME,
 	timestamps: true,
 })
 export class Movie extends Model {
-	private static MOVIE_TABLE_NAME = 'Movie' as string;
+	private static MOVIE_TABLE_NAME = 'Movies' as string;
 	private static MOVIE_ID = 'movie_id' as string;
 	private static MOVIE_TITLE = 'title' as string;
 	private static MOVIE_DESCRIPTION = 'description' as string;
@@ -93,4 +97,10 @@ export class Movie extends Model {
 
 	@BelongsToMany(() => Actor, () => MovieActor)
 	actors!: Actor[];
+
+	@BelongsToMany(() => Director, () => MovieDirector)
+	directors!: Director[];
+
+	@HasMany(() => MovieEpisode)
+	movieEpisodes!: MovieEpisode[];
 }

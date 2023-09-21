@@ -13,9 +13,9 @@ import { MovieActor } from './MovieActor';
 	timestamps: true,
 })
 export class Actor extends Model {
-	public static ACTOR_TABLE_NAME = 'Actors' as string;
-	public static ACTOR_ID = 'actor_id' as string;
-	public static ACTOR_NAME = 'name' as string;
+	private static ACTOR_TABLE_NAME = 'Actors' as string;
+	private static ACTOR_ID = 'actor_id' as string;
+	private static ACTOR_NAME = 'name' as string;
 
 	@Column({
 		type: DataType.INTEGER,
