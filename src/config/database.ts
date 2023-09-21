@@ -3,9 +3,11 @@ import dotenv from 'dotenv';
 import { Movie } from '../models/Movie';
 import { Genre } from '../models/Genre';
 import { MovieGenre } from '../models/MovieGenre';
-import { MovieEpisodes } from '../models/MovieEpisodes';
-import { Director } from '../models/Directors';
-import { MovieDirectors } from '../models/MovieDirectors ';
+import { Actor } from '../models/Actor';
+import { MovieActor } from '../models/MovieActor';
+import { MovieDirector } from '../models/MovieDirector';
+import { Director } from '../models/Director';
+import { MovieEpisode } from '../models/MovieEpisode';
 
 dotenv.config();
 
@@ -41,7 +43,16 @@ class Database {
 			dialect: 'postgres',
 			logging: false,
 		});
-		this.sequelize.addModels([Movie, Genre, MovieGenre,MovieEpisodes,Director,MovieDirectors]);
+		this.sequelize.addModels([
+			Movie,
+			Genre,
+			MovieGenre,
+			MovieEpisode,
+			Director,
+			MovieDirector,
+			Actor,
+			MovieActor,
+		]);
 
 		await this.sequelize
 			.authenticate()

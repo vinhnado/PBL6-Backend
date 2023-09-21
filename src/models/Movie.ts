@@ -1,24 +1,35 @@
+import { MovieEpisode } from './MovieEpisode';
 import {
 	Model,
 	Table,
 	Column,
 	DataType,
 	BelongsToMany,
+	HasMany,
 } from 'sequelize-typescript';
 import { Genre } from './Genre';
 import { MovieGenre } from './MovieGenre';
+import { Actor } from './Actor';
+import { MovieActor } from './MovieActor';
+import { Director } from './Director';
+import { MovieDirector } from './MovieDirector';
 
 @Table({
 	tableName: Movie.MOVIE_TABLE_NAME,
-	timestamps: false,
+	timestamps: true,
 })
 export class Movie extends Model {
-	public static MOVIE_TABLE_NAME = 'Movie' as string;
-	public static MOVIE_ID = 'movie_id' as string;
-	public static MOVIE_TITLE = 'title' as string;
-	public static MOVIE_DESCRIPTION = 'description' as string;
-	public static MOVIE_RELEASE_DATE = 'release_date' as string;
-	public static MOVIE_SERVER_URL = 'server_url' as string;
+	private static MOVIE_TABLE_NAME = 'Movies' as string;
+	private static MOVIE_ID = 'movie_id' as string;
+	private static MOVIE_TITLE = 'title' as string;
+	private static MOVIE_DESCRIPTION = 'description' as string;
+	private static MOVIE_RELEASE_DATE = 'release_date' as string;
+	private static MOVIE_NATION = 'nation' as string;
+	private static MOVIE_POSTER_URL = 'poster_url' as string;
+	private static MOVIE_TRAILER_URL = 'trailer_url' as string;
+	private static MOVIE_AVERAGE_RATING = 'average_rating' as string;
+	private static MOVIE_EPISODES = 'episodes' as string;
+	private static MOVIE_LEVEL = 'level' as string;
 
 	@Column({
 		type: DataType.INTEGER,
@@ -47,11 +58,49 @@ export class Movie extends Model {
 	releaseDate!: Date;
 
 	@Column({
-		type: DataType.STRING(1000),
-		field: Movie.MOVIE_SERVER_URL,
+		type: DataType.STRING(50),
+		field: Movie.MOVIE_NATION,
 	})
-	server_url!: string;
+	nation!: string;
+
+	@Column({
+		type: DataType.STRING(255),
+		field: Movie.MOVIE_POSTER_URL,
+	})
+	posterURL!: string;
+	@Column({
+		type: DataType.STRING(255),
+		field: Movie.MOVIE_TRAILER_URL,
+	})
+	trailerURL!: string;
+
+	@Column({
+		type: DataType.DECIMAL(3, 2),
+		field: Movie.MOVIE_AVERAGE_RATING,
+	})
+	averageRating!: string;
+
+	@Column({
+		type: DataType.SMALLINT(),
+		field: Movie.MOVIE_EPISODES,
+	})
+	episodes!: number;
+
+	@Column({
+		type: DataType.SMALLINT(),
+		field: Movie.MOVIE_LEVEL,
+	})
+	level!: number;
 
 	@BelongsToMany(() => Genre, () => MovieGenre)
 	genres!: Genre[];
+
+	@BelongsToMany(() => Actor, () => MovieActor)
+	actors!: Actor[];
+
+	@BelongsToMany(() => Director, () => MovieDirector)
+	directors!: Director[];
+
+	@HasMany(() => MovieEpisode)
+	movieEpisodes!: MovieEpisode[];
 }

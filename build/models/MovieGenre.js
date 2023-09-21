@@ -13,7 +13,7 @@ const Genre_1 = require("./Genre");
 let MovieGenre = class MovieGenre extends sequelize_typescript_1.Model {
 };
 exports.MovieGenre = MovieGenre;
-MovieGenre.MOVIEGENRE_TABLE_NAME = 'MovieGenre';
+MovieGenre.MOVIEGENRE_TABLE_NAME = 'MovieGenres';
 __decorate([
     (0, sequelize_typescript_1.ForeignKey)(() => Movie_1.Movie),
     (0, sequelize_typescript_1.Column)({

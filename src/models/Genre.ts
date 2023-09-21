@@ -13,9 +13,9 @@ import { MovieGenre } from './MovieGenre';
 	timestamps: false,
 })
 export class Genre extends Model {
-	public static GENRE_TABLE_NAME = 'Genre' as string;
-	public static GENRE_ID = 'genre_id' as string;
-	public static GENRE_NAME = 'name' as string;
+	private static GENRE_TABLE_NAME = 'Genres' as string;
+	private static GENRE_ID = 'genre_id' as string;
+	private static GENRE_NAME = 'name' as string;
 
 	@Column({
 		type: DataType.INTEGER,

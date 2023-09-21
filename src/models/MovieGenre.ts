@@ -13,7 +13,7 @@ import { Genre } from './Genre';
 	timestamps: false,
 })
 export class MovieGenre extends Model {
-	public static MOVIEGENRE_TABLE_NAME = 'MovieGenre' as string;
+	private static MOVIEGENRE_TABLE_NAME = 'MovieGenres' as string;
 
 	@ForeignKey(() => Movie)
 	@Column({

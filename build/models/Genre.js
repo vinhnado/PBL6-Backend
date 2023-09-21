@@ -13,7 +13,7 @@ const MovieGenre_1 = require("./MovieGenre");
 let Genre = class Genre extends sequelize_typescript_1.Model {
 };
 exports.Genre = Genre;
-Genre.GENRE_TABLE_NAME = 'Genre';
+Genre.GENRE_TABLE_NAME = 'Genres';
 Genre.GENRE_ID = 'genre_id';
 Genre.GENRE_NAME = 'name';
 __decorate([

@@ -16,6 +16,7 @@ class MovieRoutes extends BaseRouter_1.default {
     routes() {
         this.router.get('/movies', MovieController_1.default.getMovies);
         this.router.get('/movies/:id', MovieController_1.default.getMovieById);
+        this.router.get('/movies/genre/:genre', MovieController_1.default.getMovieByGenres);
     }
 }
 exports.default = new MovieRoutes().router;
