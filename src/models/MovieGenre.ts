@@ -10,7 +10,7 @@ import { Genre } from './Genre';
 
 @Table({
 	tableName: MovieGenre.MOVIEGENRE_TABLE_NAME,
-	timestamps: false,
+	timestamps: true,
 })
 export class MovieGenre extends Model {
 	private static MOVIEGENRE_TABLE_NAME = 'MovieGenres' as string;

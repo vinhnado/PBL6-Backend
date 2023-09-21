@@ -36,6 +36,6 @@ __decorate([
 exports.Genre = Genre = __decorate([
     (0, sequelize_typescript_1.Table)({
         tableName: Genre.GENRE_TABLE_NAME,
-        timestamps: false,
+        timestamps: true,
     })
 ], Genre);

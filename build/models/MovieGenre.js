@@ -29,6 +29,6 @@ __decorate([
 exports.MovieGenre = MovieGenre = __decorate([
     (0, sequelize_typescript_1.Table)({
         tableName: MovieGenre.MOVIEGENRE_TABLE_NAME,
-        timestamps: false,
+        timestamps: true,
     })
 ], MovieGenre);
