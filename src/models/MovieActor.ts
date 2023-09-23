@@ -20,12 +20,14 @@ export class MovieActor extends Model {
 	@ForeignKey(() => Movie)
 	@Column({
 		type: DataType.INTEGER(),
+		field: MovieActor.MOVIEACTOR_MOVIE_ID,
 	})
 	movieId!: number;
 
 	@ForeignKey(() => Actor)
 	@Column({
 		type: DataType.INTEGER(),
+		field: MovieActor.MOVIEACTOR_ACTORP_ID,
 	})
 	actorId!: number;
 }
