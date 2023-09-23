@@ -15,7 +15,7 @@ class MovieController {
 	};
 	getMovies = async (req: Request, res: Response) => {
 		try {
-			const movies = await movieService.getAllMovies1();
+			const movies = await movieService.getAllMovies();
 			return res.json(movies);
 		} catch (error: any) {
 			console.log(error);

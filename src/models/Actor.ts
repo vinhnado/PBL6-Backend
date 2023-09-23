@@ -23,7 +23,7 @@ export class Actor extends Model {
 		autoIncrement: true,
 		field: Actor.ACTOR_ID as string,
 	})
-	id!: number;
+	actorId!: number;
 
 	@Column({
 		type: DataType.STRING(100),
