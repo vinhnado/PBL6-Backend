@@ -37,7 +37,7 @@ export class Movie extends Model {
 		autoIncrement: true,
 		field: Movie.MOVIE_ID,
 	})
-	id!: number;
+	movieId!: number;
 
 	@Column({
 		type: DataType.STRING(100),

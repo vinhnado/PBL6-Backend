@@ -4,6 +4,9 @@ import { MovieGenre } from '../../models/MovieGenre';
 import { IMovieRepository } from './IMovieRepository';
 import Database from '../../config/database';
 import { QueryTypes } from 'sequelize';
+import { Actor } from '../../models/Actor';
+import { Director } from '../../models/Director';
+import { MovieEpisode } from '../../models/MovieEpisode';
 
 export class MovieRepository implements IMovieRepository {
 	private static db = Database.getInstance();
@@ -22,7 +25,25 @@ export class MovieRepository implements IMovieRepository {
 	async getAllMovies(): Promise<Movie[]> {
 		try {
 			const movies = await Movie.findAll({
-				include: Genre, // Kèm theo thông tin về Genre
+				include: [
+					{
+						model: Genre,
+						attributes: ['genre_id', 'name'],
+						through: { attributes: [] },
+					},
+					{
+						model: Actor,
+						attributes: ['actor_id', 'name'],
+					},
+					{
+						model: Director,
+						attributes: ['director_id', 'name'],
+					},
+					{
+						model: MovieEpisode,
+						attributes: ['episodeId', 'movieId', 'episodeTitle'],
+					},
+				],
 			});
 			return movies;
 		} catch (error: any) {

@@ -13,7 +13,7 @@ class App {
 
 	protected databaseSync(): void {
 		const movieRepository = Database.getInstance();
-		movieRepository.sequelize!.sync({ force: true });
+		movieRepository.sequelize!.sync({ force: false });
 	}
 
 	protected routes(): void {

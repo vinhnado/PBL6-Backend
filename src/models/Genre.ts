@@ -23,7 +23,7 @@ export class Genre extends Model {
 		autoIncrement: true,
 		field: Genre.GENRE_ID,
 	})
-	id!: number;
+	gerneId!: number;
 
 	@Column({
 		type: DataType.STRING(100),
