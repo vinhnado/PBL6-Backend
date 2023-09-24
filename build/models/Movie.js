@@ -36,7 +36,7 @@ __decorate([
         autoIncrement: true,
         field: Movie.MOVIE_ID,
     })
-], Movie.prototype, "id", void 0);
+], Movie.prototype, "movieId", void 0);
 __decorate([
     (0, sequelize_typescript_1.Column)({
         type: sequelize_typescript_1.DataType.STRING(100),

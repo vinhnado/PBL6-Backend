@@ -17,6 +17,10 @@ const Movie_1 = require("../../models/Movie");
 const Genre_1 = require("../../models/Genre");
 const database_1 = __importDefault(require("../../config/database"));
 const sequelize_1 = require("sequelize");
+const Actor_1 = require("../../models/Actor");
+const Director_1 = require("../../models/Director");
+const MovieEpisode_1 = require("../../models/MovieEpisode");
+const sequelize_2 = __importDefault(require("sequelize/types/sequelize"));
 class MovieRepository {
     constructor() { }
     static getInstance() {
@@ -29,7 +33,35 @@ class MovieRepository {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const movies = yield Movie_1.Movie.findAll({
-                    include: Genre_1.Genre, // Kèm theo thông tin về Genre
+                    include: [
+                        {
+                            model: Genre_1.Genre,
+                            attributes: [
+                                'genre_id',
+                                'name',
+                                [
+                                    sequelize_2.default.literal('`genres->MovieGenre`.`createdAt`'),
+                                    'genreCreatedAt',
+                                ],
+                                [
+                                    sequelize_2.default.literal('`genres->MovieGenre`.`updatedAt`'),
+                                    'genreUpdatedAt',
+                                ],
+                            ],
+                        },
+                        {
+                            model: Actor_1.Actor,
+                            attributes: ['actor_id', 'name'],
+                        },
+                        {
+                            model: Director_1.Director,
+                            attributes: ['director_id', 'name'],
+                        },
+                        {
+                            model: MovieEpisode_1.MovieEpisode,
+                            attributes: ['episodeId', 'movieId', 'episodeTitle'],
+                        },
+                    ],
                 });
                 return movies;
             }

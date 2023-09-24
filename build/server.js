@@ -14,7 +14,7 @@ class App {
     }
     databaseSync() {
         const movieRepository = database_1.default.getInstance();
-        movieRepository.sequelize.sync({ force: true });
+        movieRepository.sequelize.sync({ force: false });
     }
     routes() {
         this.app.route('/').get((req, res) => {

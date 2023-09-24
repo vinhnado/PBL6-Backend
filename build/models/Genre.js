@@ -23,7 +23,7 @@ __decorate([
         autoIncrement: true,
         field: Genre.GENRE_ID,
     })
-], Genre.prototype, "id", void 0);
+], Genre.prototype, "gerneId", void 0);
 __decorate([
     (0, sequelize_typescript_1.Column)({
         type: sequelize_typescript_1.DataType.STRING(100),

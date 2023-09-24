@@ -25,7 +25,7 @@ class MovieController {
         });
         this.getMovies = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const movies = yield movieService.getAllMovies1();
+                const movies = yield movieService.getAllMovies();
                 return res.json(movies);
             }
             catch (error) {
