@@ -34,14 +34,21 @@ export class MovieRepository implements IMovieRepository {
 					{
 						model: Actor,
 						attributes: ['actor_id', 'name'],
+						through: { attributes: [] },
 					},
 					{
 						model: Director,
 						attributes: ['director_id', 'name'],
+						through: { attributes: [] },
 					},
 					{
 						model: MovieEpisode,
-						attributes: ['episodeId', 'movieId', 'episodeTitle'],
+						attributes: [
+							'episode_id',
+							'episode_no',
+							'movie_url',
+							'episodeTitle',
+						],
 					},
 				],
 			});
