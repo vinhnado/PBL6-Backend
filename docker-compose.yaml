@@ -6,6 +6,8 @@ services:
     container_name: nodejs-app
     ports:
       - 8080:8000
+      - 8088:7999
+
     volumes:
       - .:/usr/src/app
   db:
