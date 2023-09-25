@@ -41,7 +41,7 @@ class Database {
 			host: this.POSTGRES_HOST,
 			port: this.POSTGRES_PORT,
 			dialect: 'postgres',
-			logging: true,
+			logging: false,
 		});
 		this.sequelize.addModels([
 			Movie,

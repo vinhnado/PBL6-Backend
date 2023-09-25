@@ -28,7 +28,7 @@ export class MovieRepository implements IMovieRepository {
 	): Promise<Movie[]> {
 		try {
 			const { title, genre, nation, year, isSeries } = searchConditions;
-
+			let genre_name: string;
 			const whereConditions: { [key: string]: any } = {};
 
 			if (title) {
@@ -38,9 +38,9 @@ export class MovieRepository implements IMovieRepository {
 			}
 
 			if (genre) {
-				whereConditions['$Genres.name$'] = {
-					[Op.iLike]: `%${genre}%`,
-				};
+				genre_name = genre;
+			} else {
+				genre_name = '';
 			}
 
 			if (nation) {
@@ -49,21 +49,14 @@ export class MovieRepository implements IMovieRepository {
 				};
 			}
 			if (year) {
-				whereConditions.release_date = whereConditions.release_date = literal(
-					`EXTRACT(YEAR FROM "release_date") = ${year}`
-				);
+				whereConditions.release_date = {
+					[Op.between]: [`${year}-01-01`, `${year}-12-31`],
+				};
 			}
 
 			if (isSeries) {
-				if (isSeries.toLowerCase() === 'true') {
-					whereConditions.episodes = {
-						[Op.ne]: 1,
-					};
-				} else {
-					whereConditions.episodes = {
-						[Op.eq]: 1,
-					};
-				}
+				whereConditions.episodes =
+					isSeries.toLowerCase() === 'true' ? { [Op.not]: 1 } : 1;
 			}
 
 			const movies = await Movie.findAll({
@@ -73,9 +66,13 @@ export class MovieRepository implements IMovieRepository {
 				include: [
 					{
 						model: Genre,
-						as: 'Genres',
 						attributes: ['genre_id', 'name'],
 						through: { attributes: [] },
+						where: {
+							name: {
+								[Op.like]: `%${genre_name}%`, // Sử dụng toán tử LIKE để tìm kiếm gần đúng
+							},
+						},
 					},
 					{
 						model: Actor,
@@ -97,6 +94,7 @@ export class MovieRepository implements IMovieRepository {
 						],
 					},
 				],
+				order: [['movie_id', 'ASC']],
 			});
 			return movies;
 		} catch (error: any) {
