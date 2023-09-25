@@ -16,17 +16,17 @@ export class MovieService implements IMovieService {
 		return MovieService.instance;
 	}
 
-	public async getAllMovies(): Promise<Movie[]> {
+	public async searchMovies(
+		searchConditions: any,
+		page: number,
+		pageSize: number
+	): Promise<Movie[]> {
 		try {
-			return await movieRepository.getAllMovies();
-		} catch (error: any) {
-			throw new Error('Không thể lấy danh sách phim: ' + error.message);
-		}
-	}
-
-	public async getAllMovies1(): Promise<Movie[]> {
-		try {
-			return await movieRepository.getAllMovies1();
+			return await movieRepository.searchMovies(
+				searchConditions,
+				page,
+				pageSize
+			);
 		} catch (error: any) {
 			throw new Error('Không thể lấy danh sách phim: ' + error.message);
 		}
@@ -37,62 +37,6 @@ export class MovieService implements IMovieService {
 			return await movieRepository.getMovieById(id);
 		} catch (error: any) {
 			throw new Error('Không thể lấy thông tin phim: ' + error.message);
-		}
-	}
-
-	async getMoviesByGenre(genreName: string): Promise<Movie[]> {
-		try {
-			return await movieRepository.getMoviesByGenre(genreName);
-		} catch (error: any) {
-			throw new Error(
-				'Không thể lấy danh sách phim theo thể loại: ' + error.message
-			);
-		}
-	}
-
-	async createMovie(
-		title: string,
-		description: string,
-		releaseDay: Date,
-		serverUrl: string
-	): Promise<Movie> {
-		try {
-			return await movieRepository.createMovie(
-				title,
-				description,
-				releaseDay,
-				serverUrl
-			);
-		} catch (error: any) {
-			throw new Error('Không thể tạo phim: ' + error.message);
-		}
-	}
-
-	async updateMovie(
-		id: number,
-		title: string,
-		description: string,
-		releaseDay: Date,
-		serverUrl: string
-	): Promise<boolean> {
-		try {
-			return await movieRepository.updateMovie(
-				id,
-				title,
-				description,
-				releaseDay,
-				serverUrl
-			);
-		} catch (error: any) {
-			throw new Error('Không thể cập nhật phim: ' + error.message);
-		}
-	}
-
-	async deleteMovie(id: number): Promise<boolean> {
-		try {
-			return await movieRepository.deleteMovie(id);
-		} catch (error: any) {
-			throw new Error('Không thể xóa phim: ' + error.message);
 		}
 	}
 }

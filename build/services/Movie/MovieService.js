@@ -20,20 +20,10 @@ class MovieService {
         }
         return MovieService.instance;
     }
-    getAllMovies() {
+    searchMovies(searchConditions, page, pageSize) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                return yield movieRepository.getAllMovies();
-            }
-            catch (error) {
-                throw new Error('Không thể lấy danh sách phim: ' + error.message);
-            }
-        });
-    }
-    getAllMovies1() {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                return yield movieRepository.getAllMovies1();
+                return yield movieRepository.searchMovies(searchConditions, page, pageSize);
             }
             catch (error) {
                 throw new Error('Không thể lấy danh sách phim: ' + error.message);
@@ -47,46 +37,6 @@ class MovieService {
             }
             catch (error) {
                 throw new Error('Không thể lấy thông tin phim: ' + error.message);
-            }
-        });
-    }
-    getMoviesByGenre(genreName) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                return yield movieRepository.getMoviesByGenre(genreName);
-            }
-            catch (error) {
-                throw new Error('Không thể lấy danh sách phim theo thể loại: ' + error.message);
-            }
-        });
-    }
-    createMovie(title, description, releaseDay, serverUrl) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                return yield movieRepository.createMovie(title, description, releaseDay, serverUrl);
-            }
-            catch (error) {
-                throw new Error('Không thể tạo phim: ' + error.message);
-            }
-        });
-    }
-    updateMovie(id, title, description, releaseDay, serverUrl) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                return yield movieRepository.updateMovie(id, title, description, releaseDay, serverUrl);
-            }
-            catch (error) {
-                throw new Error('Không thể cập nhật phim: ' + error.message);
-            }
-        });
-    }
-    deleteMovie(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                return yield movieRepository.deleteMovie(id);
-            }
-            catch (error) {
-                throw new Error('Không thể xóa phim: ' + error.message);
             }
         });
     }

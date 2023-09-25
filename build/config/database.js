@@ -21,7 +21,7 @@ const Actor_1 = require("../models/Actor");
 const MovieActor_1 = require("../models/MovieActor");
 const MovieDirector_1 = require("../models/MovieDirector");
 const Director_1 = require("../models/Director");
-const MovieEpisode_1 = require("../models/MovieEpisode");
+const Episode_1 = require("../models/Episode");
 dotenv_1.default.config();
 class Database {
     constructor() {
@@ -47,13 +47,13 @@ class Database {
                 host: this.POSTGRES_HOST,
                 port: this.POSTGRES_PORT,
                 dialect: 'postgres',
-                logging: false,
+                logging: true,
             });
             this.sequelize.addModels([
                 Movie_1.Movie,
                 Genre_1.Genre,
                 MovieGenre_1.MovieGenre,
-                MovieEpisode_1.MovieEpisode,
+                Episode_1.Episode,
                 Director_1.Director,
                 MovieDirector_1.MovieDirector,
                 Actor_1.Actor,

@@ -18,9 +18,9 @@ class App {
 
 	protected routes(): void {
 		this.app.route('/').get((req: Request, res: Response) => {
-			res.send('Welcome to new HELL!');
+			res.send('Test API!!!');
 		});
-		this.app.use('/api', MovieRouter);
+		this.app.use('/api/movies', MovieRouter);
 	}
 }
 

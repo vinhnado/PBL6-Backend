@@ -3,14 +3,13 @@ import { Genre } from '../../models/Genre';
 import { MovieGenre } from '../../models/MovieGenre';
 import { IMovieRepository } from './IMovieRepository';
 import Database from '../../config/database';
-import { QueryTypes } from 'sequelize';
+import { Op, QueryTypes, literal } from 'sequelize';
 import { Actor } from '../../models/Actor';
 import { Director } from '../../models/Director';
-import { MovieEpisode } from '../../models/MovieEpisode';
+import { Episode } from '../../models/Episode';
 
+const db = Database.getInstance();
 export class MovieRepository implements IMovieRepository {
-	private static db = Database.getInstance();
-
 	private static instance: MovieRepository | null = null;
 
 	private constructor() {}
@@ -22,12 +21,59 @@ export class MovieRepository implements IMovieRepository {
 		return MovieRepository.instance;
 	}
 
-	async getAllMovies(): Promise<Movie[]> {
+	async searchMovies(
+		searchConditions: any,
+		page: number,
+		pageSize: number
+	): Promise<Movie[]> {
 		try {
+			const { title, genre, nation, year, isSeries } = searchConditions;
+
+			const whereConditions: { [key: string]: any } = {};
+
+			if (title) {
+				whereConditions.title = {
+					[Op.iLike]: `%${title}%`,
+				};
+			}
+
+			if (genre) {
+				whereConditions['$Genres.name$'] = {
+					[Op.iLike]: `%${genre}%`,
+				};
+			}
+
+			if (nation) {
+				whereConditions.nation = {
+					[Op.eq]: nation,
+				};
+			}
+			if (year) {
+				whereConditions.release_date = whereConditions.release_date = literal(
+					`EXTRACT(YEAR FROM "release_date") = ${year}`
+				);
+			}
+
+			if (isSeries) {
+				if (isSeries.toLowerCase() === 'true') {
+					whereConditions.episodes = {
+						[Op.ne]: 1,
+					};
+				} else {
+					whereConditions.episodes = {
+						[Op.eq]: 1,
+					};
+				}
+			}
+
 			const movies = await Movie.findAll({
+				where: whereConditions,
+				offset: (page - 1) * pageSize,
+				limit: pageSize,
 				include: [
 					{
 						model: Genre,
+						as: 'Genres',
 						attributes: ['genre_id', 'name'],
 						through: { attributes: [] },
 					},
@@ -42,7 +88,7 @@ export class MovieRepository implements IMovieRepository {
 						through: { attributes: [] },
 					},
 					{
-						model: MovieEpisode,
+						model: Episode,
 						attributes: [
 							'episode_id',
 							'episode_no',
@@ -54,35 +100,7 @@ export class MovieRepository implements IMovieRepository {
 			});
 			return movies;
 		} catch (error: any) {
-			throw new Error('Không thể lấy danh sách phim: ' + error.message);
-		}
-	}
-
-	async getAllMovies1(): Promise<Movie[]> {
-		try {
-			const sql = `
-            SELECT
-            "Movie".movie_id,
-            "Movie".title,
-            "Movie".description,
-            "Movie".release_date,
-            "Movie".server_url,
-            "Genre".genre_id,
-            "Genre".name AS genre_name
-        FROM
-            "Movie"
-        JOIN
-            "MovieGenre" ON "Movie".movie_id = "MovieGenre"."movieId"
-        JOIN
-            "Genre" ON "MovieGenre"."genreId" = "Genre".genre_id;
-`;
-
-			const movies: any = await MovieRepository.db.sequelize?.query(sql, {
-				type: QueryTypes.SELECT,
-			});
-			return movies;
-		} catch (error: any) {
-			throw new Error('Không thể lấy danh sách phim: ' + error.message);
+			throw new Error('Không thể lấy danh sách phim ' + error.message);
 		}
 	}
 
@@ -95,80 +113,6 @@ export class MovieRepository implements IMovieRepository {
 			return movie || null;
 		} catch (error: any) {
 			throw new Error('Không thể lấy thông tin phim: ' + error.message);
-		}
-	}
-
-	async getMoviesByGenre(genreName: string): Promise<Movie[]> {
-		try {
-			const genre = await Genre.findOne({
-				where: { name: genreName },
-				include: Movie, // Kèm theo thông tin về các phim thuộc thể loại này
-			});
-			if (!genre) {
-				return [];
-			}
-
-			const movies = genre.movies;
-			return movies;
-		} catch (error: any) {
-			throw new Error(
-				'Không thể lấy danh sách phim theo thể loại: ' + error.message
-			);
-		}
-	}
-
-	async createMovie(
-		title: string,
-		description: string,
-		releaseDay: Date,
-		serverUrl: string
-	): Promise<Movie> {
-		try {
-			const movie = await Movie.create({
-				title,
-				description,
-				releaseDay,
-				serverUrl,
-			});
-			return movie;
-		} catch (error: any) {
-			throw new Error('Không thể tạo phim: ' + error.message);
-		}
-	}
-
-	async updateMovie(
-		id: number,
-		title: string,
-		description: string,
-		releaseDay: Date,
-		serverUrl: string
-	): Promise<boolean> {
-		try {
-			const updatedRows = await Movie.update(
-				{
-					title,
-					description,
-					releaseDay,
-					serverUrl,
-				},
-				{
-					where: { id },
-				}
-			);
-			return updatedRows[0] > 0; // Trả về true nếu có ít nhất một dòng đã được cập nhật
-		} catch (error: any) {
-			throw new Error('Không thể cập nhật phim: ' + error.message);
-		}
-	}
-
-	async deleteMovie(id: number): Promise<boolean> {
-		try {
-			const deletedRows = await Movie.destroy({
-				where: { id },
-			});
-			return deletedRows > 0; // Trả về true nếu có ít nhất một dòng đã bị xóa
-		} catch (error: any) {
-			throw new Error('Không thể xóa phim: ' + error.message);
 		}
 	}
 }

@@ -7,7 +7,7 @@ import { Actor } from '../models/Actor';
 import { MovieActor } from '../models/MovieActor';
 import { MovieDirector } from '../models/MovieDirector';
 import { Director } from '../models/Director';
-import { MovieEpisode } from '../models/MovieEpisode';
+import { Episode } from '../models/Episode';
 
 dotenv.config();
 
@@ -41,13 +41,13 @@ class Database {
 			host: this.POSTGRES_HOST,
 			port: this.POSTGRES_PORT,
 			dialect: 'postgres',
-			logging: false,
+			logging: true,
 		});
 		this.sequelize.addModels([
 			Movie,
 			Genre,
 			MovieGenre,
-			MovieEpisode,
+			Episode,
 			Director,
 			MovieDirector,
 			Actor,
