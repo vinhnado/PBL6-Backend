@@ -14,16 +14,20 @@ let MovieGenre = class MovieGenre extends sequelize_typescript_1.Model {
 };
 exports.MovieGenre = MovieGenre;
 MovieGenre.MOVIEGENRE_TABLE_NAME = 'MovieGenres';
+MovieGenre.MOVIEGENRE_MOVIE_ID = 'movie_id';
+MovieGenre.MOVIEGENRE_GENRE_ID = 'genre_id';
 __decorate([
     (0, sequelize_typescript_1.ForeignKey)(() => Movie_1.Movie),
     (0, sequelize_typescript_1.Column)({
         type: sequelize_typescript_1.DataType.INTEGER(),
+        field: MovieGenre.MOVIEGENRE_MOVIE_ID,
     })
 ], MovieGenre.prototype, "movieId", void 0);
 __decorate([
     (0, sequelize_typescript_1.ForeignKey)(() => Genre_1.Genre),
     (0, sequelize_typescript_1.Column)({
         type: sequelize_typescript_1.DataType.INTEGER(),
+        field: MovieGenre.MOVIEGENRE_GENRE_ID,
     })
 ], MovieGenre.prototype, "genreId", void 0);
 exports.MovieGenre = MovieGenre = __decorate([

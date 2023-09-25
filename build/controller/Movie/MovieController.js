@@ -13,19 +13,17 @@ const MovieService_1 = require("../../services/Movie/MovieService");
 const movieService = MovieService_1.MovieService.getInstance();
 class MovieController {
     constructor() {
-        this.getMovieByGenres = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const genre = req.params.genre;
+        this.searchMovies = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const movies = yield movieService.getMoviesByGenre(genre);
-                return res.json(movies);
-            }
-            catch (err) {
-                console.log(err);
-            }
-        });
-        this.getMovies = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                const movies = yield movieService.getAllMovies();
+                const { title, genre, nation, year, isSeries, page, pageSize } = req.query;
+                const searchConditions = {
+                    title,
+                    genre,
+                    nation,
+                    year,
+                    isSeries,
+                };
+                const movies = yield movieService.searchMovies(searchConditions, Number(page), Number(pageSize));
                 return res.json(movies);
             }
             catch (error) {

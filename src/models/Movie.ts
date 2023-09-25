@@ -1,4 +1,4 @@
-import { MovieEpisode } from './MovieEpisode';
+import { Episode } from './Episode';
 import {
 	Model,
 	Table,
@@ -101,6 +101,6 @@ export class Movie extends Model {
 	@BelongsToMany(() => Director, () => MovieDirector)
 	directors!: Director[];
 
-	@HasMany(() => MovieEpisode)
-	movieEpisodes!: MovieEpisode[];
+	@HasMany(() => Episode)
+	movieEpisodes!: Episode[];
 }

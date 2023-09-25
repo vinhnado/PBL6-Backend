@@ -18,9 +18,9 @@ class App {
     }
     routes() {
         this.app.route('/').get((req, res) => {
-            res.send('Welcome to new HELL!');
+            res.send('Test API!!!');
         });
-        this.app.use('/api', MovieRoutes_1.default);
+        this.app.use('/api/movies', MovieRoutes_1.default);
     }
 }
 const port = 8000;

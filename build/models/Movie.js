@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Movie = void 0;
-const MovieEpisode_1 = require("./MovieEpisode");
+const Episode_1 = require("./Episode");
 const sequelize_typescript_1 = require("sequelize-typescript");
 const Genre_1 = require("./Genre");
 const MovieGenre_1 = require("./MovieGenre");
@@ -101,7 +101,7 @@ __decorate([
     (0, sequelize_typescript_1.BelongsToMany)(() => Director_1.Director, () => MovieDirector_1.MovieDirector)
 ], Movie.prototype, "directors", void 0);
 __decorate([
-    (0, sequelize_typescript_1.HasMany)(() => MovieEpisode_1.MovieEpisode)
+    (0, sequelize_typescript_1.HasMany)(() => Episode_1.Episode)
 ], Movie.prototype, "movieEpisodes", void 0);
 exports.Movie = Movie = __decorate([
     (0, sequelize_typescript_1.Table)({

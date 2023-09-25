@@ -19,8 +19,7 @@ const database_1 = __importDefault(require("../../config/database"));
 const sequelize_1 = require("sequelize");
 const Actor_1 = require("../../models/Actor");
 const Director_1 = require("../../models/Director");
-const MovieEpisode_1 = require("../../models/MovieEpisode");
-const sequelize_2 = __importDefault(require("sequelize/types/sequelize"));
+const Episode_1 = require("../../models/Episode");
 class MovieRepository {
     constructor() { }
     static getInstance() {
@@ -29,70 +28,62 @@ class MovieRepository {
         }
         return MovieRepository.instance;
     }
-    getAllMovies() {
+    searchMovies(searchConditions, page, pageSize) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const { movie_id, title, genre, nation, year, isSeries } = searchConditions;
+                const whereConditions = {};
+                if (movie_id) {
+                    whereConditions.movie_id = {
+                        [sequelize_1.Op.eq]: movie_id,
+                    };
+                }
+                if (title) {
+                    whereConditions.title = {
+                        [sequelize_1.Op.iLike]: `%${title}%`,
+                    };
+                }
+                if (nation) {
+                    whereConditions.nation = {
+                        [sequelize_1.Op.eq]: nation,
+                    };
+                }
+                if (year) {
+                    whereConditions.year = {
+                        [sequelize_1.Op.eq]: year,
+                    };
+                }
                 const movies = yield Movie_1.Movie.findAll({
+                    where: whereConditions,
+                    offset: (page - 1) * pageSize,
+                    limit: pageSize,
                     include: [
                         {
                             model: Genre_1.Genre,
-                            attributes: [
-                                'genre_id',
-                                'name',
-                                [
-                                    sequelize_2.default.literal('`genres->MovieGenre`.`createdAt`'),
-                                    'genreCreatedAt',
-                                ],
-                                [
-                                    sequelize_2.default.literal('`genres->MovieGenre`.`updatedAt`'),
-                                    'genreUpdatedAt',
-                                ],
-                            ],
+                            attributes: ['genre_id', 'name'],
+                            through: { attributes: [] },
                         },
                         {
                             model: Actor_1.Actor,
                             attributes: ['actor_id', 'name'],
+                            through: { attributes: [] },
                         },
                         {
                             model: Director_1.Director,
                             attributes: ['director_id', 'name'],
+                            through: { attributes: [] },
                         },
                         {
-                            model: MovieEpisode_1.MovieEpisode,
-                            attributes: ['episodeId', 'movieId', 'episodeTitle'],
+                            model: Episode_1.Episode,
+                            attributes: [
+                                'episode_id',
+                                'episode_no',
+                                'movie_url',
+                                'episodeTitle',
+                            ],
                         },
                     ],
                 });
-                return movies;
-            }
-            catch (error) {
-                throw new Error('Không thể lấy danh sách phim: ' + error.message);
-            }
-        });
-    }
-    getAllMovies1() {
-        var _a;
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const sql = `
-            SELECT
-            "Movie".movie_id,
-            "Movie".title,
-            "Movie".description,
-            "Movie".release_date,
-            "Movie".server_url,
-            "Genre".genre_id,
-            "Genre".name AS genre_name
-        FROM
-            "Movie"
-        JOIN
-            "MovieGenre" ON "Movie".movie_id = "MovieGenre"."movieId"
-        JOIN
-            "Genre" ON "MovieGenre"."genreId" = "Genre".genre_id;
-`;
-                const movies = yield ((_a = MovieRepository.db.sequelize) === null || _a === void 0 ? void 0 : _a.query(sql, {
-                    type: sequelize_1.QueryTypes.SELECT,
-                }));
                 return movies;
             }
             catch (error) {
@@ -110,71 +101,6 @@ class MovieRepository {
             }
             catch (error) {
                 throw new Error('Không thể lấy thông tin phim: ' + error.message);
-            }
-        });
-    }
-    getMoviesByGenre(genreName) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const genre = yield Genre_1.Genre.findOne({
-                    where: { name: genreName },
-                    include: Movie_1.Movie, // Kèm theo thông tin về các phim thuộc thể loại này
-                });
-                if (!genre) {
-                    return [];
-                }
-                const movies = genre.movies;
-                return movies;
-            }
-            catch (error) {
-                throw new Error('Không thể lấy danh sách phim theo thể loại: ' + error.message);
-            }
-        });
-    }
-    createMovie(title, description, releaseDay, serverUrl) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const movie = yield Movie_1.Movie.create({
-                    title,
-                    description,
-                    releaseDay,
-                    serverUrl,
-                });
-                return movie;
-            }
-            catch (error) {
-                throw new Error('Không thể tạo phim: ' + error.message);
-            }
-        });
-    }
-    updateMovie(id, title, description, releaseDay, serverUrl) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const updatedRows = yield Movie_1.Movie.update({
-                    title,
-                    description,
-                    releaseDay,
-                    serverUrl,
-                }, {
-                    where: { id },
-                });
-                return updatedRows[0] > 0; // Trả về true nếu có ít nhất một dòng đã được cập nhật
-            }
-            catch (error) {
-                throw new Error('Không thể cập nhật phim: ' + error.message);
-            }
-        });
-    }
-    deleteMovie(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const deletedRows = yield Movie_1.Movie.destroy({
-                    where: { id },
-                });
-                return deletedRows > 0; // Trả về true nếu có ít nhất một dòng đã bị xóa
-            }
-            catch (error) {
-                throw new Error('Không thể xóa phim: ' + error.message);
             }
         });
     }
