@@ -84,7 +84,7 @@ export class Movie extends Model {
 		type: DataType.SMALLINT(),
 		field: Movie.MOVIE_EPISODES,
 	})
-	episodes!: number;
+	episodeNum!: number;
 
 	@Column({
 		type: DataType.SMALLINT(),
@@ -102,5 +102,5 @@ export class Movie extends Model {
 	directors!: Director[];
 
 	@HasMany(() => Episode)
-	movieEpisodes!: Episode[];
+	episodes!: Episode[];
 }

@@ -48,6 +48,7 @@ export class MovieRepository implements IMovieRepository {
 					[Op.eq]: nation,
 				};
 			}
+
 			if (year) {
 				whereConditions.release_date = {
 					[Op.between]: [`${year}-01-01`, `${year}-12-31`],
@@ -70,7 +71,7 @@ export class MovieRepository implements IMovieRepository {
 						through: { attributes: [] },
 						where: {
 							name: {
-								[Op.like]: `%${genre_name}%`, // Sử dụng toán tử LIKE để tìm kiếm gần đúng
+								[Op.like]: `%${genre_name}%`,
 							},
 						},
 					},
@@ -94,7 +95,7 @@ export class MovieRepository implements IMovieRepository {
 						],
 					},
 				],
-				order: [['movie_id', 'ASC']],
+				order: [['release_date', 'DESC']],
 			});
 			return movies;
 		} catch (error: any) {
