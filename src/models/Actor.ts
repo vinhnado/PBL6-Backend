@@ -4,6 +4,7 @@ import {
 	Column,
 	DataType,
 	BelongsToMany,
+	DeletedAt,
 } from 'sequelize-typescript';
 import { Movie } from './Movie';
 import { MovieActor } from './MovieActor';
@@ -11,6 +12,7 @@ import { MovieActor } from './MovieActor';
 @Table({
 	tableName: Actor.ACTOR_TABLE_NAME,
 	timestamps: true,
+	paranoid: true,
 })
 export class Actor extends Model {
 	private static ACTOR_TABLE_NAME = 'Actors' as string;
@@ -30,6 +32,9 @@ export class Actor extends Model {
 		field: Actor.ACTOR_NAME,
 	})
 	name!: string;
+
+	@DeletedAt
+	deletedAt!: Date;
 
 	@BelongsToMany(() => Movie, () => MovieActor)
 	movies!: Movie[];

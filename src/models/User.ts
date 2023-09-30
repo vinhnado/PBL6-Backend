@@ -8,11 +8,13 @@ import {
 	HasMany,
 	HasOne,
 	ForeignKey,
+	DeletedAt,
 } from 'sequelize-typescript';
 
 @Table({
 	tableName: User.USER_TABLE_NAME,
 	timestamps: true,
+	paranoid: true,
 })
 export class User extends Model {
 	private static USER_TABLE_NAME = 'Users' as string;
@@ -49,4 +51,7 @@ export class User extends Model {
 
 	@HasOne(() => Account)
 	account!: Account;
+
+	@DeletedAt
+	deletedAt!: Date;
 }

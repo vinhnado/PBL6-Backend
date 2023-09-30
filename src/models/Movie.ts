@@ -7,6 +7,7 @@ import {
 	BelongsToMany,
 	HasMany,
 	NotEmpty,
+	DeletedAt,
 } from 'sequelize-typescript';
 import { Genre } from './Genre';
 import { MovieGenre } from './MovieGenre';
@@ -18,6 +19,7 @@ import { MovieDirector } from './MovieDirector';
 @Table({
 	tableName: Movie.MOVIE_TABLE_NAME,
 	timestamps: true,
+	paranoid: true,
 })
 export class Movie extends Model {
 	private static MOVIE_TABLE_NAME = 'Movies' as string;
@@ -92,6 +94,9 @@ export class Movie extends Model {
 		field: Movie.MOVIE_LEVEL,
 	})
 	level!: number;
+
+	@DeletedAt
+	deletedAt!: Date;
 
 	@BelongsToMany(() => Genre, () => MovieGenre)
 	genres!: Genre[];

@@ -6,12 +6,14 @@ import {
 	BelongsToMany,
 	BelongsTo,
 	ForeignKey,
+	DeletedAt,
 } from 'sequelize-typescript';
 import { User } from './User';
 
 @Table({
 	tableName: Account.ACCOUNT_TABLE_NAME,
 	timestamps: true,
+	paranoid: true,
 })
 export class Account extends Model {
 	private static ACCOUNT_TABLE_NAME = 'Account' as string;
@@ -46,6 +48,9 @@ export class Account extends Model {
 		field: Account.ACCOUNT_USER_ID,
 	})
 	userId!: number;
+
+	@DeletedAt
+	deletedAt!: Date;
 
 	@BelongsTo(() => User)
 	user!: User;
