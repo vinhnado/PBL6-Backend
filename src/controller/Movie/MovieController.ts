@@ -39,6 +39,61 @@ class MovieController {
 			return res.status(500).json({ error: 'Lỗi khi lấy thông tin phim.' });
 		}
 	};
+
+	getAllMovies = async (req: Request, res: Response): Promise<void> => {
+		try {
+		  const movies = await movieService.getAllMovies();
+		  res.json(movies);
+		} catch (error) {
+		  res.status(500).json({ error: "Không thể lấy danh sách phim" });
+		}
+	};
+
+	deleteMovieById = async (req: Request, res: Response): Promise<void> => {
+		const { id } = req.params;
+	  
+		try {
+		  // Gọi service để xóa bộ phim dựa trên ID
+		  await movieService.deleteMovieById(parseInt(id, 10));
+	  
+		  res.status(204).send(); // Trả về mã trạng thái 204 (No Content) khi xóa thành công
+		} catch (error) {
+		  res.status(500).json({ error: "Loi trong qua trinh xoa" });
+		}
+	}
+
+	createMovie = async (req: Request, res: Response): Promise<void> => {
+		const {
+		  title,
+		  description,
+		  releaseDate,
+		  nation,
+		  posterURL,
+		  trailerURL,
+		  averageRating,
+		  episodeNum,
+		  level,
+		} = req.body;
+	  
+		try {
+		  // Gọi service để tạo bộ phim mới
+		  const newMovie = await movieService.createMovie(
+			title,
+			description,
+			releaseDate,
+			nation,
+			posterURL,
+			trailerURL,
+			averageRating,
+			episodeNum,
+			level
+		  );
+	  
+		  res.status(201).json(newMovie); // Trả về mã trạng thái 201 (Created) khi tạo thành công và kèm theo bộ phim mới
+		} catch (error) {
+		  res.status(500).json({ error: "Không thể thêm mới phim" });
+		}
+	  }
 }
 
 export default new MovieController();
