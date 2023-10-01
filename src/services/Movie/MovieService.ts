@@ -39,4 +39,51 @@ export class MovieService implements IMovieService {
 			throw new Error('Không thể lấy thông tin phim: ' + error.message);
 		}
 	}
+
+	async getAllMovies(): Promise<Movie[]> {
+		try {
+			const movies = await movieRepository.getAllMovies();
+			return movies;
+		} catch (error) {
+			throw new Error('Could not fetch movies');
+		}
+	}
+
+	async deleteMovieById(id: number): Promise<void> {
+		try {
+		  await movieRepository.deleteMovieById(id);
+		} catch (error) {
+		  throw new Error('Could not delete movie');
+		}
+	}
+
+	async createMovie(
+		title: string,
+		description: string,
+		releaseDate: Date,
+		nation: string,
+		posterURL: string,
+		trailerURL: string,
+		averageRating: string,
+		episodeNum: number,
+		level: number
+	  ): Promise<Movie> {
+		try {
+		  const newMovie = await movieRepository.createMovie(
+			title,
+			description,
+			releaseDate,
+			nation,
+			posterURL,
+			trailerURL,
+			averageRating,
+			episodeNum,
+			level
+		  );
+	
+		  return newMovie;
+		} catch (error) {
+		  throw new Error('Could not create movie');
+		}
+	}
 }
