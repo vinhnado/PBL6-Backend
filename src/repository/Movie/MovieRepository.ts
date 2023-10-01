@@ -10,17 +10,6 @@ import { Episode } from '../../models/Episode';
 
 const db = Database.getInstance();
 export class MovieRepository implements IMovieRepository {
-	private static instance: MovieRepository | null = null;
-
-	private constructor() {}
-
-	public static getInstance(): MovieRepository {
-		if (!MovieRepository.instance) {
-			MovieRepository.instance = new MovieRepository();
-		}
-		return MovieRepository.instance;
-	}
-
 	async searchMovies(
 		searchConditions: any,
 		page: number,
@@ -126,15 +115,15 @@ export class MovieRepository implements IMovieRepository {
 
 	async deleteMovieById(id: number): Promise<void> {
 		try {
-		  const movieToDelete = await Movie.findByPk(id);
-	
-		  if (!movieToDelete) {
-			throw new Error('Movie not found');
-		  }
-	
-		  await movieToDelete.destroy();
+			const movieToDelete = await Movie.findByPk(id);
+
+			if (!movieToDelete) {
+				throw new Error('Movie not found');
+			}
+
+			await movieToDelete.destroy();
 		} catch (error) {
-		  throw new Error('Could not delete movie');
+			throw new Error('Could not delete movie');
 		}
 	}
 
@@ -148,23 +137,23 @@ export class MovieRepository implements IMovieRepository {
 		averageRating: string,
 		episodeNum: number,
 		level: number
-	  ): Promise<Movie> {
+	): Promise<Movie> {
 		try {
-		  const newMovie = await Movie.create({
-			title,
-			description,
-			releaseDate,
-			nation,
-			posterURL,
-			trailerURL,
-			averageRating,
-			episodeNum,
-			level,
-		  });
-	
-		  return newMovie;
+			const newMovie = await Movie.create({
+				title,
+				description,
+				releaseDate,
+				nation,
+				posterURL,
+				trailerURL,
+				averageRating,
+				episodeNum,
+				level,
+			});
+
+			return newMovie;
 		} catch (error) {
-		  throw new Error('Could not create movie');
+			throw new Error('Could not create movie');
 		}
-	  }
+	}
 }
