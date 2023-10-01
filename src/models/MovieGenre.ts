@@ -4,6 +4,7 @@ import {
 	Model,
 	ForeignKey,
 	DataType,
+	DeletedAt,
 } from 'sequelize-typescript';
 import { Movie } from './Movie';
 import { Genre } from './Genre';
@@ -11,6 +12,7 @@ import { Genre } from './Genre';
 @Table({
 	tableName: MovieGenre.MOVIEGENRE_TABLE_NAME,
 	timestamps: true,
+	paranoid: true,
 })
 export class MovieGenre extends Model {
 	private static MOVIEGENRE_TABLE_NAME = 'MovieGenres' as string;
@@ -30,4 +32,7 @@ export class MovieGenre extends Model {
 		field: MovieGenre.MOVIEGENRE_GENRE_ID,
 	})
 	genreId!: number;
+	
+	@DeletedAt
+	deletedAt!: Date;
 }

@@ -5,12 +5,14 @@ import {
 	ForeignKey,
 	DataType,
 	BelongsTo,
+	DeletedAt,
 } from 'sequelize-typescript';
 import { Movie } from './Movie';
 
 @Table({
 	tableName: Episode.TABLE_NAME,
 	timestamps: true,
+	paranoid: true,
 })
 export class Episode extends Model {
 	private static TABLE_NAME = 'Episodes' as string;
@@ -80,6 +82,9 @@ export class Episode extends Model {
 		field: Episode.EPISODE_NO,
 	})
 	episodeNo!: number;
+
+	@DeletedAt
+	deletedAt!: Date;
 
 	@BelongsTo(() => Movie)
 	movie!: Movie;
