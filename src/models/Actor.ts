@@ -21,13 +21,13 @@ export class Actor extends Model {
 		type: DataType.INTEGER,
 		primaryKey: true,
 		autoIncrement: true,
-		field: Actor.ACTOR_ID as string,
+		field: Actor.ACTOR_ID,
 	})
 	actorId!: number;
 
 	@Column({
 		type: DataType.STRING(100),
-		field: Actor.ACTOR_NAME as string,
+		field: Actor.ACTOR_NAME,
 	})
 	name!: string;
 

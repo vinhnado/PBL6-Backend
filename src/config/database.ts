@@ -8,6 +8,8 @@ import { MovieActor } from '../models/MovieActor';
 import { MovieDirector } from '../models/MovieDirector';
 import { Director } from '../models/Director';
 import { Episode } from '../models/Episode';
+import { User } from '../models/User';
+import { Account } from '../models/Account';
 
 dotenv.config();
 
@@ -52,6 +54,8 @@ class Database {
 			MovieDirector,
 			Actor,
 			MovieActor,
+			User,
+			Account,
 		]);
 
 		await this.sequelize
