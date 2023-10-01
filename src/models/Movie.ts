@@ -6,6 +6,7 @@ import {
 	DataType,
 	BelongsToMany,
 	HasMany,
+	NotEmpty,
 } from 'sequelize-typescript';
 import { Genre } from './Genre';
 import { MovieGenre } from './MovieGenre';

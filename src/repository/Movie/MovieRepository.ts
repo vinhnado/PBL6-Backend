@@ -10,17 +10,6 @@ import { Episode } from '../../models/Episode';
 
 const db = Database.getInstance();
 export class MovieRepository implements IMovieRepository {
-	private static instance: MovieRepository | null = null;
-
-	private constructor() {}
-
-	public static getInstance(): MovieRepository {
-		if (!MovieRepository.instance) {
-			MovieRepository.instance = new MovieRepository();
-		}
-		return MovieRepository.instance;
-	}
-
 	async searchMovies(
 		searchConditions: any,
 		page: number,
@@ -112,6 +101,59 @@ export class MovieRepository implements IMovieRepository {
 			return movie || null;
 		} catch (error: any) {
 			throw new Error('Không thể lấy thông tin phim: ' + error.message);
+		}
+	}
+
+	async getAllMovies(): Promise<Movie[]> {
+		try {
+			const movies = await Movie.findAll();
+			return movies;
+		} catch (error) {
+			throw new Error('Could not fetch movies');
+		}
+	}
+
+	async deleteMovieById(id: number): Promise<void> {
+		try {
+			const movieToDelete = await Movie.findByPk(id);
+
+			if (!movieToDelete) {
+				throw new Error('Movie not found');
+			}
+
+			await movieToDelete.destroy();
+		} catch (error) {
+			throw new Error('Could not delete movie');
+		}
+	}
+
+	async createMovie(
+		title: string,
+		description: string,
+		releaseDate: Date,
+		nation: string,
+		posterURL: string,
+		trailerURL: string,
+		averageRating: string,
+		episodeNum: number,
+		level: number
+	): Promise<Movie> {
+		try {
+			const newMovie = await Movie.create({
+				title,
+				description,
+				releaseDate,
+				nation,
+				posterURL,
+				trailerURL,
+				averageRating,
+				episodeNum,
+				level,
+			});
+
+			return newMovie;
+		} catch (error) {
+			throw new Error('Could not create movie');
 		}
 	}
 }
