@@ -47,7 +47,7 @@ export class MovieRepository implements IMovieRepository {
 			if (isSeries) {
 				whereConditions.episodes =
 					isSeries.toLowerCase() === 'true' ? { [Op.not]: 1 } : 1;
-			}
+			}	
 
 			const movies = await Movie.findAll({
 				where: whereConditions,
