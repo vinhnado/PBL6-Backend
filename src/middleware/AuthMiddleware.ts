@@ -6,7 +6,7 @@ export const auth = (req: Request, res: Response, next: NextFunction): any => {
 		return res.status(401).send('No token!');
 	}
 
-	let secretKey = process.env.JWT_SECRET_KEY || 'secret';
+	let secretKey = process.env.JWT_SECRET_KEY || 'my-secret-key';
 	const token: string = req.headers.authorization.split(' ')[1];
 
 	try {

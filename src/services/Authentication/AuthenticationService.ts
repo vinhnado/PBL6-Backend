@@ -1,50 +1,59 @@
-// import { User } from '../../models/User';
-// import { Account } from '../../models/Account';
-// import Authentication from '../../utils/Authentication';
+import { User } from '../../models/User';
+import { Account } from '../../models/Account';
+import Authentication from '../../utils/Authentication';
+import { UserRepository } from '../../repository/User/UserRepository';
+import { IAuthenticationService } from './IAuthenticationService';
 
-// export class AuthenticationService implements IAuthenticationService {
-// 	async login(email: string, password: string): Promise<string> {
-// 		const users = await new UsersRepo().findByEmail(email);
+export class AuthenticationService implements IAuthenticationService {
+	async login(username: string, password: string): Promise<string> {
+		const searchConditions = {
+			username,
+		};
+		const user = await new UserRepository().findOneUser(searchConditions);
 
-// 		if (!users) {
-// 			throw new Error('Bad Request!');
-// 		}
-// 		// check password
-// 		let compare = await Authentication.passwordCompare(
-// 			password,
-// 			users.password
-// 		);
+		if (!user) {
+			throw new Error('Bad Request!');
+		}
+		// check password
+		let compare = await Authentication.passwordCompare(
+			password,
+			user.account.password
+		);
 
-// 		// generate token
-// 		if (compare) {
-// 			return Authentication.generateToken(
-// 				users.id,
-// 				users.email,
-// 				users.name,
-// 				users.username
-// 			);
-// 		}
-// 		return '';
-// 	}
-// 	async register(
-// 		email: string,
-// 		password: string,
-// 		name: string,
-// 		username: string
-// 	): Promise<void> {
-// 		try {
-// 			const hashedPassword: string = await Authentication.passwordHash(
-// 				password
-// 			);
-// 			const new_users = new Users();
-// 			new_users.email = email;
-// 			new_users.password = hashedPassword;
-// 			new_users.username = username;
-// 			new_users.name = name;
+		// generate token
+		if (compare) {
+			return Authentication.generateToken(
+				user.userId,
+				user.email,
+				user.account.username
+			);
+		}
+		return '';
+	}
 
-// 			await new UsersRepo().save(new_users);
-// 		} catch (error) {
-// 			throw new Error('Error login!');
-// 		}
-// 	}
-// }
+	async register(
+		email: string,
+		dateOfBirth: Date,
+		gender: number,
+		username: string,
+		password: string
+	): Promise<void> {
+		try {
+			const hashedPassword: string = await Authentication.passwordHash(
+				password
+			);
+			const newUser = new User();
+			const newAccount = new Account();
+			newUser.email = email;
+			newUser.dateOfBirth = dateOfBirth;
+			newUser.gender = gender;
+			newAccount.username = username;
+			newAccount.password = hashedPassword;
+			newUser.account = newAccount;
+			await new UserRepository().save(newUser, newAccount);
+		} catch (error) {
+			console.log(error);
+			throw new Error('Error register!');
+		}
+	}
+}

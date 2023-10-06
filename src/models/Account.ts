@@ -7,6 +7,7 @@ import {
 	BelongsTo,
 	ForeignKey,
 	DeletedAt,
+	HasOne,
 } from 'sequelize-typescript';
 import { User } from './User';
 
@@ -33,25 +34,22 @@ export class Account extends Model {
 	@Column({
 		type: DataType.STRING(100),
 		field: Account.ACOUNT_USERNAME,
+		unique: true,
+		allowNull: false,
 	})
 	username!: string;
 
 	@Column({
 		type: DataType.STRING(100),
 		field: Account.ACCOUNT_PASSWORD,
+		unique: true,
+		allowNull: false,
 	})
 	password!: string;
 
-	@ForeignKey(() => User)
-	@Column({
-		type: DataType.INTEGER,
-		field: Account.ACCOUNT_USER_ID,
-	})
-	userId!: number;
+	// @HasOne(() => User)
+	// user!: User;
 
 	@DeletedAt
 	deletedAt!: Date;
-
-	@BelongsTo(() => User)
-	user!: User;
 }
