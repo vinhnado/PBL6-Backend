@@ -7,7 +7,7 @@ import {
 	BelongsToMany,
 	HasMany,
 	NotEmpty,
-	DeletedAt,
+	DeletedAt, BelongsTo, ForeignKey,
 } from 'sequelize-typescript';
 import { Genre } from './Genre';
 import { MovieGenre } from './MovieGenre';
@@ -15,6 +15,7 @@ import { Actor } from './Actor';
 import { MovieActor } from './MovieActor';
 import { Director } from './Director';
 import { MovieDirector } from './MovieDirector';
+// import {ListTrend} from "./ListTrend";
 
 @Table({
 	tableName: Movie.MOVIE_TABLE_NAME,
@@ -49,7 +50,7 @@ export class Movie extends Model {
 	title!: string;
 
 	@Column({
-		type: DataType.STRING(255),
+		type: DataType.TEXT,
 		field: Movie.MOVIE_DESCRIPTION,
 	})
 	description!: string;
@@ -107,6 +108,8 @@ export class Movie extends Model {
 	@BelongsToMany(() => Director, () => MovieDirector)
 	directors!: Director[];
 
+
 	@HasMany(() => Episode)
 	episodes!: Episode[];
 }
+
