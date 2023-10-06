@@ -47,10 +47,13 @@ export class MovieRepository implements IMovieRepository {
 			if (isSeries) {
 				whereConditions.episodes =
 					isSeries.toLowerCase() === 'true' ? { [Op.not]: 1 } : 1;
-			}
+			}	
 
 			const movies = await Movie.findAll({
 				where: whereConditions,
+				attributes: {
+					exclude: ['deletedAt', 'updatedAt', 'createdAt'], // Loại bỏ các trường này
+				},
 				offset: (page - 1) * pageSize,
 				limit: pageSize,
 				include: [
@@ -106,7 +109,38 @@ export class MovieRepository implements IMovieRepository {
 
 	async getAllMovies(): Promise<Movie[]> {
 		try {
-			const movies = await Movie.findAll();
+			const movies = await Movie.findAll({
+				attributes: {
+					exclude: ['deletedAt', 'updatedAt', 'createdAt'],
+				},
+				include: [
+					{
+						model: Genre,
+						attributes: ['genre_id', 'name'],
+						through: { attributes: [] },
+					},
+					{
+						model: Actor,
+						attributes: ['actor_id', 'name'],
+						through: { attributes: [] },
+					},
+					{
+						model: Director,
+						attributes: ['director_id', 'name'],
+						through: { attributes: [] },
+					},
+					{
+						model: Episode,
+						attributes: [
+							'episode_id',
+							'episode_no',
+							'movie_url',
+							'episodeTitle',
+						],
+					},
+				],
+				order: [['release_date', 'DESC']],
+			});
 			return movies;
 		} catch (error) {
 			throw new Error('Could not fetch movies');
@@ -115,13 +149,11 @@ export class MovieRepository implements IMovieRepository {
 
 	async deleteMovieById(id: number): Promise<void> {
 		try {
-			const movieToDelete = await Movie.findByPk(id);
-
-			if (!movieToDelete) {
-				throw new Error('Movie not found');
-			}
-
-			await movieToDelete.destroy();
+			const movieToDelete = await Movie.destroy({
+				where: {
+					movie_id: id
+				}
+			});
 		} catch (error) {
 			throw new Error('Could not delete movie');
 		}

@@ -10,6 +10,7 @@ import { Director } from '../models/Director';
 import { Episode } from '../models/Episode';
 import { User } from '../models/User';
 import { Account } from '../models/Account';
+// import {ListTrend} from "../models/ListTrend";
 
 dotenv.config();
 
@@ -56,6 +57,7 @@ class Database {
 			MovieActor,
 			User,
 			Account,
+			// ListTrend,
 		]);
 
 		await this.sequelize
