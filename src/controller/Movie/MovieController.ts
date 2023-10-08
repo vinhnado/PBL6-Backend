@@ -92,6 +92,7 @@ class MovieController {
 			res.status(500).json({ error: 'Không thể thêm mới phim' });
 		}
 	};
+
 }
 
 export default new MovieController();
