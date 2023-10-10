@@ -5,6 +5,8 @@ class MovieRoutes extends BaseRoutes {
 		this.router.get('/', MovieController.searchMovies);
 		this.router.get('/all', MovieController.getAllMovies);
 		this.router.delete('/movies/:id', MovieController.deleteMovieById);
+		this.router.get('/minio', MovieController.testMinio);
+
 	}
 }
 
