@@ -13,6 +13,7 @@ import { Account } from '../models/Account';
 import { MovieFavorite } from '../models/MovieFavorite';
 import { WatchHistory } from '../models/WatchHistory';
 import { WatchList } from '../models/WatchList';
+// import {ListTrend} from "../models/ListTrend";
 
 dotenv.config();
 
@@ -60,8 +61,9 @@ class Database {
 			User,
 			Account,
 			MovieFavorite,
-            WatchHistory,
+      WatchHistory,
 			WatchList,
+			// ListTrend,
 		]);
 
 		await this.sequelize
