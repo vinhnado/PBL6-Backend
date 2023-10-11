@@ -36,6 +36,20 @@ class UserController {
 			return res.status(500).json({ error: 'Lỗi khi lấy danh sách user' });
 		}
 	};
+	addFavoriteMovie = async (req: Request, res: Response) => {
+		try {
+			const {movieId} = req.query;
+			console.log(req.payload.userId)
+			await new UserRepository().addFavoriteMovie(req.payload.userId, Number(movieId))
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully registerd users!',
+			});
+		} catch (error: any) {
+			console.log(error);
+			return res.status(500).json({ error: 'Lỗi khi tao moi' });
+		}
+	};
 }
 
 export default new UserController();

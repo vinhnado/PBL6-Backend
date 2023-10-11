@@ -15,6 +15,10 @@ import { Actor } from './Actor';
 import { MovieActor } from './MovieActor';
 import { Director } from './Director';
 import { MovieDirector } from './MovieDirector';
+import { User } from './User';
+import { MovieFavorite } from './MovieFavorite';
+import { WatchHistory } from './WatchHistory';
+import { WatchList } from './WatchList';
 
 @Table({
 	tableName: Movie.MOVIE_TABLE_NAME,
@@ -109,4 +113,13 @@ export class Movie extends Model {
 
 	@HasMany(() => Episode)
 	episodes!: Episode[];
+
+	@BelongsToMany(() => User, () => MovieFavorite)
+	movieFavorites!: User[];
+
+	@BelongsToMany(() => User, () => WatchHistory)
+	watchHistories!: User[];
+	
+	@BelongsToMany(() => User, () => WatchList)
+	watchList!: User[];
 }

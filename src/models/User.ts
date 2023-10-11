@@ -11,6 +11,10 @@ import {
 	DeletedAt,
 	BelongsTo,
 } from 'sequelize-typescript';
+import { Movie } from './Movie';
+import { MovieFavorite } from './MovieFavorite';
+import { WatchHistory } from './WatchHistory';
+import { WatchList } from './WatchList';
 
 @Table({
 	tableName: User.USER_TABLE_NAME,
@@ -57,18 +61,17 @@ export class User extends Model {
 	})
 	avatarURL!: string;
 
-	// @ForeignKey(() => Account)
-	// @Column({
-	// 	type: DataType.INTEGER,
-	// 	unique: true,
-	// 	allowNull: false,
-	// })
-	// accountId!: number;
-
-	// @BelongsTo(() => Account)
-	// account!: Account;
 	@HasOne(() => Account, 'accountId')
 	account!: Account;
+
+	@BelongsToMany(() => Movie, () => MovieFavorite)
+	movieFavorites!: Movie[];
+
+	@BelongsToMany(() => Movie, () => WatchHistory)
+	WatchHistories!: Movie[];
+	
+	@BelongsToMany(() => Movie, () => WatchList)
+	watchLists!: Movie[];
 
 	@DeletedAt
 	deletedAt!: Date;

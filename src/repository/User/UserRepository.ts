@@ -3,6 +3,9 @@ import { Account } from '../../models/Account';
 import { Op } from 'sequelize';
 import { IUserRepository } from './IUserRepository';
 import Database from '../../config/database';
+import { MovieFavorite } from '../../models/MovieFavorite';
+import { WatchList } from '../../models/WatchList';
+import { WatchHistory } from '../../models/WatchHistory';
 
 const db = Database.getInstance();
 
@@ -112,6 +115,39 @@ export class UserRepository {
 			return users;
 		} catch (error: any) {
 			throw new Error('Không thể lấy danh sách user ' + error.message);
+		}
+	}
+
+	async addFavoriteMovie(userId: number, movieId:number):Promise<void>{
+		try{
+		const favorite = new MovieFavorite();
+		favorite.userId = userId;
+		favorite.movieId = movieId;
+		favorite.save();
+		}catch(error){
+			throw new Error('Không thể thêm phim yêu thích');
+		}
+	}
+
+	async addWatchHistory(userId: number, movieId:number):Promise<void>{
+		try{
+		const history = new WatchHistory();
+		history.userId = userId;
+		history.movieId = movieId;
+		history.save();
+		}catch(error){
+			throw new Error('Không thể thêm phim yêu thích');
+		}
+	}
+
+	async addWatchList(userId: number, movieId:number):Promise<void>{
+		try{
+		const movie = new WatchList();
+		movie.userId = userId;
+		movie.movieId = movieId;
+		movie.save();
+		}catch(error){
+			throw new Error('Không thể thêm phim vao danh sach');
 		}
 	}
 }

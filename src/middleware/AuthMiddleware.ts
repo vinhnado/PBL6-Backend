@@ -1,6 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
+declare global {
+	namespace Express {
+	  interface Request {
+		payload?: any; 
+	  }
+	}
+  }
+
+
 export const auth = (req: Request, res: Response, next: NextFunction): any => {
 	if (!req.headers.authorization) {
 		return res.status(401).send('No token!');
@@ -13,6 +22,7 @@ export const auth = (req: Request, res: Response, next: NextFunction): any => {
 		const credential: string | object = jwt.verify(token, secretKey);
 		if (credential) {
 			req.app.locals.credential = credential;
+			req.payload = credential; 
 			return next();
 		}
 		return res.send('token invalid');
