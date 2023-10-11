@@ -4,6 +4,8 @@ import Database from './config/database';
 import MovieRouter from './controller/Movie/MovieRoutes';
 import AuthenticationRouter from './controller/Authentication/AuthenticationRoutes';
 import UserRouter from './controller/User/UserRoutes';
+import EpisodeRoutes from './controller/Episode/EpisodeRoutes';
+import cors from 'cors'; // Import cors module
 
 class App {
 	public app: Application;
@@ -17,7 +19,7 @@ class App {
 
 	private databaseSync(): void {
 		const movieRepository = Database.getInstance();
-		movieRepository.sequelize!.sync({ force:  false});
+		movieRepository.sequelize!.sync({ alter:  true});
 	}
 
 	private routes(): void {
@@ -27,11 +29,15 @@ class App {
 		this.app.use('/api/movie', MovieRouter);
 		this.app.use('/api/auth', AuthenticationRouter);
 		this.app.use('/api/user', UserRouter);
+		this.app.use('/api/episode', EpisodeRoutes);
 	}
 
 	private plugins(): void {
 		this.app.use(express.json());
 		this.app.use(express.urlencoded({ extended: true }));
+
+		// Enable CORS for all routes
+		this.app.use(cors()); // Use the cors middleware here
 	}
 }
 
