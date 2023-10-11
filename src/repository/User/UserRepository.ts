@@ -129,11 +129,12 @@ export class UserRepository {
 		}
 	}
 
-	async addWatchHistory(userId: number, movieId:number):Promise<void>{
+	async addWatchHistory(userId: number, movieId:number,duration:number):Promise<void>{
 		try{
 		const history = new WatchHistory();
 		history.userId = userId;
 		history.movieId = movieId;
+		history.duration = duration;
 		history.save();
 		}catch(error){
 			throw new Error('Không thể thêm phim yêu thích');
