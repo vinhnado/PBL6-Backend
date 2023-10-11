@@ -1,5 +1,5 @@
 import express, { Request, Response, Router } from 'express';
-import { MovieService } from '../services/Movie/MovieService';
+import { MovieService } from '../services/MovieService';
 
 const movieService = MovieService.getInstance();
 
