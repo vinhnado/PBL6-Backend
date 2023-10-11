@@ -10,6 +10,9 @@ import { Director } from '../models/Director';
 import { Episode } from '../models/Episode';
 import { User } from '../models/User';
 import { Account } from '../models/Account';
+import { MovieFavorite } from '../models/MovieFavorite';
+import { WatchHistory } from '../models/WatchHistory';
+import { WatchList } from '../models/WatchList';
 // import {ListTrend} from "../models/ListTrend";
 
 dotenv.config();
@@ -57,6 +60,9 @@ class Database {
 			MovieActor,
 			User,
 			Account,
+			MovieFavorite,
+      WatchHistory,
+			WatchList,
 			// ListTrend,
 		]);
 

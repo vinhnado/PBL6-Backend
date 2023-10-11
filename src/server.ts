@@ -1,6 +1,9 @@
+import { User } from './models/User';
 import express, { Application, Request, Response } from 'express';
 import Database from './config/database';
 import MovieRouter from './controller/Movie/MovieRoutes';
+import AuthenticationRouter from './controller/Authentication/AuthenticationRoutes';
+import UserRouter from './controller/User/UserRoutes';
 
 class App {
 	public app: Application;
@@ -21,9 +24,9 @@ class App {
 		this.app.route('/').get((req: Request, res: Response) => {
 			res.send('Test API!!!');
 		});
-		this.app.use('/api/movies', MovieRouter);
-		this.app.use('/api/auth', MovieRouter);
-		this.app.use('/api/user', MovieRouter);
+		this.app.use('/api/movie', MovieRouter);
+		this.app.use('/api/auth', AuthenticationRouter);
+		this.app.use('/api/user', UserRouter);
 	}
 
 	private plugins(): void {

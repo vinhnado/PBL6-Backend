@@ -1,9 +1,10 @@
-interface IAuthenticationService {
-	login(email: string, password: string): Promise<string>;
+export interface IAuthenticationService {
+	login(username: string, password: string): Promise<string>;
 	register(
 		email: string,
-		password: string,
-		nama: string,
-		username: string
+		dateOfBirth: Date,
+		gender: number,
+		username: string,
+		password: string
 	): Promise<void>;
 }
