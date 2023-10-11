@@ -1,5 +1,5 @@
 import express, { Request, Response, Router } from 'express';
-import { MovieService } from '../../services/Movie/MovieService';
+import { MovieService } from '../services/Movie/MovieService';
 
 class MovieController {
 	searchMovies = async (req: Request, res: Response) => {
@@ -91,25 +91,6 @@ class MovieController {
 		} catch (error) {
 			res.status(500).json({ error: 'Không thể thêm mới phim' });
 		}
-	};
-
-	testMinio = async (req: Request, res: Response): Promise<void> => {
-		const Minio = require('minio');
-		const minioClient = new Minio.Client({
-			endPoint: 'localhost',
-			port: 9001,
-			useSSL: false,
-			accessKey: 'admin',
-			secretKey: 'admin123',
-		  });
-		const bucketName = 'mybucket';
-		minioClient.makeBucket(bucketName, 'us-east-1', function (err:any) {
-			if (err) return console.log(err);
-		  
-			console.log(`Bucket '${bucketName}' created successfully.`);
-		  });
-		
-		console.log(`Bucket '${bucketName}' created successfully.`);
 	};
 
 }

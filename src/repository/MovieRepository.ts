@@ -1,12 +1,12 @@
-import { Movie } from '../../models/Movie';
-import { Genre } from '../../models/Genre';
-import { MovieGenre } from '../../models/MovieGenre';
-import { IMovieRepository } from './IMovieRepository';
-import Database from '../../config/database';
+import { Movie } from '../models/Movie';
+import { Genre } from '../models/Genre';
+import { MovieGenre } from '../models/MovieGenre';
+import { IMovieRepository } from './Interfaces/IMovieRepository';
+import Database from '../config/database';
 import { Op, QueryTypes, literal } from 'sequelize';
-import { Actor } from '../../models/Actor';
-import { Director } from '../../models/Director';
-import { Episode } from '../../models/Episode';
+import { Actor } from '../models/Actor';
+import { Director } from '../models/Director';
+import { Episode } from '../models/Episode';
 
 const db = Database.getInstance();
 export class MovieRepository implements IMovieRepository {

@@ -1,5 +1,5 @@
 import { Movie } from '../../models/Movie';
-import { MovieRepository } from '../../repository/Movie/MovieRepository';
+import { MovieRepository } from '../../repository/MovieRepository';
 import { IMovieService } from './IMovieService';
 
 export class MovieService implements IMovieService {

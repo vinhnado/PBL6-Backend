@@ -1,7 +1,7 @@
 import express, { Application, Request, Response } from 'express';
 import Database from './config/database';
-import MovieRouter from './controller/Movie/MovieRoutes';
-import EpisodeRoutes from './controller/Episode/EpisodeRoutes';
+import MovieRouter from './route/MovieRoutes';
+import EpisodeRoutes from './route/EpisodeRoutes';
 import cors from 'cors'; // Import cors module
 
 class App {

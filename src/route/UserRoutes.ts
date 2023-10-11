@@ -1,5 +1,5 @@
-import BaseRoutes from '..//Base/BaseRouter';
-import UserController from './UserController';
+import BaseRoutes from './Base/BaseRouter';
+import UserController from '../controller/UserController';
 class UserRoutes extends BaseRoutes {
 	public routes(): void {
 		// this.router.get('/', UserController.searchMovies);
