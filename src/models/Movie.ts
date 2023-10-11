@@ -72,7 +72,7 @@ export class Movie extends Model {
 	nation!: string;
 
 	@Column({
-		type: DataType.STRING(255),
+		type: DataType.TEXT,
 		field: Movie.MOVIE_POSTER_URL,
 	})
 	posterURL!: string;

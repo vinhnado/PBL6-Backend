@@ -1,6 +1,6 @@
-import { Movie } from '../../models/Movie';
-import { MovieRepository } from '../../repository/Movie/MovieRepository';
-import { IMovieService } from './IMovieService';
+import { Movie } from '../models/Movie';
+import { MovieRepository } from '../repository/MovieRepository';
+import { IMovieService } from './Interfaces/IMovieService';
 
 export class MovieService implements IMovieService {
 	public async searchMovies(

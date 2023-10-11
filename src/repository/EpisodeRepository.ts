@@ -1,5 +1,5 @@
-import { Episode } from '../../models/Episode';
-import { IEpisodeRepository } from './IEpisodeRepository';
+import { Episode } from '../models/Episode';
+import { IEpisodeRepository } from './Interfaces/IEpisodeRepository';
 
 export class EpisodeRepository implements IEpisodeRepository{
 

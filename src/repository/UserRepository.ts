@@ -1,11 +1,11 @@
-import { User } from '../../models/User';
-import { Account } from '../../models/Account';
+import { User } from '../models/User';
+import { Account } from '../models/Account';
 import { Op } from 'sequelize';
-import { IUserRepository } from './IUserRepository';
-import Database from '../../config/database';
-import { MovieFavorite } from '../../models/MovieFavorite';
-import { WatchList } from '../../models/WatchList';
-import { WatchHistory } from '../../models/WatchHistory';
+import { IUserRepository } from './Interfaces/IUserRepository';
+import Database from '../config/database';
+import { MovieFavorite } from '../models/MovieFavorite';
+import { WatchList } from '../models/WatchList';
+import { WatchHistory } from '../models/WatchHistory';
 
 const db = Database.getInstance();
 

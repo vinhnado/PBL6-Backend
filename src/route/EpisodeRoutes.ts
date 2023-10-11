@@ -1,5 +1,5 @@
-import BaseRoutes from '..//Base/BaseRouter';
-import EpisodeController from './EpisodeController';
+import BaseRoutes from './Base/BaseRouter';
+import EpisodeController from '../controller/EpisodeController';
 class MovieRoutes extends BaseRoutes {
 	public routes(): void {
 		// this.router.get('/:id', EpisodeController.getEpisode);

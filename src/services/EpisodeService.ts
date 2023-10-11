@@ -1,5 +1,5 @@
-import { Episode } from '../../models/Episode';
-import { EpisodeRepository } from '../../repository/Episode/EpisodeRepository';
+import { Episode } from '../models/Episode';
+import { EpisodeRepository } from '../repository/EpisodeRepository';
 
 export class EpisodeService {
     async getEpisode(id: number): Promise<Episode | null> {

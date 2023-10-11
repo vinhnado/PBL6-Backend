@@ -1,5 +1,6 @@
 import express, { Request, Response, Router } from 'express';
-import { UserRepository } from '../../repository/User/UserRepository';
+import { MovieService } from '../services/MovieService';
+import { UserRepository } from '../repository/UserRepository';
 
 class UserController {
 	getUser = async (req: Request, res: Response) => {

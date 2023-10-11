@@ -1,8 +1,8 @@
-import { User } from '../../models/User';
-import { Account } from '../../models/Account';
-import Authentication from '../../utils/Authentication';
-import { UserRepository } from '../../repository/User/UserRepository';
-import { IAuthenticationService } from './IAuthenticationService';
+import { User } from '../models/User';
+import { Account } from '../models/Account';
+import Authentication from '../utils/Authentication';
+import { UserRepository } from '../repository/UserRepository';
+import { IAuthenticationService } from './Interfaces/IAuthenticationService';
 
 export class AuthenticationService implements IAuthenticationService {
 	async login(username: string, password: string): Promise<string> {

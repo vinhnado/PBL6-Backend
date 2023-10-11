@@ -1,5 +1,5 @@
 import express, { Request, Response, Router } from 'express';
-import { EpisodeService } from '../../services/Episode/EpisodeService';
+import { EpisodeService } from '../services/EpisodeService';
 
 class EpisodeController{
     getEpisode = async (req: Request, res: Response) => {

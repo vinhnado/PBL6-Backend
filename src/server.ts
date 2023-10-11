@@ -1,10 +1,10 @@
 import { User } from './models/User';
 import express, { Application, Request, Response } from 'express';
 import Database from './config/database';
-import MovieRouter from './controller/Movie/MovieRoutes';
-import AuthenticationRouter from './controller/Authentication/AuthenticationRoutes';
-import UserRouter from './controller/User/UserRoutes';
-import EpisodeRoutes from './controller/Episode/EpisodeRoutes';
+import MovieRouter from './route/MovieRoutes';
+import AuthenticationRouter from './route/AuthenticationRoutes';
+import UserRouter from './route/UserRoutes';
+import EpisodeRoutes from './route/EpisodeRoutes';
 import cors from 'cors'; // Import cors module
 
 class App {
