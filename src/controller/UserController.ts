@@ -1,44 +1,56 @@
 import express, { Request, Response, Router } from 'express';
 import { MovieService } from '../services/MovieService';
+import { UserRepository } from '../repository/UserRepository';
 
-const movieService = MovieService.getInstance();
-
-class MovieController {
-	searchMovies = async (req: Request, res: Response) => {
+class UserController {
+	getUser = async (req: Request, res: Response) => {
 		try {
-			const { title, genre, nation, year, isSeries, page, pageSize } =
-				req.query;
+			const { username, email, idUser } = req.query;
 			const searchConditions = {
-				title,
-				genre,
-				nation,
-				year,
-				isSeries,
+				username,
+				email,
+				idUser,
 			};
-			const movies = await movieService.searchMovies(
+			const user = await new UserRepository().findOneUser(searchConditions);
+			return res.json(user);
+		} catch (error: any) {
+			console.log(error);
+			return res.status(500).json({ error: 'Lỗi khi tìm kiếm user' });
+		}
+	};
+	searchUsers = async (req: Request, res: Response) => {
+		try {
+			const { username, email, gender, page, pageSize } = req.query;
+			const searchConditions = {
+				username,
+				email,
+				gender,
+			};
+			const users = await new UserRepository().searchUsers(
 				searchConditions,
 				Number(page),
 				Number(pageSize)
 			);
-			return res.json(movies);
+			return res.json(users);
 		} catch (error: any) {
 			console.log(error);
-			return res.status(500).json({ error: 'Lỗi khi lấy danh sách phim.' });
+			return res.status(500).json({ error: 'Lỗi khi lấy danh sách user' });
 		}
 	};
-
-	getMovieById = async (req: Request, res: Response) => {
-		const { id } = req.params;
+	addFavoriteMovie = async (req: Request, res: Response) => {
 		try {
-			const movie = await movieService.getMovieById(Number(id));
-			if (!movie) {
-				return res.status(404).json({ error: 'Không tìm thấy phim.' });
-			}
-			return res.json(movie);
-		} catch (error) {
-			return res.status(500).json({ error: 'Lỗi khi lấy thông tin phim.' });
+			const {movieId} = req.query;
+			console.log(req.payload.userId)
+			await new UserRepository().addFavoriteMovie(req.payload.userId, Number(movieId))
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully registerd users!',
+			});
+		} catch (error: any) {
+			console.log(error);
+			return res.status(500).json({ error: 'Lỗi khi tao moi' });
 		}
 	};
 }
 
-export default new MovieController();
+export default new UserController();

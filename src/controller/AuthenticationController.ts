@@ -2,11 +2,10 @@ import { Request, Response } from 'express';
 import { AuthenticationService } from '../services/AuthenticationService';
 
 class AuthenticationController {
-	// login controller
 	async login(req: Request, res: Response) {
 		try {
-			const { email, password } = req.body;
-			const token = await new AuthenticationService().login(email, password);
+			const { username, password } = req.body;
+			const token = await new AuthenticationService().login(username, password);
 			if (token === '') {
 				return res.status(400).json({
 					status: 'Bad Request!',
@@ -20,22 +19,24 @@ class AuthenticationController {
 				result: res_token,
 			});
 		} catch (error) {
+			console.log(error);
 			return res.status(500).json({
 				status: 'Internal server Error!',
 				message: 'Internal server Error!',
 			});
 		}
 	}
-	// register controller
+
 	async register(req: Request, res: Response) {
 		try {
-			const { name, username, email, password } = req.body;
+			const { email, dateOfBirth, gender, username, password } = req.body;
 
 			await new AuthenticationService().register(
 				email,
-				password,
-				name,
-				username
+				dateOfBirth,
+				gender,
+				username,
+				password
 			);
 
 			return res.status(200).json({
@@ -43,6 +44,7 @@ class AuthenticationController {
 				message: 'Successfully registerd users!',
 			});
 		} catch (error) {
+			console.log(error);
 			return res.status(500).json({
 				status: 'Internal server Error!',
 				message: 'Internal server Error!',

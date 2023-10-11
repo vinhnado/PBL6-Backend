@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken';
 interface Payload {
 	userId: number;
 	email: string;
-	name: string;
 	username: string;
 }
 
@@ -23,14 +22,12 @@ class Authentication {
 	public static generateToken(
 		id: number,
 		email: string,
-		name: string,
 		username: string
 	): string {
-		const secretKey: string = process.env.JWT_SECRET_KEY || 'my-secret';
+		const secretKey: string = process.env.JWT_SECRET_KEY || 'my-secret-key';
 		const payload: Payload = {
 			userId: id,
 			email: email,
-			name: name,
 			username: username,
 		};
 		const option = { expiresIn: process.env.JWT_EXPIRES_IN };
@@ -40,7 +37,7 @@ class Authentication {
 
 	public static validateToken(token: string): Payload | null {
 		try {
-			const secretKey: string = process.env.JWT_SECRET_KEY || 'my-secret';
+			const secretKey: string = process.env.JWT_SECRET_KEY || 'my-secret-key';
 			return jwt.verify(token, secretKey) as Payload;
 		} catch (err) {
 			return null;
