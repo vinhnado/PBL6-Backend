@@ -50,7 +50,7 @@ export class AuthenticationService implements IAuthenticationService {
 			newAccount.username = username;
 			newAccount.password = hashedPassword;
 			newUser.account = newAccount;
-			await new UserRepository().save(newUser, newAccount);
+			await new UserRepository().createNewUser(newUser, newAccount);
 		} catch (error) {
 			console.log(error);
 			throw new Error('Error register!');

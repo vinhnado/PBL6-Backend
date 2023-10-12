@@ -1,16 +1,20 @@
 import { User } from '../models/User';
 import { Account } from '../models/Account';
-import { Op } from 'sequelize';
+import { Op, Sequelize } from 'sequelize';
 import { IUserRepository } from './Interfaces/IUserRepository';
 import Database from '../config/database';
 import { MovieFavorite } from '../models/MovieFavorite';
 import { WatchList } from '../models/WatchList';
 import { WatchHistory } from '../models/WatchHistory';
+import { BaseRepository } from './BaseRepository';
 
 const db = Database.getInstance();
 
 // export class UserRepository implements IUserRepository {
-export class UserRepository {
+export class UserRepository extends BaseRepository<User> {
+	constructor() {
+		super(User);
+	}
 	async findOneUser(searchConditions: any): Promise<User> {
 		const { username, email, idUser } = searchConditions;
 		let user_name: string;
@@ -50,7 +54,7 @@ export class UserRepository {
 		});
 		return user!;
 	}
-	async save(newUser: User, newAccount: Account): Promise<void> {
+	async createNewUser(newUser: User, newAccount: Account): Promise<void> {
 		const t = await db.sequelize!.transaction();
 
 		try {
@@ -118,36 +122,40 @@ export class UserRepository {
 		}
 	}
 
-	async addFavoriteMovie(userId: number, movieId:number):Promise<void>{
-		try{
-		const favorite = new MovieFavorite();
-		favorite.userId = userId;
-		favorite.movieId = movieId;
-		favorite.save();
-		}catch(error){
+	async addFavoriteMovie(userId: number, movieId: number): Promise<void> {
+		try {
+			const favorite = new MovieFavorite();
+			favorite.userId = userId;
+			favorite.movieId = movieId;
+			favorite.save();
+		} catch (error) {
 			throw new Error('Không thể thêm phim yêu thích');
 		}
 	}
 
-	async addWatchHistory(userId: number, movieId:number,duration:number):Promise<void>{
-		try{
-		const history = new WatchHistory();
-		history.userId = userId;
-		history.movieId = movieId;
-		history.duration = duration;
-		history.save();
-		}catch(error){
+	async addWatchHistory(
+		userId: number,
+		movieId: number,
+		duration: number
+	): Promise<void> {
+		try {
+			const history = new WatchHistory();
+			history.userId = userId;
+			history.movieId = movieId;
+			history.duration = duration;
+			history.save();
+		} catch (error) {
 			throw new Error('Không thể thêm phim yêu thích');
 		}
 	}
 
-	async addWatchList(userId: number, movieId:number):Promise<void>{
-		try{
-		const movie = new WatchList();
-		movie.userId = userId;
-		movie.movieId = movieId;
-		movie.save();
-		}catch(error){
+	async addWatchList(userId: number, movieId: number): Promise<void> {
+		try {
+			const movie = new WatchList();
+			movie.userId = userId;
+			movie.movieId = movieId;
+			movie.save();
+		} catch (error) {
 			throw new Error('Không thể thêm phim vao danh sach');
 		}
 	}

@@ -1,24 +1,45 @@
-import { Model } from "sequelize";
-import { BaseInterface } from "./Interfaces/BaseInterface";
+import { Model, ModelCtor, Sequelize } from 'sequelize-typescript';
+import { BaseInterface } from './Interfaces/BaseInterface';
 
-export abstract class BaseRepository implements BaseInterface{
+export abstract class BaseRepository<T extends Model<T>>
+	implements BaseInterface
+{
+	protected model: ModelCtor<T>;
 
-    
+	constructor(model: ModelCtor<T>) {
+		this.model = model;
+	}
 
-    getAll(): Promise<Model<any, any>[]> {
-        throw new Error("Method not implemented.");
-    }
-    find(id: number): Promise<Model<any, any>> {
-        throw new Error("Method not implemented.");
-    }
-    create(model: Model<any, any>): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
-    update(model: Model<any, any>): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
-    delete(id: number): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
+	async save(model: T): Promise<void> {
+		try {
+			await model.save();
+		} catch (error) {
+			throw new Error('Không thể save' + error);
+		}
+	}
 
+	async findById(id: number): Promise<any | null> {
+		try {
+			return await this.model.findByPk(id);
+		} catch (error) {
+			throw new Error('Không thể tìm thấy' + error);
+		}
+	}
+
+	async delete(model: T): Promise<void> {
+		try {
+			await model.destroy();
+		} catch (error) {
+			throw new Error('Không thể delete' + error);
+		}
+	}
+
+	async findMany(): Promise<any[]> {
+		try {
+			const result = await this.model.findAll();
+			return result;
+		} catch (error) {
+			throw new Error('Không thể lấy danh sách' + error);
+		}
+	}
 }

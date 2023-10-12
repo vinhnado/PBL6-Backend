@@ -69,7 +69,7 @@ export class User extends Model {
 
 	@BelongsToMany(() => Movie, () => WatchHistory)
 	WatchHistories!: Movie[];
-	
+
 	@BelongsToMany(() => Movie, () => WatchList)
 	watchLists!: Movie[];
 
