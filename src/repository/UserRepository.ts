@@ -1,17 +1,20 @@
 import { User } from '../models/User';
 import { Account } from '../models/Account';
-import { Op, Sequelize } from 'sequelize';
+import { Op, Sequelize, json } from 'sequelize';
 import { IUserRepository } from './Interfaces/IUserRepository';
 import Database from '../config/database';
 import { MovieFavorite } from '../models/MovieFavorite';
 import { WatchList } from '../models/WatchList';
 import { WatchHistory } from '../models/WatchHistory';
 import { BaseRepository } from './BaseRepository';
+import { Container, Service } from 'typedi';
 
 const db = Database.getInstance();
-
-// export class UserRepository implements IUserRepository {
-export class UserRepository extends BaseRepository<User> {
+@Service()
+export class UserRepository
+	extends BaseRepository<User>
+	implements IUserRepository
+{
 	constructor() {
 		super(User);
 	}
@@ -117,6 +120,12 @@ export class UserRepository extends BaseRepository<User> {
 				// order: [['release_date', 'DESC']],
 			});
 			return users;
+			// return json(
+			// 	status: 'success',
+			// 	data: users,
+			// 	page: page,
+			// 	pageSize: pageSize,
+			// ) as any;
 		} catch (error: any) {
 			throw new Error('Không thể lấy danh sách user ' + error.message);
 		}

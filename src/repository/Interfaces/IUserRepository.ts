@@ -1,12 +1,10 @@
 import { User } from '../../models/User';
+import { BaseInterface } from './BaseInterface';
 
-export interface IUserRepository {
+export interface IUserRepository extends BaseInterface {
+	findOneUser(searchConditions: any): Promise<User>;
 	searchUsers(
-		searchConditions: {
-			username?: string;
-			email?: string;
-			gender?: string;
-		},
+		searchConditions: any,
 		page: number,
 		pageSize: number
 	): Promise<User[]>;

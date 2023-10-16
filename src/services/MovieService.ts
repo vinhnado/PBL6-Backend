@@ -1,15 +1,21 @@
+import { Inject, Service } from 'typedi';
 import { Movie } from '../models/Movie';
-import { MovieRepository } from '../repository/MovieRepository';
 import { IMovieService } from './Interfaces/IMovieService';
+import { IMovieRepository } from '../repository/Interfaces/IMovieRepository';
+import { MovieRepository } from '../repository/MovieRepository';
 
+@Service()
 export class MovieService implements IMovieService {
+	@Inject(() => MovieRepository)
+	private movieRepository!: IMovieRepository;
+
 	public async searchMovies(
 		searchConditions: any,
 		page: number,
 		pageSize: number
 	): Promise<Movie[]> {
 		try {
-			return await new MovieRepository().searchMovies(
+			return await this.movieRepository.searchMovies(
 				searchConditions,
 				page,
 				pageSize
@@ -21,7 +27,7 @@ export class MovieService implements IMovieService {
 
 	public async getMovieById(id: number): Promise<Movie | null> {
 		try {
-			return await new MovieRepository().getMovieById(id);
+			return await this.movieRepository.getMovieById(id);
 		} catch (error: any) {
 			throw new Error('Không thể lấy thông tin phim: ' + error.message);
 		}
@@ -29,7 +35,7 @@ export class MovieService implements IMovieService {
 
 	async getAllMovies(): Promise<Movie[]> {
 		try {
-			const movies = await new MovieRepository().getAllMovies();
+			const movies = await this.movieRepository.getAllMovies();
 			return movies;
 		} catch (error) {
 			throw new Error('Could not fetch movies');
@@ -38,7 +44,7 @@ export class MovieService implements IMovieService {
 
 	async deleteMovieById(id: number): Promise<void> {
 		try {
-			await new MovieRepository().deleteMovieById(id);
+			await this.movieRepository.deleteMovieById(id);
 		} catch (error) {
 			throw new Error('Could not delete movie');
 		}
@@ -56,7 +62,7 @@ export class MovieService implements IMovieService {
 		level: number
 	): Promise<Movie> {
 		try {
-			const newMovie = await new MovieRepository().createMovie(
+			const newMovie = await this.movieRepository.createMovie(
 				title,
 				description,
 				releaseDate,
