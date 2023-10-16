@@ -7,11 +7,10 @@ import { MovieFavorite } from '../models/MovieFavorite';
 import { WatchList } from '../models/WatchList';
 import { WatchHistory } from '../models/WatchHistory';
 import { BaseRepository } from './BaseRepository';
-import Container, { Service } from 'typedi';
-import { UserService } from '../services/UserService';
+import { Container, Service } from 'typedi';
 
 const db = Database.getInstance();
-
+@Service()
 export class UserRepository
 	extends BaseRepository<User>
 	implements IUserRepository
@@ -170,5 +169,3 @@ export class UserRepository
 		}
 	}
 }
-
-Container.set({ id: 'UserRepository', value: new UserRepository() });

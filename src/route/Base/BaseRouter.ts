@@ -4,6 +4,7 @@ import IRouter from './RouterInterface';
 abstract class BaseRoutes implements IRouter {
 	public router: Router;
 	public controller: any;
+
 	constructor(controller: any) {
 		this.router = Router();
 		this.controller = controller;

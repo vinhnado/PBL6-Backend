@@ -6,6 +6,7 @@ class UserRoutes extends BaseRoutes {
 	constructor() {
 		super(new UserController());
 	}
+
 	public routes(): void {
 		this.router.get('/get-all-users', this.controller.searchUsers);
 		this.router.get('/get-user', this.controller.getUser);

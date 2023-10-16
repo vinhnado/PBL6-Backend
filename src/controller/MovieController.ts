@@ -1,9 +1,10 @@
 import { MovieService } from './../services/MovieService';
 import express, { Request, Response, Router } from 'express';
 import Container from 'typedi';
+import { IMovieService } from '../services/Interfaces/IMovieService';
 
 export class MovieController {
-	private movieService: MovieService;
+	private movieService: IMovieService;
 
 	constructor() {
 		this.movieService = Container.get(MovieService);

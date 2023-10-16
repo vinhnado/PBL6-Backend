@@ -7,9 +7,10 @@ import { Op, QueryTypes, literal } from 'sequelize';
 import { Actor } from '../models/Actor';
 import { Director } from '../models/Director';
 import { Episode } from '../models/Episode';
-import Container from 'typedi';
+import Container, { Service } from 'typedi';
 
 const db = Database.getInstance();
+@Service()
 export class MovieRepository implements IMovieRepository {
 	async searchMovies(
 		searchConditions: any,
@@ -191,4 +192,4 @@ export class MovieRepository implements IMovieRepository {
 	}
 }
 
-Container.set({ id: 'MovieRepository', value: new MovieRepository() });
+// Container.set({ id: 'MovieRepository', value: new MovieRepository() });

@@ -9,7 +9,7 @@ import { inject, injectable } from 'inversify';
 
 @Service()
 export class UserService {
-	@Inject('UserRepository')
+	@Inject(() => UserRepository)
 	private userRepository!: IUserRepository;
 
 	async findOneUser(searchConditions: any): Promise<User> {

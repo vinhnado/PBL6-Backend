@@ -1,11 +1,10 @@
 import { UserService } from './../services/UserService';
 import express, { Request, Response, Router } from 'express';
-import { MovieService } from '../services/MovieService';
 import { UserRepository } from '../repository/UserRepository';
 import { User } from '../models/User';
 import Container, { Inject, Service } from 'typedi';
-import { inject, injectable } from 'inversify';
 
+@Service()
 export class UserController {
 	private userService: UserService;
 
@@ -21,7 +20,7 @@ export class UserController {
 				email,
 				idUser,
 			};
-			const user = await new UserRepository().findOneUser(searchConditions);
+			const user = await this.userService.findOneUser(searchConditions);
 			return res.json(user);
 		} catch (error: any) {
 			console.log(error);
@@ -92,5 +91,3 @@ export class UserController {
 		}
 	};
 }
-
-// export default new UserController();
