@@ -1,7 +1,9 @@
+import { Service } from 'typedi';
 import { Movie } from '../models/Movie';
 import { MovieRepository } from '../repository/MovieRepository';
 import { IMovieService } from './Interfaces/IMovieService';
 
+@Service()
 export class MovieService implements IMovieService {
 	public async searchMovies(
 		searchConditions: any,

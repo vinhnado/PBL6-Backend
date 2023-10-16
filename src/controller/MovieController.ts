@@ -1,7 +1,14 @@
+import { MovieService } from './../services/MovieService';
 import express, { Request, Response, Router } from 'express';
-import { MovieService } from '../services/MovieService';
+import Container from 'typedi';
 
-class MovieController {
+export class MovieController {
+	private movieService: MovieService;
+
+	constructor() {
+		this.movieService = Container.get(MovieService);
+	}
+
 	searchMovies = async (req: Request, res: Response) => {
 		try {
 			const { title, genre, nation, year, isSeries, page, pageSize } =
@@ -13,7 +20,7 @@ class MovieController {
 				year,
 				isSeries,
 			};
-			const movies = await new MovieService().searchMovies(
+			const movies = await this.movieService.searchMovies(
 				searchConditions,
 				Number(page),
 				Number(pageSize)
@@ -28,7 +35,7 @@ class MovieController {
 	getMovieById = async (req: Request, res: Response) => {
 		const { id } = req.params;
 		try {
-			const movie = await new MovieService().getMovieById(Number(id));
+			const movie = await this.movieService.getMovieById(Number(id));
 			if (!movie) {
 				return res.status(404).json({ error: 'Không tìm thấy phim.' });
 			}
@@ -40,7 +47,7 @@ class MovieController {
 
 	getAllMovies = async (req: Request, res: Response): Promise<void> => {
 		try {
-			const movies = await new MovieService().getAllMovies();
+			const movies = await this.movieService.getAllMovies();
 			res.json(movies);
 		} catch (error) {
 			res.status(500).json({ error: 'Không thể lấy danh sách phim' });
@@ -52,7 +59,7 @@ class MovieController {
 
 		try {
 			// Gọi service để xóa bộ phim dựa trên ID
-			await new MovieService().deleteMovieById(parseInt(id, 10));
+			await this.movieService.deleteMovieById(parseInt(id, 10));
 
 			res.status(204).send(); // Trả về mã trạng thái 204 (No Content) khi xóa thành công
 		} catch (error) {
@@ -75,7 +82,7 @@ class MovieController {
 
 		try {
 			// Gọi service để tạo bộ phim mới
-			const newMovie = await new MovieService().createMovie(
+			const newMovie = await this.movieService.createMovie(
 				title,
 				description,
 				releaseDate,
@@ -92,7 +99,4 @@ class MovieController {
 			res.status(500).json({ error: 'Không thể thêm mới phim' });
 		}
 	};
-
 }
-
-export default new MovieController();

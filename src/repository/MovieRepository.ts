@@ -7,6 +7,7 @@ import { Op, QueryTypes, literal } from 'sequelize';
 import { Actor } from '../models/Actor';
 import { Director } from '../models/Director';
 import { Episode } from '../models/Episode';
+import Container from 'typedi';
 
 const db = Database.getInstance();
 export class MovieRepository implements IMovieRepository {
@@ -47,7 +48,7 @@ export class MovieRepository implements IMovieRepository {
 			if (isSeries) {
 				whereConditions.episodes =
 					isSeries.toLowerCase() === 'true' ? { [Op.not]: 1 } : 1;
-			}	
+			}
 
 			const movies = await Movie.findAll({
 				where: whereConditions,
@@ -151,8 +152,8 @@ export class MovieRepository implements IMovieRepository {
 		try {
 			const movieToDelete = await Movie.destroy({
 				where: {
-					movie_id: id
-				}
+					movie_id: id,
+				},
 			});
 		} catch (error) {
 			throw new Error('Could not delete movie');
@@ -189,3 +190,5 @@ export class MovieRepository implements IMovieRepository {
 		}
 	}
 }
+
+Container.set({ id: 'MovieRepository', value: new MovieRepository() });

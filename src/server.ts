@@ -1,11 +1,10 @@
 import { User } from './models/User';
 import express, { Application, Request, Response } from 'express';
 import Database from './config/database';
-import MovieRouter from './route/MovieRoutes';
-import AuthenticationRouter from './route/AuthenticationRoutes';
 import UserRouter from './route/UserRoutes';
-import EpisodeRoutes from './route/EpisodeRoutes';
 import cors from 'cors'; // Import cors module
+import { UserService } from './services/UserService';
+import Container from 'typedi';
 
 class App {
 	public app: Application;
@@ -19,17 +18,17 @@ class App {
 
 	private databaseSync(): void {
 		const movieRepository = Database.getInstance();
-		movieRepository.sequelize!.sync({ alter:  true});
+		movieRepository.sequelize!.sync({ alter: true });
 	}
 
 	private routes(): void {
 		this.app.route('/').get((req: Request, res: Response) => {
 			res.send('Test API!!!');
 		});
-		this.app.use('/api/movie', MovieRouter);
-		this.app.use('/api/auth', AuthenticationRouter);
+		// this.app.use('/api/movie', MovieRouter);
+		// this.app.use('/api/auth', AuthenticationRouter);
 		this.app.use('/api/user', UserRouter);
-		this.app.use('/api/episode', EpisodeRoutes);
+		// this.app.use('/api/episode', EpisodeRoutes);
 	}
 
 	private plugins(): void {
