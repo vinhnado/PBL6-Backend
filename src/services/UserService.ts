@@ -1,35 +1,101 @@
 import { User } from '../models/User';
-import { MovieFavorite } from '../models/MovieFavorite';
-import { WatchList } from '../models/WatchList';
-import { WatchHistory } from '../models/WatchHistory';
 import Container, { Inject, Service } from 'typedi';
 import { UserRepository } from '../repository/UserRepository';
 import { IUserRepository } from '../repository/Interfaces/IUserRepository';
-import { inject, injectable } from 'inversify';
+import { UserDTO } from '../dto/UserDTO';
 
 @Service()
 export class UserService {
 	@Inject(() => UserRepository)
-	private userRepository!: IUserRepository;
+	private userRepository!: UserRepository;
 
-	async findOneUser(searchConditions: any): Promise<User> {
+	findOneUser = async (searchConditions: any): Promise<UserDTO> => {
 		try {
-			return this.userRepository.findOneUser(searchConditions);
+			return UserDTO.userToUserDTO(
+				await this.userRepository.findOneUser(searchConditions)
+			);
 		} catch (err: any) {
 			throw new Error(err.message);
 		}
-	}
+	};
 
-	async searchUsers(
+	searchUsers = async (
 		searchConditions: any,
 		page: number,
 		pageSize: number
-	): Promise<User[]> {
+	): Promise<User[]> => {
 		try {
 			console.log(this.userRepository);
 			return this.userRepository.searchUsers(searchConditions, page, pageSize);
 		} catch (err: any) {
 			throw new Error(err.message);
 		}
-	}
+	};
+
+	addFavoriteMovie = async (userId: number, movieId: number) => {
+		try {
+			return await this.userRepository.addFavoriteMovie(userId, movieId);
+		} catch (error: any) {
+			console.log(error);
+			throw new Error(error.message);
+		}
+	};
+
+	findAllFavoriteMovie = async (
+		userId: number,
+		page: number,
+		pageSize: number
+	) => {
+		try {
+			return this.userRepository.getAllFavoriteMovie(userId, page, pageSize);
+		} catch (error: any) {
+			throw new Error(error.message);
+		}
+	};
+
+	addWatchHistory = async (
+		userId: number,
+		movieId: number,
+		duration: number
+	) => {
+		try {
+			return await this.userRepository.addWatchHistory(
+				userId,
+				movieId,
+				duration
+			);
+		} catch (error: any) {
+			console.log(error);
+			throw new Error(error.message);
+		}
+	};
+
+	findAllWatchHistory = async (
+		userId: number,
+		page: number,
+		pageSize: number
+	) => {
+		try {
+			return this.userRepository.getAllWatchHistory(userId, page, pageSize);
+		} catch (error: any) {
+			throw new Error(error.message);
+		}
+	};
+
+	addWatchList = async (userId: number, movieId: number) => {
+		try {
+			return await this.userRepository.addWatchList(userId, movieId);
+		} catch (error: any) {
+			console.log(error);
+			throw new Error(error.message);
+		}
+	};
+
+	findAllWatchList = async (userId: number, page: number, pageSize: number) => {
+		try {
+			return this.userRepository.getAllWatchList(userId, page, pageSize);
+		} catch (error: any) {
+			throw new Error(error.message);
+		}
+	};
 }

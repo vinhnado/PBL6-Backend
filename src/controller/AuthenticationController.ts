@@ -1,11 +1,19 @@
 import { Request, Response } from 'express';
+import Container, { Inject, Service } from 'typedi';
+import { IAuthenticationService } from '../services/Interfaces/IAuthenticationService';
 import { AuthenticationService } from '../services/AuthenticationService';
 
-class AuthenticationController {
-	async login(req: Request, res: Response) {
+export class AuthenticationController {
+	private authenticationService = Container.get(AuthenticationService);
+
+	constructor() {
+		this.authenticationService = Container.get(AuthenticationService);
+	}
+
+	login = async (req: Request, res: Response) => {
 		try {
 			const { username, password } = req.body;
-			const token = await new AuthenticationService().login(username, password);
+			const token = await this.authenticationService.login(username, password);
 			if (token === '') {
 				return res.status(400).json({
 					status: 'Bad Request!',
@@ -25,13 +33,13 @@ class AuthenticationController {
 				message: 'Internal server Error!',
 			});
 		}
-	}
+	};
 
-	async register(req: Request, res: Response) {
+	register = async (req: Request, res: Response) => {
 		try {
 			const { email, dateOfBirth, gender, username, password } = req.body;
 
-			await new AuthenticationService().register(
+			await this.authenticationService.register(
 				email,
 				dateOfBirth,
 				gender,
@@ -50,7 +58,5 @@ class AuthenticationController {
 				message: 'Internal server Error!',
 			});
 		}
-	}
+	};
 }
-
-export default new AuthenticationController();

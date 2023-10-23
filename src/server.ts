@@ -1,7 +1,9 @@
+import 'reflect-metadata';
 import express, { Application, Request, Response } from 'express';
 import Database from './config/database';
 import UserRouter from './route/UserRoutes';
 import MovieRouter from './route/MovieRoutes';
+import AuthenticationRouter from './route/AuthenticationRoutes';
 import cors from 'cors';
 
 class App {
@@ -24,7 +26,7 @@ class App {
 			res.send('Test API!!!');
 		});
 		this.app.use('/api/movie', MovieRouter);
-		// this.app.use('/api/auth', AuthenticationRouter);
+		this.app.use('/api/auth', AuthenticationRouter);
 		this.app.use('/api/user', UserRouter);
 		// this.app.use('/api/episode', EpisodeRoutes);
 	}
