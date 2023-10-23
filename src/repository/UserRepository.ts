@@ -110,7 +110,6 @@ export class UserRepository
 					{
 						model: Account,
 						attributes: ['username'],
-						// through: { attributes: [] },
 						where: {
 							username: {
 								[Op.like]: `%${user_name}%`,
@@ -118,7 +117,6 @@ export class UserRepository
 						},
 					},
 				],
-				// order: [['release_date', 'DESC']],
 			});
 			return users;
 		} catch (error: any) {
@@ -151,7 +149,7 @@ export class UserRepository
 						attributes: {
 							exclude: ['createdAt', 'updatedAt', 'deletedAt'],
 						},
-						// through: { attributes: ['updatedAt'] },
+						through: { attributes: ['updatedAt'] },
 					},
 				],
 			});

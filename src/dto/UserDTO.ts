@@ -1,8 +1,9 @@
+import { StringMappingType } from 'typescript';
 import { User } from '../models/User';
 
 export class UserDTO {
 	dateOfBirth: Date;
-	gender: number;
+	gender: string;
 	email: string;
 	avatarURL: string | null;
 	createdAt: string;
@@ -10,7 +11,7 @@ export class UserDTO {
 
 	constructor(
 		dateOfBirth: Date,
-		gender: number,
+		gender: string,
 		email: string,
 		avatarURL: string | null,
 		createdAt: string,

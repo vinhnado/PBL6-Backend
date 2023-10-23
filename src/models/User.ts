@@ -44,10 +44,10 @@ export class User extends Model {
 	dateOfBirth!: Date;
 
 	@Column({
-		type: DataType.SMALLINT,
+		type: DataType.STRING(10),
 		field: User.USER_GENDER,
 	})
-	gender!: number;
+	gender!: string;
 
 	@Column({
 		type: DataType.STRING(328),

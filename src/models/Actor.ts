@@ -18,6 +18,9 @@ export class Actor extends Model {
 	private static ACTOR_TABLE_NAME = 'Actors' as string;
 	private static ACTOR_ID = 'actor_id' as string;
 	private static ACTOR_NAME = 'name' as string;
+	private static ACTOR_DESCRIPTION = 'description' as string;
+	private static ACTOR_GENDER = 'gender' as string;
+	private static ACTOR_DATE_OF_BIRTH = 'dateOfBirth' as string;
 	private static ACTOR_AVARTAR_URL = 'avatar' as string;
 
 	@Column({
@@ -33,6 +36,24 @@ export class Actor extends Model {
 		field: Actor.ACTOR_NAME,
 	})
 	name!: string;
+
+	@Column({
+		type: DataType.STRING(10),
+		field: Actor.ACTOR_GENDER,
+	})
+	gender!: string;
+
+	@Column({
+		type: DataType.DATE,
+		field: Actor.ACTOR_DATE_OF_BIRTH,
+	})
+	dateOfBirth!: Date;
+
+	@Column({
+		type: DataType.TEXT,
+		field: Actor.ACTOR_DESCRIPTION,
+	})
+	description!: string;
 
 	@Column({
 		type: DataType.TEXT,
