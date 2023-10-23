@@ -55,10 +55,10 @@ export class MovieRepository implements IMovieRepository {
 			highFavorited: 'num_favorite',
 		  };
 
-		let sortField = 'id';
+		let sortField = 'movie_id';
 		let sortBy = 'ASC';
 		if(sort){
-			sortField = sortFieldMap[sort] || 'id';;
+			sortField = sortFieldMap[sort] || 'movieId';;
 		}
 		if(sortType){
 			sortBy = sortType || 'ASC';
@@ -73,7 +73,7 @@ export class MovieRepository implements IMovieRepository {
 		  include: [
 			{
 				model: Genre,
-				attributes: ['genreID', 'name'],
+				attributes: ['genre_id', 'name'],
 				as: 'genres',
 				//   required: true,
 				where: whereConditionGenre, // Lọc theo ID thể loại
@@ -102,7 +102,7 @@ export class MovieRepository implements IMovieRepository {
 
 		  ],
 		  order:[
-			[`${sortField}`,'DESC']
+			[`${sortField}`,`${sortBy}`]
 		  ],
 		  limit: pageSize, // Số lượng kết quả trên mỗi trang
 		  offset: offset, // Vị trí bắt đầu
