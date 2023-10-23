@@ -4,11 +4,18 @@ import { IMovieService } from './Interfaces/IMovieService';
 import { IMovieRepository } from '../repository/Interfaces/IMovieRepository';
 import { MovieRepository } from '../repository/MovieRepository';
 import { ISearchMovieOption } from '../repository/Interfaces/ISearchMovieOption';
+import { S3Service } from './S3Service';
+
 
 @Service()
 export class MovieService implements IMovieService {
+
 	@Inject(() => MovieRepository)
 	private movieRepository!: IMovieRepository;
+
+	@Inject(() => S3Service)
+	private s3Service!: S3Service;
+
 
 	public async searchMovies(
 		options: ISearchMovieOption,
@@ -21,10 +28,11 @@ export class MovieService implements IMovieService {
 				page=1,
 				pageSize=10
 			);
-			movies.forEach((movie) =>{
-				movie.posterURL="ABCDEF";
-				movie.trailerURL="ABC";
-			})
+			for (const movie of movies) {
+				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
+				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
+			  }
+		  
 			return movies;
 		} catch (error: any) {
 			throw new Error('Không thể lấy danh sách phim: ' + error.message);
