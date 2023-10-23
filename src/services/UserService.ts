@@ -5,7 +5,7 @@ import { WatchHistory } from '../models/WatchHistory';
 import Container, { Inject, Service } from 'typedi';
 import { UserRepository } from '../repository/UserRepository';
 import { IUserRepository } from '../repository/Interfaces/IUserRepository';
-import { inject, injectable } from 'inversify';
+// import { inject, injectable } from 'inversify';
 
 @Service()
 export class UserService {
