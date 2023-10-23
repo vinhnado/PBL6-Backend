@@ -3,99 +3,114 @@ import { Genre } from '../models/Genre';
 import { MovieGenre } from '../models/MovieGenre';
 import { IMovieRepository } from './Interfaces/IMovieRepository';
 import Database from '../config/database';
-import { Op, QueryTypes, literal } from 'sequelize';
+import { Op, QueryTypes, literal, OrderItem, Sequelize } from 'sequelize';
 import { Actor } from '../models/Actor';
 import { Director } from '../models/Director';
 import { Episode } from '../models/Episode';
 import Container, { Service } from 'typedi';
+import { ISearchMovieOption } from './Interfaces/ISearchMovieOption';
 
 const db = Database.getInstance();
+
+
 @Service()
 export class MovieRepository implements IMovieRepository {
-	async searchMovies(
-		searchConditions: any,
-		page: number,
-		pageSize: number
-	): Promise<Movie[]> {
-		try {
-			const { title, genre, nation, year, isSeries } = searchConditions;
-			let genre_name: string;
-			const whereConditions: { [key: string]: any } = {};
+	async searchMovies(options: ISearchMovieOption, page: number, pageSize: number) {
+		const { search, genre, nation, year, isSeries, sort, sortType } = options;
+	  
+		const whereCondition: any = {};
+		const whereConditionGenre: any = {};
 
-			if (title) {
-				whereConditions.title = {
-					[Op.iLike]: `%${title}%`,
-				};
-			}
-
-			if (genre) {
-				genre_name = genre;
-			} else {
-				genre_name = '';
-			}
-
-			if (nation) {
-				whereConditions.nation = {
-					[Op.eq]: nation,
-				};
-			}
-
-			if (year) {
-				whereConditions.release_date = {
-					[Op.between]: [`${year}-01-01`, `${year}-12-31`],
-				};
-			}
-
-			if (isSeries) {
-				whereConditions.episodes =
-					isSeries.toLowerCase() === 'true' ? { [Op.not]: 1 } : 1;
-			}
-
-			const movies = await Movie.findAll({
-				where: whereConditions,
-				attributes: {
-					exclude: ['deletedAt', 'updatedAt', 'createdAt'], // Loại bỏ các trường này
-				},
-				offset: (page - 1) * pageSize,
-				limit: pageSize,
-				include: [
-					{
-						model: Genre,
-						attributes: ['genre_id', 'name'],
-						through: { attributes: [] },
-						where: {
-							name: {
-								[Op.like]: `%${genre_name}%`,
-							},
-						},
-					},
-					{
-						model: Actor,
-						attributes: ['actor_id', 'name'],
-						through: { attributes: [] },
-					},
-					{
-						model: Director,
-						attributes: ['director_id', 'name'],
-						through: { attributes: [] },
-					},
-					{
-						model: Episode,
-						attributes: [
-							'episode_id',
-							'episode_no',
-							'movie_url',
-							'episodeTitle',
-						],
-					},
-				],
-				order: [['release_date', 'DESC']],
-			});
-			return movies;
-		} catch (error: any) {
-			throw new Error('Không thể lấy danh sách phim ' + error.message);
+		if (search) {
+		  whereCondition[Op.or] = [
+			{ 'title': { [Op.iLike]: `%${search}%` } },
+			{ 'description': { [Op.iLike]: `%${search}%` } },
+		  ];
+		}else{
+			const search='';
 		}
-	}
+
+		if(genre){
+			whereConditionGenre['gerneId'] = genre;
+		}
+	  
+		if (nation) {
+		  whereCondition['nation'] = nation;
+		}
+	  
+		if (year) {
+		  whereCondition['release_date'] = {
+			[Op.between]: [new Date(year, 0, 1), new Date(year, 11, 31)],
+		  };
+		}
+	  
+		if (isSeries !== undefined) {
+		  whereCondition['isSeries'] = isSeries ? { [Op.gt]: 1 } : 1;
+		}
+	  
+		const sortFieldMap = {
+			highRated: 'average_rating',
+			newest: 'release_date',
+			highViewed: 'highViewed',
+			highFavorited: 'num_favorite',
+		  };
+
+		let sortField = 'id';
+		let sortBy = 'ASC';
+		if(sort){
+			sortField = sortFieldMap[sort] || 'id';;
+		}
+		if(sortType){
+			sortBy = sortType || 'ASC';
+		}
+		const offset = (page - 1) * pageSize;
+		console.log(whereCondition);
+	  
+		const movies = await Movie.findAll({
+		   attributes: { exclude: ['deletedAt', 'createdAt', 'updatedAt'] },
+		  where: whereCondition,
+			// where :
+		  include: [
+			{
+				model: Genre,
+				attributes: ['genreID', 'name'],
+				as: 'genres',
+				//   required: true,
+				where: whereConditionGenre, // Lọc theo ID thể loại
+				through: { attributes: [] },
+			},
+			{
+				model: Actor,
+				attributes: ['actor_id', 'name'],
+				through: { attributes: [] },
+				// where: { name: { [Op.iLike]: search } },
+			},
+			{
+				model: Director,
+				attributes: ['director_id', 'name'],
+				through: { attributes: [] },
+			},
+			{
+				model: Episode,
+				attributes: [
+					'episode_id',
+					'episode_no',
+					'movie_url',
+					'episodeTitle',
+				],
+			},
+
+		  ],
+		  order:[
+			[`${sortField}`,'DESC']
+		  ],
+		  limit: pageSize, // Số lượng kết quả trên mỗi trang
+		  offset: offset, // Vị trí bắt đầu
+		});
+	  
+		return movies;
+	  }
+
 
 	async getMovieById(id: number): Promise<Movie | null> {
 		try {

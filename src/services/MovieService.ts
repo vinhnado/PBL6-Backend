@@ -3,6 +3,7 @@ import { Movie } from '../models/Movie';
 import { IMovieService } from './Interfaces/IMovieService';
 import { IMovieRepository } from '../repository/Interfaces/IMovieRepository';
 import { MovieRepository } from '../repository/MovieRepository';
+import { ISearchMovieOption } from '../repository/Interfaces/ISearchMovieOption';
 
 @Service()
 export class MovieService implements IMovieService {
@@ -10,15 +11,15 @@ export class MovieService implements IMovieService {
 	private movieRepository!: IMovieRepository;
 
 	public async searchMovies(
-		searchConditions: any,
+		options: ISearchMovieOption,
 		page: number,
 		pageSize: number
 	): Promise<Movie[]> {
 		try {
 			return await this.movieRepository.searchMovies(
-				searchConditions,
-				page,
-				pageSize
+				options,
+				page=1,
+				pageSize=10
 			);
 		} catch (error: any) {
 			throw new Error('Không thể lấy danh sách phim: ' + error.message);

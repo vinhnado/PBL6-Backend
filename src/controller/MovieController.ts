@@ -12,17 +12,19 @@ export class MovieController {
 
 	searchMovies = async (req: Request, res: Response) => {
 		try {
-			const { title, genre, nation, year, isSeries, page, pageSize } =
-				req.query;
-			const searchConditions = {
-				title,
-				genre,
-				nation,
-				year,
-				isSeries,
-			};
+			const options = {
+				search: req.query.search,
+				genre: req.query.genre,
+				nation: req.query.nation,
+				year: req.query.year,
+				isSeries: req.query.isSeries,
+				sort: req.query.sort,
+			  };
+			const page = Number(req.query.page) || 1; // Trang mặc định là 1
+			const pageSize = Number(req.query.pageSize) || 10; // Số lượng kết quả trên mỗi trang mặc định là 10
+
 			const movies = await this.movieService.searchMovies(
-				searchConditions,
+				options,
 				Number(page),
 				Number(pageSize)
 			);
