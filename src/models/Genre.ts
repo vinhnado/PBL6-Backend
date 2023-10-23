@@ -25,7 +25,7 @@ export class Genre extends Model {
 		autoIncrement: true,
 		field: Genre.GENRE_ID,
 	})
-	gerneId!: number;
+	genreId!: number; // sai ID
 
 	@Column({
 		type: DataType.STRING(100),

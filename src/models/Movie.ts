@@ -38,6 +38,8 @@ export class Movie extends Model {
 	private static MOVIE_AVERAGE_RATING = 'average_rating' as string;
 	private static MOVIE_EPISODES = 'episodes' as string;
 	private static MOVIE_LEVEL = 'level' as string;
+	private static NUM_FAVORITE = 'num_favorite' as string;
+	private static IS_SERIES = 'isSeries' as string;
 
 	@Column({
 		type: DataType.INTEGER,
@@ -99,6 +101,18 @@ export class Movie extends Model {
 		field: Movie.MOVIE_LEVEL,
 	})
 	level!: number;
+
+	@Column({
+		type: DataType.SMALLINT(),
+		field: Movie.NUM_FAVORITE,
+	})
+	num_favorite!: number;
+
+	@Column({
+		type: DataType.BOOLEAN(),
+		field: Movie.IS_SERIES,
+	})
+	isSeries!: boolean;
 
 	@DeletedAt
 	deletedAt!: Date;

@@ -1,8 +1,9 @@
 import { Movie } from '../../models/Movie';
+import { ISearchMovieOption } from './ISearchMovieOption';
 
 export interface IMovieRepository {
 	searchMovies(
-		searchConditions: any,
+		options: ISearchMovieOption,
 		page: number,
 		pageSize: number
 	): Promise<Movie[]>;
