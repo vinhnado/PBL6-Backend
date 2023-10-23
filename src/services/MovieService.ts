@@ -16,11 +16,16 @@ export class MovieService implements IMovieService {
 		pageSize: number
 	): Promise<Movie[]> {
 		try {
-			return await this.movieRepository.searchMovies(
+			let movies = await this.movieRepository.searchMovies(
 				options,
 				page=1,
 				pageSize=10
 			);
+			movies.forEach((movie) =>{
+				movie.posterURL="ABCDEF";
+				movie.trailerURL="ABC";
+			})
+			return movies;
 		} catch (error: any) {
 			throw new Error('Không thể lấy danh sách phim: ' + error.message);
 		}
