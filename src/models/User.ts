@@ -64,13 +64,22 @@ export class User extends Model {
 	@HasOne(() => Account, 'accountId')
 	account!: Account;
 
-	@BelongsToMany(() => Movie, () => MovieFavorite)
+	@BelongsToMany(() => Movie, {
+		through: () => MovieFavorite,
+		as: 'movieFavorites',
+	})
 	movieFavorites!: Movie[];
 
-	@BelongsToMany(() => Movie, () => WatchHistory)
+	@BelongsToMany(() => Movie, {
+		through: () => WatchHistory,
+		as: 'WatchHistories',
+	})
 	WatchHistories!: Movie[];
 
-	@BelongsToMany(() => Movie, () => WatchList)
+	@BelongsToMany(() => Movie, {
+		through: () => WatchList,
+		as: 'watchList',
+	})
 	watchLists!: Movie[];
 
 	@DeletedAt

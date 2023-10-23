@@ -61,7 +61,7 @@ class Database {
 			User,
 			Account,
 			MovieFavorite,
-      WatchHistory,
+			WatchHistory,
 			WatchList,
 			// ListTrend,
 		]);

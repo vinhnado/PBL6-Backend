@@ -1,10 +1,8 @@
 import { UserService } from './../services/UserService';
-import express, { Request, Response, Router } from 'express';
-import { UserRepository } from '../repository/UserRepository';
-import { User } from '../models/User';
-import Container, { Inject, Service } from 'typedi';
+import { Request, Response } from 'express';
 
-@Service()
+import Container from 'typedi';
+
 export class UserController {
 	private userService: UserService;
 
@@ -19,6 +17,19 @@ export class UserController {
 				username,
 				email,
 				idUser,
+			};
+			const user = await this.userService.findOneUser(searchConditions);
+			return res.json(user);
+		} catch (error: any) {
+			console.log(error);
+			return res.status(500).json({ error: 'Lỗi khi tìm kiếm user' });
+		}
+	};
+
+	getSelfInfo = async (req: Request, res: Response) => {
+		try {
+			const searchConditions = {
+				userId: req.payload.userId,
 			};
 			const user = await this.userService.findOneUser(searchConditions);
 			return res.json(user);
@@ -55,17 +66,76 @@ export class UserController {
 		}
 	};
 
+	getFavoriteMovieList = async (req: Request, res: Response) => {
+		try {
+			const { page, pageSize } = req.query;
+
+			const data = await this.userService.findAllFavoriteMovie(
+				req.payload.userId,
+				Number(page),
+				Number(pageSize)
+			);
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully',
+				data: data,
+			});
+		} catch (error: any) {
+			console.log(error);
+			return res.status(500).json({ error: 'Lỗi :' + error.message });
+		}
+	};
+
+	getAllWatchHistory = async (req: Request, res: Response) => {
+		try {
+			const { page, pageSize } = req.query;
+
+			const data = await this.userService.findAllWatchHistory(
+				req.payload.userId,
+				Number(page),
+				Number(pageSize)
+			);
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully',
+				data: data,
+			});
+		} catch (error: any) {
+			console.log(error);
+			return res.status(500).json({ error: 'Lỗi :' + error.message });
+		}
+	};
+
+	getAllWatchList = async (req: Request, res: Response) => {
+		try {
+			const { page, pageSize } = req.query;
+
+			const data = await this.userService.findAllWatchList(
+				req.payload.userId,
+				Number(page),
+				Number(pageSize)
+			);
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully',
+				data: data,
+			});
+		} catch (error: any) {
+			console.log(error);
+			return res.status(500).json({ error: 'Lỗi :' + error.message });
+		}
+	};
+
 	addFavoriteMovie = async (req: Request, res: Response) => {
 		try {
 			const { movieId } = req.query;
-			console.log(req.payload.userId);
-			await new UserRepository().addFavoriteMovie(
+			await this.userService.addFavoriteMovie(
 				req.payload.userId,
 				Number(movieId)
 			);
 			return res.status(200).json({
 				status: 'Ok!',
-				message: 'Successfully registerd users!',
+				message: 'Successfully',
 			});
 		} catch (error: any) {
 			console.log(error);
@@ -73,17 +143,33 @@ export class UserController {
 		}
 	};
 
-	save = async (req: Request, res: Response) => {
+	addWatchHistory = async (req: Request, res: Response) => {
 		try {
-			const { email, dateOfBirth, gender } = req.body;
-			const user = new User();
-			user.email = email;
-			user.dateOfBirth = dateOfBirth;
-			user.gender = gender;
-			await new UserRepository().save(user);
+			const { movieId, duration } = req.query;
+			console.log(req.payload.userId);
+			await this.userService.addWatchHistory(
+				req.payload.userId,
+				Number(movieId),
+				Number(duration)
+			);
 			return res.status(200).json({
 				status: 'Ok!',
-				message: 'Successfully registerd users!',
+				message: 'Successfully!',
+			});
+		} catch (error: any) {
+			console.log(error);
+			return res.status(500).json({ error: 'Lỗi khi tao moi' });
+		}
+	};
+
+	addWatchList = async (req: Request, res: Response) => {
+		try {
+			const { movieId } = req.query;
+			console.log(req.payload.userId);
+			await this.userService.addWatchList(req.payload.userId, Number(movieId));
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully!',
 			});
 		} catch (error: any) {
 			console.log(error);

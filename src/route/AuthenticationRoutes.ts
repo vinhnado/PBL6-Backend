@@ -1,11 +1,14 @@
-// import BaseRoutes from './Base/BaseRouter';
-// import AuthenticationController from '../controller/AuthenticationController';
+import { AuthenticationController } from '../controller/AuthenticationController';
+import BaseRoutes from './Base/BaseRouter';
 
-// class AuthenticationRoutes extends BaseRoutes {
-// 	routes(): void {
-// 		this.router.post('/login', AuthenticationController.login);
-// 		this.router.post('/register', AuthenticationController.register);
-// 	}
-// }
+class AuthenticationRoutes extends BaseRoutes {
+	constructor() {
+		super(new AuthenticationController());
+	}
+	routes(): void {
+		this.router.post('/login', this.controller.login);
+		this.router.post('/register', this.controller.register);
+	}
+}
 
-// export default new AuthenticationRoutes().router;
+export default new AuthenticationRoutes().router;
