@@ -14,7 +14,7 @@ import {
 import { Movie } from './Movie';
 import { MovieFavorite } from './MovieFavorite';
 import { WatchHistory } from './WatchHistory';
-import { WatchList } from './WatchList';
+import { WatchList } from './WatchLater';
 
 @Table({
 	tableName: User.USER_TABLE_NAME,

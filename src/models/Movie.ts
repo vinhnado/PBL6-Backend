@@ -7,7 +7,9 @@ import {
 	BelongsToMany,
 	HasMany,
 	NotEmpty,
-	DeletedAt, BelongsTo, ForeignKey,
+	DeletedAt,
+	BelongsTo,
+	ForeignKey,
 } from 'sequelize-typescript';
 import { Genre } from './Genre';
 import { MovieGenre } from './MovieGenre';
@@ -18,7 +20,7 @@ import { MovieDirector } from './MovieDirector';
 import { User } from './User';
 import { MovieFavorite } from './MovieFavorite';
 import { WatchHistory } from './WatchHistory';
-import { WatchList } from './WatchList';
+import { WatchLater } from './WatchLater';
 // import {ListTrend} from "./ListTrend";
 
 @Table({
@@ -126,7 +128,6 @@ export class Movie extends Model {
 	@BelongsToMany(() => Director, () => MovieDirector)
 	directors!: Director[];
 
-
 	@HasMany(() => Episode)
 	episodes!: Episode[];
 
@@ -135,8 +136,7 @@ export class Movie extends Model {
 
 	@BelongsToMany(() => User, () => WatchHistory)
 	watchHistories!: User[];
-	
-	@BelongsToMany(() => User, () => WatchList)
-	watchList!: User[];
-}
 
+	@BelongsToMany(() => User, () => WatchLater)
+	watchLater!: User[];
+}
