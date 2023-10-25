@@ -1,18 +1,18 @@
 import { Service } from 'typedi';
 import { BaseRepository } from './BaseRepository';
-import { MovieFavorite } from '../models/MovieFavorite';
 import { User } from '../models/User';
 import { Movie } from '../models/Movie';
+import { WatchHistory } from '../models/WatchHistory';
 
 @Service()
-export class MovieFavoriteRepository extends BaseRepository<MovieFavorite> {
+export class WatchHistoryRepository extends BaseRepository<WatchHistory> {
 	constructor() {
-		super(MovieFavorite);
+		super(WatchHistory);
 	}
 
 	async findAll(userId: number, page: number, pageSize: number) {
 		try {
-			const movieFavoriteList = await User.findOne({
+			const movieHistoryList = await User.findOne({
 				where: { userId: userId },
 				offset: (page - 1) * pageSize,
 				limit: pageSize,
@@ -20,7 +20,7 @@ export class MovieFavoriteRepository extends BaseRepository<MovieFavorite> {
 				include: [
 					{
 						model: Movie,
-						as: 'movieFavoriteList',
+						as: 'watchHistoryList',
 						attributes: {
 							exclude: ['createdAt', 'updatedAt', 'deletedAt'],
 						},
@@ -29,10 +29,10 @@ export class MovieFavoriteRepository extends BaseRepository<MovieFavorite> {
 				],
 			});
 
-			return movieFavoriteList;
+			return movieHistoryList;
 		} catch (error) {
 			console.log(error);
-			throw new Error('Cannot get all movie favorite');
+			throw new Error('Cannot get all movie history');
 		}
 	}
 }
