@@ -129,7 +129,7 @@ export class UserController {
 	addFavoriteMovie = async (req: Request, res: Response) => {
 		try {
 			const { movieId } = req.query;
-			await this.userService.addFavoriteMovie(
+			await this.userService.saveFavoriteMovie(
 				req.payload.userId,
 				Number(movieId)
 			);

@@ -3,11 +3,24 @@ import Container, { Inject, Service } from 'typedi';
 import { UserRepository } from '../repository/UserRepository';
 import { IUserRepository } from '../repository/Interfaces/IUserRepository';
 import { UserDTO } from '../dto/UserDTO';
+import { WatchHistoryRepository } from '../repository/WatchHistorRepository';
+import { WatchLaterRepository } from '../repository/WatchLaterRepository';
+import { MovieFavoriteRepository } from '../repository/MovieFavoriteRepository';
+import { MovieFavorite } from '../models/MovieFavorite';
 
 @Service()
 export class UserService {
 	@Inject(() => UserRepository)
 	private userRepository!: UserRepository;
+
+	@Inject(() => MovieFavoriteRepository)
+	private movieFavoriteRepository!: MovieFavoriteRepository;
+
+	@Inject(() => WatchHistoryRepository)
+	private watchHistoryRepository!: WatchHistoryRepository;
+
+	@Inject(() => WatchLaterRepository)
+	private watchLaterRepository!: WatchLaterRepository;
 
 	findOneUser = async (searchConditions: any): Promise<UserDTO> => {
 		try {
@@ -32,9 +45,30 @@ export class UserService {
 		}
 	};
 
-	addFavoriteMovie = async (userId: number, movieId: number) => {
+	saveFavoriteMovie = async (userId: number, movieId: number) => {
 		try {
-			return await this.userRepository.addFavoriteMovie(userId, movieId);
+			let movieFavorite = await this.movieFavoriteRepository
+				.findOneByCondition({
+					user_id: userId,
+					movie_id: movieId,
+				})
+				.then(async (movieFavorite) => {
+					if (movieFavorite.deleteAt != null) {
+						await this.movieFavoriteRepository.delete(movieFavorite);
+						return console.log('Da xoa bang soft delete');
+					} else {
+						await this.movieFavoriteRepository.restore(movieFavorite);
+						return console.log('Da resotre');
+					}
+				})
+				.catch((error) => {
+					// Xử lý lỗi nếu có
+					console.error('Lỗi: ', error);
+				});
+			console.log(movieFavorite);
+			return await this.movieFavoriteRepository.save(
+				MovieFavorite.build({ userId: userId, movieId: movieId })
+			);
 		} catch (error: any) {
 			console.log(error);
 			throw new Error(error.message);
@@ -47,7 +81,7 @@ export class UserService {
 		pageSize: number
 	) => {
 		try {
-			return this.userRepository.getAllFavoriteMovie(userId, page, pageSize);
+			return this.movieFavoriteRepository.findAll(userId, page, pageSize);
 		} catch (error: any) {
 			throw new Error(error.message);
 		}
@@ -59,11 +93,12 @@ export class UserService {
 		duration: number
 	) => {
 		try {
-			return await this.userRepository.addWatchHistory(
-				userId,
-				movieId,
-				duration
-			);
+			// return await this.watchHistoryRepository.addWatchHistory(
+			// 	userId,
+			// 	movieId,
+			// 	duration
+			// );
+			return null;
 		} catch (error: any) {
 			console.log(error);
 			throw new Error(error.message);
@@ -76,7 +111,7 @@ export class UserService {
 		pageSize: number
 	) => {
 		try {
-			return this.userRepository.getAllWatchHistory(userId, page, pageSize);
+			return this.watchHistoryRepository.findAll(userId, page, pageSize);
 		} catch (error: any) {
 			throw new Error(error.message);
 		}
@@ -84,7 +119,8 @@ export class UserService {
 
 	addWatchList = async (userId: number, movieId: number) => {
 		try {
-			return await this.userRepository.addWatchList(userId, movieId);
+			// return await this.watchLaterRepository.findAll(userId, movieId);
+			return null;
 		} catch (error: any) {
 			console.log(error);
 			throw new Error(error.message);
@@ -93,7 +129,7 @@ export class UserService {
 
 	findAllWatchList = async (userId: number, page: number, pageSize: number) => {
 		try {
-			return this.userRepository.getAllWatchList(userId, page, pageSize);
+			return this.watchLaterRepository.findAll(userId, page, pageSize);
 		} catch (error: any) {
 			throw new Error(error.message);
 		}

@@ -26,11 +26,30 @@ export abstract class BaseRepository<T extends Model<T>>
 		}
 	}
 
+	async findOneByCondition(searchConditions: any): Promise<any | null> {
+		try {
+			return await this.model.findOne({
+				where: searchConditions,
+				paranoid: false,
+			});
+		} catch (error) {
+			throw new Error('Không thể tìm thấy: ' + error);
+		}
+	}
+
 	async delete(model: T): Promise<void> {
 		try {
 			await model.destroy();
 		} catch (error) {
 			throw new Error('Không thể delete' + error);
+		}
+	}
+
+	async restore(model: T): Promise<void> {
+		try {
+			await model.restore();
+		} catch (error) {
+			throw new Error('Không thể restore' + error);
 		}
 	}
 
