@@ -40,7 +40,7 @@ export class AuthenticationService implements IAuthenticationService {
 	async register(
 		email: string,
 		dateOfBirth: Date,
-		gender: number,
+		gender: string,
 		username: string,
 		password: string
 	): Promise<void> {

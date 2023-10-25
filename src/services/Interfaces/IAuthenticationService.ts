@@ -3,7 +3,7 @@ export interface IAuthenticationService {
 	register(
 		email: string,
 		dateOfBirth: Date,
-		gender: number,
+		gender: string,
 		username: string,
 		password: string
 	): Promise<void>;
