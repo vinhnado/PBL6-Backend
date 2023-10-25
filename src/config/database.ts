@@ -12,7 +12,7 @@ import { User } from '../models/User';
 import { Account } from '../models/Account';
 import { MovieFavorite } from '../models/MovieFavorite';
 import { WatchHistory } from '../models/WatchHistory';
-import { WatchList } from '../models/WatchList';
+import { WatchLater } from '../models/WatchLater';
 // import {ListTrend} from "../models/ListTrend";
 
 dotenv.config();
@@ -62,7 +62,7 @@ class Database {
 			Account,
 			MovieFavorite,
 			WatchHistory,
-			WatchList,
+			WatchLater,
 			// ListTrend,
 		]);
 

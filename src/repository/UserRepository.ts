@@ -4,7 +4,7 @@ import { Op, Sequelize, json } from 'sequelize';
 import { IUserRepository } from './Interfaces/IUserRepository';
 import Database from '../config/database';
 import { MovieFavorite } from '../models/MovieFavorite';
-import { WatchList } from '../models/WatchList';
+import { WatchLater } from '../models/WatchLater';
 import { WatchHistory } from '../models/WatchHistory';
 import { BaseRepository } from './BaseRepository';
 import { Container, Service } from 'typedi';
@@ -203,16 +203,16 @@ export class UserRepository
 		}
 	}
 
-	async addWatchList(userId: number, movieId: number): Promise<void> {
-		try {
-			const movie = new WatchList();
-			movie.userId = userId;
-			movie.movieId = movieId;
-			movie.save();
-		} catch (error) {
-			throw new Error('Không thể thêm phim vao danh sach');
-		}
-	}
+	// async addWatchList(userId: number, movieId: number): Promise<void> {
+	// 	try {
+	// 		const movie = new WatchList();
+	// 		movie.userId = userId;
+	// 		movie.movieId = movieId;
+	// 		movie.save();
+	// 	} catch (error) {
+	// 		throw new Error('Không thể thêm phim vao danh sach');
+	// 	}
+	// }
 
 	async getAllWatchList(userId: number, page: number, pageSize: number) {
 		try {
