@@ -82,14 +82,14 @@ export class UserService {
 		}
 	};
 
-	addWatchList = async (userId: number, movieId: number) => {
-		try {
-			return await this.userRepository.addWatchList(userId, movieId);
-		} catch (error: any) {
-			console.log(error);
-			throw new Error(error.message);
-		}
-	};
+	// addWatchList = async (userId: number, movieId: number) => {
+	// 	try {
+	// 		return await this.userRepository.(userId, movieId);
+	// 	} catch (error: any) {
+	// 		console.log(error);
+	// 		throw new Error(error.message);
+	// 	}
+	// };
 
 	findAllWatchList = async (userId: number, page: number, pageSize: number) => {
 		try {

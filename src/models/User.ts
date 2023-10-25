@@ -14,7 +14,7 @@ import {
 import { Movie } from './Movie';
 import { MovieFavorite } from './MovieFavorite';
 import { WatchHistory } from './WatchHistory';
-import { WatchList } from './WatchLater';
+import { WatchLater } from './WatchLater';
 
 @Table({
 	tableName: User.USER_TABLE_NAME,
@@ -77,10 +77,10 @@ export class User extends Model {
 	WatchHistories!: Movie[];
 
 	@BelongsToMany(() => Movie, {
-		through: () => WatchList,
+		through: () => WatchLater,
 		as: 'watchList',
 	})
-	watchLists!: Movie[];
+	WatchLaterList!: Movie[];
 
 	@DeletedAt
 	deletedAt!: Date;
