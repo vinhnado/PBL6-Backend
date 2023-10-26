@@ -166,7 +166,7 @@ export class UserController {
 		try {
 			const { movieId } = req.query;
 			console.log(req.payload.userId);
-			await this.userService.addFavoriteMovie(req.payload.userId, Number(movieId));
+			await this.userService.saveFavoriteMovie(req.payload.userId, Number(movieId));
 			return res.status(200).json({
 				status: 'Ok!',
 				message: 'Successfully!',
