@@ -28,6 +28,7 @@ export class UserController {
 
 	getSelfInfo = async (req: Request, res: Response) => {
 		try {
+			console.log(req.payload.userId);
 			const searchConditions = {
 				userId: req.payload.userId,
 			};
@@ -110,7 +111,7 @@ export class UserController {
 		try {
 			const { page, pageSize } = req.query;
 
-			const data = await this.userService.findAllWatchList(
+			const data = await this.userService.findAllWatchLater(
 				req.payload.userId,
 				Number(page),
 				Number(pageSize)

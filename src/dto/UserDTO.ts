@@ -1,4 +1,3 @@
-import { StringMappingType } from 'typescript';
 import { User } from '../models/User';
 
 export class UserDTO {
@@ -9,30 +8,16 @@ export class UserDTO {
 	createdAt: string;
 	username: string;
 
-	constructor(
-		dateOfBirth: Date,
-		gender: string,
-		email: string,
-		avatarURL: string | null,
-		createdAt: string,
-		username: string
-	) {
-		this.dateOfBirth = dateOfBirth;
-		this.gender = gender;
-		this.email = email;
-		this.avatarURL = avatarURL;
-		this.createdAt = createdAt;
-		this.username = username;
+	constructor(user: User) {
+		this.dateOfBirth = user.dateOfBirth;
+		this.gender = user.gender;
+		this.email = user.email;
+		this.avatarURL = user.avatarURL;
+		this.createdAt = user.createdAt;
+		this.username = user.account.username;
 	}
 
 	public static userToUserDTO(user: User): UserDTO {
-		return new UserDTO(
-			user.dateOfBirth,
-			user.gender,
-			user.email,
-			user.avatarURL,
-			user.createdAt,
-			user.account.username
-		);
+		return new UserDTO(user);
 	}
 }

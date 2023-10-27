@@ -1,3 +1,4 @@
+import { Movie } from './../models/Movie';
 import { User } from '../models/User';
 import Container, { Inject, Service } from 'typedi';
 import { UserRepository } from '../repository/UserRepository';
@@ -9,6 +10,7 @@ import { MovieFavoriteRepository } from '../repository/MovieFavoriteRepository';
 import { MovieFavorite } from '../models/MovieFavorite';
 import { WatchHistory } from '../models/WatchHistory';
 import { WatchLater } from '../models/WatchLater';
+import { MovieDTO } from '../dto/MovieDTO';
 
 @Service()
 export class UserService {
@@ -93,7 +95,12 @@ export class UserService {
 		pageSize: number
 	) => {
 		try {
-			return this.movieFavoriteRepository.findAll(userId, page, pageSize);
+			const userMovie = await this.movieFavoriteRepository.findAll(
+				userId,
+				page,
+				pageSize
+			);
+			return new MovieDTO(userMovie!, 'MovieFavorite');
 		} catch (error: any) {
 			throw new Error(error.message);
 		}
@@ -150,7 +157,12 @@ export class UserService {
 		pageSize: number
 	) => {
 		try {
-			return this.watchHistoryRepository.findAll(userId, page, pageSize);
+			let userMovie = await this.watchHistoryRepository.findAll(
+				userId,
+				page,
+				pageSize
+			);
+			return new MovieDTO(userMovie!, 'WatchHistory');
 		} catch (error: any) {
 			throw new Error(error.message);
 		}
@@ -193,9 +205,18 @@ export class UserService {
 		}
 	};
 
-	findAllWatchList = async (userId: number, page: number, pageSize: number) => {
+	findAllWatchLater = async (
+		userId: number,
+		page: number,
+		pageSize: number
+	) => {
 		try {
-			return this.watchLaterRepository.findAll(userId, page, pageSize);
+			let userMovie = await this.watchLaterRepository.findAll(
+				userId,
+				page,
+				pageSize
+			);
+			return new MovieDTO(userMovie!, 'WatchLater');
 		} catch (error: any) {
 			throw new Error(error.message);
 		}
