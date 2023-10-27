@@ -20,7 +20,7 @@ export class UserRepository
 		super(User);
 	}
 	async findOneUser(searchConditions: any): Promise<User> {
-		const { username, email, idUser } = searchConditions;
+		const { username, email, userId } = searchConditions;
 		let user_name: string;
 		const whereConditions: { [key: string]: any } = {};
 
@@ -36,9 +36,9 @@ export class UserRepository
 			user_name = '';
 		}
 
-		if (idUser) {
-			whereConditions.idUser = {
-				[Op.eq]: idUser,
+		if (userId) {
+			whereConditions.user_id = {
+				[Op.eq]: userId,
 			};
 		}
 

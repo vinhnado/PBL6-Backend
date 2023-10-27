@@ -6,7 +6,6 @@ services:
     container_name: PBL6-nodejs-app
     ports:
       - 8000:8000
-      - 8088:7999
     volumes:
       - .:/usr/src/app
     depends_on:
