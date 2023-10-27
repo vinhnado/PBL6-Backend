@@ -87,7 +87,7 @@ export class MovieItem {
 				movie.averageRating,
 				movie.episodeNum,
 				movie.level,
-				movie.num_favorite,
+				movie.numFavorite,
 				movie.isSeries,
 				movieJson[type]?.updatedAt
 			);
