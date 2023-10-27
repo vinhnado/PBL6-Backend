@@ -13,28 +13,43 @@ class UserRoutes extends BaseRoutes {
 		this.router.get(
 			'/add-favorite-movie',
 			auth,
-			this.controller.addFavoriteMovie
+			this.controller.saveMovieFavorite
+		);
+		this.router.get(
+			'/delete-favorite-movie',
+			auth,
+			this.controller.deleteMovieFavorite
 		);
 		this.router.get(
 			'/get-favorite-movie-list',
 			auth,
 			this.controller.getFavoriteMovieList
 		);
-		this.router.get('/add-watch-list', auth, this.controller.addWatchList);
+		this.router.get('/add-watch-list', auth, this.controller.addWatchLater);
+		this.router.get(
+			'/delete-watch-list',
+			auth,
+			this.controller.deleteWatchLater
+		);
 		this.router.get(
 			'/get-watch-movie-list',
 			auth,
-			this.controller.getAllWatchList
+			this.controller.getAllWatchLaterList
 		);
 		this.router.get(
 			'/add-movie-history',
 			auth,
-			this.controller.addWatchHistory
+			this.controller.saveWatchHistory
+		);
+		this.router.get(
+			'/delete-movie-history',
+			auth,
+			this.controller.deleteWatchHistory
 		);
 		this.router.get(
 			'/get-history-movie-list',
 			auth,
-			this.controller.getAllWatchHistory
+			this.controller.getWatchHistoryList
 		);
 	}
 }

@@ -70,7 +70,7 @@ export class UserController {
 		try {
 			const { page, pageSize } = req.query;
 
-			const data = await this.userService.findAllFavoriteMovie(
+			const data = await this.userService.findAllMovieFavorite(
 				req.payload.userId,
 				Number(page),
 				Number(pageSize)
@@ -86,7 +86,7 @@ export class UserController {
 		}
 	};
 
-	getAllWatchHistory = async (req: Request, res: Response) => {
+	getWatchHistoryList = async (req: Request, res: Response) => {
 		try {
 			const { page, pageSize } = req.query;
 
@@ -106,7 +106,7 @@ export class UserController {
 		}
 	};
 
-	getAllWatchList = async (req: Request, res: Response) => {
+	getAllWatchLaterList = async (req: Request, res: Response) => {
 		try {
 			const { page, pageSize } = req.query;
 
@@ -126,10 +126,10 @@ export class UserController {
 		}
 	};
 
-	addFavoriteMovie = async (req: Request, res: Response) => {
+	saveMovieFavorite = async (req: Request, res: Response) => {
 		try {
 			const { movieId } = req.query;
-			await this.userService.saveFavoriteMovie(
+			await this.userService.saveMovieFavorite(
 				req.payload.userId,
 				Number(movieId)
 			);
@@ -143,11 +143,10 @@ export class UserController {
 		}
 	};
 
-	addWatchHistory = async (req: Request, res: Response) => {
+	saveWatchHistory = async (req: Request, res: Response) => {
 		try {
 			const { movieId, duration } = req.query;
-			console.log(req.payload.userId);
-			await this.userService.addWatchHistory(
+			await this.userService.saveWatchHistory(
 				req.payload.userId,
 				Number(movieId),
 				Number(duration)
@@ -162,11 +161,64 @@ export class UserController {
 		}
 	};
 
-	addWatchList = async (req: Request, res: Response) => {
+	addWatchLater = async (req: Request, res: Response) => {
 		try {
 			const { movieId } = req.query;
-			console.log(req.payload.userId);
-			await this.userService.addWatchList(req.payload.userId, Number(movieId));
+			await this.userService.saveWatchLater(
+				req.payload.userId,
+				Number(movieId)
+			);
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully!',
+			});
+		} catch (error: any) {
+			console.log(error);
+			return res.status(500).json({ error: 'Lỗi khi tao moi' });
+		}
+	};
+
+	deleteWatchHistory = async (req: Request, res: Response) => {
+		try {
+			const { movieId } = req.query;
+			await this.userService.deleteWatchHistory(
+				req.payload.userId,
+				Number(movieId)
+			);
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully!',
+			});
+		} catch (error: any) {
+			console.log(error);
+			return res.status(500).json({ error: 'Lỗi khi tao moi' });
+		}
+	};
+
+	deleteMovieFavorite = async (req: Request, res: Response) => {
+		try {
+			const { movieId } = req.query;
+			await this.userService.deleteMovieFavorite(
+				req.payload.userId,
+				Number(movieId)
+			);
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully!',
+			});
+		} catch (error: any) {
+			console.log(error);
+			return res.status(500).json({ error: 'Lỗi khi tao moi' });
+		}
+	};
+
+	deleteWatchLater = async (req: Request, res: Response) => {
+		try {
+			const { movieId } = req.query;
+			await this.userService.deleteWatchLater(
+				req.payload.userId,
+				Number(movieId)
+			);
 			return res.status(200).json({
 				status: 'Ok!',
 				message: 'Successfully!',
