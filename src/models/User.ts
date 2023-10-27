@@ -78,9 +78,9 @@ export class User extends Model {
 
 	@BelongsToMany(() => Movie, {
 		through: () => WatchLater,
-		as: 'watchList',
+		as: 'watchLaterList',
 	})
-	WatchLaterList!: Movie[];
+	watchLaterList!: Movie[];
 
 	@DeletedAt
 	deletedAt!: Date;
