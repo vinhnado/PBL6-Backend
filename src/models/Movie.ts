@@ -37,6 +37,7 @@ export class Movie extends Model {
 	private static MOVIE_NATION = 'nation' as string;
 	private static MOVIE_POSTER_URL = 'poster_url' as string;
 	private static MOVIE_TRAILER_URL = 'trailer_url' as string;
+	private static MOVIE_BG_URL = 'background_url' as string;
 	private static MOVIE_AVERAGE_RATING = 'average_rating' as string;
 	private static MOVIE_EPISODES = 'episodes' as string;
 	private static MOVIE_LEVEL = 'level' as string;
@@ -108,13 +109,19 @@ export class Movie extends Model {
 		type: DataType.SMALLINT(),
 		field: Movie.NUM_FAVORITE,
 	})
-	num_favorite!: number;
+	numFavorite!: number;
 
 	@Column({
 		type: DataType.BOOLEAN(),
 		field: Movie.IS_SERIES,
 	})
 	isSeries!: boolean;
+
+	@Column({
+		type: DataType.STRING(255),
+		field: Movie.MOVIE_BG_URL,
+	})
+	backgroundURL!:string;
 
 	@DeletedAt
 	deletedAt!: Date;

@@ -31,6 +31,7 @@ export class MovieService implements IMovieService {
 			for (const movie of movies) {
 				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
 				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
+				movie.backgroundURL = await this.s3Service.getObjectUrl('movies/'.concat((movie.movieId).toString(),'/background.jpg'));
 			  }
 		  
 			return movies;
