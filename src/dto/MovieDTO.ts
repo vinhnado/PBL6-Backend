@@ -32,31 +32,18 @@ export class MovieItem {
 	isSeries: null | boolean;
 	updatedAt: Date;
 
-	constructor(
-		movieId: number,
-		title: string,
-		description: string,
-		releaseDate: Date,
-		nation: string,
-		posterURL: string,
-		averageRating: string,
-		episodeNum: number,
-		level: number,
-		numFavorite: null | number,
-		isSeries: null | boolean,
-		updatedAt: Date
-	) {
-		this.movieId = movieId;
-		this.title = title;
-		this.description = description;
-		this.releaseDate = releaseDate;
-		this.nation = nation;
-		this.posterURL = posterURL;
-		this.averageRating = averageRating;
-		this.episodeNum = episodeNum;
-		this.level = level;
-		this.numFavorite = numFavorite;
-		this.isSeries = isSeries;
+	constructor(movie: Movie, updatedAt: Date) {
+		this.movieId = movie.movieId;
+		this.title = movie.title;
+		this.description = movie.description;
+		this.releaseDate = movie.releaseDate;
+		this.nation = movie.nation;
+		this.posterURL = movie.posterURL;
+		this.averageRating = movie.averageRating;
+		this.episodeNum = movie.episodeNum;
+		this.level = movie.level;
+		this.numFavorite = movie.numFavorite;
+		this.isSeries = movie.isSeries;
 		this.updatedAt = updatedAt;
 	}
 
@@ -75,22 +62,7 @@ export class MovieItem {
 		}
 		for (const movie of user_movie_list) {
 			const movieJson = movie.toJSON();
-			let updatedAt: any;
-			console.log(updatedAt);
-			const movieItem = new MovieItem(
-				movie.movieId,
-				movie.title,
-				movie.description,
-				movie.releaseDate,
-				movie.nation,
-				movie.posterURL,
-				movie.averageRating,
-				movie.episodeNum,
-				movie.level,
-				movie.numFavorite,
-				movie.isSeries,
-				movieJson[type]?.updatedAt
-			);
+			const movieItem = new MovieItem(movie, movieJson[type]?.updatedAt);
 			movieItemList.push(movieItem);
 		}
 
