@@ -25,8 +25,8 @@ export class MovieService implements IMovieService {
 		try {
 			let movies = await this.movieRepository.searchMovies(
 				options,
-				page=1,
-				pageSize=10
+				page=page,
+				pageSize=pageSize
 			);
 			for (const movie of movies) {
 				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);

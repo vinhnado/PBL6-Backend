@@ -28,7 +28,7 @@ export class MovieItem {
 	averageRating: string;
 	episodeNum: number;
 	level: number;
-	num_favorite: null | number;
+	numFavorite: null | number;
 	isSeries: null | boolean;
 	updatedAt: Date;
 
@@ -42,7 +42,7 @@ export class MovieItem {
 		averageRating: string,
 		episodeNum: number,
 		level: number,
-		num_favorite: null | number,
+		numFavorite: null | number,
 		isSeries: null | boolean,
 		updatedAt: Date
 	) {
@@ -55,7 +55,7 @@ export class MovieItem {
 		this.averageRating = averageRating;
 		this.episodeNum = episodeNum;
 		this.level = level;
-		this.num_favorite = num_favorite;
+		this.numFavorite = numFavorite;
 		this.isSeries = isSeries;
 		this.updatedAt = updatedAt;
 	}
@@ -87,7 +87,7 @@ export class MovieItem {
 				movie.averageRating,
 				movie.episodeNum,
 				movie.level,
-				movie.num_favorite,
+				movie.numFavorite,
 				movie.isSeries,
 				movieJson[type]?.updatedAt
 			);

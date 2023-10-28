@@ -45,7 +45,7 @@ export class MovieRepository implements IMovieRepository {
 		}
 	  
 		if (isSeries !== undefined) {
-		  whereCondition['isSeries'] = isSeries ? { [Op.gt]: 1 } : 1;
+		  whereCondition['isSeries'] = isSeries;
 		}
 	  
 		const sortFieldMap = {
@@ -64,7 +64,7 @@ export class MovieRepository implements IMovieRepository {
 			sortBy = sortType || 'ASC';
 		}
 		const offset = (page - 1) * pageSize;
-		console.log(whereCondition);
+		// console.log(whereCondition);
 	  
 		const movies = await Movie.findAll({
 		   attributes: { exclude: ['deletedAt', 'createdAt', 'updatedAt'] },
