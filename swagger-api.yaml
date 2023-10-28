@@ -27,23 +27,89 @@ paths:
       tags:
         - movie
       summary: Get all movies or by filter
-      description: Multiple status values can be provided with comma separated strings
+      description: Get and search movies API
       operationId: findPetsByStatus
       parameters:
         - name: search
           in: query
-          description: Status values that need to be considered for filter
-          required: true
+          description: Enter value to search by title and discription of movies
+          required: false
           explode: true
           schema:
-            type: array
+            type: string
+        - name: isSeries
+          in: query
+          description: Filter by film series or one episode
+          required: false
+          explode: true
+          schema:
+            type: array  
+            items:
+              type: boolean
+              enum:
+                - true
+                - false
+        - name: genre
+          in: query
+          description: Filter by genre movies, enter genre_id of movies(Current id from 1 to 20)
+          required: false
+          explode: true
+          schema:
+            type: number
+        - name: nation
+          in: query
+          description: Filter by nation movies, enter movies of movies to filter
+          required: false
+          explode: true
+          schema:
+            type: string
+        - name: year
+          in: query
+          description: Filter by year of release movies
+          required: false
+          explode: true
+          schema:
+            type: number
+        - name: sort
+          in: query
+          description: Choose addition to sort
+          required: false
+          explode: true
+          schema:
+            type: array  
             items:
               type: string
               enum:
-                - search
-                - ''
-                - sold
-              default: null
+                - highFavorited
+                - newest
+                - highRated
+        - name: sortBy
+          in: query
+          description: Default sort ASC, if you want change to DESC, select below
+          required: false
+          explode: true
+          schema:
+            type: array  
+            items:
+              type: string
+              enum:
+                - ASC
+                - DESC
+              default: ASC
+        - name: page
+          in: query
+          description: Use to pagination, default page = 1
+          required: false
+          explode: true
+          schema:
+            type: number
+        - name: pageSize
+          in: query
+          description: Use to pagination, default pageSize = 6
+          required: false
+          explode: true
+          schema:
+            type: number
       responses:
         '200':
           description: successful operation
@@ -53,13 +119,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Pet'
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
         '400':
-          description: Invalid status value
+          description: Khong the lay danh sach phim
       security:
         - petstore_auth:
             - 'write:pets'
@@ -157,6 +218,10 @@ paths:
             type: array
             items:
               type: string
+              enum:
+                - available
+                - pending
+                - sold
       responses:
         '200':
           description: successful operation

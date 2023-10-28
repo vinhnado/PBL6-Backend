@@ -31,7 +31,7 @@ export class MovieRepository implements IMovieRepository {
 		}
 
 		if(genre){
-			whereConditionGenre['gerneId'] = genre;
+			whereConditionGenre['genreId'] = genre;
 		}
 	  
 		if (nation) {
@@ -76,7 +76,7 @@ export class MovieRepository implements IMovieRepository {
 				attributes: ['genre_id', 'name'],
 				as: 'genres',
 				//   required: true,
-				// where: whereConditionGenre, // Lọc theo ID thể loại
+				where: whereConditionGenre, // Lọc theo ID thể loại
 				through: { attributes: [] },
 			},
 			{
