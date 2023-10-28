@@ -1,3 +1,4 @@
+import { S3Service } from './../services/S3Service';
 import { UserService } from './../services/UserService';
 import { Request, Response } from 'express';
 
@@ -5,9 +6,11 @@ import Container from 'typedi';
 
 export class UserController {
 	private userService: UserService;
+	private s3Service: S3Service;
 
 	constructor() {
 		this.userService = Container.get(UserService);
+		this.s3Service = Container.get(S3Service);
 	}
 
 	getUser = async (req: Request, res: Response) => {
