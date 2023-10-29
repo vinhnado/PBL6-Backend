@@ -141,7 +141,7 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 					},
 					{
 						model: Episode,
-						attributes: { exclude: ['deletedAt', 'createdAt', 'updatedAt'] },
+						attributes: { exclude: ['movie_url','deletedAt', 'createdAt', 'updatedAt'] },
 					},
 		
 				  ],
