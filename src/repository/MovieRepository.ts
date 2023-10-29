@@ -9,12 +9,18 @@ import { Director } from '../models/Director';
 import { Episode } from '../models/Episode';
 import Container, { Service } from 'typedi';
 import { ISearchMovieOption } from './Interfaces/ISearchMovieOption';
+import { BaseRepository } from './BaseRepository';
 
 const db = Database.getInstance();
 
 
 @Service()
-export class MovieRepository implements IMovieRepository {
+export class MovieRepository extends BaseRepository<Movie> implements IMovieRepository {
+	
+	constructor(){
+		super(Movie);
+	}
+	
 	async searchMovies(options: ISearchMovieOption, page: number, pageSize: number) {
 		const { search, genre, nation, year, isSeries, sort, sortType } = options;
 	  
@@ -115,12 +121,40 @@ export class MovieRepository implements IMovieRepository {
 	async getMovieById(id: number): Promise<Movie | null> {
 		try {
 			const movie = await Movie.findByPk(id, {
-				include: Genre,
+				attributes: { exclude: ['deletedAt', 'createdAt', 'updatedAt'] },
+				include: [
+					{
+						model: Genre,
+						attributes: ['genre_id', 'name'],
+						as: 'genres',
+						through: { attributes: [] },
+					},
+					{
+						model: Actor,
+						attributes: ['actor_id', 'name'],
+						through: { attributes: [] },
+					},
+					{
+						model: Director,
+						attributes: ['director_id', 'name'],
+						through: { attributes: [] },
+					},
+					{
+						model: Episode,
+						attributes: [
+							'episode_id',
+							'episode_no',
+							'movie_url',
+							'episodeTitle',
+						],
+					},
+		
+				  ],
 			});
 
 			return movie || null;
 		} catch (error: any) {
-			throw new Error('Không thể lấy thông tin phim: ' + error.message);
+			throw new Error('Can not get movie: ' + error.message);
 		}
 	}
 
