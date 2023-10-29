@@ -1,14 +1,22 @@
+import { Service } from 'typedi';
 import { Episode } from '../models/Episode';
+import { BaseRepository } from './BaseRepository';
 import { IEpisodeRepository } from './Interfaces/IEpisodeRepository';
 
-export class EpisodeRepository implements IEpisodeRepository{
+@Service()
+export class EpisodeRepository extends BaseRepository<Episode> implements IEpisodeRepository{
 
+    constructor(){
+		super(Episode);
+	}
     async getEpisode(id: number): Promise<Episode | null> {
         try{
-            const episode = await Episode.findByPk(id);
+            const episode = await Episode.findByPk(id,{
+                attributes: { exclude: ['deletedAt', 'createdAt', 'updatedAt'] }
+            });
             return episode || null;
         }catch (error: any) {
-			throw new Error('Không thể lấy thông tin Episode: ' + error.message);
+			throw new Error('Can not get Episode: ' + error.message);
 		}
     }
     async getEpisodes(searchCondition: any, page: Number, pageSize: Number): Promise<Episode> {
