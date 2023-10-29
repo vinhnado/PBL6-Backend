@@ -11,6 +11,7 @@ import { MovieFavorite } from '../models/MovieFavorite';
 import { WatchHistory } from '../models/WatchHistory';
 import { WatchLater } from '../models/WatchLater';
 import { MovieDTO } from '../dto/MovieDTO';
+import { S3Service } from './S3Service';
 
 @Service()
 export class UserService {
@@ -25,6 +26,9 @@ export class UserService {
 
 	@Inject(() => WatchLaterRepository)
 	private watchLaterRepository!: WatchLaterRepository;
+
+	@Inject(() => S3Service)
+	private s3Service!: S3Service;
 
 	findOneUser = async (searchConditions: any): Promise<UserDTO> => {
 		try {
@@ -118,20 +122,35 @@ export class UserService {
 					movie_id: movieId,
 				})
 				.then(async (watchHistory) => {
-					if (watchHistory.deleteAt == null) {
-						await this.watchHistoryRepository.restore(watchHistory);
+					if (watchHistory != null) {
+						watchHistory.duration = duration;
+						watchHistory.deletedAt = null;
+						return await this.watchHistoryRepository.save(watchHistory);
+					} else {
+						return await this.watchHistoryRepository.save(
+							WatchHistory.build({
+								userId: userId,
+								movieId: movieId,
+								duration: duration,
+							})
+						);
 					}
 				})
 				.catch((error) => {
 					console.error('Lỗi: ', error);
 				});
-			return await this.watchHistoryRepository.save(
-				WatchHistory.build({
-					userId: userId,
-					movieId: movieId,
-					duration: duration,
-				})
-			);
+		} catch (error: any) {
+			console.log(error);
+			throw new Error(error.message);
+		}
+	};
+
+	getWatchHistory = async (userId: number, movieId: number) => {
+		try {
+			return await this.watchHistoryRepository.findOneByCondition({
+				user_id: userId,
+				movie_id: movieId,
+			});
 		} catch (error: any) {
 			console.log(error);
 			throw new Error(error.message);
