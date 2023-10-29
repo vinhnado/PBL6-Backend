@@ -141,12 +141,7 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 					},
 					{
 						model: Episode,
-						attributes: [
-							'episode_id',
-							'episode_no',
-							'movie_url',
-							'episodeTitle',
-						],
+						attributes: { exclude: ['deletedAt', 'createdAt', 'updatedAt'] },
 					},
 		
 				  ],
