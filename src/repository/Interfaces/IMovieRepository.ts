@@ -1,8 +1,9 @@
 import { Movie } from '../../models/Movie';
+import { BaseInterface } from './BaseInterface';
 import { ISearchMovieOption } from './ISearchMovieOption';
 
-export interface IMovieRepository {
-	searchMovies(
+export interface IMovieRepository extends BaseInterface {
+	searchMovies(	
 		options: ISearchMovieOption,
 		page: number,
 		pageSize: number

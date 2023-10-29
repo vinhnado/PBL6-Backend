@@ -88,4 +88,9 @@ export class Episode extends Model {
 
 	@BelongsTo(() => Movie)
 	movie!: Movie;
+
+	getUrl(): string {
+		return 'ok';
+	}
+
 }
