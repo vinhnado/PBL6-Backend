@@ -4,9 +4,12 @@ import { ISearchMovieOption } from './ISearchMovieOption';
 
 export interface IMovieRepository extends BaseInterface {
 	searchMovies(	
-		options: ISearchMovieOption,
+		whereCondition: any,
+		whereConditionGenre: any,
 		page: number,
-		pageSize: number
+		pageSize: number,
+		sortField: string,
+		sortBy: string
 	): Promise<Movie[]>;
 	getMovieById(id: number): Promise<Movie | null>;
 	getAllMovies(): Promise<Movie[]>;
@@ -21,5 +24,5 @@ export interface IMovieRepository extends BaseInterface {
 		averageRating: string,
 		episodeNum: number,
 		level: number
-	  ): Promise<Movie>;
+	): Promise<Movie>;
 }

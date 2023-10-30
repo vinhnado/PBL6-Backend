@@ -21,54 +21,8 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 		super(Movie);
 	}
 	
-	async searchMovies(options: ISearchMovieOption, page: number, pageSize: number) {
-		const { search, genre, nation, year, isSeries, sort, sortType } = options;
-	  
-		const whereCondition: any = {};
-		const whereConditionGenre: any = {};
-
-		if (search) {
-		  whereCondition[Op.or] = [
-			{ 'title': { [Op.iLike]: `%${search}%` } },
-			{ 'description': { [Op.iLike]: `%${search}%` } },
-		  ];
-		}else{
-			const search='';
-		}
-
-		if(genre){
-			whereConditionGenre['genreId'] = genre;
-		}
-	  
-		if (nation) {
-		  whereCondition['nation'] = nation;
-		}
-	  
-		if (year) {
-		  whereCondition['release_date'] = {
-			[Op.between]: [new Date(year, 0, 1), new Date(year, 11, 31)],
-		  };
-		}
-	  
-		if (isSeries !== undefined) {
-		  whereCondition['isSeries'] = isSeries;
-		}
-	  
-		const sortFieldMap = {
-			highRated: 'average_rating',
-			newest: 'release_date',
-			highViewed: 'highViewed',
-			highFavorited: 'num_favorite',
-		  };
-
-		let sortField = 'movie_id';
-		let sortBy = 'ASC';
-		if(sort){
-			sortField = sortFieldMap[sort] || 'movieId';;
-		}
-		if(sortType){
-			sortBy = sortType || 'ASC';
-		}
+	async searchMovies(whereCondition: any, whereConditionGenre: any, page: number, pageSize: number, sortField: string, sortBy: string) {
+	
 		const offset = (page - 1) * pageSize;
 		// console.log(whereCondition);
 	  
@@ -141,7 +95,7 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 					},
 					{
 						model: Episode,
-						attributes: { exclude: ['movie_url','deletedAt', 'createdAt', 'updatedAt'] },
+						attributes: ['episode_id', 'movie_id', 'title', 'release_date', 'num_view', 'duration', 'episode_no'],
 					},
 		
 				  ],

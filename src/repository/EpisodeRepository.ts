@@ -9,6 +9,7 @@ export class EpisodeRepository extends BaseRepository<Episode> implements IEpiso
     constructor(){
 		super(Episode);
 	}
+
     async getEpisode(id: number): Promise<Episode | null> {
         try{
             const episode = await Episode.findByPk(id,{
@@ -19,12 +20,15 @@ export class EpisodeRepository extends BaseRepository<Episode> implements IEpiso
 			throw new Error('Can not get Episode: ' + error.message);
 		}
     }
+
     async getEpisodes(searchCondition: any, page: Number, pageSize: Number): Promise<Episode> {
         throw new Error('Method not implemented.');
     }
+
     async deleteEpisode(id: Number): Promise<void> {
         throw new Error('Method not implemented.');
     }
+
     createEpisode(episode: Episode): Promise<boolean> {
         throw new Error('Method not implemented.');
     }
@@ -37,12 +41,12 @@ export class EpisodeRepository extends BaseRepository<Episode> implements IEpiso
         try {
             const episodes = await Episode.findAll({
               where: {
-                movie_id: movie_id, // Điều này tương ứng với trường movieId trong model Episode
+                movie_id: movie_id,
               },
             });
             return episodes;
         } catch (error: any) {
-            throw new Error('Không thể lấy thông tin tập phim: ' + error.message);
+            throw new Error('Can not get episodes of movie: ' + error.message);
           }
     }
 
