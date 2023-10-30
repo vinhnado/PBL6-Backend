@@ -61,7 +61,10 @@ export class MovieController {
 		const { id } = req.query;
 		try {
 			await this.movieService.deleteMovieById(Number(id));
-			res.status(204).json({ error: 'Movie deleted successfully' });
+			res.status(204).json({ 
+				status: true,
+				message: "Delete successfully"
+			});
 		} catch (error) {
 			res.status(500).json({ error: 'An error occurred while deleting the movie' });
 		}
