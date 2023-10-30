@@ -14,16 +14,34 @@ export class EpisodeService implements IEpisodeService {
     @Inject(() => S3Service)
 	private s3Service!: S3Service;
 
+    /**
+     * Get details a episode of movie by episode_id
+     * 
+     * @param id number
+     * @returns Promise<Episode|null>
+     */
     async getEpisode(id: number): Promise<Episode|null> {
         try {
             let episode =await this.movieRepository.getEpisode(id);
             if(episode){
-                episode.posterUrl = await this.s3Service.getObjectUrl(episode.posterUrl);
-                episode.movieUrl = await this.s3Service.getObjectUrl(episode.movieUrl);
+                if(episode.posterUrl){
+                    episode.posterUrl = await this.s3Service.getObjectUrl(episode.posterUrl);
+                }else{
+                    episode.posterUrl = await this.s3Service.getObjectUrl('episodes/posterUrl/poster_default.jpg');
+                }
+
+                if(episode.movieUrl) {
+                    episode.movieUrl = await this.s3Service.getObjectUrl(episode.movieUrl);
+                }else{
+                    episode.movieUrl = await this.s3Service.getObjectUrl('episodes/movieUrl/movie_default.mp4');
+                }
             }
             return episode;
         } catch (error) {
             throw new Error('Can not get episode.');
         }
     }
+
+    
+
 }

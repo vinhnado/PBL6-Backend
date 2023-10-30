@@ -5,7 +5,7 @@ class HomeRoutes extends BaseRoutes {
 		super(new HomeController());
 	}
 	public routes(): void {
-		this.router.get('/', this.controller.getHomePosters);
+		this.router.get('/', this.controller.getMoviesByGenre);
 	}
 }
 
