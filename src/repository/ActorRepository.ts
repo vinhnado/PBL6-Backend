@@ -8,7 +8,7 @@ export class ActorRepository extends BaseRepository<Actor> {
 	constructor() {
 		super(Actor);
 	}
-	findAllMovieByActorId = async (
+	findActorInfomation = async (
 		actorId: number,
 		page: number,
 		pageSize: number
@@ -18,7 +18,9 @@ export class ActorRepository extends BaseRepository<Actor> {
 				where: { actorId: actorId },
 				offset: (page - 1) * pageSize,
 				limit: pageSize,
-				attributes: ['actorId'],
+				attributes: {
+					exclude: ['createdAt', 'updatedAt', 'deletedAt'],
+				},
 				include: [
 					{
 						model: Movie,
@@ -29,11 +31,9 @@ export class ActorRepository extends BaseRepository<Actor> {
 					},
 				],
 			});
-
 			return data;
-		} catch (error) {
-			console.log(error);
-			throw new Error('Cannot get all movie');
+		} catch (error: any) {
+			throw new Error(error.message);
 		}
 	};
 }

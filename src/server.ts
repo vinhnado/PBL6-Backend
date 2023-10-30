@@ -20,7 +20,14 @@ class App {
 
 	private databaseSync(): void {
 		const movieRepository = Database.getInstance();
-		movieRepository.sequelize!.sync({ alter: true });
+		movieRepository
+			.sequelize!.sync({ force: true })
+			.then(() => {
+				console.log('✅ Cơ sở dữ liệu đã được đồng bộ hóa.');
+			})
+			.catch((error) => {
+				console.error('Lỗi đồng bộ hóa cơ sở dữ liệu:', error);
+			});
 	}
 
 	private routes(): void {
