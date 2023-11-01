@@ -60,4 +60,25 @@ export class ActorService {
 			throw new Error(error.message);
 		}
 	};
+
+	getAllActor = async () => {
+		try {
+			return await this.actorRepository.findMany();
+		} catch (error: any) {
+			throw new Error(error.message);
+		}
+	};
+
+	searchActor = async (search: string, page: number, pageSize: number) => {
+		try {
+			const data = await this.actorRepository.searchAllActor(
+				search,
+				page,
+				pageSize
+			);
+			return data;
+		} catch (error: any) {
+			throw new Error(error.message);
+		}
+	};
 }

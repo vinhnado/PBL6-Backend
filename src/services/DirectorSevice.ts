@@ -7,7 +7,7 @@ export class DirectorService {
 	@Inject(() => DirecorRepository)
 	private directorRepository!: DirecorRepository;
 
-	findAllMovieByDirectorId = async (
+	findDirectortorInfomation = async (
 		directorId: number,
 		page: number,
 		pageSize: number
@@ -56,6 +56,39 @@ export class DirectorService {
 		try {
 			const director = await this.directorRepository.findById(directorId);
 			return await this.directorRepository.delete(director);
+		} catch (error: any) {
+			throw new Error(error.message);
+		}
+	};
+
+	deleteActorByDirectorId = async (directorId: number) => {
+		try {
+			const director = await this.directorRepository.findById(directorId);
+			return await this.directorRepository.delete(director);
+		} catch (error: any) {
+			throw new Error(error.message);
+		}
+	};
+	getAllDirector = async () => {
+		try {
+			return await this.directorRepository.findMany();
+		} catch (error: any) {
+			throw new Error(error.message);
+		}
+	};
+
+	searchAllDirector = async (
+		search: string,
+		page: number,
+		pageSize: number
+	) => {
+		try {
+			const data = await this.directorRepository.searchAllDirector(
+				search,
+				page,
+				pageSize
+			);
+			return data;
 		} catch (error: any) {
 			throw new Error(error.message);
 		}

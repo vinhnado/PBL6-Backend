@@ -5,7 +5,6 @@ module.exports = {
 	async up(queryInterface, Sequelize) {
 		await queryInterface.bulkInsert('Actors', [
 			{
-				actor_id: 1,
 				name: 'Chow Yun-fat',
 				description:
 					'Chow Yun-fat is a Hong Kong actor known for his roles in action films and crime dramas.',
@@ -16,7 +15,6 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				actor_id: 2,
 				name: 'Zhang Ziyi',
 				description:
 					'Zhang Ziyi is a Chinese actress who gained international fame for her roles in "Crouching Tiger, Hidden Dragon" and "Memoirs of a Geisha."',
@@ -27,7 +25,6 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				actor_id: 3,
 				name: 'Jet Li',
 				description:
 					'Jet Li is a Chinese actor and martial artist known for his roles in martial arts films such as "Once Upon a Time in China" and "Hero."',
@@ -38,7 +35,6 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				actor_id: 4,
 				name: 'Gong Li',
 				description:
 					'Gong Li is a renowned Chinese actress who has appeared in many critically acclaimed films, including "Raise the Red Lantern" and "Farewell My Concubine."',
@@ -49,7 +45,6 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				actor_id: 5,
 				name: 'Donnie Yen',
 				description:
 					'Donnie Yen is a Hong Kong actor and martial artist famous for his roles in the "Ip Man" series and "Rogue One: A Star Wars Story."',
@@ -60,7 +55,6 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				actor_id: 6,
 				name: 'Zhou Xun',
 				description:
 					'Zhou Xun is a Chinese actress known for her versatile acting and roles in films like "The Banquet" and "Perhaps Love."',
@@ -71,7 +65,6 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				actor_id: 7,
 				name: 'Jackie Chan',
 				description:
 					'Jackie Chan is a Hong Kong actor, martial artist, and stuntman known for his action-comedy films, including "Rush Hour" and "Police Story."',
@@ -82,7 +75,6 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				actor_id: 8,
 				name: 'Li Bingbing',
 				description:
 					'Li Bingbing is a Chinese actress who has appeared in a wide range of films, including "The Forbidden Kingdom" and "Resident Evil: Retribution."',
@@ -93,7 +85,6 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				actor_id: 9,
 				name: 'Andy Lau',
 				description:
 					'Andy Lau is a Hong Kong actor and singer known for his work in films like "Infernal Affairs" and "A Moment of Romance."',
@@ -104,7 +95,6 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				actor_id: 10,
 				name: 'Tang Wei',
 				description:
 					'Tang Wei is a Chinese actress recognized for her roles in "Lust, Caution" and "Finding Mr. Right."',
@@ -115,7 +105,6 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				actor_id: 11,
 				name: 'Wu Jing',
 				description:
 					'Wu Jing is a Chinese actor, director, and martial artist known for his roles in "Wolf Warrior" and "The Wandering Earth."',
@@ -126,7 +115,6 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				actor_id: 12,
 				name: 'Fan Bingbing',
 				description:
 					'Fan Bingbing is a Chinese actress and producer famous for her roles in "X-Men: Days of Future Past" and "Cell Phone."',
@@ -137,7 +125,6 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				actor_id: 13,
 				name: 'Tony Leung Chiu-Wai',
 				description:
 					'Tony Leung Chiu-Wai is a Hong Kong actor acclaimed for his performances in films like "In the Mood for Love" and "Chungking Express."',
@@ -148,7 +135,6 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				actor_id: 14,
 				name: 'Vicki Zhao',
 				description:
 					'Vicki Zhao is a Chinese actress and director known for her work in films like "Mulan" and "Shaolin Soccer."',
@@ -159,7 +145,6 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				actor_id: 15,
 				name: 'Louis Koo',
 				description:
 					'Louis Koo is a Hong Kong actor and film producer recognized for his roles in "Election" and "Paradox."',
@@ -170,7 +155,6 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				actor_id: 16,
 				name: 'Shu Qi',
 				description:
 					'Shu Qi is a Taiwanese-Hong Kong actress known for her appearances in "The Transporter" and "If You Are the One."',
@@ -181,7 +165,6 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				actor_id: 17,
 				name: 'Stephen Chow',
 				description:
 					'Stephen Chow is a Hong Kong actor, comedian, and filmmaker celebrated for his comedy films like "Kung Fu Hustle" and "Shaolin Soccer."',
@@ -192,7 +175,6 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				actor_id: 18,
 				name: 'Shu Qi',
 				description:
 					'Shu Qi is a Taiwanese-Hong Kong actress known for her appearances in "The Transporter" and "If You Are the One."',
@@ -203,7 +185,6 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				actor_id: 19,
 				name: 'Huang Bo',
 				description:
 					'Huang Bo is a Chinese actor, director, and writer famous for his roles in "Crazy Alien" and "The Island."',
@@ -214,7 +195,6 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				actor_id: 20,
 				name: 'Maggie Cheung',
 				description:
 					'Maggie Cheung is a Hong Kong actress recognized for her work in "In the Mood for Love" and "Hero."',

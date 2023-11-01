@@ -10,7 +10,6 @@ import { BaseRepository } from './BaseRepository';
 import { Container, Service } from 'typedi';
 import { Movie } from '../models/Movie';
 
-const db = Database.getInstance();
 @Service()
 export class UserRepository
 	extends BaseRepository<User>
@@ -59,7 +58,7 @@ export class UserRepository
 		return user!;
 	}
 	async createNewUser(newUser: User, newAccount: Account): Promise<void> {
-		const t = await db.sequelize!.transaction();
+		const t = await this.db.sequelize!.transaction();
 
 		try {
 			await newUser.save({ transaction: t });
@@ -101,6 +100,8 @@ export class UserRepository
 					[Op.eq]: gender,
 				};
 			}
+
+			console.log(whereConditions);
 
 			const users = await User.findAll({
 				where: whereConditions,

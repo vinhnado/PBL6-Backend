@@ -7,22 +7,23 @@ class IndividualRoutes extends BaseRoutes {
 	}
 	public routes(): void {
 		this.router.get('/actor', this.controller.findActorInfomation);
+		this.router.delete('/actor', this.controller.deleteActor);
 		this.router.post(
 			'/actor/createOrUpdate',
 			this.controller.createOrUpdateActor
 		);
-		this.router.get('/actor/get-all', this.controller.findActorInfomation);
-		this.router.get('/actor/search', this.controller.findActorInfomation);
-		this.router.get('/actor/delete', this.controller.findActorInfomation);
+		this.router.get('/actor/get-all', this.controller.getAllActor);
+		this.router.get('/actor/search', this.controller.searchActor);
 
-		this.router.get('/director', this.controller.findActorInfomation);
+		this.router.get('/director', this.controller.findDirectortorInfomation);
+		this.router.delete('/director', this.controller.deleteDirector);
 		this.router.post(
 			'/director/createOrUpdate',
-			this.controller.createOrUpdateActor
+			this.controller.createOrUpdateDirector
 		);
-		this.router.get('/director/get-all', this.controller.findActorInfomation);
-		this.router.get('/director/search', this.controller.findActorInfomation);
-		this.router.get('/director/delete', this.controller.findActorInfomation);
+		this.router.get('/director/get-all', this.controller.getAllDirector);
+		this.router.get('/director/search', this.controller.searchDirector);
+		this.router.delete('/director', this.controller.deleteDirector);
 	}
 }
 
