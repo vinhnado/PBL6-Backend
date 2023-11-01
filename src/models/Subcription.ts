@@ -21,6 +21,7 @@ export class Subcription extends Model {
 	private static USER_ID = 'user_id' as string;
 	private static SUBCRIPTION_TYPE_ID = 'subcription_type_id' as string;
 	private static STATUS = 'status' as string;
+	private static CLOSED_AT = 'closedAt' as string;
 
 	@Column({
 		type: DataType.INTEGER,
@@ -29,6 +30,18 @@ export class Subcription extends Model {
 		field: Subcription.SUBSCRIPTION_ID,
 	})
 	subscriptionId!: number;
+
+	@Column({
+		type: DataType.BOOLEAN,
+		field: Subcription.STATUS,
+	})
+	status!: boolean;
+
+	@Column({
+		type: DataType.DATE,
+		field: Subcription.CLOSED_AT,
+	})
+	closedAt!: Date;
 
 	@ForeignKey(() => User)
 	@Column({
@@ -49,10 +62,4 @@ export class Subcription extends Model {
 
 	@BelongsTo(() => SubcriptionType)
 	subcriptionType!: SubcriptionType;
-
-	@Column({
-		type: DataType.BOOLEAN,
-		field: Subcription.STATUS,
-	})
-	status!: boolean;
 }
