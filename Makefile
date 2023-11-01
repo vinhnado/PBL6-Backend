@@ -22,3 +22,5 @@ log:
 	docker-compose logs -f
 log-sudo:
 	sudo docker-compose logs -f
+seeder2:
+	sudo docker compose exec app sh -c "cd src && npx sequelize-cli db:seed:all"

@@ -29,7 +29,7 @@ export class Director extends Model {
 		autoIncrement: true,
 		field: Director.DIRECTOR_ID,
 	})
-	directorID!: number;
+	directorId!: number;
 
 	@Column({
 		type: DataType.STRING(50),

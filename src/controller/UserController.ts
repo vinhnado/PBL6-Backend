@@ -6,11 +6,9 @@ import Container from 'typedi';
 
 export class UserController {
 	private userService: UserService;
-	private s3Service: S3Service;
 
 	constructor() {
 		this.userService = Container.get(UserService);
-		this.s3Service = Container.get(S3Service);
 	}
 
 	getUser = async (req: Request, res: Response) => {
@@ -226,6 +224,24 @@ export class UserController {
 			return res.status(200).json({
 				status: 'Ok!',
 				message: 'Successfully!',
+			});
+		} catch (error: any) {
+			console.log(error);
+			return res.status(500).json({ error: 'Lỗi khi tao moi' });
+		}
+	};
+
+	getWatchHistory = async (req: Request, res: Response) => {
+		try {
+			const { movieId } = req.query;
+			const data = await this.userService.getWatchHistory(
+				req.payload.userId,
+				Number(movieId)
+			);
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully!',
+				data: data,
 			});
 		} catch (error: any) {
 			console.log(error);

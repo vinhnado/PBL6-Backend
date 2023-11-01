@@ -47,9 +47,15 @@ class UserRoutes extends BaseRoutes {
 			this.controller.deleteWatchHistory
 		);
 		this.router.get(
-			'/get-history-movie-list',
+			'/get-movie-history-list',
 			auth,
 			this.controller.getWatchHistoryList
+		);
+
+		this.router.get(
+			'/get-movie-history',
+			auth,
+			this.controller.getWatchHistory
 		);
 	}
 }
