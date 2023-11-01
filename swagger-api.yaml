@@ -14,8 +14,10 @@ tags:
     externalDocs:
       description: Find out more
       url: 'http://swagger.io'
-  - name: store
-    description: Access to Petstore orders
+  - name: episode
+    description: API for Episode
+  - name: home
+    description: API for Home Page
   - name: user
     description: Operations about user
     externalDocs:
@@ -121,14 +123,10 @@ paths:
                   $ref: '#/components/schemas/Pet'
         '400':
           description: Khong the lay danh sach phim
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
     post:
       tags:
         - movie
-      summary: Add a new pet to the store
+      summary: Add a new movie (To do)
       operationId: addPet
       responses:
         '405':
@@ -142,7 +140,7 @@ paths:
     put:
       tags:
         - movie
-      summary: Update an existing pet
+      summary: Update an existing movie (To do)
       operationId: updatePet
       responses:
         '400':
@@ -157,103 +155,43 @@ paths:
             - 'read:pets'
       requestBody:
         $ref: '#/components/requestBodies/Pet'
-  /pet/findByStatus:
-    get:
+    delete:
       tags:
         - movie
-      summary: Finds Pets by status
-      description: Multiple status values can be provided with comma separated strings
-      operationId: findPetsByStatus
+      summary: Deletes a movie by ID
+      operationId: deleteMovie
       parameters:
-        - name: status
+        - name: id
           in: query
-          description: Status values that need to be considered for filter
+          description: Movie ID to delete
           required: true
-          explode: true
           schema:
-            type: array
-            items:
-              type: string
-              enum:
-                - available
-                - pending
-                - sold
-              default: available
+            type: integer
+            format: int64
       responses:
-        '200':
-          description: successful operation
+        '204':
+          description: Movie deleted successfully
           content:
             application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
+              example:
+                status: true
+                message: Delete successfully
         '400':
-          description: Invalid status value
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-  /pet/findByTags:
+          description: Invalid ID supplied
+        '404':
+          description: Movie not found
+
+  '/movies/{id}':
     get:
       tags:
         - movie
-      summary: Finds Pets by tags
-      description: >-
-        Muliple tags can be provided with comma separated strings. Use\ \ tag1,
-        tag2, tag3 for testing.
-      operationId: findPetsByTags
+      summary: Find Movie by ID
+      description: Returns a single movie
+      operationId: getMovieById
       parameters:
-        - name: tags
-          in: query
-          description: Tags to filter by
-          required: true
-          explode: true
-          schema:
-            type: array
-            items:
-              type: string
-              enum:
-                - available
-                - pending
-                - sold
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
-        '400':
-          description: Invalid tag value
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-      deprecated: true
-  '/pet/{petId}':
-    get:
-      tags:
-        - movie
-      summary: Find pet by ID
-      description: Returns a single pet
-      operationId: getPetById
-      parameters:
-        - name: petId
+        - name: id
           in: path
-          description: ID of pet to return
+          description: ID of movie to return
           required: true
           schema:
             type: integer
@@ -271,14 +209,14 @@ paths:
         '400':
           description: Invalid ID supplied
         '404':
-          description: Pet not found
+          description: Movie not found
       security:
         - api_key: []
     post:
       tags:
         - movie
-      summary: Updates a pet in the store with form data
-      operationId: updatePetWithForm
+      summary: Updates a movie with form data (To do)
+      operationId: updateMovieWithForm
       parameters:
         - name: petId
           in: path
@@ -306,71 +244,22 @@ paths:
                 status:
                   description: Updated status of the pet
                   type: string
-    delete:
-      tags:
-        - movie
-      summary: Deletes a pet
-      operationId: deletePet
-      parameters:
-        - name: api_key
-          in: header
-          required: false
-          schema:
-            type: string
-        - name: petId
-          in: path
-          description: Pet id to delete
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Pet not found
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-  '/pet/{petId}/uploadImage':
-    post:
-      tags:
-        - pet
-      summary: uploads an image
-      operationId: uploadFile
-      parameters:
-        - name: petId
-          in: path
-          description: ID of pet to update
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-      requestBody:
-        content:
-          application/octet-stream:
-            schema:
-              type: string
-              format: binary
-  /store/inventory:
+
+  /episode/{id}:
     get:
       tags:
-        - store
-      summary: Returns pet inventories by status
-      description: Returns a map of status codes to quantities
-      operationId: getInventory
+        - episode
+      summary: Returns details episode of movie
+      description: Returns details episode of movie
+      parameters:
+        - name: id
+          in: path
+          description: ID of episode to return
+          required: true
+          explode: true
+          schema:
+            type: integer
+            format: int64     
       responses:
         '200':
           description: successful operation
@@ -383,276 +272,95 @@ paths:
                   format: int32
       security:
         - api_key: []
-  /store/order:
-    post:
-      tags:
-        - store
-      summary: Place an order for a pet
-      operationId: placeOrder
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Order'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Order'
-        '400':
-          description: Invalid Order
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Order'
-        description: order placed for purchasing the pet
-        required: true
-  '/store/order/{orderId}':
+ 
+  /home:
     get:
       tags:
-        - store
-      summary: Find purchase order by ID
-      description: >-
-        For valid response try integer IDs with value >= 1 and <= 10.\ \ Other
-        values will generated exceptions
-      operationId: getOrderById
+        - home
+      summary: Get movies by genre
+      description: Get list genres and movies of genre
+      operationId: findMoviesByGenre
       parameters:
-        - name: orderId
-          in: path
-          description: ID of pet that needs to be fetched
-          required: true
-          schema:
-            type: integer
-            format: int64
-            minimum: 1
-            maximum: 10
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Order'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Order'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Order not found
-    delete:
-      tags:
-        - store
-      summary: Delete purchase order by ID
-      description: >-
-        For valid response try integer IDs with positive integer value.\ \
-        Negative or non-integer values will generate API errors
-      operationId: deleteOrder
-      parameters:
-        - name: orderId
-          in: path
-          description: ID of the order that needs to be deleted
-          required: true
-          schema:
-            type: integer
-            format: int64
-            minimum: 1
-      responses:
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Order not found
-  /user:
-    post:
-      tags:
-        - user
-      summary: Create user
-      description: This can only be done by the logged in user.
-      operationId: createUser
-      responses:
-        default:
-          description: successful operation
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
-        description: Created user object
-        required: true
-  /user/createWithArray:
-    post:
-      tags:
-        - user
-      summary: Creates list of users with given input array
-      operationId: createUsersWithArrayInput
-      responses:
-        default:
-          description: successful operation
-      requestBody:
-        $ref: '#/components/requestBodies/UserArray'
-  /user/createWithList:
-    post:
-      tags:
-        - user
-      summary: Creates list of users with given input array
-      operationId: createUsersWithListInput
-      responses:
-        default:
-          description: successful operation
-      requestBody:
-        $ref: '#/components/requestBodies/UserArray'
-  /user/login:
-    get:
-      tags:
-        - user
-      summary: Logs user into the system
-      operationId: loginUser
-      parameters:
-        - name: username
+        - name: genreId
           in: query
-          description: The user name for login
-          required: true
+          description: Enter value to search by title and discription of movies
+          required: false
+          explode: true
           schema:
-            type: string
-        - name: password
+            type: number
+        - name: page
           in: query
-          description: The password for login in clear text
-          required: true
+          description: Use to pagination, default page = 1
+          required: false
+          explode: true
           schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          headers:
-            X-Rate-Limit:
-              description: calls per hour allowed by the user
-              schema:
-                type: integer
-                format: int32
-            X-Expires-After:
-              description: date in UTC when token expires
-              schema:
-                type: string
-                format: date-time
-          content:
-            application/json:
-              schema:
-                type: string
-            application/xml:
-              schema:
-                type: string
-        '400':
-          description: Invalid username/password supplied
-  /user/logout:
-    get:
-      tags:
-        - user
-      summary: Logs out current logged in user session
-      operationId: logoutUser
-      responses:
-        default:
-          description: successful operation
-  '/user/{username}':
-    get:
-      tags:
-        - user
-      summary: Get user by user name
-      operationId: getUserByName
-      parameters:
-        - name: username
-          in: path
-          description: The name that needs to be fetched. Use user1 for testing.
-          required: true
+            type: number
+        - name: pageSize
+          in: query
+          description: Use to pagination, default pageSize = 6
+          required: false
+          explode: true
           schema:
-            type: string
+            type: number
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/User'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
         '400':
-          description: Invalid username supplied
-        '404':
-          description: User not found
-    put:
-      tags:
-        - user
-      summary: Updated user
-      description: This can only be done by the logged in user.
-      operationId: updateUser
-      parameters:
-        - name: username
-          in: path
-          description: name that need to be updated
-          required: true
-          schema:
-            type: string
-      responses:
-        '400':
-          description: Invalid user supplied
-        '404':
-          description: User not found
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
-        description: Updated user object
-        required: true
-    delete:
-      tags:
-        - user
-      summary: Delete user
-      description: This can only be done by the logged in user.
-      operationId: deleteUser
-      parameters:
-        - name: username
-          in: path
-          description: The name that needs to be deleted
-          required: true
-          schema:
-            type: string
-      responses:
-        '400':
-          description: Invalid username supplied
-        '404':
-          description: User not found
+          description: Error while get movies by genres
+
+  
 externalDocs:
   description: Find out more about Swagger
   url: 'http://swagger.io'
 components:
   schemas:
-    Order:
+    Movie:
       type: object
       properties:
-        id:
+        movieId:
           type: integer
           format: int64
-        petId:
-          type: integer
-          format: int64
-        quantity:
-          type: integer
-          format: int32
-        shipDate:
+        title:
+          type: string
+        description:
+          type: string
+        releaseDate:
           type: string
           format: date-time
-        status:
+        nation:
           type: string
-          description: Order Status
+          format: string
+        posterURL:
+          type: string
+          format: string
+        trailerURL:
+          type: string
+          format: string
+        backgroundURL:
+          type: string
+          format: string          
+        averageRating:
+          type: number
+        episodeNum:
+          type: number
+        level:
+          type: number           
           enum:
-            - placed
-            - approved
-            - delivered
-        complete:
+            - 0
+            - 1
+            - 2
+            - 3
+        isSeries:
           type: boolean
           default: false
+        numFavorite:
+          type: number
       xml:
         name: Order
     Category:

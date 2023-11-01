@@ -5,6 +5,7 @@ import { IMovieRepository } from '../repository/Interfaces/IMovieRepository';
 import { MovieRepository } from '../repository/MovieRepository';
 import { ISearchMovieOption } from '../repository/Interfaces/ISearchMovieOption';
 import { S3Service } from './S3Service';
+import { Op } from 'sequelize';
 
 
 @Service()
@@ -23,10 +24,60 @@ export class MovieService implements IMovieService {
 		pageSize: number
 	): Promise<Movie[]> {
 		try {
+			const { search, genre, nation, year, isSeries, sort, sortType } = options;
+	  
+			const whereCondition: any = {};
+			const whereConditionGenre: any = {};
+	
+			if (search) {
+			  whereCondition[Op.or] = [
+				{ 'title': { [Op.iLike]: `%${search}%` } },
+				{ 'description': { [Op.iLike]: `%${search}%` } },
+			  ];
+			}else{
+				const search='';
+			}
+	
+			if(genre){
+				whereConditionGenre['genreId'] = genre;
+			}
+		  
+			if (nation) {
+			  whereCondition['nation'] = nation;
+			}
+		  
+			if (year) {
+			  whereCondition['release_date'] = {
+				[Op.between]: [new Date(year, 0, 1), new Date(year, 11, 31)],
+			  };
+			}
+		  
+			if (isSeries !== undefined) {
+			  whereCondition['isSeries'] = isSeries;
+			}
+		  
+			const sortFieldMap = {
+				highRated: 'average_rating',
+				newest: 'release_date',
+				highFavorited: 'num_favorite',
+			  };
+	
+			let sortField = 'movie_id';
+			let sortBy = 'ASC';
+			if(sort){
+				sortField = sortFieldMap[sort] || 'movieId';;
+			}
+			if(sortType){
+				sortBy = sortType || 'ASC';
+			}
+			
 			let movies = await this.movieRepository.searchMovies(
-				options,
+				whereCondition,
+				whereConditionGenre,
 				page=page,
-				pageSize=pageSize
+				pageSize=pageSize,
+				sortField,
+				sortBy
 			);
 			for (const movie of movies) {
 				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
@@ -42,16 +93,21 @@ export class MovieService implements IMovieService {
 
 	public async getMovieById(id: number): Promise<Movie | null> {
 		try {
-			return await this.movieRepository.getMovieById(id);
+			let movie = await this.movieRepository.getMovieById(id);
+			if(movie){
+				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
+				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
+				movie.backgroundURL = await this.s3Service.getObjectUrl('movies/'.concat((movie.movieId).toString(),'/background.jpg'));
+			}
+			return movie;
 		} catch (error: any) {
-			throw new Error('Không thể lấy thông tin phim: ' + error.message);
+			throw new Error('Can not get movie: ' + error.message);
 		}
 	}
 
 	async getAllMovies(): Promise<Movie[]> {
 		try {
-			const movies = await this.movieRepository.getAllMovies();
-			return movies;
+			return await this.movieRepository.getAllMovies();
 		} catch (error) {
 			throw new Error('Could not fetch movies');
 		}
@@ -59,7 +115,11 @@ export class MovieService implements IMovieService {
 
 	async deleteMovieById(id: number): Promise<void> {
 		try {
-			await this.movieRepository.deleteMovieById(id);
+			console.log(id);
+			
+			const movie = await this.movieRepository.findById(id);
+			console.log(movie);
+			return await this.movieRepository.delete(movie);
 		} catch (error) {
 			throw new Error('Could not delete movie');
 		}
