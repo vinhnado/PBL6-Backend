@@ -260,9 +260,6 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-
-      
-      
       // Add more movie records as needed
     ]);
   },
