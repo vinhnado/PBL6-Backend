@@ -22,6 +22,7 @@ export class Director extends Model {
 	private static DIRECTOR_GENDER = 'gender' as string;
 	private static DIRECTOR_DATE_OF_BIRTH = 'date_of_birth' as string;
 	private static DIRECTOR_AVARTAR_URL = 'avatar' as string;
+	private static DIRECTOR_POSTER_URL = 'poster' as string;
 
 	@Column({
 		type: DataType.INTEGER,
@@ -61,6 +62,12 @@ export class Director extends Model {
 		field: Director.DIRECTOR_AVARTAR_URL,
 	})
 	avatar!: string;
+
+	@Column({
+		type: DataType.TEXT,
+		field: Director.DIRECTOR_POSTER_URL,
+	})
+	poster!: string;
 
 	@DeletedAt
 	deletedAt!: Date;

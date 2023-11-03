@@ -22,6 +22,7 @@ export class Actor extends Model {
 	private static ACTOR_GENDER = 'gender' as string;
 	private static ACTOR_DATE_OF_BIRTH = 'date_of_birth' as string;
 	private static ACTOR_AVARTAR_URL = 'avatar' as string;
+	private static ACTOR_POSTER_URL = 'poster' as string;
 
 	@Column({
 		type: DataType.INTEGER,
@@ -60,6 +61,12 @@ export class Actor extends Model {
 		field: Actor.ACTOR_AVARTAR_URL,
 	})
 	avatar!: string;
+
+	@Column({
+		type: DataType.TEXT,
+		field: Actor.ACTOR_POSTER_URL,
+	})
+	poster!: string;
 
 	@DeletedAt
 	deletedAt!: Date;

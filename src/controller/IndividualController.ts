@@ -39,13 +39,9 @@ export class IndividualController {
 
 	findActorInfomation = async (req: Request, res: Response) => {
 		try {
-			const { actorId, page, pageSize } = req.query;
+			const { actorId } = req.query;
 
-			const data = await this.actorService.findActorInfomation(
-				Number(actorId),
-				Number(page),
-				Number(pageSize)
-			);
+			const data = await this.actorService.findActorInfomation(Number(actorId));
 			return res.status(200).json({
 				status: 'Ok!',
 				message: 'Successfully',
@@ -127,12 +123,10 @@ export class IndividualController {
 
 	findDirectortorInfomation = async (req: Request, res: Response) => {
 		try {
-			const { directorId, page, pageSize } = req.query;
+			const { directorId } = req.query;
 
 			const data = await this.directorService.findDirectortorInfomation(
-				Number(directorId),
-				Number(page),
-				Number(pageSize)
+				Number(directorId)
 			);
 			return res.status(200).json({
 				status: 'Ok!',

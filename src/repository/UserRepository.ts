@@ -1,3 +1,4 @@
+import { Subcription } from './../models/Subcription';
 import { User } from '../models/User';
 import { Account } from '../models/Account';
 import { Op, Sequelize, json } from 'sequelize';
@@ -9,7 +10,6 @@ import { WatchHistory } from '../models/WatchHistory';
 import { BaseRepository } from './BaseRepository';
 import { Container, Service } from 'typedi';
 import { Movie } from '../models/Movie';
-import { Subcription } from '../models/Subcription';
 import { SubcriptionType } from '../models/SubcriptionType';
 
 @Service()
@@ -59,15 +59,17 @@ export class UserRepository
 		});
 		return user!;
 	}
-	async createNewUser(newUser: User, newAccount: Account): Promise<void> {
+	async createNewUser(
+		newUser: User,
+		newAccount: Account,
+		newSubcription: Subcription
+	): Promise<void> {
 		const t = await this.db.sequelize!.transaction();
 
 		try {
-			// const subcription = Subcription.build();
-			// newUser.subcription = subcription;
 			await newUser.save({ transaction: t });
 			await newAccount.save({ transaction: t });
-			// await subcription.save({ transaction: t });
+			await newSubcription.save({ transaction: t });
 
 			await t.commit(); // Lưu giao dịch nếu không có lỗi
 		} catch (error: any) {

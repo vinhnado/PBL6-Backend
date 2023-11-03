@@ -12,17 +12,17 @@ module.exports = {
 					updatedAt: new Date(),
 				},
 				{
+					name: 'Standard',
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
+				{
 					name: 'Vip 1',
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},
 				{
 					name: 'Vip 2',
-					createdAt: new Date(),
-					updatedAt: new Date(),
-				},
-				{
-					name: 'Vip 3',
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},

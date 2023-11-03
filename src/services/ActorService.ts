@@ -1,23 +1,30 @@
 import { Actor } from '../models/Actor';
 import { ActorRepository } from './../repository/ActorRepository';
 import { Inject, Service } from 'typedi';
+import { S3Service } from './S3Service';
 
 @Service()
 export class ActorService {
 	@Inject(() => ActorRepository)
 	private actorRepository!: ActorRepository;
 
-	findActorInfomation = async (
-		actorId: number,
-		page: number,
-		pageSize: number
-	) => {
+	@Inject(() => S3Service)
+	private s3Service!: S3Service;
+
+	findActorInfomation = async (actorId: number) => {
 		try {
-			return await this.actorRepository.findActorInfomation(
-				actorId,
-				page,
-				pageSize
-			);
+			let actor = await this.actorRepository.findActorInfomation(actorId);
+			actor!.avatar = await this.s3Service.getObjectUrl(actor!.avatar);
+			actor!.poster = await this.s3Service.getObjectUrl(actor!.poster);
+			console.log(actor);
+			for (const movie of actor!.movies) {
+				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
+				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
+				movie.backgroundURL = await this.s3Service.getObjectUrl(
+					'movies/'.concat(movie.movieId.toString(), '/background.jpg')
+				);
+			}
+			return actor;
 		} catch (error) {
 			console.log(error);
 			throw new Error('Cannot get all movie');

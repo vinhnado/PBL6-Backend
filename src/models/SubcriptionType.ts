@@ -7,6 +7,7 @@ import {
 	ForeignKey,
 	BelongsTo,
 	HasMany,
+	DeletedAt,
 } from 'sequelize-typescript';
 
 @Table({
@@ -36,4 +37,7 @@ export class SubcriptionType extends Model {
 
 	@HasMany(() => Subcription)
 	subcriptions!: Subcription[];
+
+	@DeletedAt
+	deletedAt!: Date;
 }
