@@ -14,8 +14,20 @@ export class ActorService {
 	findActorInfomation = async (actorId: number) => {
 		try {
 			let actor = await this.actorRepository.findActorInfomation(actorId);
-			actor!.avatar = await this.s3Service.getObjectUrl(actor!.avatar);
-			actor!.poster = await this.s3Service.getObjectUrl(actor!.poster);
+			if (actor!.avatar) {
+				actor!.avatar = await this.s3Service.getObjectUrl(actor!.avatar);
+			} else {
+				actor!.avatar = await this.s3Service.getObjectUrl(
+					'default/actor/default_avatar.jpg'
+				);
+			}
+			if (actor!.poster) {
+				actor!.poster = await this.s3Service.getObjectUrl(actor!.poster);
+			} else {
+				actor!.poster = await this.s3Service.getObjectUrl(
+					'default/actor/default_poster.jpg'
+				);
+			}
 			console.log(actor);
 			for (const movie of actor!.movies) {
 				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
