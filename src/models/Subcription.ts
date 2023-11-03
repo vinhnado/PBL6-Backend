@@ -17,10 +17,8 @@ import { SubcriptionType } from './SubcriptionType';
 })
 export class Subcription extends Model {
 	private static SUBSCRIPTION_TABLE_NAME = 'Subcriptions' as string;
-	private static SUBSCRIPTION_ID = 'subscription_id' as string;
-	private static USER_ID = 'user_id' as string;
+	private static SUBSCRIPTION_ID = 'subcription_id' as string;
 	private static SUBCRIPTION_TYPE_ID = 'subcription_type_id' as string;
-	private static STATUS = 'status' as string;
 	private static CLOSED_AT = 'closedAt' as string;
 
 	@Column({
@@ -29,13 +27,7 @@ export class Subcription extends Model {
 		autoIncrement: true,
 		field: Subcription.SUBSCRIPTION_ID,
 	})
-	subscriptionId!: number;
-
-	@Column({
-		type: DataType.BOOLEAN,
-		field: Subcription.STATUS,
-	})
-	status!: boolean;
+	subcriptionId!: number;
 
 	@Column({
 		type: DataType.DATE,
@@ -43,20 +35,11 @@ export class Subcription extends Model {
 	})
 	closedAt!: Date;
 
-	@ForeignKey(() => User)
-	@Column({
-		type: DataType.INTEGER,
-		field: Subcription.USER_ID,
-	})
-	userId!: number;
-
-	@BelongsTo(() => User)
-	user!: User;
-
 	@ForeignKey(() => SubcriptionType)
 	@Column({
 		type: DataType.INTEGER,
 		field: Subcription.SUBCRIPTION_TYPE_ID,
+		defaultValue: 1,
 	})
 	subcriptionTypeId!: number;
 

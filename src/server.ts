@@ -5,9 +5,10 @@ import UserRouter from './route/UserRoutes';
 import MovieRouter from './route/MovieRoutes';
 import AuthenticationRouter from './route/AuthenticationRoutes';
 import cors from 'cors';
-import HomeRoutes from './route/HomeRoutes';
+import HomeRouter from './route/HomeRoutes';
 import IndividualRouter from './route/IndividualRoutes';
-import EpisodeRoutes from './route/EpisodeRoutes';
+import EpisodeRouter from './route/EpisodeRoutes';
+import SubcriptionRouter from './route/SubcriptionRoutes';
 
 class App {
 	public app: Application;
@@ -22,12 +23,12 @@ class App {
 	private databaseSync(): void {
 		const movieRepository = Database.getInstance();
 		movieRepository
-			.sequelize!.sync({ alter: true })
+			.sequelize!.sync({ force: false })
 			.then(() => {
 				console.log('✅ Cơ sở dữ liệu đã được đồng bộ hóa.');
 			})
 			.catch((error) => {
-				console.error('Lỗi đồng bộ hóa cơ sở dữ liệu:', error);
+				console.error('❌ Lỗi đồng bộ hóa cơ sở dữ liệu:', error);
 			});
 	}
 
@@ -38,9 +39,10 @@ class App {
 		this.app.use('/api/movies', MovieRouter);
 		this.app.use('/api/auth', AuthenticationRouter);
 		this.app.use('/api/user', UserRouter);
-		this.app.use('/api/home', HomeRoutes);
+		this.app.use('/api/home', HomeRouter);
 		this.app.use('/api/individual', IndividualRouter);
-		this.app.use('/api/episode', EpisodeRoutes);
+		this.app.use('/api/episode', EpisodeRouter);
+		this.app.use('/api/subcription', SubcriptionRouter);
 	}
 
 	private plugins(): void {

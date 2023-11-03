@@ -9,6 +9,8 @@ import { WatchHistory } from '../models/WatchHistory';
 import { BaseRepository } from './BaseRepository';
 import { Container, Service } from 'typedi';
 import { Movie } from '../models/Movie';
+import { Subcription } from '../models/Subcription';
+import { SubcriptionType } from '../models/SubcriptionType';
 
 @Service()
 export class UserRepository
@@ -61,8 +63,11 @@ export class UserRepository
 		const t = await this.db.sequelize!.transaction();
 
 		try {
+			// const subcription = Subcription.build();
+			// newUser.subcription = subcription;
 			await newUser.save({ transaction: t });
 			await newAccount.save({ transaction: t });
+			// await subcription.save({ transaction: t });
 
 			await t.commit(); // Lưu giao dịch nếu không có lỗi
 		} catch (error: any) {

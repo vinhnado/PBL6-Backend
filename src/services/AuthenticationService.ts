@@ -5,6 +5,7 @@ import { UserRepository } from '../repository/UserRepository';
 import { IAuthenticationService } from './Interfaces/IAuthenticationService';
 import Container, { Inject, Service } from 'typedi';
 import { IUserRepository } from '../repository/Interfaces/IUserRepository';
+import { Subcription } from '../models/Subcription';
 
 @Service()
 export class AuthenticationService implements IAuthenticationService {
@@ -48,14 +49,16 @@ export class AuthenticationService implements IAuthenticationService {
 			const hashedPassword: string = await Authentication.passwordHash(
 				password
 			);
-			console.log(this.userRepository);
-			const newUser = new User();
-			const newAccount = new Account();
-			newUser.email = email;
-			newUser.dateOfBirth = dateOfBirth;
-			newUser.gender = gender;
-			newAccount.username = username;
-			newAccount.password = hashedPassword;
+
+			const newAccount = Account.build({
+				username: username,
+				password: hashedPassword,
+			});
+			const newUser = User.build({
+				email: email,
+				dateOfBirth: dateOfBirth,
+				gender: gender,
+			});
 			newUser.account = newAccount;
 			await this.userRepository.createNewUser(newUser, newAccount);
 		} catch (error) {

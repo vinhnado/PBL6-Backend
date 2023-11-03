@@ -15,17 +15,17 @@ import {
 	paranoid: true,
 })
 export class SubcriptionType extends Model {
-	private static SUBSCRIPTION_TYPE_TABLE_NAME = 'SubcriptionType' as string;
-	private static SUBSCRIPTION_ID = 'subscription_type_id' as string;
+	private static SUBSCRIPTION_TYPE_TABLE_NAME = 'SubcriptionTypes' as string;
+	private static SUBSCRIPTION_TYPE_ID = 'subcription_type_id' as string;
 	private static SUBCRIPTION_TYPE_NAME = 'name' as string;
 
 	@Column({
 		type: DataType.INTEGER,
 		primaryKey: true,
 		autoIncrement: true,
-		field: SubcriptionType.SUBSCRIPTION_ID,
+		field: SubcriptionType.SUBSCRIPTION_TYPE_ID,
 	})
-	subscriptionId!: number;
+	subcriptionId!: number;
 
 	@ForeignKey(() => SubcriptionType)
 	@Column({

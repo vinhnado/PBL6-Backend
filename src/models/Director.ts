@@ -20,7 +20,7 @@ export class Director extends Model {
 	private static DIRECTOR_NAME = 'name' as string;
 	private static DIRECTOR_DESCRIPTION = 'description' as string;
 	private static DIRECTOR_GENDER = 'gender' as string;
-	private static DIRECTOR_DATE_OF_BIRTH = 'dateOfBirth' as string;
+	private static DIRECTOR_DATE_OF_BIRTH = 'date_of_birth' as string;
 	private static DIRECTOR_AVARTAR_URL = 'avatar' as string;
 
 	@Column({

@@ -31,8 +31,9 @@ export class MovieItem {
 	numFavorite: null | number;
 	isSeries: null | boolean;
 	updatedAt: Date;
+	duration!: null | number;
 
-	constructor(movie: Movie, updatedAt: Date) {
+	constructor(movie: Movie, updatedAt: Date, duration: number | null = null) {
 		this.movieId = movie.movieId;
 		this.title = movie.title;
 		this.description = movie.description;
@@ -45,6 +46,9 @@ export class MovieItem {
 		this.numFavorite = movie.numFavorite;
 		this.isSeries = movie.isSeries;
 		this.updatedAt = updatedAt;
+		if (duration != null) {
+			this.duration = duration;
+		}
 	}
 
 	public static movieListToMovieItemList(
@@ -62,7 +66,11 @@ export class MovieItem {
 		}
 		for (const movie of user_movie_list) {
 			const movieJson = movie.toJSON();
-			const movieItem = new MovieItem(movie, movieJson[type]?.updatedAt);
+			const movieItem = new MovieItem(
+				movie,
+				movieJson[type]?.updatedAt,
+				movieJson[type]?.duration!
+			);
 			movieItemList.push(movieItem);
 		}
 
