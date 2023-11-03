@@ -25,4 +25,8 @@ export interface IMovieRepository extends BaseInterface {
 		episodeNum: number,
 		level: number
 	): Promise<Movie>;
+
+	getMoviesTrending(): Promise<Movie[]>;
+	getMoviesRecommender(): Promise<Movie[]>;
+	getMoviesUpcoming(): Promise<Movie[]>;
 }

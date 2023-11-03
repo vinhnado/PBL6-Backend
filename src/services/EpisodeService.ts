@@ -27,13 +27,13 @@ export class EpisodeService implements IEpisodeService {
                 if(episode.posterUrl){
                     episode.posterUrl = await this.s3Service.getObjectUrl(episode.posterUrl);
                 }else{
-                    episode.posterUrl = await this.s3Service.getObjectUrl('episodes/posterUrl/poster_default.jpg');
+                    episode.posterUrl = await this.s3Service.getObjectUrl('default/poster_default.jpg');
                 }
 
                 if(episode.movieUrl) {
                     episode.movieUrl = await this.s3Service.getObjectUrl(episode.movieUrl);
                 }else{
-                    episode.movieUrl = await this.s3Service.getObjectUrl('episodes/movieUrl/movie_default.mp4');
+                    episode.movieUrl = await this.s3Service.getObjectUrl('default/movie_default.mp4');
                 }
             }
             return episode;

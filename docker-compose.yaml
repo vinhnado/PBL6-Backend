@@ -45,7 +45,16 @@ services:
       MINIO_ROOT_PASSWORD: admin123
     command:
       minio server --console-address ":9001" /data
+  redis:
+    image: redis:alpine
+    container_name: PBL6-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - data-redis:/data
 
 networks:
   nodejs-exa:
     driver: bridge
+volumes:  # Add a volumes section to define named volumes
+  data-redis:  # Define the named volume

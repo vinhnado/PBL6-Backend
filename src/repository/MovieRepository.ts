@@ -71,7 +71,11 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 		return movies;
 	  }
 
-
+	/**
+	 * Get movie by id_movie
+	 * @param id 
+	 * @returns Promise<Movie | null>
+	 */
 	async getMovieById(id: number): Promise<Movie | null> {
 		try {
 			const movie = await Movie.findByPk(id, {
@@ -187,6 +191,16 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 		} catch (error) {
 			throw new Error('Could not create movie');
 		}
+	}
+
+	getMoviesTrending(): Promise<Movie[]> {
+		throw new Error('Method not implemented.');
+	}
+	getMoviesRecommender(): Promise<Movie[]> {
+		throw new Error('Method not implemented.');
+	}
+	getMoviesUpcoming(): Promise<Movie[]> {
+		throw new Error('Method not implemented.');
 	}
 }
 
