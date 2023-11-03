@@ -117,7 +117,6 @@ export class MovieService implements IMovieService {
 			const cachedResult = await this.redis.get(cacheKey);
 			if (cachedResult) {
 			  // If cached data is available, return it
-			  console.log("Caching");
 			  return JSON.parse(cachedResult);
 			}
 
@@ -145,10 +144,7 @@ export class MovieService implements IMovieService {
 
 	async deleteMovieById(id: number): Promise<void> {
 		try {
-			console.log(id);
-			
 			const movie = await this.movieRepository.findById(id);
-			console.log(movie);
 			return await this.movieRepository.delete(movie);
 		} catch (error) {
 			throw new Error('Could not delete movie');
