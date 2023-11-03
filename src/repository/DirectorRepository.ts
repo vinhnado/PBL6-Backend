@@ -9,16 +9,10 @@ export class DirecorRepository extends BaseRepository<Director> {
 	constructor() {
 		super(Director);
 	}
-	findAllMovieByDirectorId = async (
-		directorId: number,
-		page: number,
-		pageSize: number
-	) => {
+	findDirectorInfomation = async (directorId: number) => {
 		try {
 			const data = await Director.findOne({
 				where: { directorId: directorId },
-				offset: (page - 1) * pageSize,
-				limit: pageSize,
 				attributes: {
 					exclude: ['createdAt', 'updatedAt', 'deletedAt'],
 				},

@@ -9,16 +9,10 @@ export class ActorRepository extends BaseRepository<Actor> {
 	constructor() {
 		super(Actor);
 	}
-	findActorInfomation = async (
-		actorId: number,
-		page: number,
-		pageSize: number
-	) => {
+	findActorInfomation = async (actorId: number) => {
 		try {
-			const data = await Actor.findOne({
+			let data = await Actor.findOne({
 				where: { actorId: actorId },
-				offset: (page - 1) * pageSize,
-				limit: pageSize,
 				attributes: {
 					exclude: ['createdAt', 'updatedAt', 'deletedAt'],
 				},

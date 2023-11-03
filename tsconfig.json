@@ -7,7 +7,7 @@
 		"outDir": "./build",
 		"rootDir": "src",
 		"strict": true,
-		"types": ["reflect-metadata"],
+		"types": ["reflect-metadata","ioredis"],
 		"moduleResolution": "node",
 		"noImplicitAny": true,
 		"esModuleInterop": true,
