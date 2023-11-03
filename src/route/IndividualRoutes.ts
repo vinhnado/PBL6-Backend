@@ -1,4 +1,3 @@
-import { HomeController } from '../controller/HomeController';
 import { IndividualController } from '../controller/IndividualController';
 import BaseRoutes from './Base/BaseRouter';
 class IndividualRoutes extends BaseRoutes {

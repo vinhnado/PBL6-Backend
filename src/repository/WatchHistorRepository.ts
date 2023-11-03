@@ -24,7 +24,7 @@ export class WatchHistoryRepository extends BaseRepository<WatchHistory> {
 						attributes: {
 							exclude: ['createdAt', 'updatedAt', 'deletedAt'],
 						},
-						through: { attributes: ['updatedAt'] },
+						through: { attributes: ['updatedAt', 'duration'] },
 					},
 				],
 			});
