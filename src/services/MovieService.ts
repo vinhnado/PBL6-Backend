@@ -125,7 +125,15 @@ export class MovieService implements IMovieService {
 				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
 				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
 				movie.backgroundURL = await this.s3Service.getObjectUrl('movies/'.concat((movie.movieId).toString(),'/background.jpg'));
+				for (const episode of movie.episodes) {
+					if(episode.posterUrl){
+						episode.posterUrl = await this.s3Service.getObjectUrl(episode.posterUrl);
+					}else{
+						episode.posterUrl = await this.s3Service.getObjectUrl('default/poster_default.jpg');
+					}
+				}
 			}
+
 			//Save movie to cache
 			await this.redis.set(cacheKey, JSON.stringify(movie), 'EX', 60*5);
 			return movie;
