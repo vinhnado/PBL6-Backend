@@ -1,13 +1,19 @@
-import { Model, ModelCtor, Sequelize } from 'sequelize-typescript';
+import { Model, ModelCtor } from 'sequelize-typescript';
 import { BaseInterface } from './Interfaces/BaseInterface';
+import sequelize from 'sequelize/types/sequelize';
+import { Op, WhereOptions } from 'sequelize';
+import Database from '../config/database';
+import { User } from '../models/User';
 
 export abstract class BaseRepository<T extends Model<T>>
 	implements BaseInterface
 {
+	protected db;
 	protected model: ModelCtor<T>;
 
 	constructor(model: ModelCtor<T>) {
 		this.model = model;
+		this.db = Database.getInstance();
 	}
 
 	async save(model: T): Promise<void> {
@@ -26,11 +32,30 @@ export abstract class BaseRepository<T extends Model<T>>
 		}
 	}
 
+	async findOneByCondition(searchConditions: any): Promise<any | null> {
+		try {
+			return await this.model.findOne({
+				where: searchConditions,
+				paranoid: false,
+			});
+		} catch (error) {
+			throw new Error('Không thể tìm thấy: ' + error);
+		}
+	}
+
 	async delete(model: T): Promise<void> {
 		try {
 			await model.destroy();
 		} catch (error) {
 			throw new Error('Không thể delete' + error);
+		}
+	}
+
+	async restore(model: T): Promise<void> {
+		try {
+			await model.restore();
+		} catch (error) {
+			throw new Error('Không thể restore' + error);
 		}
 	}
 

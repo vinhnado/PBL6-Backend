@@ -5,9 +5,11 @@ class MovieRoutes extends BaseRoutes {
 		super(new MovieController());
 	}
 	public routes(): void {
+		
 		this.router.get('/', this.controller.searchMovies);
+		this.router.get('/:id', this.controller.getMovieById);
 		this.router.get('/all', this.controller.getAllMovies);
-		this.router.delete('/movies/:id', this.controller.deleteMovieById);
+		this.router.delete('/', this.controller.deleteMovieById);
 	}
 }
 

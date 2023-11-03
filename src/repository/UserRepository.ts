@@ -9,8 +9,9 @@ import { WatchHistory } from '../models/WatchHistory';
 import { BaseRepository } from './BaseRepository';
 import { Container, Service } from 'typedi';
 import { Movie } from '../models/Movie';
+import { Subcription } from '../models/Subcription';
+import { SubcriptionType } from '../models/SubcriptionType';
 
-const db = Database.getInstance();
 @Service()
 export class UserRepository
 	extends BaseRepository<User>
@@ -20,7 +21,7 @@ export class UserRepository
 		super(User);
 	}
 	async findOneUser(searchConditions: any): Promise<User> {
-		const { username, email, idUser } = searchConditions;
+		const { username, email, userId } = searchConditions;
 		let user_name: string;
 		const whereConditions: { [key: string]: any } = {};
 
@@ -36,9 +37,9 @@ export class UserRepository
 			user_name = '';
 		}
 
-		if (idUser) {
-			whereConditions.idUser = {
-				[Op.eq]: idUser,
+		if (userId) {
+			whereConditions.user_id = {
+				[Op.eq]: userId,
 			};
 		}
 
@@ -59,11 +60,14 @@ export class UserRepository
 		return user!;
 	}
 	async createNewUser(newUser: User, newAccount: Account): Promise<void> {
-		const t = await db.sequelize!.transaction();
+		const t = await this.db.sequelize!.transaction();
 
 		try {
+			// const subcription = Subcription.build();
+			// newUser.subcription = subcription;
 			await newUser.save({ transaction: t });
 			await newAccount.save({ transaction: t });
+			// await subcription.save({ transaction: t });
 
 			await t.commit(); // Lưu giao dịch nếu không có lỗi
 		} catch (error: any) {
@@ -101,6 +105,8 @@ export class UserRepository
 					[Op.eq]: gender,
 				};
 			}
+
+			console.log(whereConditions);
 
 			const users = await User.findAll({
 				where: whereConditions,

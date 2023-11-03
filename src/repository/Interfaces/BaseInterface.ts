@@ -5,4 +5,6 @@ export interface BaseInterface {
 	findById(id: number): Promise<any | null>;
 	delete(model: Model<any>): Promise<void>;
 	findMany(): Promise<any[]>;
+	restore(model: Model<any>): Promise<void>;
+	findOneByCondition(searchConditions: any): Promise<any | null>;
 }

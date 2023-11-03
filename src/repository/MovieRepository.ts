@@ -9,62 +9,22 @@ import { Director } from '../models/Director';
 import { Episode } from '../models/Episode';
 import Container, { Service } from 'typedi';
 import { ISearchMovieOption } from './Interfaces/ISearchMovieOption';
+import { BaseRepository } from './BaseRepository';
 
 const db = Database.getInstance();
 
 
 @Service()
-export class MovieRepository implements IMovieRepository {
-	async searchMovies(options: ISearchMovieOption, page: number, pageSize: number) {
-		const { search, genre, nation, year, isSeries, sort, sortType } = options;
-	  
-		const whereCondition: any = {};
-		const whereConditionGenre: any = {};
-
-		if (search) {
-		  whereCondition[Op.or] = [
-			{ 'title': { [Op.iLike]: `%${search}%` } },
-			{ 'description': { [Op.iLike]: `%${search}%` } },
-		  ];
-		}else{
-			const search='';
-		}
-
-		if(genre){
-			whereConditionGenre['gerneId'] = genre;
-		}
-	  
-		if (nation) {
-		  whereCondition['nation'] = nation;
-		}
-	  
-		if (year) {
-		  whereCondition['release_date'] = {
-			[Op.between]: [new Date(year, 0, 1), new Date(year, 11, 31)],
-		  };
-		}
-	  
-		if (isSeries !== undefined) {
-		  whereCondition['isSeries'] = isSeries ? { [Op.gt]: 1 } : 1;
-		}
-	  
-		const sortFieldMap = {
-			highRated: 'average_rating',
-			newest: 'release_date',
-			highViewed: 'highViewed',
-			highFavorited: 'num_favorite',
-		  };
-
-		let sortField = 'movie_id';
-		let sortBy = 'ASC';
-		if(sort){
-			sortField = sortFieldMap[sort] || 'movieId';;
-		}
-		if(sortType){
-			sortBy = sortType || 'ASC';
-		}
+export class MovieRepository extends BaseRepository<Movie> implements IMovieRepository {
+	
+	constructor(){
+		super(Movie);
+	}
+	
+	async searchMovies(whereCondition: any, whereConditionGenre: any, page: number, pageSize: number, sortField: string, sortBy: string) {
+	
 		const offset = (page - 1) * pageSize;
-		console.log(whereCondition);
+		// console.log(whereCondition);
 	  
 		const movies = await Movie.findAll({
 		   attributes: { exclude: ['deletedAt', 'createdAt', 'updatedAt'] },
@@ -111,16 +71,43 @@ export class MovieRepository implements IMovieRepository {
 		return movies;
 	  }
 
-
+	/**
+	 * Get movie by id_movie
+	 * @param id 
+	 * @returns Promise<Movie | null>
+	 */
 	async getMovieById(id: number): Promise<Movie | null> {
 		try {
 			const movie = await Movie.findByPk(id, {
-				include: Genre,
+				attributes: { exclude: ['deletedAt', 'createdAt', 'updatedAt'] },
+				include: [
+					{
+						model: Genre,
+						attributes: ['genre_id', 'name'],
+						as: 'genres',
+						through: { attributes: [] },
+					},
+					{
+						model: Actor,
+						attributes: ['actor_id', 'name'],
+						through: { attributes: [] },
+					},
+					{
+						model: Director,
+						attributes: ['director_id', 'name'],
+						through: { attributes: [] },
+					},
+					{
+						model: Episode,
+						attributes: ['episode_id', 'movie_id', 'title', 'release_date', 'num_view', 'duration', 'episode_no'],
+					},
+		
+				  ],
 			});
 
 			return movie || null;
 		} catch (error: any) {
-			throw new Error('Không thể lấy thông tin phim: ' + error.message);
+			throw new Error('Can not get movie: ' + error.message);
 		}
 	}
 
@@ -204,6 +191,16 @@ export class MovieRepository implements IMovieRepository {
 		} catch (error) {
 			throw new Error('Could not create movie');
 		}
+	}
+
+	getMoviesTrending(): Promise<Movie[]> {
+		throw new Error('Method not implemented.');
+	}
+	getMoviesRecommender(): Promise<Movie[]> {
+		throw new Error('Method not implemented.');
+	}
+	getMoviesUpcoming(): Promise<Movie[]> {
+		throw new Error('Method not implemented.');
 	}
 }
 
