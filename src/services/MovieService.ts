@@ -5,7 +5,9 @@ import { IMovieRepository } from '../repository/Interfaces/IMovieRepository';
 import { MovieRepository } from '../repository/MovieRepository';
 import { ISearchMovieOption } from '../repository/Interfaces/ISearchMovieOption';
 import { S3Service } from './S3Service';
-
+import { Op } from 'sequelize';
+import Redis from 'ioredis';
+import crypto from 'crypto'; // Import the built-in crypto library
 
 @Service()
 export class MovieService implements IMovieService {
@@ -16,6 +18,18 @@ export class MovieService implements IMovieService {
 	@Inject(() => S3Service)
 	private s3Service!: S3Service;
 
+	private redis: Redis; // Create a Redis client
+
+	constructor() {
+	  this.redis = new Redis({
+		host: 'redis',
+		port: 6379,
+	  }); // Initialize the Redis client
+	}
+
+	static generateMD5Hash(input: string): string {
+  		return crypto.createHash('md5').update(input).digest('hex');
+	}
 
 	public async searchMovies(
 		options: ISearchMovieOption,
@@ -23,17 +37,74 @@ export class MovieService implements IMovieService {
 		pageSize: number
 	): Promise<Movie[]> {
 		try {
+			const cacheKey = MovieService.generateMD5Hash(`searchMovies:${JSON.stringify(options)}:${page}:${pageSize}`);
+			const cachedResult = await this.redis.get(cacheKey);
+			if (cachedResult) {
+				return JSON.parse(cachedResult);
+			}
+			const { search, genre, nation, year, isSeries, sort, sortType } = options;
+	  
+			const whereCondition: any = {};
+			const whereConditionGenre: any = {};
+	
+			if (search) {
+			  whereCondition[Op.or] = [
+				{ 'title': { [Op.iLike]: `%${search}%` } },
+				{ 'description': { [Op.iLike]: `%${search}%` } },
+			  ];
+			}else{
+				const search='';
+			}
+	
+			if(genre){
+				whereConditionGenre['genreId'] = genre;
+			}
+		  
+			if (nation) {
+			  whereCondition['nation'] = nation;
+			}
+		  
+			if (year) {
+			  whereCondition['release_date'] = {
+				[Op.between]: [new Date(year, 0, 1), new Date(year, 11, 31)],
+			  };
+			}
+		  
+			if (isSeries !== undefined) {
+			  whereCondition['isSeries'] = isSeries;
+			}
+		  
+			const sortFieldMap = {
+				highRated: 'average_rating',
+				newest: 'release_date',
+				highFavorited: 'num_favorite',
+			  };
+	
+			let sortField = 'movie_id';
+			let sortBy = 'ASC';
+			if(sort){
+				sortField = sortFieldMap[sort] || 'movieId';;
+			}
+			if(sortType){
+				sortBy = sortType || 'ASC';
+			}
+			
 			let movies = await this.movieRepository.searchMovies(
-				options,
-				page=1,
-				pageSize=10
+				whereCondition,
+				whereConditionGenre,
+				page=page,
+				pageSize=pageSize,
+				sortField,
+				sortBy
 			);
 			for (const movie of movies) {
 				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
 				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
 				movie.backgroundURL = await this.s3Service.getObjectUrl('movies/'.concat((movie.movieId).toString(),'/background.jpg'));
-			  }
-		  
+			}
+
+		    await this.redis.set(cacheKey, JSON.stringify(movies), 'EX', 60);
+
 			return movies;
 		} catch (error: any) {
 			throw new Error('Không thể lấy danh sách phim: ' + error.message);
@@ -42,16 +113,30 @@ export class MovieService implements IMovieService {
 
 	public async getMovieById(id: number): Promise<Movie | null> {
 		try {
-			return await this.movieRepository.getMovieById(id);
+			const cacheKey = `getMovieById:${id}`;
+			const cachedResult = await this.redis.get(cacheKey);
+			if (cachedResult) {
+			  // If cached data is available, return it
+			  return JSON.parse(cachedResult);
+			}
+
+			let movie = await this.movieRepository.getMovieById(id);
+			if(movie){
+				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
+				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
+				movie.backgroundURL = await this.s3Service.getObjectUrl('movies/'.concat((movie.movieId).toString(),'/background.jpg'));
+			}
+			//Save movie to cache
+			await this.redis.set(cacheKey, JSON.stringify(movie), 'EX', 60*5);
+			return movie;
 		} catch (error: any) {
-			throw new Error('Không thể lấy thông tin phim: ' + error.message);
+			throw new Error('Can not get movie: ' + error.message);
 		}
 	}
 
 	async getAllMovies(): Promise<Movie[]> {
 		try {
-			const movies = await this.movieRepository.getAllMovies();
-			return movies;
+			return await this.movieRepository.getAllMovies();
 		} catch (error) {
 			throw new Error('Could not fetch movies');
 		}
@@ -59,7 +144,8 @@ export class MovieService implements IMovieService {
 
 	async deleteMovieById(id: number): Promise<void> {
 		try {
-			await this.movieRepository.deleteMovieById(id);
+			const movie = await this.movieRepository.findById(id);
+			return await this.movieRepository.delete(movie);
 		} catch (error) {
 			throw new Error('Could not delete movie');
 		}

@@ -28,36 +28,27 @@ export class MovieItem {
 	averageRating: string;
 	episodeNum: number;
 	level: number;
-	num_favorite: null | number;
+	numFavorite: null | number;
 	isSeries: null | boolean;
 	updatedAt: Date;
+	duration!: null | number;
 
-	constructor(
-		movieId: number,
-		title: string,
-		description: string,
-		releaseDate: Date,
-		nation: string,
-		posterURL: string,
-		averageRating: string,
-		episodeNum: number,
-		level: number,
-		num_favorite: null | number,
-		isSeries: null | boolean,
-		updatedAt: Date
-	) {
-		this.movieId = movieId;
-		this.title = title;
-		this.description = description;
-		this.releaseDate = releaseDate;
-		this.nation = nation;
-		this.posterURL = posterURL;
-		this.averageRating = averageRating;
-		this.episodeNum = episodeNum;
-		this.level = level;
-		this.num_favorite = num_favorite;
-		this.isSeries = isSeries;
+	constructor(movie: Movie, updatedAt: Date, duration: number | null = null) {
+		this.movieId = movie.movieId;
+		this.title = movie.title;
+		this.description = movie.description;
+		this.releaseDate = movie.releaseDate;
+		this.nation = movie.nation;
+		this.posterURL = movie.posterURL;
+		this.averageRating = movie.averageRating;
+		this.episodeNum = movie.episodeNum;
+		this.level = movie.level;
+		this.numFavorite = movie.numFavorite;
+		this.isSeries = movie.isSeries;
 		this.updatedAt = updatedAt;
+		if (duration != null) {
+			this.duration = duration;
+		}
 	}
 
 	public static movieListToMovieItemList(
@@ -75,21 +66,10 @@ export class MovieItem {
 		}
 		for (const movie of user_movie_list) {
 			const movieJson = movie.toJSON();
-			let updatedAt: any;
-			console.log(updatedAt);
 			const movieItem = new MovieItem(
-				movie.movieId,
-				movie.title,
-				movie.description,
-				movie.releaseDate,
-				movie.nation,
-				movie.posterURL,
-				movie.averageRating,
-				movie.episodeNum,
-				movie.level,
-				movie.num_favorite,
-				movie.isSeries,
-				movieJson[type]?.updatedAt
+				movie,
+				movieJson[type]?.updatedAt,
+				movieJson[type]?.duration!
 			);
 			movieItemList.push(movieItem);
 		}

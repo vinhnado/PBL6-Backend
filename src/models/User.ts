@@ -15,6 +15,7 @@ import { Movie } from './Movie';
 import { MovieFavorite } from './MovieFavorite';
 import { WatchHistory } from './WatchHistory';
 import { WatchLater } from './WatchLater';
+import { Subcription } from './Subcription';
 
 @Table({
 	tableName: User.USER_TABLE_NAME,
@@ -63,6 +64,9 @@ export class User extends Model {
 
 	@HasOne(() => Account, 'accountId')
 	account!: Account;
+
+	@HasOne(() => Subcription, 'subcriptionId')
+	subcription!: Subcription;
 
 	@BelongsToMany(() => Movie, {
 		through: () => MovieFavorite,

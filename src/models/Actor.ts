@@ -20,7 +20,7 @@ export class Actor extends Model {
 	private static ACTOR_NAME = 'name' as string;
 	private static ACTOR_DESCRIPTION = 'description' as string;
 	private static ACTOR_GENDER = 'gender' as string;
-	private static ACTOR_DATE_OF_BIRTH = 'dateOfBirth' as string;
+	private static ACTOR_DATE_OF_BIRTH = 'date_of_birth' as string;
 	private static ACTOR_AVARTAR_URL = 'avatar' as string;
 
 	@Column({

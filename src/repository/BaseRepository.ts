@@ -1,13 +1,19 @@
-import { Model, ModelCtor, Sequelize } from 'sequelize-typescript';
+import { Model, ModelCtor } from 'sequelize-typescript';
 import { BaseInterface } from './Interfaces/BaseInterface';
+import sequelize from 'sequelize/types/sequelize';
+import { Op, WhereOptions } from 'sequelize';
+import Database from '../config/database';
+import { User } from '../models/User';
 
 export abstract class BaseRepository<T extends Model<T>>
 	implements BaseInterface
 {
+	protected db;
 	protected model: ModelCtor<T>;
 
 	constructor(model: ModelCtor<T>) {
 		this.model = model;
+		this.db = Database.getInstance();
 	}
 
 	async save(model: T): Promise<void> {

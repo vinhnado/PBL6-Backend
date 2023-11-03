@@ -17,4 +17,18 @@ export class HomeController {
 			res.status(500).json({ error: 'Can not get home poster' });
 		}
 	};
+
+	getMoviesByGenre = async (req: Request, res: Response) => {
+		try {
+			const page = Number(req.query.page) || 1; // Trang mặc định là 1
+			const pageSize = Number(req.query.pageSize) || 5; // Số lượng kết quả trên mỗi trang mặc định là 10
+			const genreId = Number(req.query.genreId);
+			const sortMovie = req.query.sortMovie?.toString();
+
+            return res.json(await this.homeService.getMoviesByGenre(genreId, page, pageSize, sortMovie));
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({ error: 'Can not get movies by genres' });
+		}
+	};
 }

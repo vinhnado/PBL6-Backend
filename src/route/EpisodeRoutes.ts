@@ -1,10 +1,12 @@
-// import BaseRoutes from './Base/BaseRouter';
-// import EpisodeController from '../controller/EpisodeController';
-// class MovieRoutes extends BaseRoutes {
-// 	public routes(): void {
-// 		// this.router.get('/:id', EpisodeController.getEpisode);
-// 		this.router.get('/:movie_id', EpisodeController.getAllEpisodeOfMovie);
-// 	}
-// }
+import BaseRoutes from './Base/BaseRouter';
+import { EpisodeController } from '../controller/EpisodeController';
+class EpisodeRoutes extends BaseRoutes {
+	constructor() {
+		super(new EpisodeController());
+	}
+	public routes(): void {
+		this.router.get('/:id', this.controller.getEpisode);
+	}
+}
 
-// export default new MovieRoutes().router;
+export default new EpisodeRoutes().router;

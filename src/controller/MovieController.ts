@@ -21,7 +21,7 @@ export class MovieController {
 				sort: req.query.sort,
 			  };
 			const page = Number(req.query.page) || 1; // Trang mặc định là 1
-			const pageSize = Number(req.query.pageSize) || 10; // Số lượng kết quả trên mỗi trang mặc định là 10
+			const pageSize = Number(req.query.pageSize) || 5; // Số lượng kết quả trên mỗi trang mặc định là 10
 
 			const movies = await this.movieService.searchMovies(
 				options,
@@ -40,11 +40,11 @@ export class MovieController {
 		try {
 			const movie = await this.movieService.getMovieById(Number(id));
 			if (!movie) {
-				return res.status(404).json({ error: 'Không tìm thấy phim.' });
+				return res.status(404).json({ error: 'Can not find movie.' });
 			}
 			return res.json(movie);
 		} catch (error) {
-			return res.status(500).json({ error: 'Lỗi khi lấy thông tin phim.' });
+			return res.status(500).json({ error: 'Can not get movie.' });
 		}
 	};
 
@@ -58,15 +58,15 @@ export class MovieController {
 	};
 
 	deleteMovieById = async (req: Request, res: Response): Promise<void> => {
-		const { id } = req.params;
-
+		const { id } = req.query;
 		try {
-			// Gọi service để xóa bộ phim dựa trên ID
-			await this.movieService.deleteMovieById(parseInt(id, 10));
-
-			res.status(204).send(); // Trả về mã trạng thái 204 (No Content) khi xóa thành công
+			await this.movieService.deleteMovieById(Number(id));
+			res.status(204).json({ 
+				status: true,
+				message: "Delete successfully"
+			});
 		} catch (error) {
-			res.status(500).json({ error: 'Loi trong qua trinh xoa' });
+			res.status(500).json({ error: 'An error occurred while deleting the movie' });
 		}
 	};
 
