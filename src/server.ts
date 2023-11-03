@@ -23,7 +23,7 @@ class App {
 	private databaseSync(): void {
 		const movieRepository = Database.getInstance();
 		movieRepository
-			.sequelize!.sync({ force: false })
+			.sequelize!.sync({ force: true })
 			.then(() => {
 				console.log('✅ Cơ sở dữ liệu đã được đồng bộ hóa.');
 			})

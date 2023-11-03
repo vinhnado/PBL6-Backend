@@ -49,7 +49,7 @@ export class AuthenticationService implements IAuthenticationService {
 			const hashedPassword: string = await Authentication.passwordHash(
 				password
 			);
-
+			const newSubcription = Subcription.build();
 			const newAccount = Account.build({
 				username: username,
 				password: hashedPassword,
@@ -60,7 +60,12 @@ export class AuthenticationService implements IAuthenticationService {
 				gender: gender,
 			});
 			newUser.account = newAccount;
-			await this.userRepository.createNewUser(newUser, newAccount);
+			newUser.subcription = newSubcription;
+			await this.userRepository.createNewUser(
+				newUser,
+				newAccount,
+				newSubcription
+			);
 		} catch (error) {
 			console.log(error);
 			throw new Error('Error register!');

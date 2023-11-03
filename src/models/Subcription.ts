@@ -6,6 +6,7 @@ import {
 	ForeignKey,
 	BelongsTo,
 	HasOne,
+	DeletedAt,
 } from 'sequelize-typescript';
 import { User } from './User';
 import { SubcriptionType } from './SubcriptionType';
@@ -45,4 +46,17 @@ export class Subcription extends Model {
 
 	@BelongsTo(() => SubcriptionType)
 	subcriptionType!: SubcriptionType;
+
+	@ForeignKey(() => User)
+	@Column({
+		type: DataType.INTEGER,
+		field: 'user_id',
+	})
+	userId!: number;
+
+	@BelongsTo(() => User)
+	user!: User;
+
+	@DeletedAt
+	deletedAt!: Date;
 }
