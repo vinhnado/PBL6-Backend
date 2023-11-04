@@ -20,4 +20,9 @@ export interface IMovieService {
 		episodeNum: number,
 		level: number
 	  ): Promise<Movie>;
+
+	getMoviesTrending(): Promise<Movie[]>;
+	getMoviesRecommender(): Promise<Movie[]>;
+	getMoviesUpcoming(): Promise<Movie[]>;
+	getMoviesForVip(): Promise<Movie[]>;
 }

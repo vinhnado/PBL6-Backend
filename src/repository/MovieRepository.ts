@@ -20,7 +20,7 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 	constructor(){
 		super(Movie);
 	}
-	
+
 	async searchMovies(whereCondition: any, whereConditionGenre: any, page: number, pageSize: number, sortField: string, sortBy: string) {
 	
 		const offset = (page - 1) * pageSize;
@@ -151,6 +151,9 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 		}
 	}
 
+	/**
+	 * Delete Movie By ID
+	 */
 	async deleteMovieById(id: number): Promise<void> {
 		try {
 			const movieToDelete = await Movie.destroy({
@@ -163,6 +166,9 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 		}
 	}
 
+	/**
+	 * Create Movie
+	 */
 	async createMovie(
 		title: string,
 		description: string,
@@ -193,14 +199,99 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 		}
 	}
 
-	getMoviesTrending(): Promise<Movie[]> {
-		throw new Error('Method not implemented.');
+	/**
+	 * Get movies trending
+	 * 
+	 */
+	async getMoviesTrending(): Promise<Movie[]> {
+		const numLimit = 15;
+		
+		const movies = await Movie.findAll({
+			attributes: {
+			  exclude: ['deletedAt', 'createdAt', 'updatedAt'],
+			},
+			order: [
+				[Sequelize.col('num_favorite'), 'DESC'], // First sorting condition
+				[Sequelize.col('average_rating'), 'DESC'], // Second sorting condition
+			  ],
+			limit: numLimit
+		  });
+		
+		return movies;
 	}
-	getMoviesRecommender(): Promise<Movie[]> {
-		throw new Error('Method not implemented.');
+
+	/**
+	 * Get movies recommender for user
+	 * 
+	 */
+	async getMoviesRecommender(): Promise<Movie[]> {
+		const numLimit = 15;
+		
+		const movies = await Movie.findAll({
+			attributes: {
+			  exclude: ['deletedAt', 'createdAt', 'updatedAt'],
+			},
+			order: [
+				[Sequelize.col('num_favorite'), 'DESC'], // First sorting condition
+				[Sequelize.col('average_rating'), 'DESC'], // Second sorting condition
+			  ],
+			limit: numLimit
+		  });
+		
+		return movies;
 	}
-	getMoviesUpcoming(): Promise<Movie[]> {
-		throw new Error('Method not implemented.');
+
+	/**
+	 * Get movies upcoming
+	 * 
+	 */
+	async getMoviesUpcoming(): Promise<Movie[]> {
+		const numLimit = 15;
+		const startDate = new Date(); // Current date
+		const endDate = new Date();
+		endDate.setMonth(endDate.getMonth() + 1); // One month ago
+		const movies = await Movie.findAll({
+			attributes: {
+			  exclude: ['deletedAt', 'createdAt', 'updatedAt'],
+			},
+			where: {
+				release_date: {
+				  [Op.between]: [endDate, startDate],
+				},
+			},
+			order: [
+				[Sequelize.col('release_date'), 'DESC'], // First sorting condition
+			  ],
+			limit: numLimit
+		  });
+		
+		return movies;
+	}
+
+	/**
+	 * Get movies for VIP privileges
+	 * 
+	 */
+	async getMoviesForVip(): Promise<Movie[]> {
+		const numLimit = 15;
+		
+		const movies = await Movie.findAll({
+			attributes: {
+			  exclude: ['deletedAt', 'createdAt', 'updatedAt'],
+			},
+			where: {
+				level: {
+				  [Op.gte]: 1,
+				},
+			},
+			order: [
+				[Sequelize.col('num_favorite'), 'DESC'], // First sorting condition
+				[Sequelize.col('average_rating'), 'DESC'], // Second sorting condition
+			  ],
+			limit: numLimit
+		  });
+		
+		return movies;
 	}
 }
 

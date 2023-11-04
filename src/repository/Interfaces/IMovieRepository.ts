@@ -29,4 +29,5 @@ export interface IMovieRepository extends BaseInterface {
 	getMoviesTrending(): Promise<Movie[]>;
 	getMoviesRecommender(): Promise<Movie[]>;
 	getMoviesUpcoming(): Promise<Movie[]>;
+	getMoviesForVip(): Promise<Movie[]>;
 }

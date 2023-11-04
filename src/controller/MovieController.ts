@@ -102,4 +102,48 @@ export class MovieController {
 			res.status(500).json({ error: 'Không thể thêm mới phim' });
 		}
 	};
+
+	getMoviesTrending = async (req: Request, res: Response) => {
+		try {
+
+			const movies = await this.movieService.getMoviesTrending();
+			return res.json(movies);
+		} catch (error: any) {
+			console.log(error);
+			return res.status(500).json({ error: 'Err while get movies trending.' });
+		}
+	};
+
+	getMoviesRecommender = async (req: Request, res: Response) => {
+		try {
+
+			const movies = await this.movieService.getMoviesRecommender();
+			return res.json(movies);
+		} catch (error: any) {
+			console.log(error);
+			return res.status(500).json({ error: 'Err while get movies recommender.' });
+		}
+	};
+
+	getMoviesUpcoming = async (req: Request, res: Response) => {
+		try {
+
+			const movies = await this.movieService.getMoviesUpcoming();
+			return res.json(movies);
+		} catch (error: any) {
+			console.log(error);
+			return res.status(500).json({ error: 'Err while get movies upcoming .' });
+		}
+	};
+
+	getMoviesForVip = async (req: Request, res: Response) => {
+		try {
+
+			const movies = await this.movieService.getMoviesForVip();
+			return res.json(movies);
+		} catch (error: any) {
+			console.log(error);
+			return res.status(500).json({ error: 'Err while get movies for vip.' });
+		}
+	};
 }

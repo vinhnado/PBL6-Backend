@@ -188,4 +188,84 @@ export class MovieService implements IMovieService {
 			throw new Error('Could not create movie');
 		}
 	}
+
+	async getMoviesTrending(): Promise<Movie[]> {
+		const cacheKey = 'moviesTrending';
+		const cachedResult = await this.redis.get(cacheKey);
+		if (cachedResult) {
+			return JSON.parse(cachedResult);
+		}
+		try {
+			let movies = await this.movieRepository.getMoviesTrending();
+			for (const movie of movies) {
+				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
+				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
+				movie.backgroundURL = await this.s3Service.getObjectUrl('movies/'.concat((movie.movieId).toString(),'/background.jpg'));
+			}
+			await this.redis.set(cacheKey, JSON.stringify(movies), 'EX', 600);
+			return movies;
+		} catch (error) {
+			throw new Error('Could not get movies trending.');
+		}
+	}
+
+	async getMoviesRecommender(): Promise<Movie[]> {
+		const cacheKey = 'moviesRecommender';
+		const cachedResult = await this.redis.get(cacheKey);
+		if (cachedResult) {
+			return JSON.parse(cachedResult);
+		}
+		try {
+			let movies = await this.movieRepository.getMoviesRecommender();
+			for (const movie of movies) {
+				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
+				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
+				movie.backgroundURL = await this.s3Service.getObjectUrl('movies/'.concat((movie.movieId).toString(),'/background.jpg'));
+			}
+			await this.redis.set(cacheKey, JSON.stringify(movies), 'EX', 600);
+			return movies;
+		} catch (error) {
+			throw new Error('Could not get movies Recommender.');
+		}
+	}
+
+	async getMoviesUpcoming(): Promise<Movie[]> {
+		const cacheKey = 'moviesUpcoming';
+		const cachedResult = await this.redis.get(cacheKey);
+		if (cachedResult) {
+			return JSON.parse(cachedResult);
+		}
+		try {
+			let movies = await this.movieRepository.getMoviesUpcoming();
+			for (const movie of movies) {
+				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
+				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
+				movie.backgroundURL = await this.s3Service.getObjectUrl('movies/'.concat((movie.movieId).toString(),'/background.jpg'));
+			}
+			await this.redis.set(cacheKey, JSON.stringify(movies), 'EX', 600);
+			return movies;
+		} catch (error) {
+			throw new Error('Could not get movies upcoming.');
+		}
+	}
+
+	async getMoviesForVip(): Promise<Movie[]> {
+		const cacheKey = 'moviesForVip';
+		const cachedResult = await this.redis.get(cacheKey);
+		if (cachedResult) {
+			return JSON.parse(cachedResult);
+		}
+		try {
+			let movies = await this.movieRepository.getMoviesForVip();
+			for (const movie of movies) {
+				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
+				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
+				movie.backgroundURL = await this.s3Service.getObjectUrl('movies/'.concat((movie.movieId).toString(),'/background.jpg'));
+			}
+			await this.redis.set(cacheKey, JSON.stringify(movies), 'EX', 600);
+			return movies;			
+		} catch (error) {
+			throw new Error('Could not get movies for VIP privileges.');
+		}
+	}
 }

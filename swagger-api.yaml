@@ -313,8 +313,77 @@ paths:
                   $ref: '#/components/schemas/Pet'
         '400':
           description: Error while get movies by genres
+  /movies/home/trending:
+    get:
+      tags:
+        - home
+      summary: Get movies trending
+      description: Get moives trending for home
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+        '400':
+          description: Error while get movies trending
 
-  
+  /movies/home/recommend:
+    get:
+      tags:
+        - home
+      summary: Get movies recommender for user
+      description: Get moives recommender for user
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+        '400':
+          description: Error while get movies recommender
+
+  /movies/home/upcoming:
+    get:
+      tags:
+        - home
+      summary: Get movies upcoming
+      description: Get moives upcoming
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+        '400':
+          description: Error while get movies recommender
+
+  /movies/home/vip:
+    get:
+      tags:
+        - home
+      summary: Get movies for user vip
+      description: Get moives for user vip
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+        '400':
+          description: Error while get movies recommender
 externalDocs:
   description: Find out more about Swagger
   url: 'http://swagger.io'
