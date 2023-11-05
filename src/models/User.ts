@@ -15,7 +15,7 @@ import { Movie } from './Movie';
 import { MovieFavorite } from './MovieFavorite';
 import { WatchHistory } from './WatchHistory';
 import { WatchLater } from './WatchLater';
-import { Subcription } from './Subcription';
+import { Subscription } from './Subscription';
 
 @Table({
 	tableName: User.USER_TABLE_NAME,
@@ -29,6 +29,8 @@ export class User extends Model {
 	private static USER_GENDER = 'gender' as string;
 	private static USER_EMAIL = 'email' as string;
 	private static USER_AVATAR_URL = 'avatar_url' as string;
+	private static USER_ACCOUNT_ID = 'account_id' as string;
+	private static USER_SUBSCIRPTION_ID = 'subscription_id' as string;
 
 	@Column({
 		type: DataType.INTEGER,
@@ -53,6 +55,7 @@ export class User extends Model {
 	@Column({
 		type: DataType.STRING(328),
 		field: User.USER_EMAIL,
+		unique: true,
 	})
 	email!: string;
 
@@ -62,11 +65,27 @@ export class User extends Model {
 	})
 	avatarURL!: string;
 
-	@HasOne(() => Account, 'accountId')
-	account!: Account;
+	@ForeignKey(() => Subscription)
+	@Column({
+		type: DataType.INTEGER,
+		field: User.USER_SUBSCIRPTION_ID,
+		unique: true,
+	})
+	subscriptionId!: number;
 
-	@HasOne(() => Subcription, 'subcriptionId')
-	subcription!: Subcription;
+	@BelongsTo(() => Subscription)
+	subscription!: Subscription;
+
+	@ForeignKey(() => Account)
+	@Column({
+		type: DataType.INTEGER,
+		field: User.USER_ACCOUNT_ID,
+		unique: true,
+	})
+	accountId!: number;
+
+	@BelongsTo(() => Account)
+	account!: Account;
 
 	@BelongsToMany(() => Movie, {
 		through: () => MovieFavorite,

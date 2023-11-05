@@ -1,9 +1,9 @@
 import { UserRepository } from './../repository/UserRepository';
 import { Inject, Service } from 'typedi';
-import { SubcriptionRepository } from '../repository/SubcriptiionRepository';
-import { Subcription } from '../models/Subcription';
+import { SubcriptionRepository } from '../repository/SubcriptionRepository';
+import { Subscription } from '../models/Subscription';
 import { SubcriptionTypeRepository } from '../repository/SubcriptionTypeRepository';
-import { SubcriptionType } from '../models/SubcriptionType';
+import { SubscriptionType } from '../models/SubscriptionType';
 
 @Service()
 export class SubcriptionService {
@@ -37,7 +37,7 @@ export class SubcriptionService {
 					throw new Error('Actor not found for the given ID');
 				}
 			} else {
-				return await this.subcriptionRepository.save(Subcription.build({}));
+				return await this.subcriptionRepository.save(Subscription.build({}));
 			}
 		} catch (error: any) {
 			throw new Error(
@@ -60,7 +60,7 @@ export class SubcriptionService {
 				);
 			} else {
 				return await this.subcriptionTypeRepository.save(
-					SubcriptionType.build({ name: name })
+					SubscriptionType.build({ name: name })
 				);
 			}
 		} catch (error: any) {

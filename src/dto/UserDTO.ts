@@ -1,3 +1,4 @@
+import { Subscription } from '../models/Subscription';
 import { User } from '../models/User';
 
 export class UserDTO {
@@ -7,6 +8,7 @@ export class UserDTO {
 	avatarURL: string | null;
 	createdAt: string;
 	username: string;
+	subscription: Subscription | null;
 
 	constructor(user: User) {
 		this.dateOfBirth = user.dateOfBirth;
@@ -15,6 +17,7 @@ export class UserDTO {
 		this.avatarURL = user.avatarURL;
 		this.createdAt = user.createdAt;
 		this.username = user.account.username;
+		this.subscription = user.subscription;
 	}
 
 	public static userToUserDTO(user: User): UserDTO {

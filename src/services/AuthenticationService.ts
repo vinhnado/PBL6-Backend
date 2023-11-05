@@ -5,7 +5,7 @@ import { UserRepository } from '../repository/UserRepository';
 import { IAuthenticationService } from './Interfaces/IAuthenticationService';
 import Container, { Inject, Service } from 'typedi';
 import { IUserRepository } from '../repository/Interfaces/IUserRepository';
-import { Subcription } from '../models/Subcription';
+import { Subscription } from '../models/Subscription';
 
 @Service()
 export class AuthenticationService implements IAuthenticationService {
@@ -49,7 +49,7 @@ export class AuthenticationService implements IAuthenticationService {
 			const hashedPassword: string = await Authentication.passwordHash(
 				password
 			);
-			const newSubcription = Subcription.build();
+			const newSubscription = Subscription.build();
 			const newAccount = Account.build({
 				username: username,
 				password: hashedPassword,
@@ -60,11 +60,11 @@ export class AuthenticationService implements IAuthenticationService {
 				gender: gender,
 			});
 			newUser.account = newAccount;
-			newUser.subcription = newSubcription;
+			newUser.subscription = newSubscription;
 			await this.userRepository.createNewUser(
 				newUser,
 				newAccount,
-				newSubcription
+				newSubscription
 			);
 		} catch (error) {
 			console.log(error);

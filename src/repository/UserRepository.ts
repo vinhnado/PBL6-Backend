@@ -1,16 +1,14 @@
-import { Subcription } from './../models/Subcription';
+import { Subscription } from '../models/Subscription';
 import { User } from '../models/User';
 import { Account } from '../models/Account';
-import { Op, Sequelize, json } from 'sequelize';
+import { Op } from 'sequelize';
 import { IUserRepository } from './Interfaces/IUserRepository';
-import Database from '../config/database';
 import { MovieFavorite } from '../models/MovieFavorite';
-import { WatchLater } from '../models/WatchLater';
 import { WatchHistory } from '../models/WatchHistory';
 import { BaseRepository } from './BaseRepository';
-import { Container, Service } from 'typedi';
+import { Service } from 'typedi';
+import { SubscriptionType } from '../models/SubscriptionType';
 import { Movie } from '../models/Movie';
-import { SubcriptionType } from '../models/SubcriptionType';
 
 @Service()
 export class UserRepository
@@ -55,6 +53,16 @@ export class UserRepository
 						},
 					},
 				},
+				{
+					model: Subscription,
+					attributes: ['closedAt'],
+					include: [
+						{
+							model: SubscriptionType, // Đặt tên mối quan hệ mà bạn đã định nghĩa trong model Subcription
+							attributes: ['subscription_type_id', 'name'], // Thay thế bằng các trường bạn muốn lấy từ SubcriptionType
+						},
+					],
+				},
 			],
 		});
 		return user!;
@@ -62,18 +70,31 @@ export class UserRepository
 	async createNewUser(
 		newUser: User,
 		newAccount: Account,
-		newSubcription: Subcription
+		newSubscription: Subscription
 	): Promise<void> {
 		const t = await this.db.sequelize!.transaction();
 
 		try {
+			const account = await newAccount.save({ transaction: t });
+			const subscription = await newSubscription.save({ transaction: t });
+			newUser.accountId = account.accountId;
+			newUser.subscriptionId = subscription.subscriptionId;
 			await newUser.save({ transaction: t });
-			await newAccount.save({ transaction: t });
-			await newSubcription.save({ transaction: t });
-
 			await t.commit(); // Lưu giao dịch nếu không có lỗi
+
+			// await User.create({
+			// 	email: newUser.email,
+			// 	dateOfBirth: newUser.dateOfBirth,
+			// 	gender: newUser.gender,
+			// 	Subcription: {},
+			// 	Account: {
+			// 		username: newUser.account.username,
+			// 		password: newUser.account.password,
+			// 	},
+			// 	include: [Account, Subscription],
+			// });
 		} catch (error: any) {
-			console.error(error);
+			// console.error(error);
 
 			await t.rollback(); // Rollback giao dịch nếu có lỗi
 			throw new Error('Không thể tạo mới người dùng ' + error.message);
