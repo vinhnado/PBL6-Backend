@@ -89,12 +89,12 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 					},
 					{
 						model: Actor,
-						attributes: ['actor_id', 'name'],
+						attributes: ['actor_id', 'name', 'avatar'],
 						through: { attributes: [] },
 					},
 					{
 						model: Director,
-						attributes: ['director_id', 'name'],
+						attributes: ['director_id', 'name', 'avatar'],
 						through: { attributes: [] },
 					},
 					{

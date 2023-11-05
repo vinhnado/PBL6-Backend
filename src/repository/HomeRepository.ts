@@ -1,10 +1,11 @@
 import Database from '../config/database';
-import { Op, QueryTypes, literal, OrderItem, Sequelize } from 'sequelize';
+import { Op, QueryTypes, literal, OrderItem, Sequelize, ModelCtor } from 'sequelize';
 import Container, { Service } from 'typedi';
 import { IHomeRepository } from './Interfaces/IHomeRepository';
 import { Genre } from '../models/Genre';
 import { BaseRepository } from './BaseRepository';
 import { Movie } from '../models/Movie';
+import { Home } from '../models/Home';
 
 const db = Database.getInstance();
 
@@ -12,8 +13,11 @@ const db = Database.getInstance();
 @Service()
 export class HomeRepository extends BaseRepository<Genre> implements IHomeRepository {
 
+    private homeModel: ModelCtor<Home>;
+
     constructor(){
 		super(Genre);
+        this.homeModel = Home;
 	}
     getMoviesByGenre(genreId: number ,page: number, pageSize: number, sortMovie?: string): Promise<Genre[]> {
         const whereCondition: any = {};
@@ -42,7 +46,23 @@ export class HomeRepository extends BaseRepository<Genre> implements IHomeReposi
         });
     }
     
-    getHomePoster(): Promise<string[]> {
-        throw new Error('Method not implemented.');
+    async getHomePoster(): Promise<Home[]> {
+        try {
+            const homes = await this.homeModel.findAll({
+                attributes: {
+                    exclude: ['createdAt', 'updatedAt', 'deletedAt']
+                },
+                include: [{
+                    model: Movie,
+                    attributes: {
+                        exclude: ['createdAt', 'updatedAt', 'deletedAt', 'trailerURL']
+                    },
+                }],
+            });
+            return homes;
+        } catch (error) {
+            console.error('Lỗi khi lấy danh sách homes:', error);
+            throw error;
+        }
     }
 }
