@@ -23,4 +23,13 @@ export class HomeController {
 			res.status(500).json({ error: 'Can not get movies by genres' });
 		}
 	};
+
+	getHomePoster = async (req: Request, res: Response) => {
+		try {			
+            return res.json(await this.homeService.getHomePoster());
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({ error: 'Can not get home movies posters' });
+		}
+	};
 }

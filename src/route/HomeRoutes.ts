@@ -6,6 +6,7 @@ class HomeRoutes extends BaseRoutes {
 	}
 	public routes(): void {
 		this.router.get('/', this.controller.getMoviesByGenre);
+		this.router.get('/posters', this.controller.getHomePoster);
 	}
 }
 

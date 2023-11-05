@@ -132,6 +132,22 @@ export class MovieService implements IMovieService {
 						episode.posterUrl = await this.s3Service.getObjectUrl('default/poster_default.jpg');
 					}
 				}
+
+				for (const actor of movie.actors) {
+					if(actor.avatar){
+						actor.avatar = await this.s3Service.getObjectUrl(actor.avatar);
+					}else{
+						actor.avatar = await this.s3Service.getObjectUrl('default/actor/avatar_default.jpg');
+					}
+				}
+
+				for (const director of movie.directors) {
+					if(director.avatar){
+						director.avatar = await this.s3Service.getObjectUrl(director.avatar);
+					}else{
+						director.avatar = await this.s3Service.getObjectUrl('default/director/avatar_default.jpg');
+					}
+				}
 			}
 
 			//Save movie to cache

@@ -3,6 +3,7 @@ import { S3Service } from './S3Service';
 import { HomeRepository } from '../repository/HomeRepository';
 import { IHomeRepository } from '../repository/Interfaces/IHomeRepository';
 import { IHomeService } from './Interfaces/IHomeService';
+import { Home } from '../models/Home';
 
 @Service()
 export class HomeService implements IHomeService {
@@ -37,6 +38,25 @@ export class HomeService implements IHomeService {
         } catch (error) {
 			console.log(error);
             throw new Error('Error while get movies by genres.');
+        }
+    }
+
+    public async getHomePoster(): Promise<Home[]> {
+        try {
+            let homeMovies = await this.homeRepository.getHomePoster();
+            for(const homeMovie of homeMovies){
+                homeMovie.rmBackground = await this.s3Service.getObjectUrl(homeMovie.rmBackground);
+                if(homeMovie.movie.backgroundURL){
+                    homeMovie.movie.backgroundURL = await this.s3Service.getObjectUrl(homeMovie.movie.backgroundURL);
+                }else{
+                    homeMovie.movie.backgroundURL = await this.s3Service.getObjectUrl('movies/'.concat((homeMovie.movieId).toString(),'/background.jpg'));
+                }
+                homeMovie.movie.posterURL = await this.s3Service.getObjectUrl(homeMovie.movie.posterURL);
+            }
+            return homeMovies;
+        } catch (error) {
+			console.log(error);
+            throw new Error('Error while get home posters.');
         }
     }
 }
