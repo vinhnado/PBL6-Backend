@@ -1,4 +1,4 @@
-import { Subcription } from './../models/Subcription';
+import { Subscription } from '../models/Subscription';
 import express, { Request, Response, Router } from 'express';
 import Container from 'typedi';
 import { SubcriptionService } from '../services/SubcriptionService';

@@ -1,10 +1,10 @@
 import { Service } from 'typedi';
 import { BaseRepository } from './BaseRepository';
-import { SubcriptionType } from '../models/SubcriptionType';
+import { SubscriptionType } from '../models/SubscriptionType';
 
 @Service()
-export class SubcriptionTypeRepository extends BaseRepository<SubcriptionType> {
+export class SubcriptionTypeRepository extends BaseRepository<SubscriptionType> {
 	constructor() {
-		super(SubcriptionType);
+		super(SubscriptionType);
 	}
 }

@@ -13,8 +13,8 @@ import { Account } from '../models/Account';
 import { MovieFavorite } from '../models/MovieFavorite';
 import { WatchHistory } from '../models/WatchHistory';
 import { WatchLater } from '../models/WatchLater';
-import { SubcriptionType } from '../models/SubcriptionType';
-import { Subcription } from '../models/Subcription';
+import { SubscriptionType } from '../models/SubscriptionType';
+import { Subscription } from '../models/Subscription';
 import { Home } from '../models/Home';
 
 dotenv.config();
@@ -65,8 +65,8 @@ class Database {
 			MovieFavorite,
 			WatchHistory,
 			WatchLater,
-			Subcription,
-			SubcriptionType,
+			Subscription,
+			SubscriptionType,
 			Home,
 		]);
 
