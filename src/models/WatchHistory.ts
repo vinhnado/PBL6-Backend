@@ -8,6 +8,7 @@ import {
 } from 'sequelize-typescript';
 import { Movie } from './Movie';
 import { User } from './User';
+import { Episode } from './Episode';
 
 @Table({
 	tableName: WatchHistory.WATCHHISTORY_TABLE_NAME,
@@ -18,6 +19,8 @@ export class WatchHistory extends Model {
 	private static WATCHHISTORY_TABLE_NAME = 'WatchHistory' as string;
 	private static WATCHHISTORY_USER_ID = 'user_id' as string;
 	private static WATCHHISTORY_MOVIE_ID = 'movie_id' as string;
+
+	private static WATCHHISTORY_EPISODE_ID = 'episode_id' as string;
 	private static WATCHHISTORY_DURATION = 'duration' as string;
 
 	@ForeignKey(() => User)
@@ -34,12 +37,19 @@ export class WatchHistory extends Model {
 	})
 	movieId!: number;
 
-    @Column({
+	@ForeignKey(() => Episode)
+	@Column({
+		type: DataType.INTEGER(),
+		field: WatchHistory.WATCHHISTORY_EPISODE_ID,
+	})
+	episodeId!: number;
+
+	@Column({
 		type: DataType.INTEGER(),
 		field: WatchHistory.WATCHHISTORY_DURATION,
 	})
 	duration!: number;
-	
+
 	@DeletedAt
 	deletedAt!: Date;
 }

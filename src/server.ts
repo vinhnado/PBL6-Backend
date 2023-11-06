@@ -8,7 +8,7 @@ import cors from 'cors';
 import HomeRouter from './route/HomeRoutes';
 import IndividualRouter from './route/IndividualRoutes';
 import EpisodeRouter from './route/EpisodeRoutes';
-import SubcriptionRouter from './route/SubcriptionRoutes';
+import SubscriptionRouter from './route/SubscriptionRoutes';
 
 class App {
 	public app: Application;
@@ -42,7 +42,7 @@ class App {
 		this.app.use('/api/home', HomeRouter);
 		this.app.use('/api/individual', IndividualRouter);
 		this.app.use('/api/episode', EpisodeRouter);
-		this.app.use('/api/subcription', SubcriptionRouter);
+		this.app.use('/api/subscription', SubscriptionRouter);
 	}
 
 	private plugins(): void {

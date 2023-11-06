@@ -6,8 +6,11 @@ import {
 	DataType,
 	BelongsTo,
 	DeletedAt,
+	BelongsToMany,
 } from 'sequelize-typescript';
 import { Movie } from './Movie';
+import { WatchHistory } from './WatchHistory';
+import { User } from './User';
 
 @Table({
 	tableName: Episode.TABLE_NAME,
@@ -45,7 +48,7 @@ export class Episode extends Model {
 		type: DataType.STRING(255),
 		field: Episode.EPISODE_TITLE,
 	})
-	episodeTitle!: string;
+	title!: string;
 
 	@Column({
 		type: DataType.DATE,
@@ -57,13 +60,13 @@ export class Episode extends Model {
 		type: DataType.STRING(255),
 		field: Episode.POSTER_URL,
 	})
-	posterUrl!: string;
+	posterURL!: string;
 
 	@Column({
 		type: DataType.STRING(255),
 		field: Episode.MOVIE_URL,
 	})
-	movieUrl!: string;
+	movieURL!: string;
 
 	@Column({
 		type: DataType.BIGINT,
@@ -82,6 +85,9 @@ export class Episode extends Model {
 		field: Episode.EPISODE_NO,
 	})
 	episodeNo!: number;
+
+	@BelongsToMany(() => User, () => WatchHistory)
+	watchHistories!: User[];
 
 	@DeletedAt
 	deletedAt!: Date;

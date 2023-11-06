@@ -9,6 +9,7 @@ import { BaseRepository } from './BaseRepository';
 import { Service } from 'typedi';
 import { SubscriptionType } from '../models/SubscriptionType';
 import { Movie } from '../models/Movie';
+import { Episode } from '../models/Episode';
 
 @Service()
 export class UserRepository
@@ -55,7 +56,7 @@ export class UserRepository
 				},
 				{
 					model: Subscription,
-					attributes: ['closedAt'],
+					// attributes: ['closedAt'],
 					include: [
 						{
 							model: SubscriptionType, // Đặt tên mối quan hệ mà bạn đã định nghĩa trong model Subcription
@@ -81,18 +82,6 @@ export class UserRepository
 			newUser.subscriptionId = subscription.subscriptionId;
 			await newUser.save({ transaction: t });
 			await t.commit(); // Lưu giao dịch nếu không có lỗi
-
-			// await User.create({
-			// 	email: newUser.email,
-			// 	dateOfBirth: newUser.dateOfBirth,
-			// 	gender: newUser.gender,
-			// 	Subcription: {},
-			// 	Account: {
-			// 		username: newUser.account.username,
-			// 		password: newUser.account.password,
-			// 	},
-			// 	include: [Account, Subscription],
-			// });
 		} catch (error: any) {
 			// console.error(error);
 
@@ -128,8 +117,6 @@ export class UserRepository
 					[Op.eq]: gender,
 				};
 			}
-
-			console.log(whereConditions);
 
 			const users = await User.findAll({
 				where: whereConditions,
@@ -192,13 +179,13 @@ export class UserRepository
 
 	async addWatchHistory(
 		userId: number,
-		movieId: number,
+		episodeId: number,
 		duration: number
 	): Promise<void> {
 		try {
 			const history = new WatchHistory();
 			history.userId = userId;
-			history.movieId = movieId;
+			history.episodeId = episodeId;
 			history.duration = duration;
 			history.save();
 		} catch (error) {
@@ -208,14 +195,14 @@ export class UserRepository
 
 	async getAllWatchHistory(userId: number, page: number, pageSize: number) {
 		try {
-			const favoritemovies = await User.findOne({
+			const watchHistories = await User.findOne({
 				where: { userId: userId },
 				offset: (page - 1) * pageSize,
 				limit: pageSize,
 				attributes: ['userId'],
 				include: [
 					{
-						model: Movie,
+						model: Episode,
 						as: 'WatchHistories',
 						attributes: {
 							exclude: ['createdAt', 'updatedAt', 'deletedAt'],
@@ -225,27 +212,16 @@ export class UserRepository
 				],
 			});
 
-			return favoritemovies;
+			return watchHistories;
 		} catch (error) {
 			console.log(error);
 			throw new Error('Cannot get all movie favorite');
 		}
 	}
 
-	// async addWatchList(userId: number, movieId: number): Promise<void> {
-	// 	try {
-	// 		const movie = new WatchList();
-	// 		movie.userId = userId;
-	// 		movie.movieId = movieId;
-	// 		movie.save();
-	// 	} catch (error) {
-	// 		throw new Error('Không thể thêm phim vao danh sach');
-	// 	}
-	// }
-
 	async getAllWatchList(userId: number, page: number, pageSize: number) {
 		try {
-			const favoritemovies = await User.findOne({
+			const watchList = await User.findOne({
 				where: { userId: userId },
 				offset: (page - 1) * pageSize,
 				limit: pageSize,
@@ -262,7 +238,7 @@ export class UserRepository
 				],
 			});
 
-			return favoritemovies;
+			return watchList;
 		} catch (error) {
 			console.log(error);
 			throw new Error('Cannot get all movie favorite');

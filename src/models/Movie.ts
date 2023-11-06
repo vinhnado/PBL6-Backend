@@ -122,7 +122,7 @@ export class Movie extends Model {
 		type: DataType.STRING(255),
 		field: Movie.MOVIE_BG_URL,
 	})
-	backgroundURL!:string;
+	backgroundURL!: string;
 
 	@DeletedAt
 	deletedAt!: Date;
@@ -142,12 +142,6 @@ export class Movie extends Model {
 	@BelongsToMany(() => User, () => MovieFavorite)
 	movieFavorites!: User[];
 
-	@BelongsToMany(() => User, () => WatchHistory)
-	watchHistories!: User[];
-
 	@BelongsToMany(() => User, () => WatchLater)
 	watchLater!: User[];
-
-	// @BelongsTo(() => Home)
-	// home!: Home;
 }

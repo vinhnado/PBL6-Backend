@@ -3,7 +3,7 @@ import { BaseRepository } from './BaseRepository';
 import { Subscription } from '../models/Subscription';
 
 @Service()
-export class SubcriptionRepository extends BaseRepository<Subscription> {
+export class SubscriptionRepository extends BaseRepository<Subscription> {
 	constructor() {
 		super(Subscription);
 	}
