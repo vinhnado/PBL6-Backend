@@ -11,7 +11,6 @@ import crypto from 'crypto'; // Import the built-in crypto library
 
 @Service()
 export class MovieService implements IMovieService {
-
 	@Inject(() => MovieRepository)
 	private movieRepository!: IMovieRepository;
 
@@ -21,14 +20,14 @@ export class MovieService implements IMovieService {
 	private redis: Redis; // Create a Redis client
 
 	constructor() {
-	  this.redis = new Redis({
-		host: 'redis',
-		port: 6379,
-	  }); // Initialize the Redis client
+		this.redis = new Redis({
+			host: 'redis',
+			port: 6379,
+		}); // Initialize the Redis client
 	}
 
 	static generateMD5Hash(input: string): string {
-  		return crypto.createHash('md5').update(input).digest('hex');
+		return crypto.createHash('md5').update(input).digest('hex');
 	}
 
 	public async searchMovies(
@@ -37,73 +36,77 @@ export class MovieService implements IMovieService {
 		pageSize: number
 	): Promise<Movie[]> {
 		try {
-			const cacheKey = MovieService.generateMD5Hash(`searchMovies:${JSON.stringify(options)}:${page}:${pageSize}`);
+			const cacheKey = MovieService.generateMD5Hash(
+				`searchMovies:${JSON.stringify(options)}:${page}:${pageSize}`
+			);
 			const cachedResult = await this.redis.get(cacheKey);
 			if (cachedResult) {
 				return JSON.parse(cachedResult);
 			}
 			const { search, genre, nation, year, isSeries, sort, sortType } = options;
-	  
+
 			const whereCondition: any = {};
 			const whereConditionGenre: any = {};
-	
+
 			if (search) {
-			  whereCondition[Op.or] = [
-				{ 'title': { [Op.iLike]: `%${search}%` } },
-				{ 'description': { [Op.iLike]: `%${search}%` } },
-			  ];
-			}else{
-				const search='';
+				whereCondition[Op.or] = [
+					{ title: { [Op.iLike]: `%${search}%` } },
+					{ description: { [Op.iLike]: `%${search}%` } },
+				];
+			} else {
+				const search = '';
 			}
-	
-			if(genre){
+
+			if (genre) {
 				whereConditionGenre['genreId'] = genre;
 			}
-		  
+
 			if (nation) {
-			  whereCondition['nation'] = nation;
+				whereCondition['nation'] = nation;
 			}
-		  
+
 			if (year) {
-			  whereCondition['release_date'] = {
-				[Op.between]: [new Date(year, 0, 1), new Date(year, 11, 31)],
-			  };
+				whereCondition['release_date'] = {
+					[Op.between]: [new Date(year, 0, 1), new Date(year, 11, 31)],
+				};
 			}
-		  
+
 			if (isSeries !== undefined) {
-			  whereCondition['isSeries'] = isSeries;
+				whereCondition['isSeries'] = isSeries;
 			}
-		  
+
 			const sortFieldMap = {
 				highRated: 'average_rating',
 				newest: 'release_date',
 				highFavorited: 'num_favorite',
-			  };
-	
+			};
+
 			let sortField = 'movie_id';
 			let sortBy = 'ASC';
-			if(sort){
-				sortField = sortFieldMap[sort] || 'movieId';;
+			if (sort) {
+				sortField = sortFieldMap[sort] || 'movieId';
 			}
-			if(sortType){
+			if (sortType) {
 				sortBy = sortType || 'ASC';
 			}
-			
+
 			let movies = await this.movieRepository.searchMovies(
 				whereCondition,
 				whereConditionGenre,
-				page=page,
-				pageSize=pageSize,
+				(page = page),
+				(pageSize = pageSize),
 				sortField,
 				sortBy
 			);
 			for (const movie of movies) {
 				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
 				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
-				movie.backgroundURL = await this.s3Service.getObjectUrl('movies/'.concat((movie.movieId).toString(),'/background.jpg'));
+				movie.backgroundURL = await this.s3Service.getObjectUrl(
+					'movies/'.concat(movie.movieId.toString(), '/background.jpg')
+				);
 			}
 
-		    await this.redis.set(cacheKey, JSON.stringify(movies), 'EX', 60);
+			await this.redis.set(cacheKey, JSON.stringify(movies), 'EX', 60);
 
 			return movies;
 		} catch (error: any) {
@@ -116,42 +119,54 @@ export class MovieService implements IMovieService {
 			const cacheKey = `getMovieById:${id}`;
 			const cachedResult = await this.redis.get(cacheKey);
 			if (cachedResult) {
-			  // If cached data is available, return it
-			  return JSON.parse(cachedResult);
+				// If cached data is available, return it
+				return JSON.parse(cachedResult);
 			}
 
 			let movie = await this.movieRepository.getMovieById(id);
-			if(movie){
+			if (movie) {
 				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
 				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
-				movie.backgroundURL = await this.s3Service.getObjectUrl('movies/'.concat((movie.movieId).toString(),'/background.jpg'));
+				movie.backgroundURL = await this.s3Service.getObjectUrl(
+					'movies/'.concat(movie.movieId.toString(), '/background.jpg')
+				);
 				for (const episode of movie.episodes) {
-					if(episode.posterUrl){
-						episode.posterUrl = await this.s3Service.getObjectUrl(episode.posterUrl);
-					}else{
-						episode.posterUrl = await this.s3Service.getObjectUrl('default/poster_default.jpg');
+					if (episode.posterURL) {
+						episode.posterURL = await this.s3Service.getObjectUrl(
+							episode.posterURL
+						);
+					} else {
+						episode.posterURL = await this.s3Service.getObjectUrl(
+							'default/poster_default.jpg'
+						);
 					}
 				}
 
 				for (const actor of movie.actors) {
-					if(actor.avatar){
+					if (actor.avatar) {
 						actor.avatar = await this.s3Service.getObjectUrl(actor.avatar);
-					}else{
-						actor.avatar = await this.s3Service.getObjectUrl('default/actor/avatar_default.jpg');
+					} else {
+						actor.avatar = await this.s3Service.getObjectUrl(
+							'default/actor/avatar_default.jpg'
+						);
 					}
 				}
 
 				for (const director of movie.directors) {
-					if(director.avatar){
-						director.avatar = await this.s3Service.getObjectUrl(director.avatar);
-					}else{
-						director.avatar = await this.s3Service.getObjectUrl('default/director/avatar_default.jpg');
+					if (director.avatar) {
+						director.avatar = await this.s3Service.getObjectUrl(
+							director.avatar
+						);
+					} else {
+						director.avatar = await this.s3Service.getObjectUrl(
+							'default/director/avatar_default.jpg'
+						);
 					}
 				}
 			}
 
 			//Save movie to cache
-			await this.redis.set(cacheKey, JSON.stringify(movie), 'EX', 60*5);
+			await this.redis.set(cacheKey, JSON.stringify(movie), 'EX', 60 * 5);
 			return movie;
 		} catch (error: any) {
 			throw new Error('Can not get movie: ' + error.message);
@@ -216,7 +231,9 @@ export class MovieService implements IMovieService {
 			for (const movie of movies) {
 				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
 				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
-				movie.backgroundURL = await this.s3Service.getObjectUrl('movies/'.concat((movie.movieId).toString(),'/background.jpg'));
+				movie.backgroundURL = await this.s3Service.getObjectUrl(
+					'movies/'.concat(movie.movieId.toString(), '/background.jpg')
+				);
 			}
 			await this.redis.set(cacheKey, JSON.stringify(movies), 'EX', 600);
 			return movies;
@@ -236,7 +253,9 @@ export class MovieService implements IMovieService {
 			for (const movie of movies) {
 				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
 				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
-				movie.backgroundURL = await this.s3Service.getObjectUrl('movies/'.concat((movie.movieId).toString(),'/background.jpg'));
+				movie.backgroundURL = await this.s3Service.getObjectUrl(
+					'movies/'.concat(movie.movieId.toString(), '/background.jpg')
+				);
 			}
 			await this.redis.set(cacheKey, JSON.stringify(movies), 'EX', 600);
 			return movies;
@@ -256,7 +275,9 @@ export class MovieService implements IMovieService {
 			for (const movie of movies) {
 				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
 				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
-				movie.backgroundURL = await this.s3Service.getObjectUrl('movies/'.concat((movie.movieId).toString(),'/background.jpg'));
+				movie.backgroundURL = await this.s3Service.getObjectUrl(
+					'movies/'.concat(movie.movieId.toString(), '/background.jpg')
+				);
 			}
 			await this.redis.set(cacheKey, JSON.stringify(movies), 'EX', 600);
 			return movies;
@@ -276,10 +297,12 @@ export class MovieService implements IMovieService {
 			for (const movie of movies) {
 				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
 				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
-				movie.backgroundURL = await this.s3Service.getObjectUrl('movies/'.concat((movie.movieId).toString(),'/background.jpg'));
+				movie.backgroundURL = await this.s3Service.getObjectUrl(
+					'movies/'.concat(movie.movieId.toString(), '/background.jpg')
+				);
 			}
 			await this.redis.set(cacheKey, JSON.stringify(movies), 'EX', 600);
-			return movies;			
+			return movies;
 		} catch (error) {
 			throw new Error('Could not get movies for VIP privileges.');
 		}
