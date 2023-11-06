@@ -16,6 +16,7 @@ import { MovieFavorite } from './MovieFavorite';
 import { WatchHistory } from './WatchHistory';
 import { WatchLater } from './WatchLater';
 import { Subscription } from './Subscription';
+import { Episode } from './Episode';
 
 @Table({
 	tableName: User.USER_TABLE_NAME,
@@ -94,11 +95,11 @@ export class User extends Model {
 	})
 	movieFavoriteList!: Movie[];
 
-	@BelongsToMany(() => Movie, {
+	@BelongsToMany(() => Episode, {
 		through: () => WatchHistory,
 		as: 'watchHistoryList',
 	})
-	watchHistoryList!: Movie[];
+	watchHistoryList!: Episode[];
 
 	@BelongsToMany(() => Movie, {
 		through: () => WatchLater,

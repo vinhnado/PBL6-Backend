@@ -1,10 +1,12 @@
 import { MovieFavorite } from './../models/MovieFavorite';
 import { User } from '../models/User';
 import { Movie } from '../models/Movie';
+import { Genre } from '../models/Genre';
+import { Episode } from '../models/Episode';
 
 export class MovieDTO {
 	userId: number;
-	ListMovie: MovieItem[];
+	ListMovie: MovieItem[] | null;
 
 	constructor(user: User, type: string) {
 		this.userId = user.userId;
@@ -19,36 +21,37 @@ export class MovieDTO {
 }
 
 export class MovieItem {
-	movieId: number;
+	id: number;
 	title: string;
-	description: string;
-	releaseDate: Date;
-	nation: string;
 	posterURL: string;
-	averageRating: string;
-	episodeNum: number;
+	averageRating!: string;
+	episodeNum!: number;
 	level: number;
-	numFavorite: null | number;
-	isSeries: null | boolean;
+	numFavorite!: number;
+	genre: Genre[] | null;
 	updatedAt: Date;
-	duration!: null | number;
 
-	constructor(movie: Movie, updatedAt: Date, duration: number | null = null) {
-		this.movieId = movie.movieId;
-		this.title = movie.title;
-		this.description = movie.description;
-		this.releaseDate = movie.releaseDate;
-		this.nation = movie.nation;
-		this.posterURL = movie.posterURL;
-		this.averageRating = movie.averageRating;
-		this.episodeNum = movie.episodeNum;
-		this.level = movie.level;
-		this.numFavorite = movie.numFavorite;
-		this.isSeries = movie.isSeries;
-		this.updatedAt = updatedAt;
-		if (duration != null) {
-			this.duration = duration;
+	constructor(
+		movie: Movie,
+		updatedAt: Date,
+		episode: Episode | null = null,
+		duration: number | null
+	) {
+		if (episode === null) {
+			this.id = movie.movieId;
+			this.title = movie.title;
+			this.posterURL = movie.posterURL;
+			this.averageRating = movie.averageRating;
+			this.episodeNum = movie.episodeNum;
+			this.numFavorite = movie.numFavorite;
+		} else {
+			this.id = episode!.episodeId;
+			this.title = episode!.title;
+			this.posterURL = episode!.posterURL;
 		}
+		this.level = movie.level;
+		this.genre = movie.genres;
+		this.updatedAt = updatedAt;
 	}
 
 	public static movieListToMovieItemList(
@@ -56,23 +59,23 @@ export class MovieItem {
 		type: string
 	): MovieItem[] {
 		const movieItemList: MovieItem[] = [];
-		let user_movie_list: Movie[] = [];
-		if (type === 'MovieFavorite') {
-			user_movie_list = user.movieFavoriteList;
-		} else if (type === 'WatchHistory') {
-			user_movie_list = user.watchHistoryList;
-		} else if (type === 'WatchLater') {
-			user_movie_list = user.watchLaterList;
-		}
-		for (const movie of user_movie_list) {
-			const movieJson = movie.toJSON();
-			const movieItem = new MovieItem(
-				movie,
-				movieJson[type]?.updatedAt,
-				movieJson[type]?.duration!
-			);
-			movieItemList.push(movieItem);
-		}
+		// let user_movie_list: Movie[] = [];
+		// if (type === 'MovieFavorite') {
+		// 	user_movie_list = user.movieFavoriteList;
+		// } else if (type === 'WatchHistory') {
+		// 	user_movie_list = user.watchHistoryList;
+		// } else if (type === 'WatchLater') {
+		// 	user_movie_list = user.watchLaterList;
+		// }
+		// for (const movie of user_movie_list) {
+		// 	const movieJson = movie.toJSON();
+		// 	const movieItem = new MovieItem(
+		// 		movie,
+		// 		movieJson[type]?.updatedAt,
+		// 		movieJson[type]?.duration!
+		// 	);
+		// 	movieItemList.push(movieItem);
+		// }
 
 		return movieItemList;
 	}

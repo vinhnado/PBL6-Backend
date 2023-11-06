@@ -142,9 +142,6 @@ export class Movie extends Model {
 	@BelongsToMany(() => User, () => MovieFavorite)
 	movieFavorites!: User[];
 
-	@BelongsToMany(() => User, () => WatchHistory)
-	watchHistories!: User[];
-
 	@BelongsToMany(() => User, () => WatchLater)
 	watchLater!: User[];
 }

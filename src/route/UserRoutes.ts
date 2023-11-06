@@ -10,6 +10,9 @@ class UserRoutes extends BaseRoutes {
 		this.router.get('/get-all-users', this.controller.searchUsers);
 		this.router.get('/get-user', this.controller.getUser);
 		this.router.get('/get-self-infomation', auth, this.controller.getSelfInfo);
+		// this.router.put('/update-user', this.controller.updateUser);
+		// this.router.delete('/delete-user', this.controller.deleteUser);
+
 		this.router.get(
 			'/add-favorite-movie',
 			auth,
