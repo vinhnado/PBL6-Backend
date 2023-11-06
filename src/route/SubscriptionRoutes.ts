@@ -1,6 +1,6 @@
 import { SubcriptionController } from '../controller/SubcriptionController';
 import BaseRoutes from './Base/BaseRouter';
-class SubcriptionRoutes extends BaseRoutes {
+class SubscriptionRoutes extends BaseRoutes {
 	constructor() {
 		super(new SubcriptionController());
 	}
@@ -17,4 +17,4 @@ class SubcriptionRoutes extends BaseRoutes {
 	}
 }
 
-export default new SubcriptionRoutes().router;
+export default new SubscriptionRoutes().router;

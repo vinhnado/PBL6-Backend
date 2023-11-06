@@ -1,20 +1,20 @@
 import { Subscription } from '../models/Subscription';
 import express, { Request, Response, Router } from 'express';
 import Container from 'typedi';
-import { SubcriptionService } from '../services/SubcriptionService';
+import { SubscriptionService } from '../services/SubscriptionService';
 
 export class SubcriptionController {
-	private subcriptionService: SubcriptionService;
+	private subscriptionService: SubscriptionService;
 
 	constructor() {
-		this.subcriptionService = Container.get(SubcriptionService);
+		this.subscriptionService = Container.get(SubscriptionService);
 	}
 
 	updateSubcription = async (req: Request, res: Response) => {
 		try {
 			const { email, idUser } = req.body;
 
-			await this.subcriptionService.createOrUpdateSubscription(1, new Date());
+			await this.subscriptionService.updateSubscription(1, new Date());
 			return res.status(200).json({
 				status: 'Ok!',
 				message: 'Successfully',
@@ -27,7 +27,7 @@ export class SubcriptionController {
 	createSubcriptionType = async (req: Request, res: Response) => {
 		try {
 			const { name } = req.body;
-			await this.subcriptionService.createOrUpdateSubscriptionType(name);
+			await this.subscriptionService.createOrUpdateSubscriptionType(name);
 			return res.status(200).json({
 				status: 'Ok!',
 				message: 'Successfully',
@@ -40,7 +40,7 @@ export class SubcriptionController {
 	updateSubcriptionType = async (req: Request, res: Response) => {
 		try {
 			const { name, subcriptionTypeId } = req.body;
-			await this.subcriptionService.createOrUpdateSubscriptionType(
+			await this.subscriptionService.createOrUpdateSubscriptionType(
 				name,
 				subcriptionTypeId
 			);
