@@ -62,7 +62,7 @@ export class User extends Model {
 	@Column({
 		type: DataType.STRING(255),
 		field: User.USER_AVATAR_URL,
-		defaultValue: 'default/director/avatar_default.jpg',
+		defaultValue: 'default/user/avatar_default.jpg',
 	})
 	avatarURL!: string;
 

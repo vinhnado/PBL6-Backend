@@ -10,21 +10,26 @@ export class SubcriptionController {
 		this.subscriptionService = Container.get(SubscriptionService);
 	}
 
-	updateSubcription = async (req: Request, res: Response) => {
+	updateSubscription = async (req: Request, res: Response) => {
 		try {
-			const { email, idUser } = req.body;
+			const { subscriptionTypeId, userId, closedAt } = req.body;
 
-			await this.subscriptionService.updateSubscription(1, new Date());
+			await this.subscriptionService.updateSubscription(
+				Number(userId),
+				new Date(closedAt),
+				Number(subscriptionTypeId)
+			);
 			return res.status(200).json({
 				status: 'Ok!',
 				message: 'Successfully',
 			});
 		} catch (error) {
+			console.log(error);
 			res.status(500).json({ error: 'Can not' });
 		}
 	};
 
-	createSubcriptionType = async (req: Request, res: Response) => {
+	createSubscriptionType = async (req: Request, res: Response) => {
 		try {
 			const { name } = req.body;
 			await this.subscriptionService.createOrUpdateSubscriptionType(name);
@@ -37,7 +42,7 @@ export class SubcriptionController {
 		}
 	};
 
-	updateSubcriptionType = async (req: Request, res: Response) => {
+	updateSubscriptionType = async (req: Request, res: Response) => {
 		try {
 			const { name, subcriptionTypeId } = req.body;
 			await this.subscriptionService.createOrUpdateSubscriptionType(

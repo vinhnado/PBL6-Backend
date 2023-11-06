@@ -1,14 +1,17 @@
-import { Subscription } from '../models/Subscription';
 import { User } from '../models/User';
 
 export class UserDTO {
 	dateOfBirth: Date;
 	gender: string;
 	email: string;
-	avatarURL: string | null;
+	avatarURL: string;
 	createdAt: string;
 	username: string;
-	subscription: Subscription | null;
+	subscription: {
+		closeAt: Date;
+		updatedAt: Date;
+		subscriptionType: string | null;
+	};
 
 	constructor(user: User) {
 		this.dateOfBirth = user.dateOfBirth;
@@ -17,7 +20,11 @@ export class UserDTO {
 		this.avatarURL = user.avatarURL;
 		this.createdAt = user.createdAt;
 		this.username = user.account.username;
-		this.subscription = user.subscription;
+		this.subscription = {
+			closeAt: user.subscription.closedAt,
+			updatedAt: user.subscription.updatedAt,
+			subscriptionType: user.subscription.subscriptionType.name,
+		};
 	}
 
 	public static userToUserDTO(user: User): UserDTO {

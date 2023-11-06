@@ -55,7 +55,7 @@ export class UserRepository
 				},
 				{
 					model: Subscription,
-					attributes: ['closedAt'],
+					// attributes: ['closedAt'],
 					include: [
 						{
 							model: SubscriptionType, // Đặt tên mối quan hệ mà bạn đã định nghĩa trong model Subcription
@@ -81,18 +81,6 @@ export class UserRepository
 			newUser.subscriptionId = subscription.subscriptionId;
 			await newUser.save({ transaction: t });
 			await t.commit(); // Lưu giao dịch nếu không có lỗi
-
-			// await User.create({
-			// 	email: newUser.email,
-			// 	dateOfBirth: newUser.dateOfBirth,
-			// 	gender: newUser.gender,
-			// 	Subcription: {},
-			// 	Account: {
-			// 		username: newUser.account.username,
-			// 		password: newUser.account.password,
-			// 	},
-			// 	include: [Account, Subscription],
-			// });
 		} catch (error: any) {
 			// console.error(error);
 

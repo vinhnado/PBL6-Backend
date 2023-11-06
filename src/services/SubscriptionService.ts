@@ -1,6 +1,6 @@
+import { Subscription } from './../models/Subscription';
 import { UserRepository } from '../repository/UserRepository';
 import { Inject, Service } from 'typedi';
-import { Subscription } from '../models/Subscription';
 import { SubscriptionType } from '../models/SubscriptionType';
 import { SubscriptionRepository } from '../repository/SubscriptionRepository';
 import { SubscriptionTypeRepository } from '../repository/SubscriptionTypeRepository';
@@ -22,21 +22,18 @@ export class SubscriptionService {
 		subscriptionTypeId: number | null = null
 	) => {
 		try {
-			const updateData: { [key: string]: any } = {};
-
-			if (subscriptionTypeId !== null) {
-				updateData.subscriptionTypeId = subscriptionTypeId;
-			}
-
-			if (closedAt !== null) {
-				updateData.closedAt = closedAt;
-			}
-			const subcriptionToUpdate = await this.userRepository.findById(userId);
-			if (subcriptionToUpdate) {
-				await subcriptionToUpdate.update({
-					updateData,
-				});
-				return await this.subscriptionRepository.save(subcriptionToUpdate);
+			const user = await this.userRepository.findOneUser({
+				userId: userId,
+			});
+			if (user) {
+				let subscription = user.subscription;
+				if (subscriptionTypeId !== null) {
+					subscription.subscriptionTypeId = subscriptionTypeId;
+				}
+				if (closedAt !== null) {
+					subscription.closedAt = closedAt;
+				}
+				return await this.subscriptionRepository.save(subscription);
 			} else {
 				throw new Error('UserId not found for the given ID');
 			}

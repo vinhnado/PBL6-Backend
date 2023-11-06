@@ -5,14 +5,14 @@ class SubscriptionRoutes extends BaseRoutes {
 		super(new SubcriptionController());
 	}
 	public routes(): void {
-		this.router.put('/update-subcription', this.controller.updateSubcription);
+		this.router.put('/update-subscription', this.controller.updateSubscription);
 		this.router.post(
-			'/create-subcription-type',
-			this.controller.createSubcriptionType
+			'/create-subscription-type',
+			this.controller.createSubscriptionType
 		);
 		this.router.put(
-			'/create-subcription-type',
-			this.controller.updateSubcriptionType
+			'/create-subscription-type',
+			this.controller.updateSubscriptionType
 		);
 	}
 }

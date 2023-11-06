@@ -33,7 +33,7 @@ export class SubscriptionType extends Model {
 		type: DataType.STRING(100),
 		field: SubscriptionType.SUBSCRIPTION_TYPE_NAME,
 	})
-	name!: number;
+	name!: string;
 
 	@HasMany(() => Subscription)
 	subscriptions!: Subscription[];
