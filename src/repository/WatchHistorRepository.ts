@@ -12,39 +12,6 @@ export class WatchHistoryRepository extends BaseRepository<WatchHistory> {
 		super(WatchHistory);
 	}
 
-	// async findAll(userId: number, page: number, pageSize: number) {
-	// 	try {
-	// 		const movieHistoryList = await User.findOne({
-	// 			where: { userId: userId },
-	// 			offset: (page - 1) * pageSize,
-	// 			limit: pageSize,
-	// 			attributes: ['userId'],
-	// 			include: [
-	// 				{
-	// 					model: Movie,
-	// 					as: 'watchHistoryList',
-	// 					attributes: {
-	// 						exclude: ['createdAt', 'updatedAt', 'deletedAt'],
-	// 					},
-	// 					through: { attributes: ['updatedAt', 'duration'] },
-	// 					include: [
-	// 						{
-	// 							model: Genre,
-	// 							attributes: ['genre_id', 'name'],
-	// 							as: 'genres',
-	// 							through: { attributes: [] },
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		});
-
-	// 		return movieHistoryList;
-	// 	} catch (error) {
-	// 		console.log(error);
-	// 		throw new Error('Cannot get all movie history');
-	// 	}
-	// }
 	async findAll(userId: number, page: number, pageSize: number) {
 		try {
 			const movieHistoryList = await User.findOne({
