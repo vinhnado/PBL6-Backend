@@ -63,14 +63,19 @@ export class WatchHistoryRepository extends BaseRepository<WatchHistory> {
 						include: [
 							{
 								model: Movie,
-								// attributes: ['genre_id', 'name'],
-								through: { attributes: [] },
+								include: [
+									{
+										model: Genre,
+										attributes: ['genre_id', 'name'],
+										as: 'genres',
+										through: { attributes: [] },
+									},
+								],
 							},
 						],
 					},
 				],
 			});
-			console.log(movieHistoryList);
 			return movieHistoryList;
 		} catch (error) {
 			console.log(error);

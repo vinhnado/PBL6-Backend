@@ -21,7 +21,7 @@ export class MovieDTO {
 }
 
 export class MovieItem {
-	movieId!: number;
+	id!: number;
 	title!: string;
 	posterURL!: string;
 	averageRating!: string;
@@ -29,7 +29,6 @@ export class MovieItem {
 	level: number;
 	numFavorite!: number;
 	genres: Genre[] | null;
-	episode!: Episode;
 	duration!: number | null;
 	updatedAt: Date;
 
@@ -40,14 +39,16 @@ export class MovieItem {
 		duration: number | null = null
 	) {
 		if (episode === null) {
-			this.movieId = movie.movieId;
+			this.id = movie.movieId;
 			this.title = movie.title;
 			this.posterURL = movie.posterURL;
 			this.averageRating = movie.averageRating;
 			this.episodeNum = movie.episodeNum;
 			this.numFavorite = movie.numFavorite;
 		} else {
-			this.episode = episode;
+			this.id = episode.episodeId;
+			this.title = episode.title;
+			this.posterURL = episode.posterURL;
 			this.duration = duration;
 		}
 		this.level = movie.level;
@@ -60,22 +61,28 @@ export class MovieItem {
 		type: string
 	): MovieItem[] {
 		const movieItemList: MovieItem[] = [];
-		let user_movie_list: Movie[] = [];
+		let user_movie_list: any[] = [];
 		if (type === 'MovieFavorite') {
 			user_movie_list = user.movieFavoriteList;
 		} else if (type === 'WatchHistory') {
-			// user_movie_list = user.watchHistoryList;
-			// return movieItemList;
+			for (const episode of user.watchHistoryList) {
+				const episodeJson = episode.toJSON();
+				const movieItem = new MovieItem(
+					episodeJson.movie,
+					episodeJson[type]?.updatedAt,
+					episodeJson,
+					episodeJson[type]?.duration!
+				);
+				movieItemList.push(movieItem);
+			}
+			console.log(movieItemList);
+			return movieItemList;
 		} else if (type === 'WatchLater') {
 			user_movie_list = user.watchLaterList;
 		}
 		for (const movie of user_movie_list) {
 			const movieJson = movie.toJSON();
-			const movieItem = new MovieItem(
-				movie,
-				movieJson[type]?.updatedAt,
-				movieJson[type]?.duration!
-			);
+			const movieItem = new MovieItem(movie, movieJson[type]?.updatedAt);
 			movieItemList.push(movieItem);
 		}
 

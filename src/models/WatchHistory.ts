@@ -18,8 +18,6 @@ import { Episode } from './Episode';
 export class WatchHistory extends Model {
 	private static WATCHHISTORY_TABLE_NAME = 'WatchHistory' as string;
 	private static WATCHHISTORY_USER_ID = 'user_id' as string;
-	private static WATCHHISTORY_MOVIE_ID = 'movie_id' as string;
-
 	private static WATCHHISTORY_EPISODE_ID = 'episode_id' as string;
 	private static WATCHHISTORY_DURATION = 'duration' as string;
 
@@ -29,13 +27,6 @@ export class WatchHistory extends Model {
 		field: WatchHistory.WATCHHISTORY_USER_ID,
 	})
 	userId!: number;
-
-	// @ForeignKey(() => Movie)
-	// @Column({
-	// 	type: DataType.INTEGER(),
-	// 	field: WatchHistory.WATCHHISTORY_MOVIE_ID,
-	// })
-	// movieId!: number;
 
 	@ForeignKey(() => Episode)
 	@Column({

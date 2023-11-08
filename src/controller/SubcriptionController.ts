@@ -69,4 +69,19 @@ export class SubcriptionController {
 			res.status(500).json({ error: 'Can not' });
 		}
 	};
+
+	deleteSubscriptionType = async (req: Request, res: Response) => {
+		try {
+			const { subscriptionTypeId } = req.query;
+			await this.subscriptionService.deleteSupscriptionType(
+				Number(subscriptionTypeId)
+			);
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully',
+			});
+		} catch (error) {
+			res.status(500).json({ error: 'Can not' });
+		}
+	};
 }

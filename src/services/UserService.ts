@@ -110,33 +110,29 @@ export class UserService {
 
 	saveWatchHistory = async (
 		userId: number,
-		movieId: number,
+		episodeId: number,
 		duration: number
 	) => {
 		try {
-			let watchHistory = await this.watchHistoryRepository
-				.findOneByCondition({
-					user_id: userId,
-					episode_id: movieId,
+			let watchHistory = await this.watchHistoryRepository.findOneByCondition({
+				user_id: userId,
+				episode_id: episodeId,
+			});
+			if (watchHistory != null && watchHistory.deletedAt != null) {
+				watchHistory.duration = duration;
+				watchHistory.deletedAt = null;
+				return await this.watchHistoryRepository.save(watchHistory);
+			} else if (watchHistory != null && watchHistory.deletedAt == null) {
+				watchHistory.duration = duration;
+				return await this.watchHistoryRepository.save(watchHistory);
+			}
+			return await this.watchHistoryRepository.save(
+				WatchHistory.build({
+					userId: userId,
+					episodeId: episodeId,
+					duration: duration,
 				})
-				.then(async (watchHistory) => {
-					if (watchHistory != null) {
-						watchHistory.duration = duration;
-						watchHistory.deletedAt = null;
-						return await this.watchHistoryRepository.save(watchHistory);
-					} else {
-						return await this.watchHistoryRepository.save(
-							WatchHistory.build({
-								userId: userId,
-								episode_id: movieId,
-								duration: duration,
-							})
-						);
-					}
-				})
-				.catch((error) => {
-					console.error('Lỗi: ', error);
-				});
+			);
 		} catch (error: any) {
 			console.log(error);
 			throw new Error(error.message);
@@ -180,6 +176,7 @@ export class UserService {
 				pageSize
 			);
 			return new MovieDTO(userMovie!, 'WatchHistory');
+			return userMovie;
 		} catch (error: any) {
 			throw new Error(error.message);
 		}
