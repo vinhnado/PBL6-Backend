@@ -3,6 +3,8 @@ import { BaseRepository } from './BaseRepository';
 import { User } from '../models/User';
 import { Movie } from '../models/Movie';
 import { WatchHistory } from '../models/WatchHistory';
+import { Genre } from '../models/Genre';
+import { Episode } from '../models/Episode';
 
 @Service()
 export class WatchHistoryRepository extends BaseRepository<WatchHistory> {
@@ -19,16 +21,28 @@ export class WatchHistoryRepository extends BaseRepository<WatchHistory> {
 				attributes: ['userId'],
 				include: [
 					{
-						model: Movie,
+						model: Episode,
 						as: 'watchHistoryList',
 						attributes: {
 							exclude: ['createdAt', 'updatedAt', 'deletedAt'],
 						},
 						through: { attributes: ['updatedAt', 'duration'] },
+						include: [
+							{
+								model: Movie,
+								include: [
+									{
+										model: Genre,
+										attributes: ['genre_id', 'name'],
+										as: 'genres',
+										through: { attributes: [] },
+									},
+								],
+							},
+						],
 					},
 				],
 			});
-
 			return movieHistoryList;
 		} catch (error) {
 			console.log(error);

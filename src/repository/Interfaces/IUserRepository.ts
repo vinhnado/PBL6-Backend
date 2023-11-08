@@ -1,10 +1,9 @@
 import { Account } from '../../models/Account';
-import { Subcription } from '../../models/Subscription';
+import { Subscription } from '../../models/Subscription';
 import { User } from '../../models/User';
 import { BaseInterface } from './BaseInterface';
 
 export interface IUserRepository extends BaseInterface {
-	getAllFavoriteMovie(userId: number, page: number, pageSize: number): unknown;
 	findOneUser(searchConditions: any): Promise<User>;
 	searchUsers(
 		searchConditions: any,
@@ -14,6 +13,6 @@ export interface IUserRepository extends BaseInterface {
 	createNewUser(
 		newUser: User,
 		newAccount: Account,
-		newSubcription: Subcription
+		newSubscription: Subscription
 	): Promise<void>;
 }

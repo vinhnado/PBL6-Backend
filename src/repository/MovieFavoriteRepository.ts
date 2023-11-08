@@ -3,6 +3,7 @@ import { BaseRepository } from './BaseRepository';
 import { MovieFavorite } from '../models/MovieFavorite';
 import { User } from '../models/User';
 import { Movie } from '../models/Movie';
+import { Genre } from '../models/Genre';
 
 @Service()
 export class MovieFavoriteRepository extends BaseRepository<MovieFavorite> {
@@ -25,6 +26,14 @@ export class MovieFavoriteRepository extends BaseRepository<MovieFavorite> {
 							exclude: ['createdAt', 'updatedAt', 'deletedAt'],
 						},
 						through: { attributes: ['updatedAt'] },
+						include: [
+							{
+								model: Genre,
+								attributes: ['genre_id', 'name'],
+								as: 'genres',
+								through: { attributes: [] },
+							},
+						],
 					},
 				],
 			});

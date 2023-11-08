@@ -147,10 +147,10 @@ export class UserController {
 
 	saveWatchHistory = async (req: Request, res: Response) => {
 		try {
-			const { movieId, duration } = req.query;
+			const { episodeId, duration } = req.query;
 			await this.userService.saveWatchHistory(
 				req.payload.userId,
-				Number(movieId),
+				Number(episodeId),
 				Number(duration)
 			);
 			return res.status(200).json({
@@ -182,10 +182,10 @@ export class UserController {
 
 	deleteWatchHistory = async (req: Request, res: Response) => {
 		try {
-			const { movieId } = req.query;
+			const { episodeId } = req.query;
 			await this.userService.deleteWatchHistory(
 				req.payload.userId,
-				Number(movieId)
+				Number(episodeId)
 			);
 			return res.status(200).json({
 				status: 'Ok!',
