@@ -68,7 +68,7 @@ export class SubscriptionService {
 		}
 	};
 
-	getAllSupcriptionType = async () => {
+	getAllSubscriptionType = async () => {
 		try {
 			return await this.subscriptionTypeRepository.findMany();
 		} catch (error: any) {
@@ -76,7 +76,7 @@ export class SubscriptionService {
 		}
 	};
 
-	deleteSupcriptionType = async (subcriptionTypeId: number) => {
+	deleteSupscriptionType = async (subcriptionTypeId: number) => {
 		try {
 			return await this.subscriptionTypeRepository.delete(
 				await this.subscriptionTypeRepository.findById(subcriptionTypeId)

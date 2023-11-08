@@ -3,6 +3,7 @@ import { BaseRepository } from './BaseRepository';
 import { User } from '../models/User';
 import { Movie } from '../models/Movie';
 import { WatchLater } from '../models/WatchLater';
+import { Genre } from '../models/Genre';
 
 @Service()
 export class WatchLaterRepository extends BaseRepository<WatchLater> {
@@ -25,6 +26,14 @@ export class WatchLaterRepository extends BaseRepository<WatchLater> {
 							exclude: ['createdAt', 'updatedAt', 'deletedAt'],
 						},
 						through: { attributes: ['updatedAt'] },
+						include: [
+							{
+								model: Genre,
+								attributes: ['genre_id', 'name'],
+								as: 'genres',
+								through: { attributes: [] },
+							},
+						],
 					},
 				],
 			});

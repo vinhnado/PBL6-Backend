@@ -21,36 +21,37 @@ export class MovieDTO {
 }
 
 export class MovieItem {
-	id: number;
-	title: string;
-	posterURL: string;
+	movieId!: number;
+	title!: string;
+	posterURL!: string;
 	averageRating!: string;
 	episodeNum!: number;
 	level: number;
 	numFavorite!: number;
-	genre: Genre[] | null;
+	genres: Genre[] | null;
+	episode!: Episode;
+	duration!: number | null;
 	updatedAt: Date;
 
 	constructor(
 		movie: Movie,
 		updatedAt: Date,
 		episode: Episode | null = null,
-		duration: number | null
+		duration: number | null = null
 	) {
 		if (episode === null) {
-			this.id = movie.movieId;
+			this.movieId = movie.movieId;
 			this.title = movie.title;
 			this.posterURL = movie.posterURL;
 			this.averageRating = movie.averageRating;
 			this.episodeNum = movie.episodeNum;
 			this.numFavorite = movie.numFavorite;
 		} else {
-			this.id = episode!.episodeId;
-			this.title = episode!.title;
-			this.posterURL = episode!.posterURL;
+			this.episode = episode;
+			this.duration = duration;
 		}
 		this.level = movie.level;
-		this.genre = movie.genres;
+		this.genres = movie.genres;
 		this.updatedAt = updatedAt;
 	}
 
@@ -59,23 +60,24 @@ export class MovieItem {
 		type: string
 	): MovieItem[] {
 		const movieItemList: MovieItem[] = [];
-		// let user_movie_list: Movie[] = [];
-		// if (type === 'MovieFavorite') {
-		// 	user_movie_list = user.movieFavoriteList;
-		// } else if (type === 'WatchHistory') {
-		// 	user_movie_list = user.watchHistoryList;
-		// } else if (type === 'WatchLater') {
-		// 	user_movie_list = user.watchLaterList;
-		// }
-		// for (const movie of user_movie_list) {
-		// 	const movieJson = movie.toJSON();
-		// 	const movieItem = new MovieItem(
-		// 		movie,
-		// 		movieJson[type]?.updatedAt,
-		// 		movieJson[type]?.duration!
-		// 	);
-		// 	movieItemList.push(movieItem);
-		// }
+		let user_movie_list: Movie[] = [];
+		if (type === 'MovieFavorite') {
+			user_movie_list = user.movieFavoriteList;
+		} else if (type === 'WatchHistory') {
+			// user_movie_list = user.watchHistoryList;
+			// return movieItemList;
+		} else if (type === 'WatchLater') {
+			user_movie_list = user.watchLaterList;
+		}
+		for (const movie of user_movie_list) {
+			const movieJson = movie.toJSON();
+			const movieItem = new MovieItem(
+				movie,
+				movieJson[type]?.updatedAt,
+				movieJson[type]?.duration!
+			);
+			movieItemList.push(movieItem);
+		}
 
 		return movieItemList;
 	}

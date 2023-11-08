@@ -30,12 +30,12 @@ export class WatchHistory extends Model {
 	})
 	userId!: number;
 
-	@ForeignKey(() => Movie)
-	@Column({
-		type: DataType.INTEGER(),
-		field: WatchHistory.WATCHHISTORY_MOVIE_ID,
-	})
-	movieId!: number;
+	// @ForeignKey(() => Movie)
+	// @Column({
+	// 	type: DataType.INTEGER(),
+	// 	field: WatchHistory.WATCHHISTORY_MOVIE_ID,
+	// })
+	// movieId!: number;
 
 	@ForeignKey(() => Episode)
 	@Column({

@@ -55,20 +55,18 @@ export class UserService {
 
 	saveMovieFavorite = async (userId: number, movieId: number) => {
 		try {
-			let movieFavorite = await this.movieFavoriteRepository
-				.findOneByCondition({
+			let movieFavorite = await this.movieFavoriteRepository.findOneByCondition(
+				{
 					user_id: userId,
 					movie_id: movieId,
-				})
-				.then(async (movieFavorite) => {
-					if (movieFavorite.deleteAt == null) {
-						await this.movieFavoriteRepository.restore(movieFavorite);
-						return console.log('Da resotre');
-					}
-				})
-				.catch((error) => {
-					console.error('Lỗi: ', error);
-				});
+				}
+			);
+
+			if (movieFavorite != null && movieFavorite.deleteAt != null) {
+				console.log('vao1');
+				return await this.movieFavoriteRepository.restore(movieFavorite);
+			}
+
 			return await this.movieFavoriteRepository.save(
 				MovieFavorite.build({ userId: userId, movieId: movieId })
 			);
@@ -119,7 +117,7 @@ export class UserService {
 			let watchHistory = await this.watchHistoryRepository
 				.findOneByCondition({
 					user_id: userId,
-					movie_id: movieId,
+					episode_id: movieId,
 				})
 				.then(async (watchHistory) => {
 					if (watchHistory != null) {
@@ -130,7 +128,7 @@ export class UserService {
 						return await this.watchHistoryRepository.save(
 							WatchHistory.build({
 								userId: userId,
-								movieId: movieId,
+								episode_id: movieId,
 								duration: duration,
 							})
 						);
@@ -189,19 +187,13 @@ export class UserService {
 
 	saveWatchLater = async (userId: number, movieId: number) => {
 		try {
-			let watchLater = await this.watchLaterRepository
-				.findOneByCondition({
-					user_id: userId,
-					movie_id: movieId,
-				})
-				.then(async (watchLater) => {
-					if (watchLater.deleteAt == null) {
-						await this.watchLaterRepository.restore(watchLater);
-					}
-				})
-				.catch((error) => {
-					console.error('Lỗi: ', error);
-				});
+			let watchLater = await this.watchLaterRepository.findOneByCondition({
+				user_id: userId,
+				movie_id: movieId,
+			});
+			if (watchLater != null && watchLater.deleteAt != null) {
+				return await this.movieFavoriteRepository.restore(watchLater);
+			}
 			return await this.watchLaterRepository.save(
 				WatchLater.build({ userId: userId, movieId: movieId })
 			);

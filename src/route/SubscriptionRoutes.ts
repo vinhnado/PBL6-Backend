@@ -14,6 +14,10 @@ class SubscriptionRoutes extends BaseRoutes {
 			'/create-subscription-type',
 			this.controller.updateSubscriptionType
 		);
+		this.router.get(
+			'/get-all-subscription-type',
+			this.controller.getAllSubscriptionType
+		);
 	}
 }
 

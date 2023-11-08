@@ -57,4 +57,16 @@ export class SubcriptionController {
 			res.status(500).json({ error: 'Can not' });
 		}
 	};
+	getAllSubscriptionType = async (req: Request, res: Response) => {
+		try {
+			const data = await this.subscriptionService.getAllSubscriptionType();
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully',
+				data: data,
+			});
+		} catch (error) {
+			res.status(500).json({ error: 'Can not' });
+		}
+	};
 }

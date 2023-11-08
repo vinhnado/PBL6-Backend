@@ -10,6 +10,7 @@ import { Service } from 'typedi';
 import { SubscriptionType } from '../models/SubscriptionType';
 import { Movie } from '../models/Movie';
 import { Episode } from '../models/Episode';
+import { Genre } from '../models/Genre';
 
 @Service()
 export class UserRepository
@@ -137,111 +138,6 @@ export class UserRepository
 			return users;
 		} catch (error: any) {
 			throw new Error('Không thể lấy danh sách user ' + error.message);
-		}
-	}
-
-	async addFavoriteMovie(userId: number, movieId: number): Promise<void> {
-		try {
-			const favorite = new MovieFavorite();
-			favorite.userId = userId;
-			favorite.movieId = movieId;
-			favorite.save();
-		} catch (error) {
-			throw new Error('Không thể thêm phim yêu thích');
-		}
-	}
-
-	async getAllFavoriteMovie(userId: number, page: number, pageSize: number) {
-		try {
-			const favoritemovies = await User.findOne({
-				where: { userId: userId },
-				offset: (page - 1) * pageSize,
-				limit: pageSize,
-				attributes: ['userId'],
-				include: [
-					{
-						model: Movie,
-						as: 'movieFavorites',
-						attributes: {
-							exclude: ['createdAt', 'updatedAt', 'deletedAt'],
-						},
-						through: { attributes: ['updatedAt'] },
-					},
-				],
-			});
-
-			return favoritemovies;
-		} catch (error) {
-			console.log(error);
-			throw new Error('Cannot get all movie favorite');
-		}
-	}
-
-	async addWatchHistory(
-		userId: number,
-		episodeId: number,
-		duration: number
-	): Promise<void> {
-		try {
-			const history = new WatchHistory();
-			history.userId = userId;
-			history.episodeId = episodeId;
-			history.duration = duration;
-			history.save();
-		} catch (error) {
-			throw new Error('Không thể thêm phim yêu thích');
-		}
-	}
-
-	async getAllWatchHistory(userId: number, page: number, pageSize: number) {
-		try {
-			const watchHistories = await User.findOne({
-				where: { userId: userId },
-				offset: (page - 1) * pageSize,
-				limit: pageSize,
-				attributes: ['userId'],
-				include: [
-					{
-						model: Episode,
-						as: 'WatchHistories',
-						attributes: {
-							exclude: ['createdAt', 'updatedAt', 'deletedAt'],
-						},
-						// through: { attributes: ['updatedAt'] },
-					},
-				],
-			});
-
-			return watchHistories;
-		} catch (error) {
-			console.log(error);
-			throw new Error('Cannot get all movie favorite');
-		}
-	}
-
-	async getAllWatchList(userId: number, page: number, pageSize: number) {
-		try {
-			const watchList = await User.findOne({
-				where: { userId: userId },
-				offset: (page - 1) * pageSize,
-				limit: pageSize,
-				attributes: ['userId'],
-				include: [
-					{
-						model: Movie,
-						as: 'watchList',
-						attributes: {
-							exclude: ['createdAt', 'updatedAt', 'deletedAt'],
-						},
-						// through: { attributes: ['updatedAt'] },
-					},
-				],
-			});
-
-			return watchList;
-		} catch (error) {
-			console.log(error);
-			throw new Error('Cannot get all movie favorite');
 		}
 	}
 }
