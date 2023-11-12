@@ -9,12 +9,20 @@ export class PaymentController {
 	private momoService: MomoService;
 
 	constructor() {
+        const accessKey = 'F8BBA842ECF85';
+        const secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
+        const partnerCode = 'MOMO';
+        const redirectUrl = 'https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b';
+        const ipnUrl = 'https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b';
+        const requestType = "payWithMethod";
+        const amount = '50000';
+        const lang = 'vi';
 		this.vnPayService = new VNPayService({
             tmnCode: '4YOYYZHU',
             secureSecret: 'MBIDOAOKAURPHPQIQVKYWQNHCSNNVWHU',
             returnUrl: 'https://sandbox.vnpayment.vn/tryitnow/Home/ReturnResult',
         });
-        this.momoService = Container.get(MomoService);
+        this.momoService = new MomoService(accessKey, secretKey, partnerCode, redirectUrl, ipnUrl, requestType, amount, lang);
 	}
 
     getVNPayPaymentURL =  async (req: Request, res: Response) => {
@@ -62,14 +70,23 @@ export class PaymentController {
 
     getMomoPaymentURL = async (req: Request, res: Response) => {
         try {
-            const momoPaymentUrl = await this.momoService.getPaymentUrl();
-            res.status(200).json({
-                message: "Successfully",
-                success: true,
-                data: {
-                    url: momoPaymentUrl
-                },
-            });
+            this.momoService.getPaymentUrl('pay with MoMo', '')
+              .then(paymentUrl => {
+                res.status(200).json({
+                    message: "Successfully",
+                    success: true,
+                    data: {
+                        url: paymentUrl
+                    },
+                });
+              })
+              .catch(error => {
+                console.error('Error:', error);
+                    res.status(200).json({
+                        message: "Failed",
+                        success: false,
+                    });
+              });
         } catch (error) {
             res.status(500).json({ message: 'Internal Server Error', error: error });
         } 
