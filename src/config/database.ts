@@ -16,6 +16,7 @@ import { WatchLater } from '../models/WatchLater';
 import { SubscriptionType } from '../models/SubscriptionType';
 import { Subscription } from '../models/Subscription';
 import { Home } from '../models/Home';
+import { Payment } from '../models/Payment';
 
 dotenv.config();
 
@@ -68,6 +69,7 @@ class Database {
 			Subscription,
 			SubscriptionType,
 			Home,
+			Payment,
 		]);
 
 		await this.sequelize
