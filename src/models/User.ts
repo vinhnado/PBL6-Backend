@@ -17,6 +17,7 @@ import { WatchHistory } from './WatchHistory';
 import { WatchLater } from './WatchLater';
 import { Subscription } from './Subscription';
 import { Episode } from './Episode';
+import { Payment } from './Payment';
 
 @Table({
 	tableName: User.USER_TABLE_NAME,
@@ -106,6 +107,9 @@ export class User extends Model {
 		as: 'watchLaterList',
 	})
 	watchLaterList!: Movie[];
+
+	@HasMany(() => Payment)
+	payments!: Payment[];
 
 	@DeletedAt
 	deletedAt!: Date;

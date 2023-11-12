@@ -104,7 +104,7 @@ export class PaypalService {
 			return responseData;
 		} catch (error) {
 			console.error('Error capturing order:', error);
-			throw error; // You might want to handle this error appropriately in the calling code
+			throw error;
 		}
 	};
 }
