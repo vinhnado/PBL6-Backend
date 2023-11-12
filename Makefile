@@ -5,9 +5,9 @@ exec-sudo:
 exec:
 	docker-compose exec app bash
 up:
-	docker-compose up -d
+	docker-compose up
 up-sudo:
-	sudo docker-compose up -d
+	sudo docker-compose up
 down:
 	docker-compose down
 down-sudo:
