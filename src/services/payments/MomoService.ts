@@ -10,54 +10,35 @@ export class MomoService {
     private redirectUrl: string;
     private ipnUrl: string;
     private requestType: string;
-    private amount: string;
+    // private amount: string;
     private lang: string;
   
-    constructor(
-      accessKey: string,
-      secretKey: string,
-      partnerCode: string,
-      redirectUrl: string,
-      ipnUrl: string,
-      requestType: string,
-      amount: string,
-      lang: string
-    ) {
-      this.accessKey = accessKey;
-      this.secretKey = secretKey;
-      this.partnerCode = partnerCode;
-      this.redirectUrl = redirectUrl;
-      this.ipnUrl = ipnUrl;
-      this.requestType = requestType;
-      this.amount = amount;
-      this.lang = lang;
+    constructor() {
+      this.accessKey = 'F8BBA842ECF85';
+      this.secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
+      this.partnerCode = 'MOMO';
+      this.redirectUrl = 'localhost:3000';
+      this.ipnUrl = 'http://localhost:8000/api/payments/momo/verify';
+      this.requestType = 'payWithMethod';
+      this.lang = 'vi';
     }
   
-    generateSignature(orderInfo: string, extraData: string): string {
-      const orderId = this.partnerCode + new Date().getTime();
-      const requestId = orderId;
+    async getPaymentUrl(orderId: string ,orderInfo: string, extraData: string, amount: number): Promise<void> {
+      const requestId = this.partnerCode + new Date().getTime();
+      // const orderId = requestId;
   
-      const rawSignature = `accessKey=${this.accessKey}&amount=${this.amount}&extraData=${extraData}&ipnUrl=${this.ipnUrl}&orderId=${orderId}&orderInfo=${orderInfo}&partnerCode=${this.partnerCode}&redirectUrl=${this.redirectUrl}&requestId=${requestId}&requestType=${this.requestType}`;
+      const rawSignature = `accessKey=${this.accessKey}&amount=${amount}&extraData=${extraData}&ipnUrl=${this.ipnUrl}&orderId=${orderId}&orderInfo=${orderInfo}&partnerCode=${this.partnerCode}&redirectUrl=${this.redirectUrl}&requestId=${requestId}&requestType=${this.requestType}`;
   
       const signature = crypto.createHmac('sha256', this.secretKey)
         .update(rawSignature)
         .digest('hex');
-  
-      return signature;
-    }
-  
-    async getPaymentUrl(orderInfo: string, extraData: string): Promise<void> {
-      const requestId = this.partnerCode + new Date().getTime();
-      const orderId = requestId;
-  
-      const signature = this.generateSignature(orderInfo, extraData);
-  
+
       const requestBody = JSON.stringify({
         partnerCode: this.partnerCode,
-        partnerName: "Test",
+        partnerName: "Movies Website",
         storeId: "MomoTestStore",
         requestId: requestId,
-        amount: this.amount,
+        amount: amount,
         orderId: orderId,
         orderInfo: orderInfo,
         redirectUrl: this.redirectUrl,

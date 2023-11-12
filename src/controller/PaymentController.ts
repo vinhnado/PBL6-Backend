@@ -11,20 +11,12 @@ export class PaymentController {
 	private paypalService: PaypalService;
 
 	constructor() {
-        const accessKey = 'F8BBA842ECF85';
-        const secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
-        const partnerCode = 'MOMO';
-        const redirectUrl = 'https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b';
-        const ipnUrl = 'https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b';
-        const requestType = "payWithMethod";
-        const amount = '50000';
-        const lang = 'vi';
 		this.vnPayService = new VNPayService({
             tmnCode: '4YOYYZHU',
             secureSecret: 'MBIDOAOKAURPHPQIQVKYWQNHCSNNVWHU',
             returnUrl: 'https://sandbox.vnpayment.vn/tryitnow/Home/ReturnResult',
         });
-        this.momoService = new MomoService(accessKey, secretKey, partnerCode, redirectUrl, ipnUrl, requestType, amount, lang);
+        this.momoService = Container.get(MomoService);
         this.paypalService = Container.get(PaypalService);
     }
 
@@ -72,7 +64,7 @@ export class PaymentController {
 
     getMomoPaymentURL = async (req: Request, res: Response) => {
         try {
-            this.momoService.getPaymentUrl('pay with MoMo', '')
+            this.momoService.getPaymentUrl( 'MM'+new Date().getTime(),'pay with MoMo', '', 55000)
               .then(paymentUrl => {
                 res.status(200).json({
                     message: "Successfully",
@@ -93,7 +85,7 @@ export class PaymentController {
             res.status(500).json({ message: 'Internal Server Error', error: error });
         } 
     }
-    
+
 	createPaypalOrder = async (req: Request, res: Response) => {
 		this.paypalService
 			.createOrder(req.body.price)
