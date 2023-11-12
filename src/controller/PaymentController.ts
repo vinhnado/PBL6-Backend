@@ -12,13 +12,13 @@ export class PaymentController {
 
 	constructor() {
 		this.vnPayService = new VNPayService({
-			tmnCode: '4YOYYZHU',
-			secureSecret: 'MBIDOAOKAURPHPQIQVKYWQNHCSNNVWHU',
-			returnUrl: 'https://sandbox.vnpayment.vn/tryitnow/Home/ReturnResult',
-		});
-		this.momoService = Container.get(MomoService);
-		this.paypalService = Container.get(PaypalService);
-	}
+            tmnCode: '4YOYYZHU',
+            secureSecret: 'MBIDOAOKAURPHPQIQVKYWQNHCSNNVWHU',
+            returnUrl: 'https://sandbox.vnpayment.vn/tryitnow/Home/ReturnResult',
+        });
+        this.momoService = Container.get(MomoService);
+        this.paypalService = Container.get(PaypalService);
+    }
 
 	getVNPayPaymentURL = async (req: Request, res: Response) => {
 		try {
@@ -62,20 +62,29 @@ export class PaymentController {
 		}
 	};
 
-	getMomoPaymentURL = async (req: Request, res: Response) => {
-		try {
-			const momoPaymentUrl = await this.momoService.getPaymentUrl();
-			res.status(200).json({
-				message: 'Successfully',
-				success: true,
-				data: {
-					url: momoPaymentUrl,
-				},
-			});
-		} catch (error) {
-			res.status(500).json({ message: 'Internal Server Error', error: error });
-		}
-	};
+    getMomoPaymentURL = async (req: Request, res: Response) => {
+        try {
+            this.momoService.getPaymentUrl( 'MM'+new Date().getTime(),'pay with MoMo', '', 55000)
+              .then(paymentUrl => {
+                res.status(200).json({
+                    message: "Successfully",
+                    success: true,
+                    data: {
+                        url: paymentUrl
+                    },
+                });
+              })
+              .catch(error => {
+                console.error('Error:', error);
+                    res.status(200).json({
+                        message: "Failed",
+                        success: false,
+                    });
+              });
+        } catch (error) {
+            res.status(500).json({ message: 'Internal Server Error', error: error });
+        } 
+    }
 
 	createPaypalOrder = async (req: Request, res: Response) => {
 		this.paypalService
