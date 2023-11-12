@@ -77,10 +77,11 @@ export class PaymentController {
 		}
 	};
 
-	createPaypalOrder = (req: Request, res: Response) => {
+	createPaypalOrder = async (req: Request, res: Response) => {
 		this.paypalService
 			.createOrder(req.body.price)
 			.then((json) => {
+				console.log(json);
 				res.send(json);
 			})
 			.catch((err) => {
@@ -88,9 +89,19 @@ export class PaymentController {
 			});
 	};
 
-	completePaypalOrder = (req: Request, res: Response) => {
+	completePaypalOrder = async (req: Request, res: Response) => {
 		this.paypalService
 			.completeOrder(req.body.order_id)
+			.then((json) => {
+				res.send(json);
+			})
+			.catch((err) => {
+				res.status(500).json({ message: 'Internal Server Error', error: err });
+			});
+	};
+	capturePaypalOrder = async (req: Request, res: Response) => {
+		this.paypalService
+			.captureOrder(req.body.order_id)
 			.then((json) => {
 				res.send(json);
 			})

@@ -10,7 +10,7 @@ export class PaypalService {
 			? 'https://api-m.sandbox.paypal.com'
 			: 'https://api-m.paypal.com';
 
-	get_access_token() {
+	async get_access_token() {
 		const auth = `${this.client_id}:${this.client_secret}`;
 		const data = 'grant_type=client_credentials';
 		return fetch(this.endpoint_url + '/v1/oauth2/token', {
@@ -28,67 +28,83 @@ export class PaypalService {
 	}
 
 	createOrder = async (price: number) => {
-		this.get_access_token()
-			.then((access_token) => {
-				let order_data_json = {
-					// intent: req.body.intent.toUpperCase(),
-					intent: 'CAPTURE',
+		try {
+			const access_token = await this.get_access_token();
 
-					purchase_units: [
-						{
-							amount: {
-								currency_code: 'USD',
-								value: price.toString(),
-							},
+			let order_data_json = {
+				intent: 'CAPTURE',
+				purchase_units: [
+					{
+						amount: {
+							currency_code: 'USD',
+							value: price.toString(),
 						},
-					],
-				};
-				const data = JSON.stringify(order_data_json);
+					},
+				],
+			};
+			const data = JSON.stringify(order_data_json);
 
-				fetch(this.endpoint_url + '/v2/checkout/orders', {
-					//https://developer.paypal.com/docs/api/orders/v2/#orders_create
+			const response = await fetch(this.endpoint_url + '/v2/checkout/orders', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${access_token}`,
+				},
+				body: data,
+			});
+
+			const json = await response.json();
+			return json;
+		} catch (error: any) {
+			throw new Error('Can not create order: ' + error.message);
+		}
+	};
+
+	completeOrder = async (orderId: string) => {
+		try {
+			const access_token = await this.get_access_token();
+
+			const response = await fetch(
+				this.endpoint_url + '/v2/checkout/orders/' + orderId + '/' + 'capture',
+				{
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
 						Authorization: `Bearer ${access_token}`,
 					},
-					body: data,
-				})
-					.then((res) => res.json())
-					.then((json) => {
-						return json;
-					}); //Send minimal data to client
-			})
-			.catch((error) => {
-				throw new Error('Can not fetch data : ' + error.message);
-			});
-	};
+				}
+			);
 
-	completeOrder = async (orderId: string) => {
-		this.get_access_token()
-			.then((access_token) => {
-				fetch(
-					this.endpoint_url +
-						'/v2/checkout/orders/' +
-						orderId +
-						'/' +
-						'capture',
-					{
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json',
-							Authorization: `Bearer ${access_token}`,
-						},
-					}
-				)
-					.then((res) => res.json())
-					.then((json) => {
-						console.log(json);
-						return json;
-					}); //Send minimal data to client
-			})
-			.catch((error) => {
-				throw new Error('Can not fetch data : ' + error.message);
+			const json = await response.json();
+			return json;
+		} catch (error: any) {
+			throw new Error('Can not complete order: ' + error.message);
+		}
+	};
+	captureOrder = async (orderID: string) => {
+		try {
+			const accessToken = await this.get_access_token();
+			const url = `${this.endpoint_url}/v2/checkout/orders/${orderID}/capture`;
+
+			const response = await fetch(url, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${accessToken}`,
+				},
 			});
+
+			if (!response.ok) {
+				throw new Error(`Failed to capture order. Status: ${response.status}`);
+			}
+
+			const responseData = await response.json();
+			console.log(responseData);
+
+			return responseData;
+		} catch (error) {
+			console.error('Error capturing order:', error);
+			throw error; // You might want to handle this error appropriately in the calling code
+		}
 	};
 }
