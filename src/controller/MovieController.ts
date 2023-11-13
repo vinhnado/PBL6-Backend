@@ -76,11 +76,8 @@ export class MovieController {
 			description,
 			releaseDate,
 			nation,
-			posterURL,
-			trailerURL,
-			averageRating,
-			episodeNum,
 			level,
+			isSeries
 		} = req.body;
 
 		try {
@@ -90,16 +87,13 @@ export class MovieController {
 				description,
 				releaseDate,
 				nation,
-				posterURL,
-				trailerURL,
-				averageRating,
-				episodeNum,
-				level
+				level,
+				isSeries
 			);
 
-			res.status(201).json(newMovie); // Trả về mã trạng thái 201 (Created) khi tạo thành công và kèm theo bộ phim mới
+			res.status(201).json(newMovie);
 		} catch (error) {
-			res.status(500).json({ error: 'Không thể thêm mới phim' });
+			res.status(500).json({ error: 'Can not create new movie' });
 		}
 	};
 

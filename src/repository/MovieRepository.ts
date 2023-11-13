@@ -56,7 +56,7 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 					'episode_id',
 					'episode_no',
 					'movie_url',
-					'episodeTitle',
+					'title',
 				],
 			},
 
@@ -176,23 +176,36 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 		nation: string,
 		posterURL: string,
 		trailerURL: string,
-		averageRating: string,
+		averageRating: number,
 		episodeNum: number,
-		level: number
+		level: number,
+		backgroundURL: string,
+		isSeries: boolean
 	): Promise<Movie> {
 		try {
 			const newMovie = await Movie.create({
-				title,
-				description,
-				releaseDate,
-				nation,
-				posterURL,
-				trailerURL,
-				averageRating,
-				episodeNum,
-				level,
+				title: title,
+				description: description,
+				releaseDate: releaseDate,
+				nation: nation,
+				posterURL: posterURL,
+				trailerURL: trailerURL,
+				backgroundURL: backgroundURL,
+				averageRating: averageRating,
+				episodeNum: episodeNum,
+				level: level,
+				numFavorite: 0,
+				isSeries: isSeries,
 			});
+			const formattedPosterURL = `movies/${newMovie.movieId}/poster.jpg`;
+			const formattedTrailerURL = `movies/${newMovie.movieId}/trailer.mp4`;
+			const formattedBackgroundURL = `movies/${newMovie.movieId}/background.jpg`;
 
+			await newMovie.update({
+			  posterURL: formattedPosterURL,
+			  trailerURL: formattedTrailerURL,
+			  backgroundURL:formattedBackgroundURL,
+			});
 			return newMovie;
 		} catch (error) {
 			throw new Error('Could not create movie');

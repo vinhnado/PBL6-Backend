@@ -12,9 +12,9 @@ export class PaymentController {
 
 	constructor() {
 		this.vnPayService = new VNPayService({
-            tmnCode: '4YOYYZHU',
-            secureSecret: 'MBIDOAOKAURPHPQIQVKYWQNHCSNNVWHU',
-            returnUrl: 'https://sandbox.vnpayment.vn/tryitnow/Home/ReturnResult',
+            tmnCode: process.env.VNP_TMN_CODE || '4YOYYZHU',
+            secureSecret: process.env.VNP_HASH_SECRET|| 'MBIDOAOKAURPHPQIQVKYWQNHCSNNVWHU',
+            returnUrl: process.env.VNP_RETURN_URL||'https://sandbox.vnpayment.vn/tryitnow/Home/ReturnResult',
         });
         this.momoService = Container.get(MomoService);
         this.paypalService = Container.get(PaypalService);
@@ -40,7 +40,7 @@ export class PaymentController {
 		}
 	};
 
-	verifyReturnUrl = async (req: Request, res: Response) => {
+	verifyReturnUrlVNPay = async (req: Request, res: Response) => {
 		try {
 			// console.log(req.query);
 			const query: any = req.query;
@@ -117,5 +117,11 @@ export class PaymentController {
 			.catch((err) => {
 				res.status(500).json({ message: 'Internal Server Error', error: err });
 			});
+	};
+
+    verifyReturnUrlMomo = async (req: Request, res: Response) => {
+		console.log(req.body);
+		console.log("Momo return");
+
 	};
 }

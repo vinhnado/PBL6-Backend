@@ -195,13 +195,15 @@ export class MovieService implements IMovieService {
 		description: string,
 		releaseDate: Date,
 		nation: string,
-		posterURL: string,
-		trailerURL: string,
-		averageRating: string,
-		episodeNum: number,
-		level: number
+		level: number,
+		isSeries: boolean
 	): Promise<Movie> {
 		try {
+			const posterURL = '';
+			const trailerURL = '';
+			const backgroundURL = '';
+			const averageRating = 0.0;
+			const episodeNum = 0;
 			const newMovie = await this.movieRepository.createMovie(
 				title,
 				description,
@@ -211,7 +213,9 @@ export class MovieService implements IMovieService {
 				trailerURL,
 				averageRating,
 				episodeNum,
-				level
+				level,
+				backgroundURL,
+				isSeries
 			);
 
 			return newMovie;
@@ -307,4 +311,6 @@ export class MovieService implements IMovieService {
 			throw new Error('Could not get movies for VIP privileges.');
 		}
 	}
+
+	// async updatePosterMovie()
 }

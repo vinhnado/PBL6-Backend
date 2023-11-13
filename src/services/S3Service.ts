@@ -16,7 +16,7 @@ export class S3Service {
 
     private EXPIRATION = 24*60*60;
 
-    // Get link Object
+    // Get link Object 
     getObjectUrl= async (objectName:string, bucketName:string = this.BUCKET_NAME, expiration:number = this.EXPIRATION) =>
     {
         try {
