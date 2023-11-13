@@ -21,9 +21,11 @@ export interface IMovieRepository extends BaseInterface {
 		nation: string,
 		posterURL: string,
 		trailerURL: string,
-		averageRating: string,
+		averageRating: number,
 		episodeNum: number,
-		level: number
+		level: number,
+		backgroundURL: string,
+		isSeries: boolean
 	): Promise<Movie>;
 
 	getMoviesTrending(): Promise<Movie[]>;

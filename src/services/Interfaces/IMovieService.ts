@@ -14,11 +14,8 @@ export interface IMovieService {
 		description: string,
 		releaseDate: Date,
 		nation: string,
-		posterURL: string,
-		trailerURL: string,
-		averageRating: string,
-		episodeNum: number,
-		level: number
+		level: number,
+		isSeries: boolean
 	  ): Promise<Movie>;
 
 	getMoviesTrending(): Promise<Movie[]>;
