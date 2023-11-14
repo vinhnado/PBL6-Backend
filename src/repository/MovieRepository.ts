@@ -24,7 +24,6 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 	async searchMovies(whereCondition: any, whereConditionGenre: any, page: number, pageSize: number, sortField: string, sortBy: string) {
 	
 		const offset = (page - 1) * pageSize;
-		// console.log(whereCondition);
 	  
 		const movies = await Movie.findAll({
 		   attributes: { exclude: ['deletedAt', 'createdAt', 'updatedAt'] },
@@ -58,6 +57,10 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 					'movie_url',
 					'title',
 				],
+				order: [
+					// We start the order array with the model we want to sort
+					[Episode, 'episode_id', 'ASC']
+				]
 			},
 
 		  ],
@@ -305,6 +308,18 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 		  });
 		
 		return movies;
+	}
+
+	async updateMovie(movieId: number, updatedData: Partial<Movie>): Promise<[number, Movie[]]> {
+		try {
+			const [rowsAffected, updatedMovies] = await Movie.update(updatedData, {
+				where: { movieId },
+				returning: true, // Return the updated records
+			  });
+			return [rowsAffected, updatedMovies];
+		} catch (error: any) {
+			throw new Error('Update failed: ' + error.message);
+		}
 	}
 }
 

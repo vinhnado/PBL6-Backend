@@ -4,7 +4,7 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
     // Define an array of movie IDs and genre IDs to create random associations.
-    const movieIds = Array.from({ length: 16 }, (_, i) => i + 1); // Movie IDs from 1 to 16
+    const movieIds = Array.from({ length: 45 }, (_, i) => i + 1); // Movie IDs from 1 to 45
     const genreIds = Array.from({ length: 20 }, (_, i) => i + 1); // Genre IDs from 1 to 20
 
     // Create an array to store associations.

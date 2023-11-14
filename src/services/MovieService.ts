@@ -8,6 +8,7 @@ import { S3Service } from './S3Service';
 import { Op } from 'sequelize';
 import Redis from 'ioredis';
 import crypto from 'crypto'; // Import the built-in crypto library
+import express, { Request, Response } from 'express';
 
 @Service()
 export class MovieService implements IMovieService {
@@ -124,6 +125,7 @@ export class MovieService implements IMovieService {
 			}
 
 			let movie = await this.movieRepository.getMovieById(id);
+			
 			if (movie) {
 				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
 				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
@@ -164,7 +166,6 @@ export class MovieService implements IMovieService {
 					}
 				}
 			}
-
 			//Save movie to cache
 			await this.redis.set(cacheKey, JSON.stringify(movie), 'EX', 60 * 5);
 			return movie;
@@ -223,6 +224,22 @@ export class MovieService implements IMovieService {
 			throw new Error('Could not create movie');
 		}
 	}
+
+	async updateMovie(req: Request, res: Response): Promise<Movie | null> {
+		try {
+			const { id } = req.params;
+			const updatedData = req.body;
+			const [rowsAffected, updatedMovies] = await this.movieRepository.updateMovie(parseInt(id), updatedData);
+
+			if (rowsAffected > 0) {
+				return updatedMovies[0]; // Return the first updated movie
+			}
+			return null;
+		} catch (error) {
+			throw new Error('Update movie failed');
+		}
+	}
+	// service.ts
 
 	async getMoviesTrending(): Promise<Movie[]> {
 		const cacheKey = 'moviesTrending';

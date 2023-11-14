@@ -1,5 +1,5 @@
 // file: validators/movieValidator.ts
-import { query, body, validationResult } from 'express-validator';
+import { query, body, param } from 'express-validator';
 
 export const validateSearchMovies = [
     query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
@@ -14,12 +14,12 @@ export const validateSearchMovies = [
 ];
 
 export const validateGetMovieById = [
-// Validator cho trường 'id'
-    query('id').notEmpty().withMessage('ID is required').isInt().withMessage('ID must be an integer'),
+    // Validator cho trường 'id'
+    param('id').notEmpty().withMessage('ID is required').isInt({min:1}).withMessage('ID must be an integer and min = 1'),
 ];
 
 export const validateDeleteMovieById = [
-    query('id').notEmpty().withMessage('ID is required').isInt().withMessage('ID must be an integer'),
+    query('id').notEmpty().withMessage('ID is required').isInt({min:1}).withMessage('ID must be an integer and min = 1'),
 ];
 
 export const validateCreateMovie = [
@@ -27,6 +27,19 @@ export const validateCreateMovie = [
     body('description').notEmpty().withMessage('Description is required'),
     body('releaseDate').isISO8601().withMessage('Release date must be a valid date'),
     body('nation').notEmpty().withMessage('Nation is required'),
-    body('episodeNum').isInt().withMessage('Episode number must be an integer'),
-    body('level').isInt().withMessage('Level must be an integer'),
+    body('isSeries').isBoolean().withMessage('isSeries is must be boolean'),
+    body('level').isInt().withMessage('Level must be an integer').isIn([1,2,3]),
+];
+
+export const validateUpdateMovie = [
+    param('id').notEmpty().withMessage('ID is required').isInt({min:1}).withMessage('ID must be an integer and min = 1'),
+    body('title').optional().isString().withMessage('Title must be a string'),
+    body('description').optional().isString().withMessage('Description must be a string'),
+    body('releaseDate').optional().isISO8601().withMessage('Release date must be a valid date'),
+    body('nation').optional().isString().withMessage('Nation must be a string'),
+    body('isSeries').optional().isBoolean().withMessage('isSeries is must be boolean'),
+    body('level').optional().isInt().withMessage('Level must be an integer').isIn([1,2,3]),
+    body('averageRating').optional().isFloat({min : 0.0}).withMessage('averageRating must be an float'),
+    body('episode').optional().isInt().withMessage('Episode must be an integer'),
+    body('numFavorite').optional().isInt({min : 0}).withMessage('numFavorite must be an integer'),
 ];
