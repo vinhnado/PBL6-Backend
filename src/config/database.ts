@@ -17,6 +17,8 @@ import { SubscriptionType } from '../models/SubscriptionType';
 import { Subscription } from '../models/Subscription';
 import { Home } from '../models/Home';
 import { Payment } from '../models/Payment';
+import { Comment } from '../models/Comment';
+import { SubComment } from '../models/SubComment';
 
 dotenv.config();
 
@@ -70,6 +72,8 @@ class Database {
 			SubscriptionType,
 			Home,
 			Payment,
+			Comment,
+			SubComment
 		]);
 
 		await this.sequelize

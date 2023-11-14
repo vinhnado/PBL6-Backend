@@ -2,6 +2,8 @@ import { Service } from 'typedi';
 import { Episode } from '../models/Episode';
 import { BaseRepository } from './BaseRepository';
 import { IEpisodeRepository } from './Interfaces/IEpisodeRepository';
+import { Comment } from '../models/Comment';
+import { SubComment } from '../models/SubComment';
 
 @Service()
 export class EpisodeRepository extends BaseRepository<Episode> implements IEpisodeRepository{
@@ -13,7 +15,20 @@ export class EpisodeRepository extends BaseRepository<Episode> implements IEpiso
     async getEpisode(id: number): Promise<Episode | null> {
         try{
             const episode = await Episode.findByPk(id,{
-                attributes: { exclude: ['deletedAt', 'createdAt', 'updatedAt'] }
+                attributes: { exclude: ['deletedAt', 'createdAt', 'updatedAt'] },
+                include: [
+                    {
+                        model: Comment,
+                        attributes: { exclude: ['deletedAt'] },
+                        include: [
+                            {
+                              model: SubComment, // Assuming the model for subcomments is named 'Subcomment'
+                              attributes: { exclude: ['deletedAt'] },
+                            },
+                        ],
+                        limit: 10, // Limit the number of comments to 10
+                    },
+                ]
             });
             return episode || null;
         }catch (error: any) {
@@ -29,7 +44,7 @@ export class EpisodeRepository extends BaseRepository<Episode> implements IEpiso
         throw new Error('Method not implemented.');
     }
 
-    createEpisode(episode: Episode): Promise<boolean> {
+    async createEpisode(episode: Episode): Promise<boolean> {
         throw new Error('Method not implemented.');
     }
 

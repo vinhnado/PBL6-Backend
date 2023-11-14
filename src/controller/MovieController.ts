@@ -48,25 +48,25 @@ export class MovieController {
 		}
 	};
 
-	getAllMovies = async (req: Request, res: Response): Promise<void> => {
+	getAllMovies = async (req: Request, res: Response) => {
 		try {
 			const movies = await this.movieService.getAllMovies();
-			res.json(movies);
+			return res.json(movies);
 		} catch (error) {
-			res.status(500).json({ error: 'Không thể lấy danh sách phim' });
+			return res.status(500).json({ error: 'Không thể lấy danh sách phim' });
 		}
 	};
 
-	deleteMovieById = async (req: Request, res: Response): Promise<void> => {
+	deleteMovieById = async (req: Request, res: Response) => {
 		const { id } = req.query;
 		try {
 			await this.movieService.deleteMovieById(Number(id));
-			res.status(204).json({ 
+			return res.status(204).json({ 
 				status: true,
 				message: "Delete successfully"
 			});
 		} catch (error) {
-			res.status(500).json({ error: 'An error occurred while deleting the movie' });
+			return res.status(500).json({ error: 'An error occurred while deleting the movie' });
 		}
 	};
 
@@ -96,6 +96,19 @@ export class MovieController {
 			res.status(500).json({ error: 'Can not create new movie' });
 		}
 	};
+
+	updateMovie =async (req: Request, res: Response) => {
+		try {
+			// Gọi service để tạo bộ phim mới
+			const movieUpdate = await this.movieService.updateMovie(req, res);
+			if (movieUpdate) {
+				return res.status(200).json(movieUpdate);
+			}
+			return res.status(404).json({ error: 'Movie not found or not updated.' });
+		} catch (error) {
+			return res.status(500).json({ error: 'Internal server error.' });
+		}
+	}
 
 	getMoviesTrending = async (req: Request, res: Response) => {
 		try {

@@ -1,4 +1,5 @@
 import { Movie } from '../../models/Movie';
+import express, { Request, Response, Router } from 'express';
 
 export interface IMovieService {
 	searchMovies(
@@ -17,7 +18,7 @@ export interface IMovieService {
 		level: number,
 		isSeries: boolean
 	  ): Promise<Movie>;
-
+	updateMovie(req: Request, res: Response): Promise<Movie | null>;
 	getMoviesTrending(): Promise<Movie[]>;
 	getMoviesRecommender(): Promise<Movie[]>;
 	getMoviesUpcoming(): Promise<Movie[]>;

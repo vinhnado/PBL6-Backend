@@ -5,8 +5,8 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     const episodesData = [];
 
-    for (let movieId = 1; movieId <= 16; movieId++) {
-      for (let episodeNo = 1; episodeNo <= 5; episodeNo++) {
+    for (let movieId = 1; movieId <= 45; movieId++) {
+      for (let episodeNo = 1; episodeNo <= 10; episodeNo++) {
         episodesData.push({
           movie_id: movieId,
           title: 'Tập '.concat(episodeNo),

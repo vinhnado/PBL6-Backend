@@ -7,10 +7,12 @@ import {
 	BelongsTo,
 	DeletedAt,
 	BelongsToMany,
+	HasMany,
 } from 'sequelize-typescript';
 import { Movie } from './Movie';
 import { WatchHistory } from './WatchHistory';
 import { User } from './User';
+import { Comment } from './Comment';
 
 @Table({
 	tableName: Episode.TABLE_NAME,
@@ -94,4 +96,7 @@ export class Episode extends Model {
 
 	@BelongsTo(() => Movie)
 	movie!: Movie;
+
+	@HasMany(() => Comment)
+    comments!:Comment[];
 }
