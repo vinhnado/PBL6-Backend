@@ -12,6 +12,7 @@ import { WatchHistory } from '../models/WatchHistory';
 import { WatchLater } from '../models/WatchLater';
 import { MovieDTO } from '../dto/MovieDTO';
 import { S3Service } from './S3Service';
+import { AuthenticationService } from './AuthenticationService';
 
 @Service()
 export class UserService {
@@ -29,6 +30,9 @@ export class UserService {
 
 	@Inject(() => S3Service)
 	private s3Service!: S3Service;
+
+	@Inject(() => AuthenticationService)
+	private authenticationService!: AuthenticationService;
 
 	findOneUser = async (searchConditions: any): Promise<UserDTO> => {
 		try {
@@ -50,6 +54,33 @@ export class UserService {
 			return this.userRepository.searchUsers(searchConditions, page, pageSize);
 		} catch (err: any) {
 			throw new Error(err.message);
+		}
+	};
+
+	updateUser = async (userData: Partial<User>) => {
+		try {
+			if (userData.userId) {
+				const userToUpdate = await this.userRepository.findById(
+					userData.userId
+				);
+				if (userToUpdate) {
+					await userToUpdate.update(userData);
+					return await this.userRepository.save(userToUpdate);
+				} else {
+					throw new Error('User not found for the given ID');
+				}
+			}
+		} catch (error: any) {
+			throw new Error(error.message);
+		}
+	};
+
+	deleteUser = async (userId: number) => {
+		try {
+			const user = await this.userRepository.findById(userId);
+			return await this.userRepository.delete(user);
+		} catch (error: any) {
+			throw new Error(error.message);
 		}
 	};
 

@@ -1,8 +1,8 @@
-import { SubcriptionController } from '../controller/SubcriptionController';
+import { SubscriptionController } from '../controller/SubscriptionController';
 import BaseRoutes from './Base/BaseRouter';
 class SubscriptionRoutes extends BaseRoutes {
 	constructor() {
-		super(new SubcriptionController());
+		super(new SubscriptionController());
 	}
 	public routes(): void {
 		this.router.put('/update-subscription', this.controller.updateSubscription);

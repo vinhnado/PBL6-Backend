@@ -3,7 +3,7 @@ import express, { Request, Response, Router } from 'express';
 import Container from 'typedi';
 import { SubscriptionService } from '../services/SubscriptionService';
 
-export class SubcriptionController {
+export class SubscriptionController {
 	private subscriptionService: SubscriptionService;
 
 	constructor() {
