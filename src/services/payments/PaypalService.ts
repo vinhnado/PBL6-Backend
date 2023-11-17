@@ -1,7 +1,12 @@
-import { Service } from 'typedi';
+import { Inject, Service } from 'typedi';
+import { PaymentService } from '../PaymentService';
+import { Payment } from '../../models/Payment';
 
 @Service()
 export class PaypalService {
+	@Inject(() => PaymentService)
+	private paymentService!: PaymentService;
+
 	environment = process.env.ENVIRONMENT;
 	client_id = process.env.CLIENT_ID;
 	client_secret = process.env.CLIENT_SECRET;
@@ -53,7 +58,17 @@ export class PaypalService {
 				body: data,
 			});
 
-			const json = await response.json();
+			const json = (await response.json()) as { id?: string };
+			const id = json.id?.toString();
+			const partialObject: Partial<Payment> = {
+				type: 'paypal',
+				price: price,
+				transactionId: id,
+				status: 'Not checkout',
+				userId: 1,
+			};
+
+			await this.paymentService.addOrEditPayment(partialObject);
 			return json;
 		} catch (error: any) {
 			throw new Error('Can not create order: ' + error.message);
@@ -75,7 +90,15 @@ export class PaypalService {
 				}
 			);
 
-			const json = await response.json();
+			const json = (await response.json()) as { id?: string };
+			const id = json.id?.toString();
+			const partialObject: Partial<Payment> = {
+				orderInfo: JSON.stringify(json),
+				status: 'Success',
+				transactionId: id,
+			};
+
+			await this.paymentService.addOrEditPayment(partialObject);
 			return json;
 		} catch (error: any) {
 			throw new Error('Can not complete order: ' + error.message);

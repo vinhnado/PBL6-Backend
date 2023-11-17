@@ -1,3 +1,5 @@
+import { User } from '../models/User';
+import { AuthenticationService } from '../services/AuthenticationService';
 import { S3Service } from './../services/S3Service';
 import { UserService } from './../services/UserService';
 import { Request, Response } from 'express';
@@ -6,9 +8,11 @@ import Container from 'typedi';
 
 export class UserController {
 	private userService: UserService;
+	private authenticationService: AuthenticationService;
 
 	constructor() {
 		this.userService = Container.get(UserService);
+		this.authenticationService = Container.get(AuthenticationService);
 	}
 
 	getUser = async (req: Request, res: Response) => {
@@ -65,6 +69,51 @@ export class UserController {
 		} catch (error: any) {
 			console.log(error);
 			return res.status(500).json({ error: 'Lỗi khi lấy danh sách user' });
+		}
+	};
+
+	createOrUpdateUser = async (req: Request, res: Response) => {
+		try {
+			const { userId, email, dateOfBirth, gender, username, password } =
+				req.body;
+
+			const data: Partial<User> = {};
+			if (userId) {
+				if (userId !== undefined) data.userId = userId;
+				if (email !== undefined) data.email = email;
+				if (dateOfBirth !== undefined) data.dateOfBirth = dateOfBirth;
+				if (gender !== undefined) data.gender = gender;
+				await this.userService.updateUser(data);
+			} else {
+				await this.authenticationService.register(
+					email,
+					dateOfBirth,
+					gender,
+					username,
+					password
+				);
+			}
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully',
+			});
+		} catch (error: any) {
+			console.log(error);
+			return res.status(500).json({ error: 'Lỗi :' + error.message });
+		}
+	};
+
+	deleteUser = async (req: Request, res: Response) => {
+		try {
+			const { userId } = req.query;
+			await this.userService.deleteUser(Number(userId));
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully',
+			});
+		} catch (error: any) {
+			console.log(error);
+			return res.status(500).json({ error: 'Lỗi :' + error.message });
 		}
 	};
 

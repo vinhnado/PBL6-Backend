@@ -43,6 +43,17 @@ export abstract class BaseRepository<T extends Model<T>>
 		}
 	}
 
+	async findByCondition(searchConditions: any): Promise<any | null> {
+		try {
+			return await this.model.findAll({
+				where: searchConditions,
+				paranoid: true,
+			});
+		} catch (error) {
+			throw new Error('Không thể tìm thấy: ' + error);
+		}
+	}
+
 	async delete(model: T): Promise<void> {
 		try {
 			await model.destroy();
