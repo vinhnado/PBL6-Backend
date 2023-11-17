@@ -16,7 +16,7 @@ import { User } from './User';
 	paranoid: true,
 })
 export class SubComment extends Model {
-	private static TABLE_NAME = 'subComments' as string;
+	private static TABLE_NAME = 'sub_comments' as string;
 	private static ID = 'id' as string;
 	private static PARENT_ID = 'parent_id' as string;
 	private static USER_ID = 'user_id' as string;
