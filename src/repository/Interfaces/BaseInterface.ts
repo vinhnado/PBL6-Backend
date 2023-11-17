@@ -7,4 +7,5 @@ export interface BaseInterface {
 	findMany(): Promise<any[]>;
 	restore(model: Model<any>): Promise<void>;
 	findOneByCondition(searchConditions: any): Promise<any | null>;
+	findByCondition(searchConditions: any): Promise<any | null>;
 }

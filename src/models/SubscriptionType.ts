@@ -19,6 +19,9 @@ export class SubscriptionType extends Model {
 	private static SUBSCRIPTION_TYPE_TABLE_NAME = 'SubscriptionTypes' as string;
 	private static SUBSCRIPTION_TYPE_ID = 'subscription_type_id' as string;
 	private static SUBSCRIPTION_TYPE_NAME = 'name' as string;
+	private static SUBSCRIPTION_TYPE_DURATION = 'duration' as string;
+	private static SUBSCRIPTION_TYPE_PRICE = 'price' as string;
+	private static SUBSCRIPTION_TYPE_DISCOUNT = 'discount' as string;
 
 	@Column({
 		type: DataType.INTEGER,
@@ -34,6 +37,27 @@ export class SubscriptionType extends Model {
 		field: SubscriptionType.SUBSCRIPTION_TYPE_NAME,
 	})
 	name!: string;
+
+	@Column({
+		type: DataType.INTEGER,
+		field: SubscriptionType.SUBSCRIPTION_TYPE_DURATION,
+		allowNull: true,
+	})
+	duration!: number;
+
+	@Column({
+		type: DataType.FLOAT,
+		field: SubscriptionType.SUBSCRIPTION_TYPE_PRICE,
+		allowNull: true,
+	})
+	price!: number;
+
+	@Column({
+		type: DataType.FLOAT,
+		field: SubscriptionType.SUBSCRIPTION_TYPE_DISCOUNT,
+		allowNull: true,
+	})
+	discount!: number;
 
 	@HasMany(() => Subscription)
 	subscriptions!: Subscription[];

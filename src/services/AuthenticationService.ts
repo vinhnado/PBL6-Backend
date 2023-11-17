@@ -66,11 +66,8 @@ export class AuthenticationService implements IAuthenticationService {
 				newAccount,
 				newSubscription
 			);
-		} catch (error) {
-			console.log(error);
-			throw new Error('Error register!');
+		} catch (error: any) {
+			throw new Error('Error register!' + error.message);
 		}
 	}
 }
-
-// Container.set('AuthenticationService', new AuthenticationService());

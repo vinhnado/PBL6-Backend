@@ -53,7 +53,7 @@ export class Payment extends Model {
 		field: Payment.PAYMENT_ORDER_INFO,
 		allowNull: true,
 	})
-	orderInfo!: number;
+	orderInfo!: string;
 
 	@Column({
 		type: DataType.TEXT,
