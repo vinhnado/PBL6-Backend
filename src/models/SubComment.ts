@@ -4,8 +4,8 @@ import {
 	Column,
 	DataType,
 	DeletedAt,
-    BelongsTo,
-    ForeignKey,
+	BelongsTo,
+	ForeignKey,
 } from 'sequelize-typescript';
 import { Comment } from './Comment';
 import { User } from './User';
@@ -16,53 +16,53 @@ import { User } from './User';
 	paranoid: true,
 })
 export class SubComment extends Model {
-	private static TABLE_NAME = 'SubComments' as string;
+	private static TABLE_NAME = 'subComments' as string;
 	private static ID = 'id' as string;
 	private static PARENT_ID = 'parent_id' as string;
 	private static USER_ID = 'user_id' as string;
 	private static CONTENT = 'content' as string;
 	private static NUM_LIKE = 'num_like' as string;
-    
-    @Column({
-        type: DataType.INTEGER,
-        primaryKey:true,
-        autoIncrement: true,
-        field: SubComment.ID,
-    })
-    id!: number;
 
-    @ForeignKey(() => Comment)
-    @Column({
-        type: DataType.INTEGER,
-        field: SubComment.PARENT_ID
-    })
-    parentId!:number;
+	@Column({
+		type: DataType.INTEGER,
+		primaryKey: true,
+		autoIncrement: true,
+		field: SubComment.ID,
+	})
+	id!: number;
 
-    @ForeignKey(() => User)
-    @Column({
-        type: DataType.INTEGER,
-        field: SubComment.USER_ID
-    })
-    userId!:number;
+	@ForeignKey(() => Comment)
+	@Column({
+		type: DataType.INTEGER,
+		field: SubComment.PARENT_ID,
+	})
+	parentId!: number;
 
-    @Column({
-        type: DataType.INTEGER,
-        field: SubComment.CONTENT      
-    })
-    content!:string
+	@ForeignKey(() => User)
+	@Column({
+		type: DataType.INTEGER,
+		field: SubComment.USER_ID,
+	})
+	userId!: number;
 
-    @Column({
-        type: DataType.INTEGER,
-        field: SubComment.NUM_LIKE      
-    })
-    numLike!:string
+	@Column({
+		type: DataType.INTEGER,
+		field: SubComment.CONTENT,
+	})
+	content!: string;
 
-    @DeletedAt
+	@Column({
+		type: DataType.INTEGER,
+		field: SubComment.NUM_LIKE,
+	})
+	numLike!: string;
+
+	@DeletedAt
 	deletedAt!: Date;
 
-    @BelongsTo(() => Comment)
-    comment!: Comment;
+	@BelongsTo(() => Comment)
+	comment!: Comment;
 
-    @BelongsTo(() => User)
-    user!: User;
+	@BelongsTo(() => User)
+	user!: User;
 }

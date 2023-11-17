@@ -17,7 +17,7 @@ import { User } from './User';
 	paranoid: true,
 })
 export class Account extends Model {
-	private static ACCOUNT_TABLE_NAME = 'Account' as string;
+	private static ACCOUNT_TABLE_NAME = 'accounts' as string;
 	private static ACCOUNT_ID = 'account_id' as string;
 	private static ACOUNT_USERNAME = 'username' as string;
 	private static ACCOUNT_PASSWORD = 'password' as string;

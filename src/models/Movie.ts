@@ -30,7 +30,7 @@ import { Home } from './Home';
 	paranoid: true,
 })
 export class Movie extends Model {
-	private static MOVIE_TABLE_NAME = 'Movies' as string;
+	private static MOVIE_TABLE_NAME = 'movies' as string;
 	private static MOVIE_ID = 'movie_id' as string;
 	private static MOVIE_TITLE = 'title' as string;
 	private static MOVIE_DESCRIPTION = 'description' as string;
