@@ -309,7 +309,7 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				title: 'The Witcher',
+				title: 'The Witcher - Thợ săn quái vật',
 				description: 'The Witcher: Blood Origin là phần phim thứ 3 của series The Witcher nổi tiếng của Netflix –  được chuyển thể từ tác phẩm cùng tên nổi tiếng của đại văn hào người Ba Lan Andrej Sapkowski.',
 				release_date: new Date('2022-01-15'),
 				nation: 'America',

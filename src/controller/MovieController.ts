@@ -2,12 +2,16 @@ import { MovieService } from './../services/MovieService';
 import express, { Request, Response, Router } from 'express';
 import Container from 'typedi';
 import { IMovieService } from '../services/Interfaces/IMovieService';
+import { IRecommenderService } from '../services/Interfaces/IRecommenderService';
+import { RecommenderSerivce } from '../services/RecommenderService';
 
 export class MovieController {
 	private movieService: IMovieService;
+	private recommenderService: IRecommenderService;
 
 	constructor() {
 		this.movieService = Container.get(MovieService);
+		this.recommenderService = Container.get(RecommenderSerivce)
 	}
 
 	searchMovies = async (req: Request, res: Response) => {
@@ -153,4 +157,14 @@ export class MovieController {
 			return res.status(500).json({ error: 'Err while get movies for vip.' });
 		}
 	};
+	
+	getMoviesRecommender1 = async (req: Request, res: Response) => {
+		try {
+			console.log("hello MovieController");
+			const movies = await this.recommenderService.createMatrix();
+			return res.json(movies);
+		} catch (error) {
+			console.log("Loi o controller");
+		}
+	}
 }

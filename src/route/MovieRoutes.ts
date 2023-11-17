@@ -23,6 +23,7 @@ class MovieRoutes extends BaseRoutes {
 		this.router.delete('/', validateDeleteMovieById, validate, this.controller.deleteMovieById);
 		this.router.post('/create', validateCreateMovie, validate, this.controller.createMovie);
 		this.router.put('/update/:id', validateUpdateMovie, validate, this.controller.updateMovie);
+		this.router.get('/recommender/get', this.controller.getMoviesRecommender1);
 	}
 }
 

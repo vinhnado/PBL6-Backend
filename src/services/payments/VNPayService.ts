@@ -16,8 +16,8 @@ import { VnpLocale } from '../../enums';
 export class VNPayService {
 
     /**
-     * @param date 
-     * @param format 
+     * @param date
+     * @param format
      * @return number
      */
     private dateFormat(date: Date, format = 'yyyyMMddHHmmss'): number {

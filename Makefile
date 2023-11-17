@@ -12,7 +12,7 @@ down:
 	docker-compose down
 down-sudo:
 	sudo docker-compose down
-seeder:
+seeder-sudo:
 	sudo docker-compose exec app sh -c "cd src && npx sequelize-cli db:seed:all"
 refresh:
 	down up
@@ -22,5 +22,5 @@ log:
 	docker-compose logs -f
 log-sudo:
 	sudo docker-compose logs -f
-seeder2:
-	sudo docker compose exec app sh -c "cd src && npx sequelize-cli db:seed:all"
+seeder:
+	docker compose exec app sh -c "cd src && npx sequelize-cli db:seed:all"
