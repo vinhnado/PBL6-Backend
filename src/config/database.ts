@@ -19,6 +19,7 @@ import { Home } from '../models/Home';
 import { Payment } from '../models/Payment';
 import { Comment } from '../models/Comment';
 import { SubComment } from '../models/SubComment';
+import { Rating } from '../models/Rating';
 
 dotenv.config();
 
@@ -73,7 +74,8 @@ class Database {
 			Home,
 			Payment,
 			Comment,
-			SubComment
+			SubComment,
+			Rating
 		]);
 
 		await this.sequelize

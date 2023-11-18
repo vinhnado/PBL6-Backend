@@ -20,6 +20,7 @@ import { Episode } from './Episode';
 import { Payment } from './Payment';
 import { SubComment } from './SubComment';
 import { Comment } from './Comment';
+import { Rating } from './Rating';
 
 @Table({
 	tableName: User.USER_TABLE_NAME,
@@ -112,6 +113,12 @@ export class User extends Model {
 
 	@HasMany(() => Payment)
 	payments!: Payment[];
+
+	@BelongsToMany(() => Movie, {
+		through: () => Rating,
+		as: 'ratings',
+	})
+	ratings!: Rating[];
 
 	@DeletedAt
 	deletedAt!: Date;

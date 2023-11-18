@@ -13,6 +13,7 @@ import { Movie } from './Movie';
 import { WatchHistory } from './WatchHistory';
 import { User } from './User';
 import { Comment } from './Comment';
+import { Rating } from './Rating';
 
 @Table({
 	tableName: Episode.TABLE_NAME,

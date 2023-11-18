@@ -27,6 +27,17 @@ export class MovieService implements IMovieService {
 		}); // Initialize the Redis client
 	}
 
+	public clearCache(){
+		this.redis.flushall((err, reply) => {
+			if (err) {
+			  console.error(err);
+			} else {
+			  console.log('Cache cleared:', reply === 'OK');
+			}
+			this.redis.quit();
+		});
+	}
+
 	static generateMD5Hash(input: string): string {
 		return crypto.createHash('md5').update(input).digest('hex');
 	}
