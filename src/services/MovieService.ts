@@ -340,5 +340,24 @@ export class MovieService implements IMovieService {
 		}
 	}
 
+	async getAllNations():Promise<string[]>
+	{
+		try {
+			const nations = await this.movieRepository.getAllNations() as any;
+
+			return nations;
+		} catch (error) {
+			throw new Error('Could not get nations of movies.');
+		}
+	}
+
+	async getAllReleaseYears(): Promise<number[]>
+	{
+		try {
+			return await this.movieRepository.getAllReleaseDates();
+		} catch (error) {
+			throw new Error('Could not get nations of movies.');
+		}
+	}
 	// async updatePosterMovie()
 }
