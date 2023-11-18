@@ -10,6 +10,7 @@ import IndividualRouter from './route/IndividualRoutes';
 import EpisodeRouter from './route/EpisodeRoutes';
 import SubscriptionRouter from './route/SubscriptionRoutes';
 import PaymentRoutes from './route/PaymentRoutes';
+import GenreRoutes from './route/GenreRoutes';
 
 class App {
 	public app: Application;
@@ -45,6 +46,7 @@ class App {
 		this.app.use('/api/episode', EpisodeRouter);
 		this.app.use('/api/subscription', SubscriptionRouter);
 		this.app.use('/api/payments', PaymentRoutes);
+		this.app.use('/api/genres', GenreRoutes);
 	}
 
 	private plugins(): void {

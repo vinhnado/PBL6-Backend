@@ -23,4 +23,6 @@ export interface IMovieService {
 	getMoviesRecommender(): Promise<Movie[]>;
 	getMoviesUpcoming(): Promise<Movie[]>;
 	getMoviesForVip(): Promise<Movie[]>;
+	getAllNations(): Promise<string[]>;
+	getAllReleaseYears(): Promise<number[]>;
 }

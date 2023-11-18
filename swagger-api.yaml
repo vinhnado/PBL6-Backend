@@ -16,6 +16,8 @@ tags:
       url: 'http://swagger.io'
   - name: episode
     description: API for Episode
+  - name: genre
+    description: API for Genre
   - name: home
     description: API for Home Page
   - name: user
@@ -244,7 +246,52 @@ paths:
                 status:
                   description: Updated status of the pet
                   type: string
-
+  '/movies/get/nations':
+    get:
+      tags:
+        - movie
+      summary: Get all nations
+      description: Returns distinct nations of movies
+      operationId: getAllNations
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Pet'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Movie not found
+      security:
+        - api_key: []
+  '/movies/get/years':
+    get:
+      tags:
+        - movie
+      summary: Get all release years
+      description: Returns distinct release years of movies
+      operationId: getAllReleaseYears
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Pet'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Movie not found
+      security:
+        - api_key: []
   /episode/{id}:
     get:
       tags:
@@ -260,6 +307,25 @@ paths:
           schema:
             type: integer
             format: int64     
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security:
+        - api_key: []
+
+  /genres:
+    get:
+      tags:
+        - genre
+      summary: Returns all genres
+      description: Returns genres
       responses:
         '200':
           description: successful operation

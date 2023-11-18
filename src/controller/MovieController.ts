@@ -169,4 +169,22 @@ export class MovieController {
 			console.log("Err while get recommend movies");
 		}
 	}
+
+	getAllNations = async (req: Request, res: Response) => {
+		try {
+			const nations = await this.movieService.getAllNations();
+			return res.json(nations);
+		} catch (error) {
+			console.log("Err while get all nations");
+		}
+	}
+
+	getAllReleaseYears = async (req: Request, res: Response) => {
+		try {
+			const years = await this.movieService.getAllReleaseYears();
+			return res.json(years);
+		} catch (error) {
+			console.log("Err while get all released year");
+		}
+	}
 }

@@ -4,5 +4,5 @@ import { BaseInterface } from './BaseInterface';
 
 export interface IGenreRepository extends BaseInterface {
 
-	getAllGenre(): Promise<any>;
+	getAllGenre(): Promise<Genre[]>;
 }

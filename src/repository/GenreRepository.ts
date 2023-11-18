@@ -19,8 +19,8 @@ export class GenreRepository extends BaseRepository<Genre> implements IGenreRepo
 		super(Genre);
 	}
 
-    getAllGenre(): Promise<any> {
-        return this.model.findAndCountAll({
+    async getAllGenre(): Promise<Genre[]> {
+        return await this.model.findAll({
             attributes: ['genre_id', 'name'],
             order: [['genre_id', 'ASC']]
         });

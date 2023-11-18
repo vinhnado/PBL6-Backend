@@ -10,8 +10,6 @@ import express, { Request, Response } from 'express';
 import { IRecommenderService } from './Interfaces/IRecommenderService';
 import { RecommenderRepository } from '../repository/RecommenderRepository';
 import { IRecommenderRepository } from '../repository/Interfaces/IRecommenderRepository';
-import { GenreRepository } from '../repository/GenreRepository';
-import { IGenreRepository } from '../repository/Interfaces/IGenreRepository';
 import { MovieGenre } from '../models/MovieGenre';
 import { User } from '../models/User';
 
@@ -24,9 +22,6 @@ export class RecommenderSerivce implements IRecommenderService {
 
 	@Inject(() => RecommenderRepository)
 	private recommenderRepo!: IRecommenderRepository;
-
-    @Inject(() => GenreRepository)
-	private genreRepo!: IGenreRepository;
 
 	@Inject(() => S3Service)
 	private s3Service!: S3Service;
