@@ -9,6 +9,9 @@ import { WatchHistory } from '../models/WatchHistory';
 import { WatchLater } from '../models/WatchLater';
 import { MovieFavorite } from '../models/MovieFavorite';
 import { MovieGenre } from '../models/MovieGenre';
+import { User } from '../models/User';
+import { Rating } from '../models/Rating';
+import { Episode } from '../models/Episode';
 
 const db = Database.getInstance();
 
@@ -61,31 +64,72 @@ export class RecommenderRepository extends BaseRepository<Movie> implements IRec
      * 
      * @returns Promise<Movie[]> 
      */
-    async getDataMoviesOfUser(userId: number): Promise<Movie[]> {
+    async getDataMoviesOfUser(userId: number): Promise<User|null> {
 		try {
-			const movies = await Movie.findAll({
+			const movies = await User.findByPk(userId, {
 				attributes: {
 					exclude: ['deletedAt', 'updatedAt', 'createdAt'],
 				},
 				include: [
 					{
-						model: Genre,
-						attributes: ['genre_id', 'name'],
+						model: Movie,
+						attributes: ['movie_id'],
+						as: 'ratings',
+						through: { attributes: ['movie_id', 'rating'] },
+					},
+					{
+						model: Episode,
+						as: 'watchHistoryList',
+						attributes: ['movie_id'],
 						through: { attributes: [] },
-				        order: [['genre_id', 'ASC']],
 					},
-                    {
-						model: MovieFavorite,
-					},
-                    {
-						model: WatchLater,
+					{
+						model: Movie,
+						as: 'movieFavoriteList',
+						attributes: ['movie_id'],
+						through: { attributes: [] },
 					},
 				],
-				order: [['movie_id', 'ASC']],
 			});
-			return movies;
+			if(movies){
+				return movies;
+			}
+			return null;
 		} catch (error) {
+			console.log("Err in Repo: ",error);
+			
 			throw new Error('Could not get movies and genres');
 		}
     }
+
+	async getMoviesRecommendByIds(movieIds: number[], page: number, pageSize: number): Promise<Movie[]> {
+		try {
+			const offset = (page - 1) * pageSize;
+			const movies: Movie[] = await Movie.findAll({
+				where: {
+					movieId: {
+					  [Op.in]: movieIds
+					}
+				  },
+				  order: 
+					[
+					  Sequelize.literal(
+						`CASE ${movieIds
+						  .map((id, index) => `WHEN movie_id = ${id} THEN ${index}`)
+						  .join(' ')}
+						END`
+					  )
+					]
+				  ,
+			  limit: pageSize,
+			  offset: offset
+			});
+		
+			return movies;
+		  } catch (error) {
+			console.log(error);
+			
+			throw new Error('Could not get movies by movie IDs');
+		  }
+	}
 }

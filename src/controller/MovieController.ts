@@ -4,12 +4,15 @@ import Container from 'typedi';
 import { IMovieService } from '../services/Interfaces/IMovieService';
 import { IRecommenderService } from '../services/Interfaces/IRecommenderService';
 import { RecommenderSerivce } from '../services/RecommenderService';
+import { UserService } from '../services/UserService';
 
 export class MovieController {
 	private movieService: IMovieService;
 	private recommenderService: IRecommenderService;
+	private userService: UserService;
 
 	constructor() {
+		this.userService = Container.get(UserService);
 		this.movieService = Container.get(MovieService);
 		this.recommenderService = Container.get(RecommenderSerivce)
 	}
@@ -125,17 +128,6 @@ export class MovieController {
 		}
 	};
 
-	getMoviesRecommender = async (req: Request, res: Response) => {
-		try {
-
-			const movies = await this.movieService.getMoviesRecommender();
-			return res.json(movies);
-		} catch (error: any) {
-			console.log(error);
-			return res.status(500).json({ error: 'Err while get movies recommender.' });
-		}
-	};
-
 	getMoviesUpcoming = async (req: Request, res: Response) => {
 		try {
 
@@ -158,13 +150,23 @@ export class MovieController {
 		}
 	};
 	
-	getMoviesRecommender1 = async (req: Request, res: Response) => {
+	getMoviesRecommender = async (req: Request, res: Response) => {
 		try {
-			console.log("hello MovieController");
-			const movies = await this.recommenderService.createMatrix();
+			const page = Number(req.query.page) || 1; // Trang mặc định là 1
+			const pageSize = Number(req.query.pageSize) || 5; // Số lượng kết quả trên mỗi trang mặc định là 10
+			// const searchConditions = {
+			// 	userId: req.payload.userId,
+			// };
+			// const user = await this.userService.findOneUser(searchConditions);
+			const userId = Number(req.query.userId);
+			if(!userId){
+				const movies = await this.movieService.getMoviesRecommender();
+				return res.json(movies);
+			}
+			const movies = await this.recommenderService.getMoviesRecommend(userId,page,pageSize);
 			return res.json(movies);
 		} catch (error) {
-			console.log("Loi o controller");
+			console.log("Err while get recommend movies");
 		}
 	}
 }

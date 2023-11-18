@@ -33,20 +33,20 @@ export class Rating extends Model {
 		type: DataType.INTEGER(),
 		field: Rating.MOVIE_ID,
 	})
-	episodeId!: number;
+	movieId!: number;
 
 	@Column({
 		type: DataType.INTEGER(),
 		field: Rating.RATING,
 	})
-	duration!: number;
+	rating!: number;
 
 	@DeletedAt
 	deletedAt!: Date;
 
-    @BelongsTo(() => User)
-    user!: User;
+    // @BelongsTo(() => User)
+    // user!: User;
 
-    @BelongsTo(() => Movie)
-    movie!: Movie;
+    // @BelongsTo(() => Movie)
+    // movie!: Movie;
 }

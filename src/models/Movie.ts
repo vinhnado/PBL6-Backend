@@ -146,6 +146,6 @@ export class Movie extends Model {
 	@BelongsToMany(() => User, () => WatchLater)
 	watchLater!: User[];
 
-	@HasMany(() => Rating)
-    ratings!:Rating[];
+	@BelongsToMany(() => User, () => Rating)
+	ratings!: User[];
 }
