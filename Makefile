@@ -26,3 +26,5 @@ seeder:
 	docker compose exec app sh -c "cd src && npx sequelize-cli db:seed:all"
 seeder2:
 	sudo docker compose exec app sh -c "cd src && npx sequelize-cli db:seed:all"
+restart:
+	docker-compose restart app

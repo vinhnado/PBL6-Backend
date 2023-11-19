@@ -46,7 +46,7 @@ export class SubComment extends Model {
 	userId!: number;
 
 	@Column({
-		type: DataType.INTEGER,
+		type: DataType.TEXT,
 		field: SubComment.CONTENT,
 	})
 	content!: string;

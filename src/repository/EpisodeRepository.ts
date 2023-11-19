@@ -4,6 +4,7 @@ import { BaseRepository } from './BaseRepository';
 import { IEpisodeRepository } from './Interfaces/IEpisodeRepository';
 import { Comment } from '../models/Comment';
 import { SubComment } from '../models/SubComment';
+import { User } from '../models/User';
 
 @Service()
 export class EpisodeRepository extends BaseRepository<Episode> implements IEpisodeRepository{
@@ -16,19 +17,29 @@ export class EpisodeRepository extends BaseRepository<Episode> implements IEpiso
         try{
             const episode = await Episode.findByPk(id,{
                 attributes: { exclude: ['deletedAt', 'createdAt', 'updatedAt'] },
-                include: [
-                    {
-                        model: Comment,
-                        attributes: { exclude: ['deletedAt'] },
-                        include: [
-                            {
-                              model: SubComment, // Assuming the model for subcomments is named 'Subcomment'
-                              attributes: { exclude: ['deletedAt'] },
-                            },
-                        ],
-                        limit: 10, // Limit the number of comments to 10
-                    },
-                ]
+                // include: [
+                //     {
+                //         model: Comment,
+                //         attributes: { exclude: ['deletedAt'] },
+                //         include: [
+                //             {
+                //                 model: User, // Assuming the model for subcomments is named 'Subcomment'
+                //                 attributes: { exclude: ['deletedAt'] },
+                //             },
+                //             {
+                //               model: SubComment, // Assuming the model for subcomments is named 'Subcomment'
+                //               attributes: { exclude: ['deletedAt'] },
+                //               include: [
+                //                     {
+                //                         model: User, // Assuming the model for subcomments is named 'Subcomment'
+                //                         attributes: { exclude: ['deletedAt'] },
+                //                     },
+                //                 ],
+                //             },
+                //         ],
+                //         limit: 10, // Limit the number of comments to 10
+                //     },
+                // ]
             });
             return episode || null;
         }catch (error: any) {
