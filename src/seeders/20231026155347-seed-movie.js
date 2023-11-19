@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
 	async up(queryInterface, Sequelize) {
-		return queryInterface.bulkInsert('Movies', [
+		return queryInterface.bulkInsert('movies', [
 			{
 				title: 'Cửu Nghĩa Nhân',
 				description:
@@ -246,7 +246,8 @@ module.exports = {
 			},
 			{
 				title: 'Double Patty',
-				description: 'Bộ phim kể về tình yêu, tình bạn cũng những câu chuyện đời thường của cô gái tên Lee Hyun Ji với ước mơ trở thành phát thanh viên (Bae Joo Hyun thủ vai) và Kang Woo Ram (Shin Seung Ho thủ vai). Là một bộ phim tràn ngập sự quan tâm và ấm áp.',
+				description:
+					'Bộ phim kể về tình yêu, tình bạn cũng những câu chuyện đời thường của cô gái tên Lee Hyun Ji với ước mơ trở thành phát thanh viên (Bae Joo Hyun thủ vai) và Kang Woo Ram (Shin Seung Ho thủ vai). Là một bộ phim tràn ngập sự quan tâm và ấm áp.',
 				release_date: new Date('2023-01-15'),
 				nation: 'Hàn Quốc',
 				poster_url: 'movies/16/poster.jpg',
@@ -262,7 +263,8 @@ module.exports = {
 			},
 			{
 				title: 'Lưu Ly Mỹ Nhân Sát',
-				description: 'Lưu Ly Mỹ Nhân Sát xoay quanh thiếu nữ Chử Toàn Cơ trời sinh khiếm khuyết lục thức. Mối tình của nàng và đệ tử Ly Trạch cung là Vũ Ti Phượng bị đè nặng bởi những âm mưu từ kiếp trước, nhưng bọn họ vẫn kiên định nắm tay nhau, đối mặt với gió tanh mưa máu. Chử Toàn Cơ (Viên Băng Nghiên) là con gái Chử Lỗi, chưởng môn Thiếu Dương phái, một trong ngũ đại phái tu tiên uy trấn giang hồ. Cùng với tỉ tỉ song sinh Chử Linh Lung, Lục sư huynh Chung Mẫn Ngôn, gặp được Vũ Tư Phượng (Thành Nghị), là đệ tử Ly Trạch Cung, Yêu tộc Kim Sí Điểu. Tư Phượng cùng Toàn Cơ trải qua đấu tranh mà rèn luyện trưởng thành, còn cho Tư Phượng nếm trải thứ tình yêu đến chết cũng không phai, chịu đựng vô số giày vò đau đớn, chặt đứt mọi đường lui để yêu một người. Trải qua muôn vàn biến cố, Chử Toàn Cơ dần tìm được ký ức kiếp trước của mình và tìm được lời giải cho những sự kiện bí ẩn xảy ra trong cuộc đời nàng.',
+				description:
+					'Lưu Ly Mỹ Nhân Sát xoay quanh thiếu nữ Chử Toàn Cơ trời sinh khiếm khuyết lục thức. Mối tình của nàng và đệ tử Ly Trạch cung là Vũ Ti Phượng bị đè nặng bởi những âm mưu từ kiếp trước, nhưng bọn họ vẫn kiên định nắm tay nhau, đối mặt với gió tanh mưa máu. Chử Toàn Cơ (Viên Băng Nghiên) là con gái Chử Lỗi, chưởng môn Thiếu Dương phái, một trong ngũ đại phái tu tiên uy trấn giang hồ. Cùng với tỉ tỉ song sinh Chử Linh Lung, Lục sư huynh Chung Mẫn Ngôn, gặp được Vũ Tư Phượng (Thành Nghị), là đệ tử Ly Trạch Cung, Yêu tộc Kim Sí Điểu. Tư Phượng cùng Toàn Cơ trải qua đấu tranh mà rèn luyện trưởng thành, còn cho Tư Phượng nếm trải thứ tình yêu đến chết cũng không phai, chịu đựng vô số giày vò đau đớn, chặt đứt mọi đường lui để yêu một người. Trải qua muôn vàn biến cố, Chử Toàn Cơ dần tìm được ký ức kiếp trước của mình và tìm được lời giải cho những sự kiện bí ẩn xảy ra trong cuộc đời nàng.',
 				release_date: new Date(),
 				nation: 'Trung Quốc',
 				poster_url: 'movies/17/poster.jpg',
@@ -278,7 +280,8 @@ module.exports = {
 			},
 			{
 				title: 'Trường Nguyệt Tẫn Minh',
-				description: 'Vì muốn cứu chúng sinh khỏi sự thống trị tàn bạo của Đạm Đài Tẫn, Lê Tô Tô quay trở lại thời điểm 500 năm trước và hóa thân thành Diệp Tịch Vụ để ngăn cản hắn trở thành ma thần. Không ngờ số phận trêu đùa, Đạm Đài Tẫn lại chính là phu quân trên danh nghĩa của Diệp Tịch Vụ. Từ đây, mối tình bi thương kéo dài hàng trăm năm của họ bắt đầu, làm thay đổi vận mệnh của Đạm Đài Tẫn và cả tam giới.',
+				description:
+					'Vì muốn cứu chúng sinh khỏi sự thống trị tàn bạo của Đạm Đài Tẫn, Lê Tô Tô quay trở lại thời điểm 500 năm trước và hóa thân thành Diệp Tịch Vụ để ngăn cản hắn trở thành ma thần. Không ngờ số phận trêu đùa, Đạm Đài Tẫn lại chính là phu quân trên danh nghĩa của Diệp Tịch Vụ. Từ đây, mối tình bi thương kéo dài hàng trăm năm của họ bắt đầu, làm thay đổi vận mệnh của Đạm Đài Tẫn và cả tam giới.',
 				release_date: new Date(),
 				nation: 'Trung Quốc',
 				poster_url: 'movies/18/poster.jpg',
@@ -294,7 +297,8 @@ module.exports = {
 			},
 			{
 				title: 'Lord of the Rings',
-				description: 'Lord of the Rings là một trong những bom tấn nằm trong danh sách những bộ phim hay nhất thế giới. Dựa trên tiểu thuyết nổi tiếng cùng tên của nhà văn J.R.R.Tolkien, bộ phim lấy bối cảnh ở vùng Middle Earth (vùng Trung Địa) – nơi quy tụ nhiều dòng tộc, giống loài khác nhau như Hobbit (bán nhân), Elf (tiên tộc), Goblin (yêu tinh)…',
+				description:
+					'Lord of the Rings là một trong những bom tấn nằm trong danh sách những bộ phim hay nhất thế giới. Dựa trên tiểu thuyết nổi tiếng cùng tên của nhà văn J.R.R.Tolkien, bộ phim lấy bối cảnh ở vùng Middle Earth (vùng Trung Địa) – nơi quy tụ nhiều dòng tộc, giống loài khác nhau như Hobbit (bán nhân), Elf (tiên tộc), Goblin (yêu tinh)…',
 				release_date: new Date(),
 				nation: 'America',
 				poster_url: 'movies/19/poster.jpg',
@@ -310,7 +314,8 @@ module.exports = {
 			},
 			{
 				title: 'The Witcher',
-				description: 'The Witcher: Blood Origin là phần phim thứ 3 của series The Witcher nổi tiếng của Netflix –  được chuyển thể từ tác phẩm cùng tên nổi tiếng của đại văn hào người Ba Lan Andrej Sapkowski.',
+				description:
+					'The Witcher: Blood Origin là phần phim thứ 3 của series The Witcher nổi tiếng của Netflix –  được chuyển thể từ tác phẩm cùng tên nổi tiếng của đại văn hào người Ba Lan Andrej Sapkowski.',
 				release_date: new Date('2022-01-15'),
 				nation: 'America',
 				poster_url: 'movies/20/poster.jpg',
@@ -324,9 +329,11 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //21
+			{
+				//21
 				title: 'Godzilla Đại Chiến Kong - Godzilla Vs Kong ',
-				description: '“Godzilla Vs Kong” (2021) thuộc top phim viễn tưởng hay nhất 2020 và bùng nổ tại các rạp Việt Nam trước khi đại dịch Covid19 xuất hiện. Nội dung phim nói về cuộc chạm trán nảy lửa giữa hai vị chúa tể khổng lồ với hàng loạt kỹ xảo điện ảnh siêu ấn tượng làm các fan phải đứng ngồi không yên. Liệu nhân vật nào sẽ giành chiến thắng? Nếu bạn là một người ưa thích thể loại phim về khoa học viễn tưởng bom tấn thì không nên bỏ qua “Godzilla Đại Chiến Kong”.',
+				description:
+					'“Godzilla Vs Kong” (2021) thuộc top phim viễn tưởng hay nhất 2020 và bùng nổ tại các rạp Việt Nam trước khi đại dịch Covid19 xuất hiện. Nội dung phim nói về cuộc chạm trán nảy lửa giữa hai vị chúa tể khổng lồ với hàng loạt kỹ xảo điện ảnh siêu ấn tượng làm các fan phải đứng ngồi không yên. Liệu nhân vật nào sẽ giành chiến thắng? Nếu bạn là một người ưa thích thể loại phim về khoa học viễn tưởng bom tấn thì không nên bỏ qua “Godzilla Đại Chiến Kong”.',
 				release_date: new Date('2021-11-11'),
 				nation: 'America',
 				poster_url: 'movies/21/poster.jpg',
@@ -340,9 +347,12 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //22
-				title: "Liên Minh Công Lý Của Zack Snyder - Zack Snyder's Justice League",
-				description: '“Zack Snyders Justice League” (2021) là một trong  những bộ phim khoa học viễn tưởng hay nhất Hollywood với dàn diễn viên siêu chất lượng. Ngoài các tình tiết “chất” như các tựa phim siêu anh hùng khác, “Liên minh công lý của Zack Snyder” còn bổ sung thêm một số chi tiết trong phim mới mẻ và chăm chút nhiều về khâu âm thanh giúp cho các fan cảm nhận được độ chân thực của phim. Nếu bạn là fan của các siêu anh hùng như Superman, Batman, Wonder Woman… thì không nên bỏ qua phim này nhé.',
+			{
+				//22
+				title:
+					"Liên Minh Công Lý Của Zack Snyder - Zack Snyder's Justice League",
+				description:
+					'“Zack Snyders Justice League” (2021) là một trong  những bộ phim khoa học viễn tưởng hay nhất Hollywood với dàn diễn viên siêu chất lượng. Ngoài các tình tiết “chất” như các tựa phim siêu anh hùng khác, “Liên minh công lý của Zack Snyder” còn bổ sung thêm một số chi tiết trong phim mới mẻ và chăm chút nhiều về khâu âm thanh giúp cho các fan cảm nhận được độ chân thực của phim. Nếu bạn là fan của các siêu anh hùng như Superman, Batman, Wonder Woman… thì không nên bỏ qua phim này nhé.',
 				release_date: new Date('2021-01-01'),
 				nation: 'America',
 				poster_url: 'movies/22/poster.jpg',
@@ -356,9 +366,11 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //23
+			{
+				//23
 				title: 'Avatar 2',
-				description: '“Avatar 2” là tác phẩm điện ảnh thuộc top phim viễn tưởng 2022 hay nhất của đạo diễn James Cameron. Đây là phim khoa học viễn tưởng về tương lai đã làm mưa làm gió tại các phòng vé và có doanh thu cao nhất trong suốt thời gian dài. Phần 2 của bộ phim cho thấy sự khác biệt lớn so với phần 1 khi đạo diễn đã tập trung làm mới bằng những hình ảnh trẻ trung hơn với những đứa trẻ đại diện cho tương lai – một nguồn năng lượng tươi mới. Các fan còn chần chừ gì mà không trải nghiệm ngay tác phẩm phim viễn tưởng hay 2022 này nhé.',
+				description:
+					'“Avatar 2” là tác phẩm điện ảnh thuộc top phim viễn tưởng 2022 hay nhất của đạo diễn James Cameron. Đây là phim khoa học viễn tưởng về tương lai đã làm mưa làm gió tại các phòng vé và có doanh thu cao nhất trong suốt thời gian dài. Phần 2 của bộ phim cho thấy sự khác biệt lớn so với phần 1 khi đạo diễn đã tập trung làm mới bằng những hình ảnh trẻ trung hơn với những đứa trẻ đại diện cho tương lai – một nguồn năng lượng tươi mới. Các fan còn chần chừ gì mà không trải nghiệm ngay tác phẩm phim viễn tưởng hay 2022 này nhé.',
 				release_date: new Date('2022-01-15'),
 				nation: 'America',
 				poster_url: 'movies/23/poster.jpg',
@@ -372,9 +384,11 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //24
+			{
+				//24
 				title: 'Avengers: Endgame - Biệt Đội Siêu Anh Hùng: Hồi Kết',
-				description: '“Avengers: Endgame” là phần kết của chuỗi series phim khoa học viễn tưởng – hành động bom tấn đình đám của anh em đạo diễn Russo. Với sự góp mặt của dàn diễn viên nổi tiếng như Chris Evans, Robert Downey Jr., Chris Hemsworth, phim đã tạo cho khán giả những pha hành động kịch tính đến nghẹt thở nhưng cũng không kém phần cảm xúc. ',
+				description:
+					'“Avengers: Endgame” là phần kết của chuỗi series phim khoa học viễn tưởng – hành động bom tấn đình đám của anh em đạo diễn Russo. Với sự góp mặt của dàn diễn viên nổi tiếng như Chris Evans, Robert Downey Jr., Chris Hemsworth, phim đã tạo cho khán giả những pha hành động kịch tính đến nghẹt thở nhưng cũng không kém phần cảm xúc. ',
 				release_date: new Date('2019-01-15'),
 				nation: 'America',
 				poster_url: 'movies/24/poster.jpg',
@@ -388,9 +402,11 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //25
+			{
+				//25
 				title: 'Blue Beetle',
-				description: "Jaime Reyes suddenly finds himself in possession of an ancient relic of alien biotechnology called the Scarab. When the Scarab chooses Jaime to be its symbiotic host, he's bestowed with an incredible suit of armor that's capable of extraordinary and unpredictable powers, forever changing his destiny as he becomes the superhero Blue Beetle.",
+				description:
+					"Jaime Reyes suddenly finds himself in possession of an ancient relic of alien biotechnology called the Scarab. When the Scarab chooses Jaime to be its symbiotic host, he's bestowed with an incredible suit of armor that's capable of extraordinary and unpredictable powers, forever changing his destiny as he becomes the superhero Blue Beetle.",
 				release_date: new Date(),
 				nation: 'America',
 				poster_url: 'movies/25/poster.jpg',
@@ -404,9 +420,11 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //26
+			{
+				//26
 				title: 'Sát Thủ Nhân Tạo Phần 2: Mẫu Vật Còn Lại',
-				description: "Sát Thủ Nhân Tạo Phần 2: Mẫu Vật Còn Lại xoay quanh nhân vật Gu Ja Yoon (do Kim Da Mi đảm nhận) – một cô bé được cứu sống và nhận nuôi bởi đôi vợ chồng già sau khi chạy trốn khỏi một tổ chức đáng sợ. Tuy nhiên 10 năm sau, cuộc sống của Ja Yoon lại một lần nữa bị đảo lộn bởi sự truy đuổi của những kẻ lạ mặt năm xưa. Từ đó mở ra cuộc hành trình ly kỳ của Ja Yoon khi cô phải đối đầu với những mối đe dọa xung quanh. Ja Yoon là một cô bé “dị nhân”, sở hữu một năng lực phi thường khiến cho các kẻ thù của cô phải khiếp sợ.",
+				description:
+					'Sát Thủ Nhân Tạo Phần 2: Mẫu Vật Còn Lại xoay quanh nhân vật Gu Ja Yoon (do Kim Da Mi đảm nhận) – một cô bé được cứu sống và nhận nuôi bởi đôi vợ chồng già sau khi chạy trốn khỏi một tổ chức đáng sợ. Tuy nhiên 10 năm sau, cuộc sống của Ja Yoon lại một lần nữa bị đảo lộn bởi sự truy đuổi của những kẻ lạ mặt năm xưa. Từ đó mở ra cuộc hành trình ly kỳ của Ja Yoon khi cô phải đối đầu với những mối đe dọa xung quanh. Ja Yoon là một cô bé “dị nhân”, sở hữu một năng lực phi thường khiến cho các kẻ thù của cô phải khiếp sợ.',
 				release_date: new Date(),
 				nation: 'Hàn Quốc',
 				poster_url: 'movies/26/poster.jpg',
@@ -420,9 +438,11 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //27
+			{
+				//27
 				title: 'Hậu Duệ Mặt Trời',
-				description: '"Hậu duệ mặt trời" là bộ phim kể về Yoo Shi Jin (Song Joong Ki), anh là đội trưởng lực lượng gìn giữ hòa bình của Liên Hợp Quốc, bị rơi vào lưới tình với thành viên của tổ chức Bác sĩ không biên giới, Kang Mo Yeon (Song Hye Kyo). Tuy nhiên, họ thường xuyên xung đột vì không hiểu công việc của nhau. Ngoài ra, đồng nghiệp của Yoo Shi Yin, Seo Dae Yong (Jin Goo) đã chia tay với bạn gái Yoon Myung Joo (Kim Ji Won). Và tình cờ, 4 người họ đã gặp lại nhau tại Urak bởi những biến cố bất ngờ.',
+				description:
+					'"Hậu duệ mặt trời" là bộ phim kể về Yoo Shi Jin (Song Joong Ki), anh là đội trưởng lực lượng gìn giữ hòa bình của Liên Hợp Quốc, bị rơi vào lưới tình với thành viên của tổ chức Bác sĩ không biên giới, Kang Mo Yeon (Song Hye Kyo). Tuy nhiên, họ thường xuyên xung đột vì không hiểu công việc của nhau. Ngoài ra, đồng nghiệp của Yoo Shi Yin, Seo Dae Yong (Jin Goo) đã chia tay với bạn gái Yoon Myung Joo (Kim Ji Won). Và tình cờ, 4 người họ đã gặp lại nhau tại Urak bởi những biến cố bất ngờ.',
 				release_date: new Date(),
 				nation: 'Hàn Quốc',
 				poster_url: 'movies/27/poster.jpg',
@@ -436,9 +456,11 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //28
+			{
+				//28
 				title: 'Người Thầy Y Đức',
-				description: "Người Thầy Y Đức là bộ phim truyền hình Hàn Quốc được giới phê bình đánh giá cao, đồng thời rất thành công về mặt thương mại với sự tham gia của Yoo Yeon Seok và Seo Hyn Jin. Kang Dong Joo là một bác sĩ có khát khao trở thành người vượt trội nhất, và Yoo Seo Jung là một nữ bác sĩ nỗ lực không ngừng để được mọi người công nhận. Họ không có điểm chung nào trước đó cho đến khi cả hai gặp được vị bác sĩ tài ba nhưng kỳ quặc, Kim Sa Bu. Từ đó hai người bắt đầu hiểu ý nghĩa thực sự của cuộc sống và tình yêu.",
+				description:
+					'Người Thầy Y Đức là bộ phim truyền hình Hàn Quốc được giới phê bình đánh giá cao, đồng thời rất thành công về mặt thương mại với sự tham gia của Yoo Yeon Seok và Seo Hyn Jin. Kang Dong Joo là một bác sĩ có khát khao trở thành người vượt trội nhất, và Yoo Seo Jung là một nữ bác sĩ nỗ lực không ngừng để được mọi người công nhận. Họ không có điểm chung nào trước đó cho đến khi cả hai gặp được vị bác sĩ tài ba nhưng kỳ quặc, Kim Sa Bu. Từ đó hai người bắt đầu hiểu ý nghĩa thực sự của cuộc sống và tình yêu.',
 				release_date: new Date(),
 				nation: 'Hàn Quốc',
 				poster_url: 'movies/28/poster.jpg',
@@ -452,9 +474,11 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //29
+			{
+				//29
 				title: 'Bác Sĩ Xứ Lạ',
-				description: "Nam chính của bộ phim này từ nhỏ đã bị bắt sang Triều Tiên với bố của mình. Cậu được bố đào tạo thành một bác sĩ phẫu thuật lồng ngực xuất sắc. Trưởng thành rồi cậu trở về làm việc trong một bệnh viện hàng đầu của Hàn Quốc. Nhưng cậu lại không thể hoà nhập được với đội ngũ y bác sĩ ở đây, trở thành câu chuyện của một người nơi xứ lạ.",
+				description:
+					'Nam chính của bộ phim này từ nhỏ đã bị bắt sang Triều Tiên với bố của mình. Cậu được bố đào tạo thành một bác sĩ phẫu thuật lồng ngực xuất sắc. Trưởng thành rồi cậu trở về làm việc trong một bệnh viện hàng đầu của Hàn Quốc. Nhưng cậu lại không thể hoà nhập được với đội ngũ y bác sĩ ở đây, trở thành câu chuyện của một người nơi xứ lạ.',
 				release_date: new Date(),
 				nation: 'Hàn Quốc',
 				poster_url: 'movies/29/poster.jpg',
@@ -468,9 +492,11 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //30
+			{
+				//30
 				title: 'Penthouse Cuộc Chiến Thượng Lưu Phần 1',
-				description: ' Bộ phim kể về câu chuyện những gia đình giàu có vì bồi dưỡng con em thành danh mà không từ thủ đoạn, xảy ra giữa tầng lớp thượng lưu Hàn Quốc sống tại tầng 100 của một tòa chung cư cao cấp (Tên "Hera Palace"), đi cùng với những đó là những thứ như báo thù, ngoại tình, giao dịch tiền bạc...',
+				description:
+					' Bộ phim kể về câu chuyện những gia đình giàu có vì bồi dưỡng con em thành danh mà không từ thủ đoạn, xảy ra giữa tầng lớp thượng lưu Hàn Quốc sống tại tầng 100 của một tòa chung cư cao cấp (Tên "Hera Palace"), đi cùng với những đó là những thứ như báo thù, ngoại tình, giao dịch tiền bạc...',
 				release_date: new Date(),
 				nation: 'Hàn Quốc',
 				poster_url: 'movies/30/poster.jpg',
@@ -484,9 +510,11 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //31
+			{
+				//31
 				title: 'Lời Nguyền',
-				description: 'Tại tập đoàn IT lớn mạnh nhất nước có một tà thần, chỉ có một cô gái trẻ và một phóng viên biết được sự thật này. Cô gái sở hữu một sức mạnh thần bí cùng với một phóng viên tin tức xả thân vì chính nghĩa cùng nhau hợp lực để phơi bày âm hưu xấu xa của tà thần.',
+				description:
+					'Tại tập đoàn IT lớn mạnh nhất nước có một tà thần, chỉ có một cô gái trẻ và một phóng viên biết được sự thật này. Cô gái sở hữu một sức mạnh thần bí cùng với một phóng viên tin tức xả thân vì chính nghĩa cùng nhau hợp lực để phơi bày âm hưu xấu xa của tà thần.',
 				release_date: new Date(),
 				nation: 'Hàn Quốc',
 				poster_url: 'movies/31/poster.jpg',
@@ -500,9 +528,11 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //32
+			{
+				//32
 				title: 'Thần chết',
-				description: '"Thần chết" là bộ phim kịch tính đầy bí ẩn được xây dựng dựa trên góc nhìn của thần chết đối với thế giới loài người. Bộ phim kể câu chuyện giữa Black (Song Seung Heon thủ vai), sứ giả địa ngục, người nhập vào cơ thể của một cảnh sát và Kang Ha Ram (Go Ara thủ vai), người có thể nhìn thấy bóng của người chết.',
+				description:
+					'"Thần chết" là bộ phim kịch tính đầy bí ẩn được xây dựng dựa trên góc nhìn của thần chết đối với thế giới loài người. Bộ phim kể câu chuyện giữa Black (Song Seung Heon thủ vai), sứ giả địa ngục, người nhập vào cơ thể của một cảnh sát và Kang Ha Ram (Go Ara thủ vai), người có thể nhìn thấy bóng của người chết.',
 				release_date: new Date(),
 				nation: 'Hàn Quốc',
 				poster_url: 'movies/32/poster.jpg',
@@ -516,9 +546,11 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //33
+			{
+				//33
 				title: 'Mouse Kẻ Săn Người',
-				description: 'Phim kể về cảnh sát tuần tra đầy chính trực Jung Ba Reum (do Lee Seung Gi thủ vai) và cảnh sát hình sự Go Moo Chi (do Lee Hee Joon thủ vai) mất cha mẹ vì tên cuồng sát, sống để báo thù, sau khi gặp được "Kẻ săn mồi" ác độc nhất thuộc 1% những bệnh nhân mắc bệnh tâm thần, vận mệnh của họ đã hoàn toàn thay đổi.',
+				description:
+					'Phim kể về cảnh sát tuần tra đầy chính trực Jung Ba Reum (do Lee Seung Gi thủ vai) và cảnh sát hình sự Go Moo Chi (do Lee Hee Joon thủ vai) mất cha mẹ vì tên cuồng sát, sống để báo thù, sau khi gặp được "Kẻ săn mồi" ác độc nhất thuộc 1% những bệnh nhân mắc bệnh tâm thần, vận mệnh của họ đã hoàn toàn thay đổi.',
 				release_date: new Date(),
 				nation: 'Hàn Quốc',
 				poster_url: 'movies/33/poster.jpg',
@@ -532,9 +564,11 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //34
+			{
+				//34
 				title: 'Thư Ký Kim Sao Thế?',
-				description: ' Phim được chuyển thể từ bộ tiểu thuyết cùng tên, kể về cô thư ký Kim Mi So (do Park Min-young thủ vai) sau 9 năm làm việc bên cạnh phó chủ tịch tập đoàn Hoàn Mỹ - Lee Young Joon (do Park Seo-joon thủ vai), bất ngờ đề nghị từ chức. Thực ra tình cảm của Lee Young Joon đối với thư ký Kim đã vượt ra khỏi giới hạn công việc, cho nên anh đã bắt đầu bày mưu tính kế níu giữ cô lại, đồng thời đã dẫn dắt ra câu chuyện bí mất thời thơ ấu giữa hai người.',
+				description:
+					' Phim được chuyển thể từ bộ tiểu thuyết cùng tên, kể về cô thư ký Kim Mi So (do Park Min-young thủ vai) sau 9 năm làm việc bên cạnh phó chủ tịch tập đoàn Hoàn Mỹ - Lee Young Joon (do Park Seo-joon thủ vai), bất ngờ đề nghị từ chức. Thực ra tình cảm của Lee Young Joon đối với thư ký Kim đã vượt ra khỏi giới hạn công việc, cho nên anh đã bắt đầu bày mưu tính kế níu giữ cô lại, đồng thời đã dẫn dắt ra câu chuyện bí mất thời thơ ấu giữa hai người.',
 				release_date: new Date(),
 				nation: 'Hàn Quốc',
 				poster_url: 'movies/34/poster.jpg',
@@ -548,9 +582,11 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //35
+			{
+				//35
 				title: 'Bác Sĩ Ma - Ghost Doctor',
-				description: 'Bộ phim Bác Sĩ Ma (Ghost Doctor) kể về câu chuyện của hai bác sĩ khác hẳn nhau về cuộc sống, cá tính và tính tình. Cả linh hồn lẫn thân thể của họ bất ngờ kết hợp lại và họ trở thành bác sĩ âm hồn không rời khỏi bệnh viện cũng như bệnh nhân nổi sau khi qua đời. Phim có sự tham gia của hai nam thần điện ảnh Hàn - Bi Rain và Kim Bum. Trong phim, Go Seung Tak (Kim Bum đóng) là một chàng trai vô cùng thông minh, xuất thân từ gia đình tài phiệt. Sinh ra trong một gia đình có điều kiện nên Go Seung Tak sở hữu cho mình rất nhiều ưu điểm. Anh hiện đang là bác sĩ nội trú may mắn nhất khi có ông nội là người sáng lập bệnh viện Myung-Shin và mẹ là chủ tịch bệnh viện. Một ngày nọ, Seung Tak vô tình vướng vào bác sĩ phẫu thuật lồng ngực thiên tài Cha Young Min (Bi Rain thủ vai), là một bác sĩ thiên tài, với kỹ năng phẫu thuật xuất sắc, nhưng anh lại ích kỷ và kiêu ngạo. Và rồi chẳng may, linh hồn của Young Min chiếm hữu cơ thể của một bác sĩ khác sau một vụ án bất ngờ, đó là Seong Tak. Từ đây, hàng loạt tình huống dở khóc dở cười sẽ xảy đến với bộ đôi bác sĩ ma tài năng này.',
+				description:
+					'Bộ phim Bác Sĩ Ma (Ghost Doctor) kể về câu chuyện của hai bác sĩ khác hẳn nhau về cuộc sống, cá tính và tính tình. Cả linh hồn lẫn thân thể của họ bất ngờ kết hợp lại và họ trở thành bác sĩ âm hồn không rời khỏi bệnh viện cũng như bệnh nhân nổi sau khi qua đời. Phim có sự tham gia của hai nam thần điện ảnh Hàn - Bi Rain và Kim Bum. Trong phim, Go Seung Tak (Kim Bum đóng) là một chàng trai vô cùng thông minh, xuất thân từ gia đình tài phiệt. Sinh ra trong một gia đình có điều kiện nên Go Seung Tak sở hữu cho mình rất nhiều ưu điểm. Anh hiện đang là bác sĩ nội trú may mắn nhất khi có ông nội là người sáng lập bệnh viện Myung-Shin và mẹ là chủ tịch bệnh viện. Một ngày nọ, Seung Tak vô tình vướng vào bác sĩ phẫu thuật lồng ngực thiên tài Cha Young Min (Bi Rain thủ vai), là một bác sĩ thiên tài, với kỹ năng phẫu thuật xuất sắc, nhưng anh lại ích kỷ và kiêu ngạo. Và rồi chẳng may, linh hồn của Young Min chiếm hữu cơ thể của một bác sĩ khác sau một vụ án bất ngờ, đó là Seong Tak. Từ đây, hàng loạt tình huống dở khóc dở cười sẽ xảy đến với bộ đôi bác sĩ ma tài năng này.',
 				release_date: new Date(),
 				nation: 'Hàn Quốc',
 				poster_url: 'movies/35/poster.jpg',
@@ -565,9 +601,11 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //36
+			{
+				//36
 				title: 'Nguyệt Ca Hành',
-				description: '"Nguyệt Ca Hành" do Lâm Kiến Long làm đạo diễn, với sự tham gia của Trương Bân Bân,Từ Lộ, Vương Hữu Thạc,Trịnh Hợp Huệ Tử, Vương Dĩ Quan. Bộ phim dựa trên cuốn tiểu thuyết "Bay lên mặt trăng" của Thục Khách. Cô gái trẻ Liễu Sao đã đánh đổi số phận cuộc đời mình để có được niềm vui ở bên một người đàn ông bí ẩn trong ba ngày, và kể từ đó, cô đã trải qua rất nhiều thăng trầm và một mối quan hệ đầy chông gai. Để bảo vệ tính mạng, bảo vệ người thân, họ đã phải trải qua rất nhiều khó khăn gian khổ, cống hiến cả cuộc đời mình để thực hiện lời hứa của quý nhân. Liệu họ có thể vượt qua số phận của mình và thay đổi cái kết không?',
+				description:
+					'"Nguyệt Ca Hành" do Lâm Kiến Long làm đạo diễn, với sự tham gia của Trương Bân Bân,Từ Lộ, Vương Hữu Thạc,Trịnh Hợp Huệ Tử, Vương Dĩ Quan. Bộ phim dựa trên cuốn tiểu thuyết "Bay lên mặt trăng" của Thục Khách. Cô gái trẻ Liễu Sao đã đánh đổi số phận cuộc đời mình để có được niềm vui ở bên một người đàn ông bí ẩn trong ba ngày, và kể từ đó, cô đã trải qua rất nhiều thăng trầm và một mối quan hệ đầy chông gai. Để bảo vệ tính mạng, bảo vệ người thân, họ đã phải trải qua rất nhiều khó khăn gian khổ, cống hiến cả cuộc đời mình để thực hiện lời hứa của quý nhân. Liệu họ có thể vượt qua số phận của mình và thay đổi cái kết không?',
 				release_date: new Date(),
 				nation: 'Trung Quốc',
 				poster_url: 'movies/36/poster.jpg',
@@ -581,9 +619,11 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //37
+			{
+				//37
 				title: 'Trùng Tử',
-				description: 'Trùng Tử là tác phẩm được nhiều mọt phim mong chờ bởi nguyên tác của tác giả Thục Khách vốn đã rất nổi tiếng trước đó. Bộ phim có nội dung khá giống Hoa Thiên Cốt, xoay quanh mối tình thầy trò ngang trái giữa Lạc  Âm Phàm (Từ Chính Khê) và Trùng Tử (Dương Siêu Việt).',
+				description:
+					'Trùng Tử là tác phẩm được nhiều mọt phim mong chờ bởi nguyên tác của tác giả Thục Khách vốn đã rất nổi tiếng trước đó. Bộ phim có nội dung khá giống Hoa Thiên Cốt, xoay quanh mối tình thầy trò ngang trái giữa Lạc  Âm Phàm (Từ Chính Khê) và Trùng Tử (Dương Siêu Việt).',
 				release_date: new Date(),
 				nation: 'Trung Quốc',
 				poster_url: 'movies/37/poster.jpg',
@@ -597,9 +637,11 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //38
+			{
+				//38
 				title: 'Tinh Lạc Ngưng Thành Đường',
-				description: 'Tinh Lạc Ngưng Thành Đường là tác phẩm cổ trang ngọt ngào, hài hước chuyển thể từ cuốn tiểu thuyết cùng tên của Nhất Độ Quân Hoa. Nội dung phim là chuyện tình ly kỳ của hai nàng công chúa song sinh của Nhân tộc. Tỷ tỷ Thanh Quỳ tính cách ấm áp, tài mạo song toàn được gả cho Thái tử Thiếu Điển Hữu Cầm (Trần Tinh Húc) của Thiên tộc. Còn muội muội Dạ Đàm (Lý Lan Địch) bướng bỉnh, đanh đá lại được hứa gả cho Ma tộc.',
+				description:
+					'Tinh Lạc Ngưng Thành Đường là tác phẩm cổ trang ngọt ngào, hài hước chuyển thể từ cuốn tiểu thuyết cùng tên của Nhất Độ Quân Hoa. Nội dung phim là chuyện tình ly kỳ của hai nàng công chúa song sinh của Nhân tộc. Tỷ tỷ Thanh Quỳ tính cách ấm áp, tài mạo song toàn được gả cho Thái tử Thiếu Điển Hữu Cầm (Trần Tinh Húc) của Thiên tộc. Còn muội muội Dạ Đàm (Lý Lan Địch) bướng bỉnh, đanh đá lại được hứa gả cho Ma tộc.',
 				release_date: new Date(),
 				nation: 'Trung Quốc',
 				poster_url: 'movies/38/poster.jpg',
@@ -613,9 +655,11 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //39
+			{
+				//39
 				title: 'Đại Minh Dưới Kính Hiển Vi',
-				description: 'Đại Minh Dưới Kính Hiển Vi là bộ phim cổ trang Trung Quốc 2023 thu hút bởi dàn diễn viên chắc tay cùng nội dung đề tài phá án, huyền nghi khá lôi cuốn. Phim kể về chàng trai yêu thích toán học Soái Gia Mô (Trương Nhược Quân), trong một lần nghiên cứu bỗng phát hiện một vấn đề lịch sử lưu truyền tại huyện Kim Hoa. Gia Mô quyết định sửa chữa sai sót mà không hề biết sẽ dẫn anh đến những nguy hiểm bởi sự phân tranh lợi ích tập thể. ',
+				description:
+					'Đại Minh Dưới Kính Hiển Vi là bộ phim cổ trang Trung Quốc 2023 thu hút bởi dàn diễn viên chắc tay cùng nội dung đề tài phá án, huyền nghi khá lôi cuốn. Phim kể về chàng trai yêu thích toán học Soái Gia Mô (Trương Nhược Quân), trong một lần nghiên cứu bỗng phát hiện một vấn đề lịch sử lưu truyền tại huyện Kim Hoa. Gia Mô quyết định sửa chữa sai sót mà không hề biết sẽ dẫn anh đến những nguy hiểm bởi sự phân tranh lợi ích tập thể. ',
 				release_date: new Date(),
 				nation: 'Trung Quốc',
 				poster_url: 'movies/39/poster.jpg',
@@ -629,9 +673,11 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //40
+			{
+				//40
 				title: 'Trường Tương Tư',
-				description: 'Trường Tương Tư là bộ phim cổ trang Trung Quốc 2023 cấp S+ của Tencent, với sự tham gia của các diễn viên đang HOT màn ảnh nhỏ Trung Quốc như Dương Tử, Trương Vãn Ý, Đặng Vi và Đàn Kiện Thứ. Phim có thể loại huyền huyễn, xoay quanh Cao Tân Cửu Dao, thường gọi là Tiểu Yêu - con gái của Xi Vưu và Tây Lăng Hành khi vừa sinh ra đời đã được gửi nuôi cho vương mẫu Ngọc Sơn.',
+				description:
+					'Trường Tương Tư là bộ phim cổ trang Trung Quốc 2023 cấp S+ của Tencent, với sự tham gia của các diễn viên đang HOT màn ảnh nhỏ Trung Quốc như Dương Tử, Trương Vãn Ý, Đặng Vi và Đàn Kiện Thứ. Phim có thể loại huyền huyễn, xoay quanh Cao Tân Cửu Dao, thường gọi là Tiểu Yêu - con gái của Xi Vưu và Tây Lăng Hành khi vừa sinh ra đời đã được gửi nuôi cho vương mẫu Ngọc Sơn.',
 				release_date: new Date(),
 				nation: 'Trung Quốc',
 				poster_url: 'movies/40/poster.jpg',
@@ -645,9 +691,11 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //41
+			{
+				//41
 				title: 'Ngọc Cốt Dao',
-				description: 'Ngọc Cốt Dao là phim cổ trang Trung Quốc 2023 đáng mong đợi, thu hút được sự quan tâm trên các nền tảng mạng xã hội. Cốt truyện xoay quanh hoàng thái tử Thời Ảnh (Tiêu Chiến) của Khống Tang và quận chúa Chu Nhan (Nhậm Mẫn) của Xích tộc. Chỉ vì ân nghĩa của một đóa hoa mà mối duyên của họ phải trải qua quá trình lịch kiếp vô cùng bi thương. Chu Nhan trưởng thành bên vòng tay của Thời Ảnh, cả hai cùng nhau chung tay bảo vệ vương triều Khống Tang.',
+				description:
+					'Ngọc Cốt Dao là phim cổ trang Trung Quốc 2023 đáng mong đợi, thu hút được sự quan tâm trên các nền tảng mạng xã hội. Cốt truyện xoay quanh hoàng thái tử Thời Ảnh (Tiêu Chiến) của Khống Tang và quận chúa Chu Nhan (Nhậm Mẫn) của Xích tộc. Chỉ vì ân nghĩa của một đóa hoa mà mối duyên của họ phải trải qua quá trình lịch kiếp vô cùng bi thương. Chu Nhan trưởng thành bên vòng tay của Thời Ảnh, cả hai cùng nhau chung tay bảo vệ vương triều Khống Tang.',
 				release_date: new Date(),
 				nation: 'Trung Quốc',
 				poster_url: 'movies/41/poster.jpg',
@@ -661,9 +709,11 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //42
+			{
+				//42
 				title: ' A Tale Of Twin Cities (2022) - Kính Song Thành',
-				description: 'Câu chuyện phim xoay quanh nhân vật Bạch Anh, một thiếu nữ người Miêu Na Sênh có tính cách vui vẻ, nhiệt tình và hoạt bát. Nàng muốn trốn khỏi những hỗn loạn, âm mưu của thế gian mà tìm đến Vân Hoang – chốn thần tiên trần thế. Trên đường đi, Bạch Anh gặp được Tô Ma cứu giúp, hai người tâm đầu ý hợp, kết duyên làm bằng hữu, lâu dần nảy sinh tình cảm. Thế nhưng bi kịch đã bất ngờ xảy ra khiến hai người phải chia ly. Nhiều năm sau gặp lại tưởng như đã trọn vẹn hạnh phúc thì nào ngờ chuyện tình cảm của nàng và chàng lại gặp muôn vàn trắc trở, khó khăn, cuối cùng sinh ky từ biệt, bị chia cắt tới tận kiếp sau.',
+				description:
+					'Câu chuyện phim xoay quanh nhân vật Bạch Anh, một thiếu nữ người Miêu Na Sênh có tính cách vui vẻ, nhiệt tình và hoạt bát. Nàng muốn trốn khỏi những hỗn loạn, âm mưu của thế gian mà tìm đến Vân Hoang – chốn thần tiên trần thế. Trên đường đi, Bạch Anh gặp được Tô Ma cứu giúp, hai người tâm đầu ý hợp, kết duyên làm bằng hữu, lâu dần nảy sinh tình cảm. Thế nhưng bi kịch đã bất ngờ xảy ra khiến hai người phải chia ly. Nhiều năm sau gặp lại tưởng như đã trọn vẹn hạnh phúc thì nào ngờ chuyện tình cảm của nàng và chàng lại gặp muôn vàn trắc trở, khó khăn, cuối cùng sinh ky từ biệt, bị chia cắt tới tận kiếp sau.',
 				release_date: new Date(),
 				nation: 'Trung Quốc',
 				poster_url: 'movies/42/poster.jpg',
@@ -677,9 +727,11 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //43
+			{
+				//43
 				title: 'Royal Feast (2022) - Thượng Thực',
-				description: 'Bộ phim có nội dung khá giống Hoa Thiên Cốt, xoay quanh câu chuyện tình thầy trò ngang trái giữa Lạc Âm Phàm (Từ Chính Khê) và Trùng Tử (Dương Siêu Việt). Từ nhỏ Trùng Tử đã phải đi ăn mày vì thân mang sát khí, bị gia đình, bạn bè xa lánh, nàng 1 lòng tu tiên nhưng vì dễ tẩu hoả nhập ma nên bị các tông môn từ chối.',
+				description:
+					'Bộ phim có nội dung khá giống Hoa Thiên Cốt, xoay quanh câu chuyện tình thầy trò ngang trái giữa Lạc Âm Phàm (Từ Chính Khê) và Trùng Tử (Dương Siêu Việt). Từ nhỏ Trùng Tử đã phải đi ăn mày vì thân mang sát khí, bị gia đình, bạn bè xa lánh, nàng 1 lòng tu tiên nhưng vì dễ tẩu hoả nhập ma nên bị các tông môn từ chối.',
 				release_date: new Date(),
 				nation: 'Trung Quốc',
 				poster_url: 'movies/43/poster.jpg',
@@ -693,9 +745,11 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //44
+			{
+				//44
 				title: 'Mộng Hoa Lục',
-				description: 'Phim kể về cuộc đời đầy bất hạnh của ca kỹ Triệu Phán Nhi (Lưu Diệc Phi) và nàng không cam tâm số phận nên đã quyết định đứng lên trả thù, ngoài những tình tiết cốt truyện hấp dẫn, phim còn gây chao đảo cộng đồng mạng với những câu thả thính của nhân vật chính, các cảnh đẹp trong phim được cư dân mạng thi nhau bắt trend khiến phim ngày càng nổi tiếng hơn.',
+				description:
+					'Phim kể về cuộc đời đầy bất hạnh của ca kỹ Triệu Phán Nhi (Lưu Diệc Phi) và nàng không cam tâm số phận nên đã quyết định đứng lên trả thù, ngoài những tình tiết cốt truyện hấp dẫn, phim còn gây chao đảo cộng đồng mạng với những câu thả thính của nhân vật chính, các cảnh đẹp trong phim được cư dân mạng thi nhau bắt trend khiến phim ngày càng nổi tiếng hơn.',
 				release_date: new Date(),
 				nation: 'Trung Quốc',
 				poster_url: 'movies/44/poster.jpg',
@@ -709,9 +763,11 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{ //45
+			{
+				//45
 				title: 'Trầm Vụn Hương Phai',
-				description: 'Đây là bộ phim cổ trang tiên hiệp xoay quanh câu chuyện tình yêu dài đằng đẵng giữa hai nhân vật chính là Nhan Đàm và Ứng Uyên. Vì phải hoá thành người trước trăm năm nên Nhan Đàm đã phải trải qua tình kiếp đầy đau khổ, nàng muốn yêu Ứng Uyên nhưng chàng đã quên đi ký ức. Sau này, Nhan Đàm quyết định từ bỏ tiên cốt đi vào luân hồi và lưu lạc ở sông Vong Xuyên hơn 800 năm.',
+				description:
+					'Đây là bộ phim cổ trang tiên hiệp xoay quanh câu chuyện tình yêu dài đằng đẵng giữa hai nhân vật chính là Nhan Đàm và Ứng Uyên. Vì phải hoá thành người trước trăm năm nên Nhan Đàm đã phải trải qua tình kiếp đầy đau khổ, nàng muốn yêu Ứng Uyên nhưng chàng đã quên đi ký ức. Sau này, Nhan Đàm quyết định từ bỏ tiên cốt đi vào luân hồi và lưu lạc ở sông Vong Xuyên hơn 800 năm.',
 				release_date: new Date(),
 				nation: 'Trung Quốc',
 				poster_url: 'movies/45/poster.jpg',
