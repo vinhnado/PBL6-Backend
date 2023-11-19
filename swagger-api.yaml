@@ -320,6 +320,48 @@ paths:
       security:
         - api_key: []
 
+  /episode/{id}/comments:
+    get:
+      tags:
+        - episode
+      summary: Returns comments of episode
+      description: Returns comments of episode
+      parameters:
+        - name: id
+          in: path
+          description: ID of episode to return
+          required: true
+          explode: true
+          schema:
+            type: integer
+            format: int64
+        - name: page
+          in: query
+          description: Use to pagination, default page = 1
+          required: false
+          explode: true
+          schema:
+            type: number
+        - name: pageSize
+          in: query
+          description: Use to pagination, default pageSize = 10
+          required: false
+          explode: true
+          schema:
+            type: number        
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security:
+        - api_key: []
+
   /genres:
     get:
       tags:
@@ -623,13 +665,13 @@ components:
       name: api_key
       in: header
 
-  /user:
-  /get-all-users:
-    get:
-      summary: Get all users
-      responses:
-        '200':
-          description: Successful response
+  # /user:
+  # /get-all-users:
+  #   get:
+  #     summary: Get all users
+  #     responses:
+  #       '200':
+  #         description: Successful response
 #   /get-user:
 #     get:
 #       summary: Get user by username, email, or userId

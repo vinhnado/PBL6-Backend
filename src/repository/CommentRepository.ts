@@ -16,7 +16,7 @@ export class CommentRepository extends BaseRepository<Comment> implements IComme
         try {
             const offset = (page - 1) * pageSize;
             return this.model.findAll({ 
-		        attributes: { exclude: ['deletedAt', 'user_id'] },
+		        attributes: { exclude: ['deletedAt', 'userId', 'episodeId'] },
                 where: {episode_id: episodeId},
                 include: [
                     {
@@ -25,7 +25,7 @@ export class CommentRepository extends BaseRepository<Comment> implements IComme
                     },
                     {
                         model: SubComment,
-                        attributes: { exclude: ['deletedAt'] },
+                        attributes: { exclude: ['deletedAt','userId'] },
                         //   required: true,
                         include:[
                             {

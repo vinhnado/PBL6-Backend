@@ -54,26 +54,48 @@ export class EpisodeService implements IEpisodeService {
 		} catch (error) {
 			throw new Error('Can not get episode.');
 		}
-	}
-
-	async getCommentsOfEpisode(episodeId: number, page: number, pageSize:number): Promise<Comment[]> {
+	}	async getCommentsOfEpisode(episodeId: number, page: number, pageSize:number): Promise<Comment[]> {
 		try {
 			let comments = await this.commentRepository.getCommentsByEpisodeId(episodeId, page, pageSize);
 			let url = '';
+			const userArr = new Map<number, string>();
+			userArr.set(0, await this.s3Service.getObjectUrl('default/avatar.jpg'));
+			for(let comment of comments){
+				if(!comment.user.avatarURL){
+					const id = Number(comment.user.getDataValue('user_id'));
+					if (!userArr.has(id)) {
+						const imageUrl = await this.s3Service.getObjectUrl(comment.user.getDataValue('avatar_url'));
+						userArr.set(id, imageUrl);
+					}
+				}
+
+				for(let subComment of comment.subcomments){
+					if(!subComment.user.avatarURL){
+						const id = Number(subComment.user.getDataValue('user_id'));
+						if (!userArr.has(id)) {
+							const imageUrl = await this.s3Service.getObjectUrl(subComment.user.getDataValue('avatar_url'));
+							userArr.set(id, imageUrl);
+						}
+					}
+				}
+			}
+			
 			for(let comment of comments)
 			{
-				if(comment.user.avatarURL){
-					url = await this.s3Service.getObjectUrl(comment.user.avatarURL);
+				if(comment.user.getDataValue('avatar_url')){
+					url = userArr.get(comment.user.getDataValue('user_id'))||'';
+
 				}else{
-					url = await this.s3Service.getObjectUrl('default/avatar.jpg');
+					url = userArr.get(0)||'';
 				}
 				comment.user.setDataValue('avatar_url',url);
 
 				for(let subComment of comment.subcomments){
-					if(subComment.user.avatarURL){
-						url = await this.s3Service.getObjectUrl(comment.user.avatarURL);
+					if(subComment.user.getDataValue('avatar_url')){
+						url = userArr.get(comment.user.getDataValue('user_id'))||'';
+
 					}else{
-						url = await this.s3Service.getObjectUrl('default/avatar.jpg');
+						url = userArr.get(0)||'';
 					}
 					subComment.user.setDataValue('avatar_url',url);
 				}
@@ -83,4 +105,6 @@ export class EpisodeService implements IEpisodeService {
 			throw new Error('Err get comment of episode.');
 		}
 	}
+
+
 }
