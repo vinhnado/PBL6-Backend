@@ -3,37 +3,747 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
 	async up(queryInterface, Sequelize) {
-		// Define an array of movie IDs and genre IDs to create random associations.
-		const movieIds = Array.from({ length: 45 }, (_, i) => i + 1); // Movie IDs from 1 to 45
-		const genreIds = Array.from({ length: 20 }, (_, i) => i + 1); // Genre IDs from 1 to 20
-
-		// Create an array to store associations.
-		const associations = [];
-
-		// Iterate through movies and associate them with random genres.
-		for (const movieId of movieIds) {
-			// Determine the number of random genres to associate with each movie.
-			const numGenres = Math.floor(Math.random() * 5) + 1; // Random number from 1 to 5.
-
-			// Shuffle the genre IDs to select random ones.
-			const shuffledGenres = genreIds.sort(() => Math.random() - 0.5);
-
-			// Take the first `numGenres` shuffled genre IDs.
-			const selectedGenres = shuffledGenres.slice(0, numGenres);
-
-			// Create associations for the selected genres and movie.
-			selectedGenres.forEach((genreId) => {
-				associations.push({
-					movie_id: movieId,
-					genre_id: genreId,
-					createdAt: new Date(),
-					updatedAt: new Date(),
-				});
-			});
-		}
-
 		// Insert associations into the MovieGenres table.
-		return queryInterface.bulkInsert('movie_genres', associations, {});
+		return queryInterface.bulkInsert('movie_genres', [
+			{
+				movie_id: 1,
+				genre_id: 18,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 1,
+				genre_id: 19,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 2,
+				genre_id: 18,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 2,
+				genre_id: 4,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 3,
+				genre_id: 18,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 3,
+				genre_id: 4,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 4,
+				genre_id: 4,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 4,
+				genre_id: 19,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 5,
+				genre_id: 19,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 5,
+				genre_id: 4,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 6,
+				genre_id: 1,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 6,
+				genre_id: 18,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 6,
+				genre_id: 9,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 7,
+				genre_id: 4,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 7,
+				genre_id: 10,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 7,
+				genre_id: 21,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 8,
+				genre_id: 4,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 8,
+				genre_id: 10,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 8,
+				genre_id: 18,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 9,
+				genre_id: 10,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 9,
+				genre_id: 19,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 9,
+				genre_id: 4,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 10,
+				genre_id: 19,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 10,
+				genre_id: 13,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 10,
+				genre_id: 20,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 11,
+				genre_id: 18,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 11,
+				genre_id: 10,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 12,
+				genre_id: 21,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 12,
+				genre_id: 10,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 13,
+				genre_id: 4,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 13,
+				genre_id: 10,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 14,
+				genre_id: 4,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 14,
+				genre_id: 10,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 14,
+				genre_id: 22,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 15,
+				genre_id: 1,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 15,
+				genre_id: 5,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 15,
+				genre_id: 13,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 16,
+				genre_id: 4,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 16,
+				genre_id: 10,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 16,
+				genre_id: 18,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 17,
+				genre_id: 19,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 17,
+				genre_id: 4,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 17,
+				genre_id: 8,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 18,
+				genre_id: 4,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 18,
+				genre_id: 19,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 19,
+				genre_id: 18,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 19,
+				genre_id: 23,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 19,
+				genre_id: 3,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 20,
+				genre_id: 1,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 20,
+				genre_id: 6,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 20,
+				genre_id: 20,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 21,
+				genre_id: 1,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 21,
+				genre_id: 3,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 21,
+				genre_id: 6,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 22,
+				genre_id: 1,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 22,
+				genre_id: 3,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 22,
+				genre_id: 6,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 23,
+				genre_id: 3,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 23,
+				genre_id: 6,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 23,
+				genre_id: 1,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 23,
+				genre_id: 10,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 24,
+				genre_id: 1,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 24,
+				genre_id: 3,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 24,
+				genre_id: 6,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 25,
+				genre_id: 1,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 25,
+				genre_id: 3,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 25,
+				genre_id: 6,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 26,
+				genre_id: 1,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 26,
+				genre_id: 5,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 26,
+				genre_id: 15,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 27,
+				genre_id: 4,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 27,
+				genre_id: 10,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 28,
+				genre_id: 10,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 28,
+				genre_id: 24,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 29,
+				genre_id: 10,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 29,
+				genre_id: 24,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 30,
+				genre_id: 16,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 30,
+				genre_id: 10,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 30,
+				genre_id: 24,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 30,
+				genre_id: 15,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 31,
+				genre_id: 5,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 31,
+				genre_id: 15,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 31,
+				genre_id: 6,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 31,
+				genre_id: 18,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 32,
+				genre_id: 15,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 32,
+				genre_id: 10,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 33,
+				genre_id: 1,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 33,
+				genre_id: 9,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 33,
+				genre_id: 15,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 34,
+				genre_id: 10,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 34,
+				genre_id: 2,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 34,
+				genre_id: 4,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 35,
+				genre_id: 2,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 35,
+				genre_id: 18,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 36,
+				genre_id: 10,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 36,
+				genre_id: 8,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 36,
+				genre_id: 12,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 36,
+				genre_id: 19,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 37,
+				genre_id: 19,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 37,
+				genre_id: 10,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 37,
+				genre_id: 13,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 38,
+				genre_id: 19,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 38,
+				genre_id: 10,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 39,
+				genre_id: 19,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 39,
+				genre_id: 12,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 39,
+				genre_id: 15,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 40,
+				genre_id: 4,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 40,
+				genre_id: 19,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 40,
+				genre_id: 10,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 41,
+				genre_id: 19,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 41,
+				genre_id: 13,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 41,
+				genre_id: 11,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 42,
+				genre_id: 19,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 42,
+				genre_id: 4,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 42,
+				genre_id: 18,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 43,
+				genre_id: 19,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 43,
+				genre_id: 18,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 43,
+				genre_id: 4,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 44,
+				genre_id: 4,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 44,
+				genre_id: 19,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 45,
+				genre_id: 4,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 45,
+				genre_id: 19,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 45,
+				genre_id: 8,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+		]);
 	},
 
 	async down(queryInterface, Sequelize) {

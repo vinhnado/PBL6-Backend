@@ -24,7 +24,7 @@ class App {
 	private databaseSync(): void {
 		const movieRepository = Database.getInstance();
 		movieRepository
-			.sequelize!.sync({ force: false })
+			.sequelize!.sync({ force: true })
 			.then(() => {
 				console.log('✅ Cơ sở dữ liệu đã được đồng bộ hóa.');
 			})
@@ -44,7 +44,12 @@ class App {
 		this.app.use('/api/individual', IndividualRouter);
 		this.app.use('/api/episode', EpisodeRouter);
 		this.app.use('/api/subscription', SubscriptionRouter);
+<<<<<<< HEAD
 		this.app.use('/api/payments', PaymentRouter);
+=======
+		this.app.use('/api/payments', PaymentRoutes);
+		this.app.use('/api/genres', GenreRoutes);
+>>>>>>> ef8ff3eb5bb5f0f13b7c1c275eef169e8154be98
 	}
 
 	private plugins(): void {

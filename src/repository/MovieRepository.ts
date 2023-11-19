@@ -321,6 +321,33 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 			throw new Error('Update failed: ' + error.message);
 		}
 	}
+
+	async getAllNations(): Promise<string[]> {
+		try {
+			const nations: { DISTINCT: string }[] = await Movie.aggregate('nation', 'DISTINCT', { plain: false }) as any;
+			const nationNames: string[] = nations.map((nation) => nation.DISTINCT);
+			return nationNames;
+		  } catch (error) {
+			throw new Error('Could not get all nations');
+		  }
+	}
+
+	async getAllReleaseDates(): Promise<number[]> {
+		try {
+			const releaseYears: any = await Movie.findAll({
+			  attributes: [
+				[Sequelize.fn('DISTINCT', Sequelize.fn('extract', Sequelize.literal('YEAR FROM "release_date"'))), 'releaseYear']
+			  ],
+			  raw: true, // Chỉ trả về dữ liệu chưa được làm phẳng, không tạo instances của model
+			});
+		
+			return releaseYears.map((yearObj: { releaseYear: number }) => yearObj.releaseYear);
+		  } catch (error) {
+			console.log(error);
+			
+			throw new Error('Could not get all release years');
+		  }
+	}
 }
 
 // Container.set({ id: 'MovieRepository', value: new MovieRepository() });

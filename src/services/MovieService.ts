@@ -27,6 +27,17 @@ export class MovieService implements IMovieService {
 		}); // Initialize the Redis client
 	}
 
+	public clearCache(){
+		this.redis.flushall((err, reply) => {
+			if (err) {
+			  console.error(err);
+			} else {
+			  console.log('Cache cleared:', reply === 'OK');
+			}
+			this.redis.quit();
+		});
+	}
+
 	static generateMD5Hash(input: string): string {
 		return crypto.createHash('md5').update(input).digest('hex');
 	}
@@ -329,5 +340,24 @@ export class MovieService implements IMovieService {
 		}
 	}
 
+	async getAllNations():Promise<string[]>
+	{
+		try {
+			const nations = await this.movieRepository.getAllNations() as any;
+
+			return nations;
+		} catch (error) {
+			throw new Error('Could not get nations of movies.');
+		}
+	}
+
+	async getAllReleaseYears(): Promise<number[]>
+	{
+		try {
+			return await this.movieRepository.getAllReleaseDates();
+		} catch (error) {
+			throw new Error('Could not get nations of movies.');
+		}
+	}
 	// async updatePosterMovie()
 }

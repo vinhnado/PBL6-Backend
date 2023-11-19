@@ -40,7 +40,7 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				name: 'Chính kịch',
+				name: 'Tiên hiệp',
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
@@ -60,7 +60,7 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				name: 'Viễn tây',
+				name: 'Tiểu thuyết chuyển thế',
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
@@ -70,12 +70,12 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				name: 'Thể thao',
+				name: 'Thanh Xuân',
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
 			{
-				name: 'Âm nhạc',
+				name: 'Bí ẩn',
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
@@ -101,6 +101,26 @@ module.exports = {
 			},
 			{
 				name: 'Kỳ ảo',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				name: 'LGBT',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				name: 'Học Đường',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				name: 'Hài hước',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				name: 'Tình bạn',
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
