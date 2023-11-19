@@ -154,9 +154,11 @@ export class MovieController {
 		try {
 			const page = Number(req.query.page) || 1; // Trang mặc định là 1
 			const pageSize = Number(req.query.pageSize) || 5; // Số lượng kết quả trên mỗi trang mặc định là 10
-			const userId = Number(req.payload.userId,);
-			console.log(userId);
-			
+			// const searchConditions = {
+			// 	userId: req.payload.userId,
+			// };
+			// const user = await this.userService.findOneUser(searchConditions);
+			const userId = Number(req.query.userId);
 			if(!userId){
 				const movies = await this.movieService.getMoviesRecommender();
 				return res.json(movies);
@@ -183,6 +185,19 @@ export class MovieController {
 			return res.json(years);
 		} catch (error) {
 			console.log("Err while get all released year");
+		}
+	}
+
+	getPresignUrlToUpload = async (req: Request, res: Response) => {
+		try {
+			const movieId = Number(req.query.movieId);
+			const url = await this.movieService.getPresignUrlToUploadMovie(movieId);
+			return res.status(200).json(url);
+		} catch (error) {
+			console.log("Could not get presignUrl to upload movies.");
+			return res.status(404).json({
+				message: "Could not get presignUrl",
+			});
 		}
 	}
 }

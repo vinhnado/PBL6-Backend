@@ -4,6 +4,7 @@ import { VNPayService } from '../services/payments/VNPayService';
 import { text } from 'node:stream/consumers';
 import { MomoService } from '../services/payments/MomoService';
 import { PaypalService } from '../services/payments/PaypalService';
+import { Payment } from '../models/Payment';
 
 export class PaymentController {
 	private vnPayService: VNPayService;
@@ -22,12 +23,22 @@ export class PaymentController {
 
 	getVNPayPaymentURL = async (req: Request, res: Response) => {
 		try {
+			const price = req.body.price;
+			const ipAdd = req.body.ipAddress;
+			const id = (Math.floor(Math.random() * 90000) + 10000).toString();
 			const paymentUrl = await this.vnPayService.buildPaymentUrl({
-				vnp_Amount: 10000,
-				vnp_IpAddr: '127.0.0.1',
-				vnp_TxnRef: (Math.floor(Math.random() * 90000) + 10000).toString(),
+				vnp_Amount: price,
+				vnp_IpAddr: ipAdd,
+				vnp_TxnRef: id,
 				vnp_OrderInfo: '123456',
 			});
+			const partialObject: Partial<Payment> = {
+				type: 'paypal',
+				price: price,
+				transactionId: id,
+				status: 'Not checkout',
+				userId: 1,
+			};
 			res.status(200).json({
 				message: 'Successfully',
 				success: true,

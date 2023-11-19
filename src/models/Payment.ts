@@ -24,7 +24,9 @@ export class Payment extends Model {
 	private static PAYMENT_PRICE = 'price' as string;
 	private static PAYMENT_ORDER_INFO = 'order_info' as string;
 	private static PAYMENT_TRANSACTION_ID = 'transaction_id' as string;
-	private static PAYMENT_STATUS = 'payment_type' as string;
+	private static PAYMENT_STATUS = 'status' as string;
+	private static PAYMENT_ISPAYMENT = 'is_payment' as string;
+
 
 	@Column({
 		type: DataType.INTEGER,
@@ -68,6 +70,13 @@ export class Payment extends Model {
 		allowNull: false,
 	})
 	status!: string;
+
+	@Column({
+		type: DataType.BOOLEAN,
+		field: Payment.PAYMENT_ISPAYMENT,
+		allowNull: false,
+	})
+	isPayment!: string;
 
 	@ForeignKey(() => User)
 	@Column({
