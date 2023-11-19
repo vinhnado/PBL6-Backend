@@ -41,7 +41,6 @@ export class Account extends Model {
 	@Column({
 		type: DataType.STRING(100),
 		field: Account.ACCOUNT_PASSWORD,
-		unique: true,
 		allowNull: false,
 	})
 	password!: string;

@@ -1,35 +1,95 @@
 'use strict';
 
-const generateRandomPassword = () => {
-	// Generate a random password logic (you can replace this with your own logic)
-	const characters =
-		'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-	const passwordLength = 8;
-	let password = '';
+// const generateRandomPassword = () => {
+// 	// Generate a random password logic (you can replace this with your own logic)
+// 	const characters =
+// 		'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+// 	const passwordLength = 8;
+// 	let password = '';
 
-	for (let i = 0; i < passwordLength; i++) {
-		const randomIndex = Math.floor(Math.random() * characters.length);
-		password += characters.charAt(randomIndex);
-	}
+// 	for (let i = 0; i < passwordLength; i++) {
+// 		const randomIndex = Math.floor(Math.random() * characters.length);
+// 		password += characters.charAt(randomIndex);
+// 	}
 
-	return password;
-};
+// 	return password;
+// };
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
 	async up(queryInterface, Sequelize) {
-		const accounts = [];
-
-		for (let i = 0; i < 10; i++) {
-			accounts.push({
-				username: 'user' + Math.floor(Math.random() * 10000),
-				password: generateRandomPassword(),
+		await queryInterface.bulkInsert('accounts', [
+			{
+				username: 'username1',
+				password:
+					'$2b$10$D69VoJEoIijwminkjAo.recens0qA/NXN1.PiVy.S8j6ou29G4WlW',
 				createdAt: new Date(),
 				updatedAt: new Date(),
-			});
-		}
-
-		await queryInterface.bulkInsert('accounts', accounts);
+			},
+			{
+				username: 'username2',
+				password:
+					'$2b$10$D69VoJEoIijwminkjAo.recens0qA/NXN1.PiVy.S8j6ou29G4WlW',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				username: 'username3',
+				password:
+					'$2b$10$D69VoJEoIijwminkjAo.recens0qA/NXN1.PiVy.S8j6ou29G4WlW',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				username: 'username4',
+				password:
+					'$2b$10$D69VoJEoIijwminkjAo.recens0qA/NXN1.PiVy.S8j6ou29G4WlW',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				username: 'username5',
+				password:
+					'$2b$10$D69VoJEoIijwminkjAo.recens0qA/NXN1.PiVy.S8j6ou29G4WlW',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				username: 'username6',
+				password:
+					'$2b$10$D69VoJEoIijwminkjAo.recens0qA/NXN1.PiVy.S8j6ou29G4WlW',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				username: 'username7',
+				password:
+					'$2b$10$D69VoJEoIijwminkjAo.recens0qA/NXN1.PiVy.S8j6ou29G4WlW',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				username: 'username8',
+				password:
+					'$2b$10$D69VoJEoIijwminkjAo.recens0qA/NXN1.PiVy.S8j6ou29G4WlW',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				username: 'username9',
+				password:
+					'$2b$10$D69VoJEoIijwminkjAo.recens0qA/NXN1.PiVy.S8j6ou29G4WlW',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				username: 'username10',
+				password:
+					'$2b$10$D69VoJEoIijwminkjAo.recens0qA/NXN1.PiVy.S8j6ou29G4WlW',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+		]);
 	},
 
 	async down(queryInterface, Sequelize) {
