@@ -154,11 +154,9 @@ export class MovieController {
 		try {
 			const page = Number(req.query.page) || 1; // Trang mặc định là 1
 			const pageSize = Number(req.query.pageSize) || 5; // Số lượng kết quả trên mỗi trang mặc định là 10
-			// const searchConditions = {
-			// 	userId: req.payload.userId,
-			// };
-			// const user = await this.userService.findOneUser(searchConditions);
-			const userId = Number(req.query.userId);
+			const userId = Number(req.payload.userId,);
+			console.log(userId);
+			
 			if(!userId){
 				const movies = await this.movieService.getMoviesRecommender();
 				return res.json(movies);
