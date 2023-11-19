@@ -21,7 +21,7 @@ import { Rating } from './Rating';
 	paranoid: true,
 })
 export class Episode extends Model {
-	private static TABLE_NAME = 'Episodes' as string;
+	private static TABLE_NAME = 'episodes' as string;
 	private static EPISODE_ID = 'episode_id' as string;
 	private static MOVIE_ID = 'movie_id' as string;
 	private static EPISODE_TITLE = 'title' as string;
@@ -99,5 +99,5 @@ export class Episode extends Model {
 	movie!: Movie;
 
 	@HasMany(() => Comment)
-    comments!:Comment[];
+	comments!: Comment[];
 }

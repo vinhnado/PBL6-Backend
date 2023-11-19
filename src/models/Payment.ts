@@ -17,7 +17,7 @@ import { User } from './User';
 	paranoid: true,
 })
 export class Payment extends Model {
-	private static PAYMENT_TABLE_NAME = 'Payments' as string;
+	private static PAYMENT_TABLE_NAME = 'payments' as string;
 	private static PAYMENT_ID = 'payment_id' as string;
 	private static PAYMENT_USER_ID = 'user_id' as string;
 	private static PAYMENT_TYPE = 'payment_type' as string;

@@ -15,7 +15,7 @@ import { Genre } from './Genre';
 	paranoid: true,
 })
 export class MovieGenre extends Model {
-	private static MOVIEGENRE_TABLE_NAME = 'MovieGenres' as string;
+	private static MOVIEGENRE_TABLE_NAME = 'movie_genres' as string;
 	private static MOVIEGENRE_MOVIE_ID = 'movie_id' as string;
 	private static MOVIEGENRE_GENRE_ID = 'genre_id' as string;
 
@@ -32,7 +32,7 @@ export class MovieGenre extends Model {
 		field: MovieGenre.MOVIEGENRE_GENRE_ID,
 	})
 	genreId!: number;
-	
+
 	@DeletedAt
 	deletedAt!: Date;
 }

@@ -16,7 +16,7 @@ import {
 	paranoid: true,
 })
 export class SubscriptionType extends Model {
-	private static SUBSCRIPTION_TYPE_TABLE_NAME = 'SubscriptionTypes' as string;
+	private static SUBSCRIPTION_TYPE_TABLE_NAME = 'subscription_types' as string;
 	private static SUBSCRIPTION_TYPE_ID = 'subscription_type_id' as string;
 	private static SUBSCRIPTION_TYPE_NAME = 'name' as string;
 	private static SUBSCRIPTION_TYPE_DURATION = 'duration' as string;

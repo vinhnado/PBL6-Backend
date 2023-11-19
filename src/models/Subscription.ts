@@ -16,7 +16,7 @@ import { SubscriptionType } from './SubscriptionType';
 	paranoid: true,
 })
 export class Subscription extends Model {
-	private static SUBSCRIPTION_TABLE_NAME = 'Subscriptions' as string;
+	private static SUBSCRIPTION_TABLE_NAME = 'subscriptions' as string;
 	private static SUBSCRIPTION_ID = 'subscription_id' as string;
 	private static SUBSCRIPTION_TYPE_ID = 'subscription_type_id' as string;
 	private static CLOSED_AT = 'closedAt' as string;

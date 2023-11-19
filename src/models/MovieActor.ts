@@ -15,7 +15,7 @@ import { Actor } from './Actor';
 	paranoid: true,
 })
 export class MovieActor extends Model {
-	private static MOVIEACTOR_TABLE_NAME = 'MovieActors' as string;
+	private static MOVIEACTOR_TABLE_NAME = 'movie_actors' as string;
 	private static MOVIEACTOR_MOVIE_ID = 'movie_id' as string;
 	private static MOVIEACTOR_ACTORP_ID = 'actor_id' as string;
 
