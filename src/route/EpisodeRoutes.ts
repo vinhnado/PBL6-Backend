@@ -6,6 +6,7 @@ class EpisodeRoutes extends BaseRoutes {
 	}
 	public routes(): void {
 		this.router.get('/:id', this.controller.getEpisode);
+		this.router.get('/:id/comments', this.controller.getCommentsOfEpisode);
 	}
 }
 

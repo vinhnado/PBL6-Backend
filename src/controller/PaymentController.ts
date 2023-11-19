@@ -1,15 +1,19 @@
 import { Request, Response } from 'express';
-import Container from 'typedi';
+import Container, { Inject } from 'typedi';
 import { VNPayService } from '../services/payments/VNPayService';
 import { text } from 'node:stream/consumers';
 import { MomoService } from '../services/payments/MomoService';
 import { PaypalService } from '../services/payments/PaypalService';
 import { Payment } from '../models/Payment';
+import { PaymentService } from '../services/PaymentService';
 
 export class PaymentController {
 	private vnPayService: VNPayService;
 	private momoService: MomoService;
 	private paypalService: PaypalService;
+	
+	@Inject(() => PaymentService)
+	private paymentService!: PaymentService;
 
 	constructor() {
 		this.vnPayService = new VNPayService({
@@ -26,19 +30,25 @@ export class PaymentController {
 			const price = req.body.price;
 			const ipAdd = req.body.ipAddress;
 			const id = (Math.floor(Math.random() * 90000) + 10000).toString();
+			const id_subscription = req.body.price;
 			const paymentUrl = await this.vnPayService.buildPaymentUrl({
 				vnp_Amount: price,
 				vnp_IpAddr: ipAdd,
 				vnp_TxnRef: id,
 				vnp_OrderInfo: '123456',
 			});
+
 			const partialObject: Partial<Payment> = {
-				type: 'paypal',
+				type: 'vn-pay',
 				price: price,
 				transactionId: id,
+				orderInfo: "",
 				status: 'Not checkout',
 				userId: 1,
+				isPayment: false,
 			};
+
+			await this.paymentService.addOrEditPayment(partialObject);
 			res.status(200).json({
 				message: 'Successfully',
 				success: true,

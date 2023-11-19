@@ -4,14 +4,21 @@ import { EpisodeRepository } from '../repository/EpisodeRepository';
 import { IEpisodeRepository } from '../repository/Interfaces/IEpisodeRepository';
 import { IEpisodeService } from './Interfaces/IEpisodeService';
 import { S3Service } from './S3Service';
+import { Comment } from '../models/Comment';
+import { CommentRepository } from '../repository/CommentRepository';
+import { ICommentRepository } from '../repository/Interfaces/ICommentRepository';
 
 @Service()
 export class EpisodeService implements IEpisodeService {
+
 	@Inject(() => EpisodeRepository)
 	private movieRepository!: IEpisodeRepository;
 
 	@Inject(() => S3Service)
 	private s3Service!: S3Service;
+
+	@Inject(() => CommentRepository)
+	private commentRepository!: ICommentRepository;
 
 	/**
 	 * Get details a episode of movie by episode_id
@@ -46,6 +53,34 @@ export class EpisodeService implements IEpisodeService {
 			return episode;
 		} catch (error) {
 			throw new Error('Can not get episode.');
+		}
+	}
+
+	async getCommentsOfEpisode(episodeId: number, page: number, pageSize:number): Promise<Comment[]> {
+		try {
+			let comments = await this.commentRepository.getCommentsByEpisodeId(episodeId, page, pageSize);
+			let url = '';
+			for(let comment of comments)
+			{
+				if(comment.user.avatarURL){
+					url = await this.s3Service.getObjectUrl(comment.user.avatarURL);
+				}else{
+					url = await this.s3Service.getObjectUrl('default/avatar.jpg');
+				}
+				comment.user.setDataValue('avatar_url',url);
+
+				for(let subComment of comment.subcomments){
+					if(subComment.user.avatarURL){
+						url = await this.s3Service.getObjectUrl(comment.user.avatarURL);
+					}else{
+						url = await this.s3Service.getObjectUrl('default/avatar.jpg');
+					}
+					subComment.user.setDataValue('avatar_url',url);
+				}
+			}
+			return comments;
+		} catch (error) {
+			throw new Error('Err get comment of episode.');
 		}
 	}
 }
