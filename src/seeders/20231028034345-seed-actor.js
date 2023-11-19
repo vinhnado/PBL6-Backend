@@ -643,17 +643,6 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{//1
-				name: 'La Vân Hi',
-				description:
-					'',
-				gender: 'Male',
-				date_of_birth: new Date('1955-05-18'),
-				avatar: 'actors/58/avatar.jpg',
-				poster: 'default/actor/poster_default.jpg',
-				createdAt: new Date(),
-				updatedAt: new Date(),
-			},
-			{//1
 				name: 'Denny Huang',
 				description:
 					'',
