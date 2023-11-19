@@ -16,7 +16,7 @@ import { Episode } from './Episode';
 	paranoid: true,
 })
 export class WatchHistory extends Model {
-	private static WATCHHISTORY_TABLE_NAME = 'WatchHistory' as string;
+	private static WATCHHISTORY_TABLE_NAME = 'watch_histories' as string;
 	private static WATCHHISTORY_USER_ID = 'user_id' as string;
 	private static WATCHHISTORY_EPISODE_ID = 'episode_id' as string;
 	private static WATCHHISTORY_DURATION = 'duration' as string;

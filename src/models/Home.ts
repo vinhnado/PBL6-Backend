@@ -17,7 +17,7 @@ import { Movie } from './Movie';
 	paranoid: true,
 })
 export class Home extends Model {
-	private static HOME_TABLE_NAME = 'Home' as string;
+	private static HOME_TABLE_NAME = 'home' as string;
 	private static ID = 'id' as string;
 	private static ID_MOVIE = 'id_movie' as string;
 	private static REMOVE_BG = 'rm_background' as string;

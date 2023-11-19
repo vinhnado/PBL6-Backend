@@ -15,7 +15,7 @@ import { Director } from './Director';
 	paranoid: true,
 })
 export class MovieDirector extends Model {
-	private static TABLE_NAME = 'MovieDirectors' as string;
+	private static TABLE_NAME = 'movie_directors' as string;
 	private static MOVIE_ID = 'movie_id' as string;
 	private static DIRECTOR_ID = 'director_id' as string;
 

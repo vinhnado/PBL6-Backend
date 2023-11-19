@@ -15,7 +15,7 @@ import { MovieGenre } from './MovieGenre';
 	paranoid: true,
 })
 export class Genre extends Model {
-	private static GENRE_TABLE_NAME = 'Genres' as string;
+	private static GENRE_TABLE_NAME = 'genres' as string;
 	private static GENRE_ID = 'genre_id' as string;
 	private static GENRE_NAME = 'name' as string;
 
@@ -35,7 +35,7 @@ export class Genre extends Model {
 
 	@DeletedAt
 	deletedAt!: Date;
-	
+
 	@BelongsToMany(() => Movie, () => MovieGenre)
 	movies!: Movie[];
 }

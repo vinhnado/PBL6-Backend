@@ -70,6 +70,7 @@ export class SubscriptionService {
 
 	getAllSubscriptionType = async () => {
 		try {
+			console.log(await this.subscriptionTypeRepository.findByCondition({}));
 			return await this.subscriptionTypeRepository.findMany();
 		} catch (error: any) {
 			throw new Error(error.message);

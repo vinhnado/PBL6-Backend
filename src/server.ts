@@ -9,8 +9,8 @@ import HomeRouter from './route/HomeRoutes';
 import IndividualRouter from './route/IndividualRoutes';
 import EpisodeRouter from './route/EpisodeRoutes';
 import SubscriptionRouter from './route/SubscriptionRoutes';
-import PaymentRoutes from './route/PaymentRoutes';
-import GenreRoutes from './route/GenreRoutes';
+import PaymentRouter from './route/PaymentRoutes';
+import GenreRouter from './route/GenreRoutes';
 
 class App {
 	public app: Application;
@@ -45,8 +45,8 @@ class App {
 		this.app.use('/api/individual', IndividualRouter);
 		this.app.use('/api/episode', EpisodeRouter);
 		this.app.use('/api/subscription', SubscriptionRouter);
-		this.app.use('/api/payments', PaymentRoutes);
-		this.app.use('/api/genres', GenreRoutes);
+		this.app.use('/api/payments', PaymentRouter);
+		this.app.use('/api/genres', GenreRouter);
 	}
 
 	private plugins(): void {

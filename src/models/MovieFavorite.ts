@@ -15,7 +15,7 @@ import { User } from './User';
 	paranoid: true,
 })
 export class MovieFavorite extends Model {
-	private static MOVIEFAVORITE_TABLE_NAME = 'MovieFavorite' as string;
+	private static MOVIEFAVORITE_TABLE_NAME = 'movie_favorites' as string;
 	private static WMOVIEFAVORITE_USER_ID = 'user_id' as string;
 	private static WMOVIEFAVORITE_MOVIE_ID = 'movie_id' as string;
 
@@ -32,7 +32,7 @@ export class MovieFavorite extends Model {
 		field: MovieFavorite.WMOVIEFAVORITE_MOVIE_ID,
 	})
 	movieId!: number;
-	
+
 	@DeletedAt
 	deletedAt!: Date;
 }

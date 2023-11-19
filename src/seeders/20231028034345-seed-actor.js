@@ -3,11 +3,11 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
 	async up(queryInterface, Sequelize) {
-		await queryInterface.bulkInsert('Actors', [
-			{//1
+		await queryInterface.bulkInsert('actors', [
+			{
+				//1
 				name: 'Ngô Thiến',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/1/avatar.jpg',
@@ -15,10 +15,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//2
+			{
+				//2
 				name: 'Hồ Ý Hoàn',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/2/avatar.jpg',
@@ -26,10 +26,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//3
+			{
+				//3
 				name: 'Kiều Chấn Vũ',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/3/avatar.jpg',
@@ -37,10 +37,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//4
+			{
+				//4
 				name: 'Ngu Thư Hân',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/4/avatar.jpg',
@@ -48,10 +48,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//5
+			{
+				//5
 				name: 'Trương Lăng Hách',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/5/avatar.jpg',
@@ -59,10 +59,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//6
+			{
+				//6
 				name: 'Lư Dục Hiểu',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/6/avatar.jpg',
@@ -70,10 +70,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//7
+			{
+				//7
 				name: 'Tăng Thuấn Hy',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/7/avatar.jpg',
@@ -81,10 +81,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//8
+			{
+				//8
 				name: 'Trần Đô Linh',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/8/avatar.jpg',
@@ -92,10 +92,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Cảnh Điềm',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/9/avatar.jpg',
@@ -103,10 +103,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Phùng Thiệu Phong',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/10/avatar.jpg',
@@ -114,10 +114,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Vương Lệ Khôn',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/11/avatar.jpg',
@@ -125,10 +125,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Tăng Khả Ny',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/12/avatar.jpg',
@@ -136,10 +136,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Vương Ngọc Văn',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/13/avatar.jpg',
@@ -147,10 +147,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Diệp Thanh',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/14/avatar.jpg',
@@ -158,10 +158,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Tương Long',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/15/avatar.jpg',
@@ -169,10 +169,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Trần Hân Dư',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/16/avatar.jpg',
@@ -180,10 +180,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Ngô Tuấn Dư',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/17/avatar.jpg',
@@ -191,10 +191,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Cam Vọng Tinh',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/18/avatar.jpg',
@@ -202,10 +202,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Khang Tịch',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/19/avatar.jpg',
@@ -213,10 +213,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Nghê Ni',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/20/avatar.jpg',
@@ -224,10 +224,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Bạch Vũ',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/21/avatar.jpg',
@@ -235,10 +235,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Kim Hãn',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/22/avatar.jpg',
@@ -246,10 +246,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Mạnh Tử Nghĩa',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/23/avatar.jpg',
@@ -257,10 +257,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Trương Nghệ Thượng',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/24/avatar.jpg',
@@ -268,10 +268,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Supakorn Wuttinunsurasit',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/25/avatar.jpg',
@@ -279,10 +279,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Mix Wanut Sangtianprapai',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/26/avatar.jpg',
@@ -290,10 +290,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Puwanat Ruengves',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/27/avatar.jpg',
@@ -301,10 +301,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Ahn So Hee',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/28/avatar.jpg',
@@ -312,10 +312,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Lee Min Ho',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/29/avatar.jpg',
@@ -323,10 +323,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Park Shin Hye',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/30/avatar.jpg',
@@ -334,10 +334,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Woo-bin Ki',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/31/avatar.jpg',
@@ -345,10 +345,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Jung Soo Jung',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/32/avatar.jpg',
@@ -356,10 +356,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Yoo Gong',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/33/avatar.jpg',
@@ -367,10 +367,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Jung yumi',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/34/avatar.jpg',
@@ -378,10 +378,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Ma Dong Xi',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/35/avatar.jpg',
@@ -389,10 +389,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Hoàng Cảnh Du',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/36/avatar.jpg',
@@ -400,10 +400,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Trương Tịnh Nghi',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/37/avatar.jpg',
@@ -411,10 +411,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Ngô Cương',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/38/avatar.jpg',
@@ -422,10 +422,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Hình Phi',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/39/avatar.jpg',
@@ -433,10 +433,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Từ Khai Sính',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/40/avatar.jpg',
@@ -444,10 +444,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Từ Phương Châu',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/41/avatar.jpg',
@@ -455,10 +455,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Thành Nghị',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/42/avatar.jpg',
@@ -466,10 +466,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Aero Xiao',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/43/avatar.jpg',
@@ -477,10 +477,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Từ Lộ',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/44/avatar.jpg',
@@ -488,10 +488,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Ngụy Triết Minh',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/45/avatar.jpg',
@@ -499,10 +499,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Lưu Nhuận Nam',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/46/avatar.jpg',
@@ -510,10 +510,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Trương Bách Gia',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/47/avatar.jpg',
@@ -521,10 +521,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Vương Nghệ Điềm',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/48/avatar.jpg',
@@ -532,10 +532,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'La Vân Hi',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/49/avatar.jpg',
@@ -543,10 +543,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Bạch Lộc',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/50/avatar.jpg',
@@ -554,10 +554,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Crystal',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/51/avatar.jpg',
@@ -565,10 +565,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Ji Chang Wook',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/52/avatar.jpg',
@@ -576,10 +576,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Lim YoonA,Yoona',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/53/avatar.jpg',
@@ -587,10 +587,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Song Yun-ah',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/54/avatar.jpg',
@@ -598,10 +598,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Seung-ho Shin',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/55/avatar.jpg',
@@ -609,10 +609,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Irene',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/56/avatar.jpg',
@@ -620,10 +620,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Ton Saran Anantasetthakul',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/57/avatar.jpg',
@@ -631,10 +631,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Yoon Phusanu Wongsavanischakorn',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/58/avatar.jpg',
@@ -642,10 +642,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Denny Huang',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/58/avatar.jpg',
@@ -653,10 +653,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Hangee Liou',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/58/avatar.jpg',
@@ -664,10 +664,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Sun Ke-Fang',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/58/avatar.jpg',
@@ -675,10 +675,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Jared Leto',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/58/avatar.jpg',
@@ -686,10 +686,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Ezra Miller',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/58/avatar.jpg',
@@ -697,10 +697,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Jason Momoa',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/58/avatar.jpg',
@@ -708,10 +708,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Ray Fisher',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/58/avatar.jpg',
@@ -719,10 +719,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Amy Adams',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/58/avatar.jpg',
@@ -730,10 +730,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Robert Downey',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/58/avatar.jpg',
@@ -741,10 +741,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Chris Evans',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/58/avatar.jpg',
@@ -752,10 +752,10 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
-			{//1
+			{
+				//1
 				name: 'Mark Ruffalo',
-				description:
-					'',
+				description: '',
 				gender: 'Male',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/58/avatar.jpg',

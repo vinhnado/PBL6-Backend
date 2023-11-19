@@ -4,7 +4,7 @@
 module.exports = {
 	async up(queryInterface, Sequelize) {
 		await queryInterface.bulkInsert(
-			'SubscriptionTypes',
+			'subscription_types',
 			[
 				{
 					name: 'Guest',
