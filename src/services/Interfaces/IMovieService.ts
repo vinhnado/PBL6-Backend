@@ -25,4 +25,5 @@ export interface IMovieService {
 	getMoviesForVip(): Promise<Movie[]>;
 	getAllNations(): Promise<string[]>;
 	getAllReleaseYears(): Promise<number[]>;
+	getPresignUrlToUploadMovie(idMovie: number): Promise<{ key: string, value: string }[]>;
 }

@@ -8,6 +8,7 @@ import {
 	validateUpdateMovie
 } from '../validators/MovieValidator';
 import { validate } from '../validators/Validator';
+import { auth } from '../middleware/AuthMiddleware';
 class MovieRoutes extends BaseRoutes {
 	constructor() {
 		super(new MovieController());
@@ -22,9 +23,10 @@ class MovieRoutes extends BaseRoutes {
 		this.router.delete('/', validateDeleteMovieById, validate, this.controller.deleteMovieById);
 		this.router.post('/create', validateCreateMovie, validate, this.controller.createMovie);
 		this.router.put('/update/:id', validateUpdateMovie, validate, this.controller.updateMovie);
-		this.router.get('/recommender/get', this.controller.getMoviesRecommender);
+		this.router.get('/recommender/get',auth, this.controller.getMoviesRecommender);
 		this.router.get('/get/nations', this.controller.getAllNations);
 		this.router.get('/get/years', this.controller.getAllReleaseYears);
+		this.router.get('/get/presign-url', this.controller.getPresignUrlToUpload);
 	}
 }
 

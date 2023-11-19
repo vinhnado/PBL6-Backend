@@ -29,7 +29,7 @@ export class S3Service {
     }
 
     // Create temp url to upload object to s3
-    async generatePresignedUrlUpadte(objectName:string ,bucketName:string = this.BUCKET_NAME, expiration:number= this.EXPIRATION) {
+    async generatePresignedUrlUpdate(objectName:string ,bucketName:string = this.BUCKET_NAME, expiration:number= this.EXPIRATION) {
         try {
           const url = await S3Service.minioClient.presignedPutObject(bucketName , objectName, expiration);
           return url;

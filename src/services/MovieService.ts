@@ -359,5 +359,25 @@ export class MovieService implements IMovieService {
 			throw new Error('Could not get nations of movies.');
 		}
 	}
+
+	async getPresignUrlToUploadMovie(movieId: number):  Promise<{ key: string, value: string }[]>
+	{
+		try {
+			const poster = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/poster.jpg');
+			const background = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/background.jpg');
+			const trailer = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/trailer.mp4');
+
+			const presignedUrls: { key: string, value: string }[] = [
+				{ key: 'poster', value: poster },
+				{ key: 'background', value: background },
+				{ key: 'trailer', value: trailer },
+			  ];
+		  
+			  return presignedUrls;
+		} catch (error) {
+			throw new Error('Could not get presignUrl to upload movies.');
+		}
+	}
+
 	// async updatePosterMovie()
 }

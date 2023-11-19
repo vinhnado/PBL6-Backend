@@ -187,4 +187,17 @@ export class MovieController {
 			console.log("Err while get all released year");
 		}
 	}
+
+	getPresignUrlToUpload = async (req: Request, res: Response) => {
+		try {
+			const movieId = Number(req.query.movieId);
+			const url = await this.movieService.getPresignUrlToUploadMovie(movieId);
+			return res.status(200).json(url);
+		} catch (error) {
+			console.log("Could not get presignUrl to upload movies.");
+			return res.status(404).json({
+				message: "Could not get presignUrl",
+			});
+		}
+	}
 }
