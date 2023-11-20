@@ -48,7 +48,7 @@ export class Comment extends Model {
 	userId!: number;
 
 	@Column({
-		type: DataType.INTEGER,
+		type: DataType.TEXT,
 		field: Comment.CONTENT,
 	})
 	content!: string;

@@ -20,6 +20,10 @@ tags:
     description: API for Episode
   - name: genre
     description: API for Genre
+  - name: comment
+    description: API for Comment
+  - name: rating
+    description: API for Rating
   - name: home
     description: API for Home Page
   - name: user
@@ -360,6 +364,48 @@ paths:
       security:
         - api_key: []
 
+  /episode/{id}/comments:
+    get:
+      tags:
+        - episode
+      summary: Returns comments of episode
+      description: Returns comments of episode
+      parameters:
+        - name: id
+          in: path
+          description: ID of episode to return
+          required: true
+          explode: true
+          schema:
+            type: integer
+            format: int64
+        - name: page
+          in: query
+          description: Use to pagination, default page = 1
+          required: false
+          explode: true
+          schema:
+            type: number
+        - name: pageSize
+          in: query
+          description: Use to pagination, default pageSize = 10
+          required: false
+          explode: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security:
+        - api_key: []
+
   /genres:
     get:
       tags:
@@ -378,7 +424,131 @@ paths:
                   format: int32
       security:
         - api_key: []
-
+  /comments/create:
+    post:
+      tags:
+        - comment
+      summary: Add comment for episode
+      description: Add comment for episode
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                episodeId:
+                  type: integer
+                  format: int64
+                  default: 1
+                content:
+                  type: string
+                  default: 'Add comment here'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security:
+        - bearerAuth: []
+  /comments/delete/{commentId}:
+    delete:
+      tags:
+        - comment
+      summary: Delete comment
+      description: Delete comment by id
+      parameters:
+        - name: commentId
+          in: path
+          description: commentId to delete
+          required: true
+          explode: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security:
+        - bearerAuth: []
+  /comments/edit/{commentId}:
+    put:
+      tags:
+        - comment
+      summary: Edit comment
+      description: Edit comment
+      parameters:
+        - name: commentId
+          in: path
+          description: commentId to update
+          required: true
+          explode: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  default: 'content to update'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security:
+        - bearerAuth: []
+  /ratings/create:
+    post:
+      tags:
+        - rating
+      summary: Add rating for movie
+      description: Add rating for movie
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                movieId:
+                  type: integer
+                  format: int64
+                rating:
+                  type: number
+                  format: float
+                  default: 5.0
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security:
+        - bearerAuth: []
   /home:
     get:
       tags:
@@ -981,15 +1151,11 @@ components:
       description: List of user object
       required: true
   securitySchemes:
-    petstore_auth:
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: 'http://petstore.swagger.io/oauth/dialog'
-          scopes:
-            'write:pets': modify pets in your account
-            'read:pets': read your pets
     bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    api_key:
       type: apiKey
       in: header
       name: Authorization

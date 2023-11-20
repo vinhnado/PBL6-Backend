@@ -76,7 +76,7 @@ export class Payment extends Model {
 		field: Payment.PAYMENT_ISPAYMENT,
 		allowNull: false,
 	})
-	isPayment!: string;
+	isPayment!: boolean;
 
 	@ForeignKey(() => User)
 	@Column({
