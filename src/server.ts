@@ -11,6 +11,7 @@ import EpisodeRouter from './route/EpisodeRoutes';
 import SubscriptionRouter from './route/SubscriptionRoutes';
 import PaymentRouter from './route/PaymentRoutes';
 import GenreRouter from './route/GenreRoutes';
+import CommentRoutes from './route/CommentRoutes';
 
 class App {
 	public app: Application;
@@ -47,6 +48,7 @@ class App {
 		this.app.use('/api/subscription', SubscriptionRouter);
 		this.app.use('/api/payments', PaymentRouter);
 		this.app.use('/api/genres', GenreRouter);
+		this.app.use('/api/comments', CommentRoutes);
 	}
 
 	private plugins(): void {
