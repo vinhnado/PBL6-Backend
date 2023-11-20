@@ -17,11 +17,11 @@ export class UserController {
 
 	getUser = async (req: Request, res: Response) => {
 		try {
-			const { username, email, idUser } = req.query;
+			const { username, email, userId } = req.query;
 			const searchConditions = {
 				username,
 				email,
-				idUser,
+				userId,
 			};
 			const user = await this.userService.findOneUser(searchConditions);
 			return res.json(user);
