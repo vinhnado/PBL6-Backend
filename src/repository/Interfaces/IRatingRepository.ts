@@ -6,4 +6,5 @@ import { BaseInterface } from './BaseInterface';
 export interface IRatingRepository extends BaseInterface {
 
     getRatingOfMovie(movie_id: number): Promise<Rating[]>;
+    addRating(data: any): Promise<Rating>;
 }

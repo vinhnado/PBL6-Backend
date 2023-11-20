@@ -16,6 +16,7 @@ export class RatingRepository extends BaseRepository<Rating> implements IRatingR
 	constructor(){
 		super(Rating);
 	}
+
     getRatingOfMovie(movieId: number): Promise<Rating[]> {
         try {
            const ratings = this.model.findAll({
@@ -27,7 +28,43 @@ export class RatingRepository extends BaseRepository<Rating> implements IRatingR
            }); 
            return ratings;
         } catch (error) {
-            throw new Error('Method not implemented.');
+            throw (error);
         }
+    }
+
+    async addRating(data: any): Promise<Rating> {
+        try {
+            const rs = await this.model.create(data);
+            
+            await this.updateAvgRatingMovie(data.movieId);
+            return rs;
+        } catch (error) {
+            throw (error);
+        }
+    }
+
+    async updateAvgRatingMovie(movieId: number): Promise<void>
+    {
+        try {
+            const result = await Rating.findOne({
+              attributes: [[Sequelize.fn('AVG', Sequelize.col('rating')), 'averageRating']],
+              where: {
+                movie_id: movieId
+              }
+            });
+        
+            const averageRating = result?.getDataValue('averageRating');
+            await Movie.update(
+                { averageRating: averageRating },
+                {
+                  where: {
+                    movie_id: movieId,
+                  },
+                }
+            );
+          } catch (error) {
+            console.error('Error calculating average rating:', error);
+            throw error;
+          }
     }
 }

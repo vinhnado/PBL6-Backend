@@ -20,6 +20,8 @@ tags:
     description: API for Genre
   - name: comment
     description: API for Comment
+  - name: rating
+    description: API for Rating
   - name: home
     description: API for Home Page
   - name: user
@@ -476,6 +478,37 @@ paths:
                   format: int32
       security: 
        - bearerAuth: []    
+  /ratings/create:
+    post:
+      tags:
+        - rating
+      summary: Add rating for movie
+      description: Add rating for movie
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                movieId:
+                  type: integer
+                  format: int64
+                rating:
+                  type: number
+                  format: float
+                  default: 5.0
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security: 
+       - bearerAuth: []
   /home:
     get:
       tags:
