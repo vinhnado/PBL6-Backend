@@ -161,7 +161,6 @@ export class MovieController {
 			// };
 			// const user = await this.userService.findOneUser(searchConditions);
 			const userId = Number(req.payload.userId);
-			console.log(userId);
 			
 			if(!userId){
 				const movies = await this.movieService.getMoviesRecommender();

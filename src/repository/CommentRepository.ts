@@ -12,6 +12,14 @@ export class CommentRepository extends BaseRepository<Comment> implements IComme
 		super(Comment);
 	}
 
+    addComment(comment: Partial<Comment>): Promise<Comment> {
+        try {
+            return this.model.create(comment);
+        } catch (error) {
+            throw(error);
+        }
+    }
+
     getCommentsByEpisodeId(episodeId: number, page: number, pageSize:number): Promise<Comment[]> {
         try {
             const offset = (page - 1) * pageSize;
@@ -37,6 +45,7 @@ export class CommentRepository extends BaseRepository<Comment> implements IComme
                 ],
                 limit: pageSize, // Số lượng kết quả trên mỗi trang
                 offset: offset, // Vị trí bắt đầu
+                order: [['createdAt', 'DESC']],
              });
         } catch (error: any) {
 			throw new Error('Can not get comments: ' + error.message);
