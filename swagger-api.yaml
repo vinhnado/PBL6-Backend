@@ -9,6 +9,8 @@ info:
 servers:
   - url: 'http://localhost:8000/api'
 tags:
+  - name: authentication
+    description: API for Authentication
   - name: movie
     description: API for Movies
     externalDocs:
@@ -26,6 +28,44 @@ tags:
       description: Find out more about our store
       url: 'http://swagger.io'
 paths:
+  /auth/login:
+    post:
+      summary: User login
+      tags:
+        - authentication
+      requestBody:
+        description: User credentials for login
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCredentials'
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+  /auth/register:
+    post:
+      summary: User registration
+      tags:
+        - authentication
+      requestBody:
+        description: User data for registration
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+
   /movies:
     get:
       tags:
@@ -450,11 +490,365 @@ paths:
                   $ref: '#/components/schemas/Pet'
         '400':
           description: Error while get movies recommender
+
+  /user/get-all-users:
+    get:
+      summary: Get all users
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: true
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Number of items per page
+          required: true
+          schema:
+            type: integer
+      tags:
+        - user
+      responses:
+        '200':
+          description: Successful response
+
+  /user/get-user:
+    get:
+      summary: Get user by username, email, or userId
+      tags:
+        - user
+      parameters:
+        - name: username
+          in: query
+          description: Username of the user
+          required: false
+          schema:
+            type: string
+        - name: email
+          in: query
+          description: Email of the user
+          required: false
+          schema:
+            type: string
+        - name: userId
+          in: query
+          description: ID of the user
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+
+  /user/get-self-information:
+    get:
+      summary: Get information about the authenticated user
+      tags:
+        - user
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+
+  /user/update-user:
+    put:
+      summary: Update user information
+      tags:
+        - user
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: User data to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Successful response
+
+  /user/create-user:
+    post:
+      summary: Create a new user
+      tags:
+        - user
+      requestBody:
+        description: User data for registration
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+      responses:
+        '200':
+          description: Successful response
+
+  /user/delete-user:
+    delete:
+      summary: Delete a user by userId
+      tags:
+        - user
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userId
+          in: query
+          description: ID of the user to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+
+  /user/add-favorite-movie:
+    get:
+      summary: Add a movie to the favorites
+      tags:
+        - user
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: movieId
+          in: query
+          description: ID of the movie to add to favorites
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+
+  /user/delete-favorite-movie:
+    get:
+      summary: Remove a movie from the favorites
+      tags:
+        - user
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: movieId
+          in: query
+          description: ID of the movie to remove from favorites
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+
+  /user/get-favorite-movie-list:
+    get:
+      summary: Get the list of favorite movies
+      tags:
+        - user
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: true
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Number of items per page
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+
+  /user/add-watch-list:
+    get:
+      summary: Add a movie to the watch list
+      tags:
+        - user
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: movieId
+          in: query
+          description: ID of the movie to add to watch list
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+
+  /user/delete-watch-list:
+    get:
+      summary: Remove a movie from the watch list
+      tags:
+        - user
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: movieId
+          in: query
+          description: ID of the movie to remove from watch list
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+
+  /user/get-watch-movie-list:
+    get:
+      summary: Get the watch list
+      tags:
+        - user
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: true
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Number of items per page
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+
+  /user/add-movie-history:
+    get:
+      summary: Add a movie to the watch history
+      tags:
+        - user
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: episodeId
+          in: query
+          description: ID of the episode to add to watch history
+          required: true
+          schema:
+            type: integer
+        - name: duration
+          in: query
+          description: Duration of the movie in minutes
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+
+  /user/delete-movie-history:
+    get:
+      summary: Remove a movie from the watch history
+      tags:
+        - user
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: episodeId
+          in: query
+          description: ID of the episode to remove from watch history
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+
+  /user/get-movie-history-list:
+    get:
+      summary: Get the watch history list
+      tags:
+        - user
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: true
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Number of items per page
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+
+  /user/get-movie-history:
+    get:
+      summary: Get the watch history for a specific movie
+      tags:
+        - user
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: movieId
+          in: query
+          description: ID of the movie to get watch history
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+
 externalDocs:
   description: Find out more about Swagger
   url: 'http://swagger.io'
 components:
   schemas:
+    User:
+      type: object
+      properties:
+        userId:
+          type: integer
+        email:
+          type: string
+        dateOfBirth:
+          type: string
+        gender:
+          type: string
+        username:
+          type: string
+
+    UserRegistration:
+      type: object
+      properties:
+        email:
+          type: string
+        dateOfBirth:
+          type: string
+        gender:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+
+    UserCredentials:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
     Movie:
       type: object
       properties:
@@ -508,30 +902,7 @@ components:
           type: string
       xml:
         name: Category
-    User:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        username:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-        password:
-          type: string
-        phone:
-          type: string
-        userStatus:
-          type: integer
-          format: int32
-          description: User Status
-      xml:
-        name: User
+
     Tag:
       type: object
       properties:
@@ -618,301 +989,7 @@ components:
           scopes:
             'write:pets': modify pets in your account
             'read:pets': read your pets
-    api_key:
+    bearerAuth:
       type: apiKey
-      name: api_key
       in: header
-
-  /user:
-  /get-all-users:
-    get:
-      summary: Get all users
-      responses:
-        '200':
-          description: Successful response
-#   /get-user:
-#     get:
-#       summary: Get user by username, email, or userId
-#       parameters:
-#         - name: username
-#           in: query
-#           description: Username of the user
-#           required: false
-#           schema:
-#             type: string
-#         - name: email
-#           in: query
-#           description: Email of the user
-#           required: false
-#           schema:
-#             type: string
-#         - name: idUser
-#           in: query
-#           description: ID of the user
-#           required: false
-#           schema:
-#             type: integer
-#       responses:
-#         '200':
-#           description: Successful response
-
-#   /get-self-information:
-#     get:
-#       summary: Get information about the authenticated user
-#       security:
-#         - bearerAuth: []
-#       responses:
-#         '200':
-#           description: Successful response
-
-#   /update-user:
-#     put:
-#       summary: Update user information
-#       security:
-#         - bearerAuth: []
-#       requestBody:
-#         description: User data to update
-#         required: true
-#         content:
-#           application/json:
-#             schema:
-#               $ref: '#/components/schemas/User'
-#       responses:
-#         '200':
-#           description: Successful response
-
-#   /create-user:
-#     post:
-#       summary: Create a new user
-#       requestBody:
-#         description: User data for registration
-#         required: true
-#         content:
-#           application/json:
-#             schema:
-#               $ref: '#/components/schemas/UserRegistration'
-#       responses:
-#         '200':
-#           description: Successful response
-
-#   /delete-user:
-#     delete:
-#       summary: Delete a user by userId
-#       security:
-#         - bearerAuth: []
-#       parameters:
-#         - name: userId
-#           in: query
-#           description: ID of the user to delete
-#           required: true
-#           schema:
-#             type: integer
-#       responses:
-#         '200':
-#           description: Successful response
-
-#   /add-favorite-movie:
-#     get:
-#       summary: Add a movie to favorites
-#       security:
-#         - bearerAuth: []
-#       parameters:
-#         - name: movieId
-#           in: query
-#           description: ID of the movie to add to favorites
-#           required: true
-#           schema:
-#             type: integer
-#       responses:
-#         '200':
-#           description: Successful response
-
-#   /delete-favorite-movie:
-#     get:
-#       summary: Remove a movie from favorites
-#       security:
-#         - bearerAuth: []
-#       parameters:
-#         - name: movieId
-#           in: query
-#           description: ID of the movie to remove from favorites
-#           required: true
-#           schema:
-#             type: integer
-#       responses:
-#         '200':
-#           description: Successful response
-
-#   /get-favorite-movie-list:
-#     get:
-#       summary: Get the list of favorite movies
-#       security:
-#         - bearerAuth: []
-#       parameters:
-#         - name: page
-#           in: query
-#           description: Page number
-#           required: true
-#           schema:
-#             type: integer
-#         - name: pageSize
-#           in: query
-#           description: Number of items per page
-#           required: true
-#           schema:
-#             type: integer
-#       responses:
-#         '200':
-#           description: Successful response
-
-#   /add-watch-list:
-#     get:
-#       summary: Add a movie to the watch list
-#       security:
-#         - bearerAuth: []
-#       parameters:
-#         - name: movieId
-#           in: query
-#           description: ID of the movie to add to the watch list
-#           required: true
-#           schema:
-#             type: integer
-#       responses:
-#         '200':
-#           description: Successful response
-
-#   /delete-watch-list:
-#     get:
-#       summary: Remove a movie from the watch list
-#       security:
-#         - bearerAuth: []
-#       parameters:
-#         - name: movieId
-#           in: query
-#           description: ID of the movie to remove from the watch list
-#           required: true
-#           schema:
-#             type: integer
-#       responses:
-#         '200':
-#           description: Successful response
-
-#   /get-watch-movie-list:
-#     get:
-#       summary: Get the list of movies in the watch list
-#       security:
-#         - bearerAuth: []
-#       parameters:
-#         - name: page
-#           in: query
-#           description: Page number
-#           required: true
-#           schema:
-#             type: integer
-#         - name: pageSize
-#           in: query
-#           description: Number of items per page
-#           required: true
-#           schema:
-#             type: integer
-#       responses:
-#         '200':
-#           description: Successful response
-
-#   /add-movie-history:
-#     get:
-#       summary: Add a movie to the watch history
-#       security:
-#         - bearerAuth: []
-#       parameters:
-#         - name: episodeId
-#           in: query
-#           description: ID of the episode to add to watch history
-#           required: true
-#           schema:
-#             type: integer
-#         - name: duration
-#           in: query
-#           description: Duration of the watch
-#           required: true
-#           schema:
-#             type: integer
-#       responses:
-#         '200':
-#           description: Successful response
-
-#   /delete-movie-history:
-#     get:
-#       summary: Remove a movie from watch history
-#       security:
-#         - bearerAuth: []
-#       parameters:
-#         - name: episodeId
-#           in: query
-#           description: ID of the episode to remove from watch history
-#           required: true
-#           schema:
-#             type: integer
-#       responses:
-#         '200':
-#           description: Successful response
-
-#   /get-movie-history-list:
-#     get:
-#       summary: Get the list of movies in the watch history
-#       security:
-#         - bearerAuth: []
-#       parameters:
-#         - name: page
-#           in: query
-#           description: Page number
-#           required: true
-#           schema:
-#             type: integer
-#         - name: pageSize
-#           in: query
-#           description: Number of items per page
-#           required: true
-#           schema:
-#             type: integer
-#       responses:
-#         '200':
-#           description: Successful response
-
-#   /get-movie-history:
-#     get:
-#       summary: Get the watch history for a specific movie
-#       security:
-#         - bearerAuth: []
-#       parameters:
-#         - name: movieId
-#           in: query
-#           description: ID of the movie to get watch history
-#           required: true
-#           schema:
-#             type: integer
-#       responses:
-#         '200':
-#           description: Successful response
-
-# components:
-#   schemas:
-#     User:
-#       type: object
-#       properties:
-#         userId:
-#           type: integer
-#         email:
-#           type: string
-#         dateOfBirth:
-#           type: string
-#           format: date
-#         gender:
-#           type: string
-#           enum: [male, female, other]
-#         username:
-#           type: string
-#       required:
-#         - userId
-#         - email
-#         - date
+      name: Authorization
