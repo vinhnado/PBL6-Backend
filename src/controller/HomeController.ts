@@ -14,10 +14,7 @@ export class HomeController {
 		try {
 			const page = Number(req.query.page) || 1; // Trang mặc định là 1
 			const pageSize = Number(req.query.pageSize) || 5; // Số lượng kết quả trên mỗi trang mặc định là 10
-			const genreId = Number(req.query.genreId);
-			const sortMovie = req.query.sortMovie?.toString();
-
-            return res.json(await this.homeService.getMoviesByGenre(genreId, page, pageSize, sortMovie));
+            return res.status(200).json(await this.homeService.getMoviesByGenre(page, pageSize));
 		} catch (error) {
 			console.log(error);
 			res.status(500).json({ error: 'Can not get movies by genres' });
@@ -32,4 +29,19 @@ export class HomeController {
 			res.status(500).json({ error: 'Can not get home movies posters' });
 		}
 	};
+
+	getMoviesOfGenre = async (req: Request, res: Response) => {
+		try {
+			const page = Number(req.query.page) || 1; // Trang mặc định là 1
+			const pageSize = Number(req.query.pageSize) || 15; // Số lượng 
+			const genreId = Number(req.params.genreId);
+			const sortMovie = req.query.sortMovie?.toString();
+			return res.status(200).json(await this.homeService.getMoviesOfGenre(genreId, page, pageSize, sortMovie));
+		} catch (error) {
+			console.log(error);
+			return res.status(500).json({
+				message: "Server error !"
+			});
+		}
+	}
 }
