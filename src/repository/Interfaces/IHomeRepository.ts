@@ -4,5 +4,6 @@ import { Movie } from '../../models/Movie';
 
 export interface IHomeRepository {
 	getHomePoster(): Promise<Home[]>;
-	getMoviesByGenre(genre_id: number ,page: number, pageSize: number, sortMovie?: string): Promise<Genre[]>;
+	getMoviesByGenre(page: number, pageSize: number): Promise<Genre[]>;
+	getMoviesOfGenre(genreId: number ,page: number, pageSize: number): Promise<Genre[]>;
 }

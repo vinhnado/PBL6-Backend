@@ -94,7 +94,7 @@ export class UserService {
 			);
 
 			if (movieFavorite != null && movieFavorite.deleteAt != null) {
-				console.log('vao1');
+				
 				return await this.movieFavoriteRepository.restore(movieFavorite);
 			}
 

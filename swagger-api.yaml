@@ -406,6 +406,134 @@ paths:
       security:
         - api_key: []
 
+  /episode/delete/{episodeId}:
+    delete:
+      tags:
+        - episode
+      summary: Delete episode
+      description: Delete episode by id
+      parameters:
+        - name: episodeId
+          in: path
+          description: commentId to delete
+          required: true
+          explode: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security:
+        - bearerAuth: []
+
+  /episode/create:
+    post:
+      tags:
+        - episode
+      summary: Add episode for movie
+      description: Add episode for movie
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                movieId:
+                  type: integer
+                  format: int64
+                  default: 1
+                title:
+                  type: string
+                  default: 'Tap 1'
+                releaseDate:
+                  type: string
+                  format: date
+                duration:
+                  type: integer
+                episodeNo:
+                  type: integer
+                description:
+                  type: string
+                  default: null
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security:
+        - bearerAuth: []
+
+  /episode/update/{episodeId}:
+    put:
+      tags:
+        - episode
+      summary: Update episode
+      description: Update episode
+      parameters:
+        - name: episodeId
+          in: path
+          description: episodeId to update
+          required: true
+          explode: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                movieId:
+                  type: integer
+                  format: int64
+                  default: 1
+                title:
+                  type: string
+                  default: 'Tap 1'
+                releaseDate:
+                  type: string
+                  format: date
+                duration:
+                  type: integer
+                episodeNo:
+                  type: integer
+                description:
+                  type: string
+                  default: null
+                numView:
+                  type: integer
+                posterURL:
+                  type: string
+                movieURL:
+                  type: string
+
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security:
+        - bearerAuth: []
+
   /genres:
     get:
       tags:
@@ -547,9 +675,42 @@ paths:
                 additionalProperties:
                   type: integer
                   format: int32
-      security:
-        - bearerAuth: []
-  /home:
+      security: 
+       - bearerAuth: []
+  /home/genres:
+    get:
+      tags:
+        - home
+      summary: Get movies by genre
+      description: Get list genres and movies of genre
+      operationId: findMoviesByGenre
+      parameters:
+        - name: page
+          in: query
+          description: Use to pagination, default page = 1
+          required: false
+          explode: true
+          schema:
+            type: number
+        - name: pageSize
+          in: query
+          description: Use to pagination, default pageSize = 6
+          required: false
+          explode: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+        '400':
+          description: Error while get movies by genres
+  /home/genres/{genreId}:
     get:
       tags:
         - home
@@ -558,9 +719,9 @@ paths:
       operationId: findMoviesByGenre
       parameters:
         - name: genreId
-          in: query
+          in: path
           description: Enter value to search by title and discription of movies
-          required: false
+          required: true
           explode: true
           schema:
             type: number
