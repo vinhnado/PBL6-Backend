@@ -35,7 +35,6 @@ export class PaypalService {
 	createOrder = async (price: number) => {
 		try {
 			const access_token = await this.get_access_token();
-
 			let order_data_json = {
 				intent: 'CAPTURE',
 				purchase_units: [
@@ -67,7 +66,6 @@ export class PaypalService {
 				status: 'Not checkout',
 				userId: 1,
 			};
-
 			await this.paymentService.addOrEditPayment(partialObject);
 			return json;
 		} catch (error: any) {

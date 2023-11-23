@@ -5,6 +5,7 @@ import { IEpisodeRepository } from './Interfaces/IEpisodeRepository';
 import { Comment } from '../models/Comment';
 import { SubComment } from '../models/SubComment';
 import { User } from '../models/User';
+import { Movie } from '../models/Movie';
 
 @Service()
 export class EpisodeRepository extends BaseRepository<Episode> implements IEpisodeRepository{
@@ -15,7 +16,7 @@ export class EpisodeRepository extends BaseRepository<Episode> implements IEpiso
 
     async getEpisode(id: number): Promise<Episode | null> {
         try{
-            const episode = await Episode.findByPk(id,{
+            const episode = await this.model.findByPk(id,{
                 attributes: { exclude: ['deletedAt', 'createdAt', 'updatedAt'] },
                 // include: [
                 //     {
@@ -51,16 +52,42 @@ export class EpisodeRepository extends BaseRepository<Episode> implements IEpiso
         throw new Error('Method not implemented.');
     }
 
-    async deleteEpisode(id: Number): Promise<void> {
-        throw new Error('Method not implemented.');
+    async createEpisode(episode: any): Promise<Episode> {
+        try {
+            const newEpisode = await this.model.create(episode);
+            await this.updateNumEpisodeInMovie(newEpisode.movieId,1);
+            return newEpisode;
+        } catch (error) {
+            throw(error);
+            
+        }
     }
 
-    async createEpisode(episode: Episode): Promise<boolean> {
-        throw new Error('Method not implemented.');
+    async updateNumEpisodeInMovie(movieId: number, n: number): Promise<boolean>
+    {
+        try {
+            const movie = await Movie.findByPk(movieId);
+            if(movie){
+                movie.episodeNum = movie.episodeNum + n;
+                movie.save();
+                return true;
+            }
+            return false;
+        } catch (error) {
+            throw(error);
+        }
     }
 
-    async updateEpisode(episode: Episode): Promise<boolean> {
-        throw new Error('Method not implemented.');
+    async updateEpisode(episodeId: number ,updatedData: Partial<Episode>): Promise<[number, Episode[]]> {
+        try {
+            const [rowsAffected, updatedMovies] = await this.model.update(updatedData, {
+				where: { episodeId },
+				returning: true, // Return the updated records
+			  });
+			return [rowsAffected, updatedMovies];
+        } catch (error) {
+            throw(error);
+        }
     }
 
     async getAllEpisodeOfMovie(movie_id: number): Promise<Episode[]> {

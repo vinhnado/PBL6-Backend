@@ -7,18 +7,22 @@ import { S3Service } from './S3Service';
 import { Comment } from '../models/Comment';
 import { CommentRepository } from '../repository/CommentRepository';
 import { ICommentRepository } from '../repository/Interfaces/ICommentRepository';
+import { Request } from 'express';
+import { ParamsDictionary } from 'express-serve-static-core';
+import { ParsedQs } from 'qs';
 
 @Service()
 export class EpisodeService implements IEpisodeService {
 
 	@Inject(() => EpisodeRepository)
-	private movieRepository!: IEpisodeRepository;
+	private episodeRepository!: IEpisodeRepository;
 
 	@Inject(() => S3Service)
 	private s3Service!: S3Service;
 
 	@Inject(() => CommentRepository)
 	private commentRepository!: ICommentRepository;
+	
 
 	/**
 	 * Get details a episode of movie by episode_id
@@ -28,7 +32,7 @@ export class EpisodeService implements IEpisodeService {
 	 */
 	async getEpisode(id: number): Promise<Episode | null> {
 		try {
-			let episode = await this.movieRepository.getEpisode(id);
+			let episode = await this.episodeRepository.getEpisode(id);
 			if (episode) {
 				if (episode.posterURL) {
 					episode.posterURL = await this.s3Service.getObjectUrl(
@@ -106,5 +110,65 @@ export class EpisodeService implements IEpisodeService {
 		}
 	}
 
+	async createEpisode(req: Request): Promise<Episode> {
+		try {
+			const {
+				movieId,
+				title,
+				description,
+				releaseDate,
+				duration,
+				episodeNo,
+			} = req.body;
+			const formattedPosterURL = `movies/${movieId}/episodes/${episodeNo}/poster.jpg`;
+			const formattedMovieURL = `movies/${movieId}/episodes/${episodeNo}/movie.mp4`;
+
+			const episodeData = {
+				movieId : movieId,
+				title: title,
+				description: description,
+				releaseDate: releaseDate,
+				duration: duration,
+				episodeNo: episodeNo,
+				numView:0,
+				posterURL: formattedPosterURL,
+				movieURL: formattedMovieURL,
+			}
+			const newEpisode = await this.episodeRepository.createEpisode(episodeData);
+			
+			return newEpisode;
+		} catch (error) {
+			throw(error);
+		}
+	}
+
+	async  updateEpisode(req: Request): Promise<[number, Episode[]]>
+	{
+		try {
+			const episodeId = Number(req.params.episodeId);
+			const updatedData = req.body;
+			return await this.episodeRepository.updateEpisode(episodeId, updatedData);
+		} catch (error) {
+			console.log(error);
+			throw(error);			
+		}
+	}
+
+	async deleteEpisode(req: Request): Promise<boolean>
+	{
+		try {
+			const episodeId = req.params.episodeId;
+			const episode = await this.episodeRepository.findById(Number(episodeId));
+			if(episode){
+				await this.episodeRepository.delete(episode);
+				await this.episodeRepository.updateNumEpisodeInMovie(episode.movieId,-1);
+				return true;
+			}
+			return false;
+		} catch (error) {
+			console.log(error);
+			throw(error);
+		}
+	}
 
 }

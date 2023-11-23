@@ -31,6 +31,7 @@ export class Episode extends Model {
 	private static NUM_VIEW = 'num_view' as string;
 	private static DURATION = 'duration' as string;
 	private static EPISODE_NO = 'episode_no' as string;
+	private static EPISODE_DESCRIPTION = 'description' as string;
 
 	@Column({
 		type: DataType.INTEGER(),
@@ -52,6 +53,12 @@ export class Episode extends Model {
 		field: Episode.EPISODE_TITLE,
 	})
 	title!: string;
+
+	@Column({
+		type: DataType.STRING(255),
+		field: Episode.EPISODE_DESCRIPTION,
+	})
+	description!: string;
 
 	@Column({
 		type: DataType.DATE,
