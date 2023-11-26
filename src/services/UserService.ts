@@ -94,7 +94,6 @@ export class UserService {
 			);
 
 			if (movieFavorite != null && movieFavorite.deleteAt != null) {
-				
 				return await this.movieFavoriteRepository.restore(movieFavorite);
 			}
 

@@ -1,3 +1,4 @@
+import { AccountRepository } from './../repository/AccountRepository';
 import { User } from '../models/User';
 import { Account } from '../models/Account';
 import Authentication from '../utils/Authentication';
@@ -6,11 +7,22 @@ import { IAuthenticationService } from './Interfaces/IAuthenticationService';
 import Container, { Inject, Service } from 'typedi';
 import { IUserRepository } from '../repository/Interfaces/IUserRepository';
 import { Subscription } from '../models/Subscription';
+import Mail from '../utils/Mail';
+import { Token } from '../utils/Token';
 
 @Service()
 export class AuthenticationService implements IAuthenticationService {
 	@Inject(() => UserRepository)
 	private userRepository!: IUserRepository;
+
+	@Inject(() => AccountRepository)
+	private accountRepository!: AccountRepository;
+
+	@Inject(() => Mail)
+	private mail!: Mail;
+
+	@Inject(() => Token)
+	private token!: Token;
 
 	async login(username: string, password: string): Promise<string> {
 		const searchConditions = {
@@ -68,6 +80,76 @@ export class AuthenticationService implements IAuthenticationService {
 			);
 		} catch (error: any) {
 			throw new Error('Error register!' + error.message);
+		}
+	}
+
+	async forgotPassword(
+		email: string,
+		token: string | null = null,
+		password: string | null = null
+	) {
+		try {
+			const searchConditions = {
+				email,
+			};
+			if (token == null) {
+				const user = await this.userRepository.findOneUser(searchConditions);
+				await this.mail.forgotPassword(
+					user.account.username,
+					email,
+					await this.token.generateToken(email)
+				);
+				return 'Hãy kiểm tra email';
+			} else {
+				const data = await this.token.verifyToken(token);
+				console.log(data);
+				if (data != null && data?.email == email && password) {
+					const account = (
+						await this.userRepository.findOneUser(searchConditions)
+					).account;
+					const hashedPassword: string = await Authentication.passwordHash(
+						password
+					);
+					account.update({ password: hashedPassword });
+					await this.accountRepository.save(account);
+					return 'Thành công';
+				}
+			}
+		} catch (error: any) {
+			throw new Error('Error!' + error.message);
+		}
+	}
+
+	async activeUser(email: string, token: string | null = null) {
+		try {
+			// const searchConditions = {
+			// 	email,
+			// };
+			// if (token == null) {
+			// 	const user = await this.userRepository.findOneUser(searchConditions);
+			// 	await this.mail.forgotPassword(
+			// 		user.account.username,
+			// 		email,
+			// 		await this.token.generateToken(email)
+			// 	);
+			// 	return 'Hãy kiểm tra email';
+			// } else {
+			// 	const data = await this.token.verifyToken(token);
+			// 	console.log(data);
+			// 	if (data != null && data?.email == email && password) {
+			// 		const account = (
+			// 			await this.userRepository.findOneUser(searchConditions)
+			// 		).account;
+			// 		const hashedPassword: string = await Authentication.passwordHash(
+			// 			password
+			// 		);
+			// 		account.update({ password: hashedPassword });
+			// 		await this.accountRepository.save(account);
+			// 		return 'Thành công';
+			// 	}
+			// }
+		} catch (error: any) {
+			throw new Error('Error!' + error.message);
 		}
 	}
 }

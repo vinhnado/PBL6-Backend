@@ -48,7 +48,7 @@ export class UserRepository
 			include: [
 				{
 					model: Account,
-					attributes: ['username', 'password'],
+					// attributes: ['account_id', 'username', 'password'],
 					where: {
 						username: {
 							[Op.like]: `%${user_name}%`,
