@@ -33,6 +33,7 @@ export class User extends Model {
 	private static USER_DATE_OF_BIRTH = 'date_of_birth' as string;
 	private static USER_GENDER = 'gender' as string;
 	private static USER_EMAIL = 'email' as string;
+	private static USER_ACTIVE = 'active' as string;
 	private static USER_AVATAR_URL = 'avatar_url' as string;
 	private static USER_ACCOUNT_ID = 'account_id' as string;
 	private static USER_SUBSCIRPTION_ID = 'subscription_id' as string;
@@ -63,6 +64,13 @@ export class User extends Model {
 		unique: true,
 	})
 	email!: string;
+
+	@Column({
+		type: DataType.BOOLEAN,
+		field: User.USER_ACTIVE,
+		defaultValue: false,
+	})
+	active!: boolean;
 
 	@Column({
 		type: DataType.STRING(255),

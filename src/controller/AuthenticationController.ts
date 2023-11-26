@@ -59,4 +59,31 @@ export class AuthenticationController {
 			});
 		}
 	};
+
+	forgotPassword = async (req: Request, res: Response) => {
+		try {
+			const { email, token, password } = req.body;
+			let data;
+			if (token == null) {
+				data = await this.authenticationService.forgotPassword(email);
+			} else {
+				data = await this.authenticationService.forgotPassword(
+					email,
+					token,
+					password
+				);
+			}
+
+			return res.status(200).json({
+				status: 'Ok!',
+				message: data,
+			});
+		} catch (error) {
+			console.log(error);
+			return res.status(500).json({
+				status: 'Internal server Error!',
+				message: 'Internal server Error!',
+			});
+		}
+	};
 }
