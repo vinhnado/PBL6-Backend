@@ -9,6 +9,7 @@ class AuthenticationRoutes extends BaseRoutes {
 		this.router.post('/login', this.controller.login);
 		this.router.post('/register', this.controller.register);
 		this.router.post('/forgot-password', this.controller.forgotPassword);
+		this.router.post('/active-user', this.controller.activeUser);
 	}
 }
 

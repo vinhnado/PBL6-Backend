@@ -96,7 +96,7 @@ export class AuthenticationService implements IAuthenticationService {
 				const user = await this.userRepository.findOneUser(searchConditions);
 				await this.mail.forgotPassword(
 					user.account.username,
-					email,
+					user.email,
 					await this.token.generateToken(email)
 				);
 				return 'Hãy kiểm tra email';
@@ -113,6 +113,8 @@ export class AuthenticationService implements IAuthenticationService {
 					account.update({ password: hashedPassword });
 					await this.accountRepository.save(account);
 					return 'Thành công';
+				} else {
+					return 'Token hết hiệu lực hoặc không tồn tại';
 				}
 			}
 		} catch (error: any) {
@@ -122,32 +124,29 @@ export class AuthenticationService implements IAuthenticationService {
 
 	async activeUser(email: string, token: string | null = null) {
 		try {
-			// const searchConditions = {
-			// 	email,
-			// };
-			// if (token == null) {
-			// 	const user = await this.userRepository.findOneUser(searchConditions);
-			// 	await this.mail.forgotPassword(
-			// 		user.account.username,
-			// 		email,
-			// 		await this.token.generateToken(email)
-			// 	);
-			// 	return 'Hãy kiểm tra email';
-			// } else {
-			// 	const data = await this.token.verifyToken(token);
-			// 	console.log(data);
-			// 	if (data != null && data?.email == email && password) {
-			// 		const account = (
-			// 			await this.userRepository.findOneUser(searchConditions)
-			// 		).account;
-			// 		const hashedPassword: string = await Authentication.passwordHash(
-			// 			password
-			// 		);
-			// 		account.update({ password: hashedPassword });
-			// 		await this.accountRepository.save(account);
-			// 		return 'Thành công';
-			// 	}
-			// }
+			const searchConditions = {
+				email,
+			};
+			if (token == null) {
+				const user = await this.userRepository.findOneUser(searchConditions);
+				await this.mail.activeUser(
+					user.account.username,
+					user.email,
+					await this.token.generateToken(email)
+				);
+				return 'Hãy kiểm tra email';
+			} else {
+				const data = await this.token.verifyToken(token);
+				console.log(data);
+				if (data != null && data?.email == email) {
+					const user = await this.userRepository.findOneUser(searchConditions);
+					user.update({ active: true });
+					await this.userRepository.save(user);
+					return 'Thành công';
+				} else {
+					return 'Token hết hiệu lực hoặc không tồn tại';
+				}
+			}
 		} catch (error: any) {
 			throw new Error('Error!' + error.message);
 		}
