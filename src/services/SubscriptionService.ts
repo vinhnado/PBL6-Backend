@@ -18,7 +18,7 @@ export class SubscriptionService {
 
 	updateSubscription = async (
 		userId: number,
-		closedAt: Date | null,
+		closedAt: Date | null = null,
 		subscriptionTypeId: number | null = null
 	) => {
 		try {
@@ -27,7 +27,18 @@ export class SubscriptionService {
 			});
 			if (user) {
 				let subscription = user.subscription;
-				if (subscriptionTypeId !== null) {
+				if (subscriptionTypeId !== null && closedAt !== null) {
+					subscription.subscriptionTypeId = subscriptionTypeId;
+					const subcriptionType =
+						await this.subscriptionTypeRepository.findById(subscriptionTypeId);
+					const currentDate = new Date();
+					const nextDate = new Date(currentDate);
+					nextDate.setMonth(
+						currentDate.getMonth() + subcriptionType.duration.getMonth()
+					);
+
+					subscription.closedAt = nextDate;
+				} else if (subscriptionTypeId !== null) {
 					subscription.subscriptionTypeId = subscriptionTypeId;
 				}
 				if (closedAt !== null) {
@@ -70,7 +81,6 @@ export class SubscriptionService {
 
 	getAllSubscriptionType = async () => {
 		try {
-			console.log(await this.subscriptionTypeRepository.findByCondition({}));
 			return await this.subscriptionTypeRepository.findMany();
 		} catch (error: any) {
 			throw new Error(error.message);
