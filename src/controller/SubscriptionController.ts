@@ -14,11 +14,24 @@ export class SubscriptionController {
 		try {
 			const { subscriptionTypeId, userId, closedAt } = req.body;
 
-			await this.subscriptionService.updateSubscription(
-				Number(userId),
-				new Date(closedAt),
-				Number(subscriptionTypeId)
-			);
+			if (subscriptionTypeId && closedAt) {
+				await this.subscriptionService.updateSubscription(
+					Number(userId),
+					new Date(closedAt),
+					Number(subscriptionTypeId)
+				);
+			} else if (closedAt) {
+				await this.subscriptionService.updateSubscription(
+					Number(userId),
+					new Date(closedAt)
+				);
+			} else if (subscriptionTypeId) {
+				await this.subscriptionService.updateSubscription(
+					Number(userId),
+					null,
+					Number(subscriptionTypeId)
+				);
+			}
 			return res.status(200).json({
 				status: 'Ok!',
 				message: 'Successfully',

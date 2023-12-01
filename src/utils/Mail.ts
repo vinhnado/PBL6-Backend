@@ -59,6 +59,34 @@ export class Mail {
 			console.error('Error sending email:', error);
 		}
 	};
+
+	activeUser = async (
+		username: string,
+		to: string,
+		token: string
+	): Promise<void> => {
+		try {
+			console.log(token);
+			const replacements = {
+				username: username,
+				replaceLink: 'https://example.com/reset-password/' + token,
+			};
+
+			let htmlContent = fs.readFileSync(
+				'src/utils/ForgotPasswordMail.html',
+				'utf8'
+			);
+
+			Object.entries(replacements).forEach(([key, value]) => {
+				const regex = new RegExp(`{{${key}}}`, 'g');
+				htmlContent = htmlContent.replace(regex, value);
+			});
+
+			return await this.sendEmail(to, 'Xác nhận người dùng', htmlContent);
+		} catch (error) {
+			console.error('Error sending email:', error);
+		}
+	};
 }
 
 export default Mail;

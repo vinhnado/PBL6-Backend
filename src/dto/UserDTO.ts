@@ -7,6 +7,7 @@ export class UserDTO {
 	avatarURL: string;
 	createdAt: string;
 	username: string;
+	active: boolean;
 	subscription: {
 		closeAt: Date;
 		updatedAt: Date;
@@ -19,6 +20,7 @@ export class UserDTO {
 		this.email = user.email;
 		this.avatarURL = user.avatarURL;
 		this.createdAt = user.createdAt;
+		this.active = user.active;
 		this.username = user.account.username;
 		this.subscription = {
 			closeAt: user.subscription.closedAt,
