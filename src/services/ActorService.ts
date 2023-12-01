@@ -28,7 +28,7 @@ export class ActorService {
 					'default/actor/default_poster.jpg'
 				);
 			}
-			console.log(actor);
+
 			for (const movie of actor!.movies) {
 				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
 				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
