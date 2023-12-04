@@ -4,6 +4,7 @@ import { Inject, Service } from 'typedi';
 import { SubscriptionType } from '../models/SubscriptionType';
 import { SubscriptionRepository } from '../repository/SubscriptionRepository';
 import { SubscriptionTypeRepository } from '../repository/SubscriptionTypeRepository';
+import { addMonths } from 'date-fns';
 
 @Service()
 export class SubscriptionService {
@@ -18,7 +19,7 @@ export class SubscriptionService {
 
 	updateSubscription = async (
 		userId: number,
-		closedAt: Date | null,
+		closedAt: Date | null = null,
 		subscriptionTypeId: number | null = null
 	) => {
 		try {
@@ -27,8 +28,21 @@ export class SubscriptionService {
 			});
 			if (user) {
 				let subscription = user.subscription;
-				if (subscriptionTypeId !== null) {
+				if (subscriptionTypeId !== null && closedAt !== null) {
 					subscription.subscriptionTypeId = subscriptionTypeId;
+
+					subscription.closedAt = closedAt;
+				} else if (subscriptionTypeId !== null) {
+					subscription.subscriptionTypeId = subscriptionTypeId;
+					const subcriptionType =
+						await this.subscriptionTypeRepository.findById(subscriptionTypeId);
+					const currentDate = new Date();
+
+					const newDate: Date = addMonths(
+						currentDate,
+						subcriptionType.duration
+					);
+					subscription.closedAt = newDate;
 				}
 				if (closedAt !== null) {
 					subscription.closedAt = closedAt;
@@ -70,7 +84,6 @@ export class SubscriptionService {
 
 	getAllSubscriptionType = async () => {
 		try {
-			console.log(await this.subscriptionTypeRepository.findByCondition({}));
 			return await this.subscriptionTypeRepository.findMany();
 		} catch (error: any) {
 			throw new Error(error.message);

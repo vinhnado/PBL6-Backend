@@ -28,6 +28,8 @@ tags:
     description: API for Home Page
   - name: user
     description: Operations about user
+  - name: subscription
+    description: API for subscription
     externalDocs:
       description: Find out more about our store
       url: 'http://swagger.io'
@@ -675,8 +677,8 @@ paths:
                 additionalProperties:
                   type: integer
                   format: int32
-      security: 
-       - bearerAuth: []
+      security:
+        - bearerAuth: []
   /home/genres:
     get:
       tags:
@@ -1138,6 +1140,117 @@ paths:
       responses:
         '200':
           description: Successful response
+
+  /subscription/update-subscription:
+    put:
+      tags:
+        - subscription
+      summary: Update Subscription
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subscriptionTypeId:
+                  type: integer
+                userId:
+                  type: integer
+                closedAt:
+                  type: string
+                  format: date-time
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                status: Ok!
+                message: Successfully
+
+  /subscription/create-subscription-type:
+    post:
+      tags:
+        - subscription
+      summary: Create Subscription Type
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                status: Ok!
+                message: Successfully
+
+  /subscription/update-subscription-type:
+    put:
+      tags:
+        - subscription
+      summary: Update Subscription Type
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                subscriptionTypeId:
+                  type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                status: Ok!
+                message: Successfully
+
+  /subscription/get-all-subscription-type:
+    get:
+      tags:
+        - subscription
+      summary: Get All Subscription Types
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                status: Ok!
+                message: Successfully
+                data: []
+
+  /subscription/delete-subscription-type:
+    delete:
+      tags:
+        - subscription
+      summary: Delete Subscription Type
+      parameters:
+        - name: subscriptionTypeId
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                status: Ok!
+                message: Successfully
 
 externalDocs:
   description: Find out more about Swagger

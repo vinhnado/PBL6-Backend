@@ -86,4 +86,27 @@ export class AuthenticationController {
 			});
 		}
 	};
+
+	activeUser = async (req: Request, res: Response) => {
+		try {
+			const { email, token } = req.body;
+			let data;
+			if (token == null) {
+				data = await this.authenticationService.activeUser(email);
+			} else {
+				data = await this.authenticationService.activeUser(email, token);
+			}
+
+			return res.status(200).json({
+				status: 'Ok!',
+				message: data,
+			});
+		} catch (error) {
+			console.log(error);
+			return res.status(500).json({
+				status: 'Internal server Error!',
+				message: 'Internal server Error!',
+			});
+		}
+	};
 }

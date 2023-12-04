@@ -29,7 +29,7 @@ export class SubscriptionType extends Model {
 		autoIncrement: true,
 		field: SubscriptionType.SUBSCRIPTION_TYPE_ID,
 	})
-	subscriptionId!: number;
+	subscriptionTypeId!: number;
 
 	@ForeignKey(() => SubscriptionType)
 	@Column({
