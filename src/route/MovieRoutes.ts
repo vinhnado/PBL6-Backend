@@ -5,7 +5,8 @@ import {
 	validateGetMovieById,
 	validateDeleteMovieById,
 	validateCreateMovie,
-	validateUpdateMovie
+	validateUpdateMovie,
+	validategetPresignUrlToUpload
 } from '../validators/MovieValidator';
 import { validate } from '../validators/Validator';
 import { auth } from '../middleware/AuthMiddleware';
@@ -26,7 +27,7 @@ class MovieRoutes extends BaseRoutes {
 		this.router.get('/recommend/get',auth, this.controller.getMoviesRecommender);
 		this.router.get('/get/nations', this.controller.getAllNations);
 		this.router.get('/get/years', this.controller.getAllReleaseYears);
-		this.router.get('/get/presign-url', this.controller.getPresignUrlToUpload);
+		this.router.get('/get/presign-url', validategetPresignUrlToUpload, validate, this.controller.getPresignUrlToUpload);
 	}
 }
 

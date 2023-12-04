@@ -43,3 +43,7 @@ export const validateUpdateMovie = [
     body('episode').optional().isInt().withMessage('Episode must be an integer'),
     body('numFavorite').optional().isInt({min : 0}).withMessage('numFavorite must be an integer'),
 ];
+
+export const validategetPresignUrlToUpload = [
+    query('movieId').notEmpty().withMessage('movieId is required').isInt({min:1}).withMessage('movieId must be an integer and min = 1'),
+];

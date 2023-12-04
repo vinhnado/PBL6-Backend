@@ -363,9 +363,9 @@ export class MovieService implements IMovieService {
 	async getPresignUrlToUploadMovie(movieId: number):  Promise<{ key: string, value: string }[]>
 	{
 		try {
-			const poster = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/poster.jpg');
-			const background = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/background.jpg');
-			const trailer = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/trailer.mp4');
+			const poster = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/poster.jpg','image/jpeg');
+			const background = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/background.jpg','image/jpeg');
+			const trailer = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/trailer.mp4','video/mp4');
 
 			const presignedUrls: { key: string, value: string }[] = [
 				{ key: 'poster', value: poster },
