@@ -13,6 +13,7 @@ import PaymentRouter from './route/PaymentRoutes';
 import GenreRouter from './route/GenreRoutes';
 import CommentRouter from './route/CommentRoutes';
 import RatingRouter from './route/RatingRoutes';
+import StatisticalRoutes from './route/StatisticalRoutes';
 
 class App {
 	public app: Application;
@@ -51,6 +52,7 @@ class App {
 		this.app.use('/api/genres', GenreRouter);
 		this.app.use('/api/comments', CommentRouter);
 		this.app.use('/api/ratings', RatingRouter);
+		this.app.use('/api/statisticals', StatisticalRoutes);
 	}
 
 	private plugins(): void {
