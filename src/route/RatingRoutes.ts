@@ -1,6 +1,5 @@
 import BaseRoutes from './Base/BaseRouter';
 import { auth } from '../middleware/AuthMiddleware';
-import { validateAddComment, validateDeleteComment, validateUpdateComment } from '../validators/CommentValidator';
 import { validate } from '../validators/Validator';
 import { RatingController } from '../controller/RatingController';
 class RatingRoutes extends BaseRoutes {
