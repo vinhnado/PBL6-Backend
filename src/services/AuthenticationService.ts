@@ -43,8 +43,9 @@ export class AuthenticationService implements IAuthenticationService {
 		if (compare) {
 			return Authentication.generateToken(
 				user.userId,
-				user.email,
-				user.account.username
+				user.role,
+				user.account.username,
+				user.subscription.subscriptionInfo.subscriptionTypeId
 			);
 		}
 		return '';

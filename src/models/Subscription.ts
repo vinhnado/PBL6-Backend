@@ -9,6 +9,7 @@ import {
 	DeletedAt,
 } from 'sequelize-typescript';
 import { SubscriptionType } from './SubscriptionType';
+import { SubscriptionInfo } from './SubscriptionInfo';
 
 @Table({
 	tableName: Subscription.SUBSCRIPTION_TABLE_NAME,
@@ -18,8 +19,8 @@ import { SubscriptionType } from './SubscriptionType';
 export class Subscription extends Model {
 	private static SUBSCRIPTION_TABLE_NAME = 'subscriptions' as string;
 	private static SUBSCRIPTION_ID = 'subscription_id' as string;
-	private static SUBSCRIPTION_TYPE_ID = 'subscription_type_id' as string;
-	private static CLOSED_AT = 'closedAt' as string;
+	private static SUBSCRIPTION_INFO_ID = 'subscription_info_id' as string;
+	private static CLOSED_AT = 'closeAt' as string;
 
 	@Column({
 		type: DataType.INTEGER,
@@ -33,18 +34,18 @@ export class Subscription extends Model {
 		type: DataType.DATE,
 		field: Subscription.CLOSED_AT,
 	})
-	closedAt!: Date;
+	closeAt!: Date;
 
-	@ForeignKey(() => SubscriptionType)
+	@ForeignKey(() => SubscriptionInfo)
 	@Column({
 		type: DataType.INTEGER,
-		field: Subscription.SUBSCRIPTION_TYPE_ID,
+		field: Subscription.SUBSCRIPTION_INFO_ID,
 		defaultValue: 1,
 	})
-	subscriptionTypeId!: number;
+	subscriptionInfoId!: number;
 
-	@BelongsTo(() => SubscriptionType)
-	subscriptionType!: SubscriptionType;
+	@BelongsTo(() => SubscriptionInfo)
+	subscriptionInfo!: SubscriptionInfo;
 
 	@DeletedAt
 	deletedAt!: Date;

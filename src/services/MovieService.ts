@@ -27,12 +27,12 @@ export class MovieService implements IMovieService {
 		}); // Initialize the Redis client
 	}
 
-	public clearCache(){
+	public clearCache() {
 		this.redis.flushall((err, reply) => {
 			if (err) {
-			  console.error(err);
+				console.error(err);
 			} else {
-			  console.log('Cache cleared:', reply === 'OK');
+				console.log('Cache cleared:', reply === 'OK');
 			}
 			this.redis.quit();
 		});
@@ -136,7 +136,7 @@ export class MovieService implements IMovieService {
 			}
 
 			let movie = await this.movieRepository.getMovieById(id);
-			
+
 			if (movie) {
 				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
 				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
@@ -240,7 +240,8 @@ export class MovieService implements IMovieService {
 		try {
 			const { id } = req.params;
 			const updatedData = req.body;
-			const [rowsAffected, updatedMovies] = await this.movieRepository.updateMovie(parseInt(id), updatedData);
+			const [rowsAffected, updatedMovies] =
+				await this.movieRepository.updateMovie(parseInt(id), updatedData);
 
 			if (rowsAffected > 0) {
 				return updatedMovies[0]; // Return the first updated movie
@@ -340,10 +341,9 @@ export class MovieService implements IMovieService {
 		}
 	}
 
-	async getAllNations():Promise<string[]>
-	{
+	async getAllNations(): Promise<string[]> {
 		try {
-			const nations = await this.movieRepository.getAllNations() as any;
+			const nations = (await this.movieRepository.getAllNations()) as any;
 
 			return nations;
 		} catch (error) {
@@ -351,8 +351,7 @@ export class MovieService implements IMovieService {
 		}
 	}
 
-	async getAllReleaseYears(): Promise<number[]>
-	{
+	async getAllReleaseYears(): Promise<number[]> {
 		try {
 			return await this.movieRepository.getAllReleaseDates();
 		} catch (error) {
@@ -360,20 +359,27 @@ export class MovieService implements IMovieService {
 		}
 	}
 
-	async getPresignUrlToUploadMovie(movieId: number):  Promise<{ key: string, value: string }[]>
-	{
+	async getPresignUrlToUploadMovie(
+		movieId: number
+	): Promise<{ key: string; value: string }[]> {
 		try {
-			const poster = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/poster.jpg');
-			const background = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/background.jpg');
-			const trailer = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/trailer.mp4');
+			const poster = await this.s3Service.generatePresignedUrlUpdate(
+				'movies/' + movieId + '/poster.jpg'
+			);
+			const background = await this.s3Service.generatePresignedUrlUpdate(
+				'movies/' + movieId + '/background.jpg'
+			);
+			const trailer = await this.s3Service.generatePresignedUrlUpdate(
+				'movies/' + movieId + '/trailer.mp4'
+			);
 
-			const presignedUrls: { key: string, value: string }[] = [
+			const presignedUrls: { key: string; value: string }[] = [
 				{ key: 'poster', value: poster },
 				{ key: 'background', value: background },
 				{ key: 'trailer', value: trailer },
-			  ];
-		  
-			  return presignedUrls;
+			];
+
+			return presignedUrls;
 		} catch (error) {
 			throw new Error('Could not get presignUrl to upload movies.');
 		}

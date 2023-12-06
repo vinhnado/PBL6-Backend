@@ -20,6 +20,8 @@ import { Payment } from '../models/Payment';
 import { Comment } from '../models/Comment';
 import { SubComment } from '../models/SubComment';
 import { Rating } from '../models/Rating';
+import { Duration } from '../models/Duration';
+import { SubscriptionInfo } from '../models/SubscriptionInfo';
 
 dotenv.config();
 
@@ -31,6 +33,7 @@ class Database {
 	private POSTGRES_PORT = process.env.POSTGRES_PORT as unknown as number;
 	private POSTGRES_USER = process.env.POSTGRES_USER as string;
 	private POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD as string;
+	private POSTGRES_SSL = process.env.POSTGRES_SSL as string;
 
 	private static instance: Database | null = null;
 
@@ -46,6 +49,12 @@ class Database {
 	}
 
 	private async connectToPostgreSQL() {
+		let ssl: boolean;
+		if (this.POSTGRES_SSL === 'true') {
+			ssl = true;
+		} else {
+			ssl = false;
+		}
 		this.sequelize = new Sequelize({
 			database: this.POSTGRES_DB,
 			username: this.POSTGRES_USER,
@@ -54,6 +63,9 @@ class Database {
 			port: this.POSTGRES_PORT,
 			dialect: 'postgres',
 			logging: false,
+			dialectOptions: {
+				ssl: ssl,
+			},
 		});
 		this.sequelize.addModels([
 			Movie,
@@ -75,7 +87,9 @@ class Database {
 			Payment,
 			Comment,
 			SubComment,
-			Rating
+			Rating,
+			Duration,
+			SubscriptionInfo,
 		]);
 
 		await this.sequelize

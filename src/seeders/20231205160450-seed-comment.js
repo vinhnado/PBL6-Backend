@@ -2,37 +2,37 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    // Lấy danh sách userId từ 1 đến 10
-    const userIds = Array.from({ length: 10 }, (_, index) => index + 1);
-    // Lấy danh sách episodeId từ 1 đến 450
-    const episodeIds = Array.from({ length: 450 }, (_, index) => index + 1);
+	async up(queryInterface, Sequelize) {
+		// Lấy danh sách userId từ 1 đến 10
+		const userIds = Array.from({ length: 10 }, (_, index) => index + 1);
+		// Lấy danh sách episodeId từ 1 đến 450
+		const episodeIds = Array.from({ length: 450 }, (_, index) => index + 1);
 
-    const comments = [];
-    for (const userId of userIds) {
-      for (const episodeId of episodeIds) {
-        comments.push({
-          episode_id : episodeId,
-          user_id : userId,
-          content: getRandomContent(),
-          num_like: Math.floor(Math.random() * 101),
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        });
-      }
-    }
-    await queryInterface.bulkInsert('comments', comments, {});
-  },
+		const comments = [];
+		for (const userId of userIds) {
+			for (const episodeId of episodeIds) {
+				comments.push({
+					episode_id: episodeId,
+					user_id: userId,
+					content: getRandomContent(),
+					num_like: Math.floor(Math.random() * 101),
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				});
+			}
+		}
+		await queryInterface.bulkInsert('comments', comments, {});
+	},
 
-  async down(queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
-    await queryInterface.bulkDelete('comments', null, {});
-  },
+	async down(queryInterface, Sequelize) {
+		/**
+		 * Add commands to revert seed here.
+		 *
+		 * Example:
+		 * await queryInterface.bulkDelete('People', null, {});
+		 */
+		await queryInterface.bulkDelete('comments', null, {});
+	},
 };
 
 function getRandomContent() {
@@ -103,7 +103,7 @@ function getRandomContent() {
 		'Cảnh quay đẹp như mơ, không gian mở rộng.',
 		'Nó không chỉ là phim, mà là một tác phẩm nghệ thuật.',
 		'Những giây phút khó quên được lưu giữ trong tâm trí tôi.',
-	  ];
+	];
 
 	const randomIndex = Math.floor(Math.random() * contentOptions.length);
 	return contentOptions[randomIndex];

@@ -9,6 +9,7 @@ import {
 	HasMany,
 	DeletedAt,
 } from 'sequelize-typescript';
+import { SubscriptionInfo } from './SubscriptionInfo';
 
 @Table({
 	tableName: SubscriptionType.SUBSCRIPTION_TYPE_TABLE_NAME,
@@ -19,9 +20,7 @@ export class SubscriptionType extends Model {
 	private static SUBSCRIPTION_TYPE_TABLE_NAME = 'subscription_types' as string;
 	private static SUBSCRIPTION_TYPE_ID = 'subscription_type_id' as string;
 	private static SUBSCRIPTION_TYPE_NAME = 'name' as string;
-	private static SUBSCRIPTION_TYPE_DURATION = 'duration' as string;
 	private static SUBSCRIPTION_TYPE_PRICE = 'price' as string;
-	private static SUBSCRIPTION_TYPE_DISCOUNT = 'discount' as string;
 
 	@Column({
 		type: DataType.INTEGER,
@@ -31,7 +30,6 @@ export class SubscriptionType extends Model {
 	})
 	subscriptionTypeId!: number;
 
-	@ForeignKey(() => SubscriptionType)
 	@Column({
 		type: DataType.STRING(100),
 		field: SubscriptionType.SUBSCRIPTION_TYPE_NAME,
@@ -40,27 +38,12 @@ export class SubscriptionType extends Model {
 
 	@Column({
 		type: DataType.INTEGER,
-		field: SubscriptionType.SUBSCRIPTION_TYPE_DURATION,
-		allowNull: true,
-	})
-	duration!: number;
-
-	@Column({
-		type: DataType.FLOAT,
 		field: SubscriptionType.SUBSCRIPTION_TYPE_PRICE,
-		allowNull: true,
 	})
 	price!: number;
 
-	@Column({
-		type: DataType.FLOAT,
-		field: SubscriptionType.SUBSCRIPTION_TYPE_DISCOUNT,
-		allowNull: true,
-	})
-	discount!: number;
-
-	@HasMany(() => Subscription)
-	subscriptions!: Subscription[];
+	@HasMany(() => SubscriptionInfo)
+	subscriptionInfos!: SubscriptionInfo[];
 
 	@DeletedAt
 	deletedAt!: Date;
