@@ -21,7 +21,7 @@ export interface IMovieService {
 	getMoviesForVip(): Promise<Movie[]>;
 	getAllNations(): Promise<string[]>;
 	getAllReleaseYears(): Promise<number[]>;
-	getPresignUrlToUploadMovie(idMovie: number): Promise<{ key: string, value: string }[]>;
+	getPresignUrlToUploadMovie(idMovie: number, option: string): Promise<{ key: string, value: string }[]>;
 	
 	addActorForMovie(req: Request): Promise<MovieActor[]>;
 	deleteActorOfMovie(req: Request): Promise<number>;

@@ -31,3 +31,10 @@ export const validateCreateEpisode = [
     body('duration').notEmpty().isInt().withMessage('Duration is required and must be an integer'),
     body('episodeNo').notEmpty().isInt().withMessage('Episode number is required and must be an integer'),
 ]
+
+export const validateGetPresignURL = [
+    query('movieId').notEmpty().isInt({min:1}).withMessage('Movie ID is required and must be an integer'),
+    query('episodeNum').notEmpty().isInt({min:1}).withMessage('episodeNum is required and must be an integer'),
+    query('option').notEmpty().isIn(['onlyMovie', 'onlyPoster','movieAndPoster']).withMessage('option is required and in onlyMovie, onlyPoster, movieAndPoster'),
+
+];

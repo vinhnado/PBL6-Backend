@@ -186,7 +186,8 @@ export class MovieController {
 	getPresignUrlToUpload = async (req: Request, res: Response) => {
 		try {
 			const movieId = Number(req.query.movieId);
-			const url = await this.movieService.getPresignUrlToUploadMovie(movieId);
+			let option = req.query.option+'';
+			const url = await this.movieService.getPresignUrlToUploadMovie(movieId, option);
 			return res.status(200).json(url);
 		} catch (error) {
 			console.log("Could not get presignUrl to upload movies.");
