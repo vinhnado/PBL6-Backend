@@ -171,4 +171,45 @@ export class EpisodeService implements IEpisodeService {
 		}
 	}
 
+	async getPresignUrlToUploadPosterAndMovie(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<{ key: string, value: string }[]> {
+		try {
+			const movieId = req.body.movieId;
+			const episodeNo = req.body.episodeNo;
+			const poster = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episode/'+episodeNo+'/poster.jpg','image/jpeg');
+			const movie = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episode/'+episodeNo+'/movie.mp4','video/mp4');
+
+			const presignedUrls: { key: string, value: string }[] = [
+				{ key: 'poster', value: poster },
+				{ key: 'movie', value: movie },
+			  ];
+		  
+			return presignedUrls;
+		} catch (error) {
+			console.log(error);
+			throw(error);
+		}
+	}
+	
+	async getPresignUrlToUploadMovie(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<string> {
+		try {
+			const movieId = req.body.movieId;
+			const episodeNo = req.body.episodeNo;
+			const movie = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episode/'+episodeNo+'/movie.mp4','video/mp4');
+			return movie;
+		} catch (error) {
+			console.log(error);
+			throw(error);
+		}	}
+
+	async getPresignUrlToUploadPoster(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<string> {
+		try {
+			const movieId = req.body.movieId;
+			const episodeNo = req.body.episodeNo;
+			const poster = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episode/'+episodeNo+'/poster.jpg','image/jpeg');
+			return poster;
+		} catch (error) {
+			console.log(error);
+			throw(error);
+		}	}
+
 }
