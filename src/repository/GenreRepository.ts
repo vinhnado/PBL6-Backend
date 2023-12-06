@@ -9,9 +9,6 @@ import { WatchLater } from '../models/WatchLater';
 import { MovieFavorite } from '../models/MovieFavorite';
 import { IGenreRepository } from './Interfaces/IGenreRepository';
 
-const db = Database.getInstance();
-
-
 @Service()
 export class GenreRepository extends BaseRepository<Genre> implements IGenreRepository {
 	

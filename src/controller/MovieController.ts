@@ -202,4 +202,34 @@ export class MovieController {
 			});
 		}
 	}
+
+ 	addActorForMovie= async(req: Request, res: Response) => {
+		try {
+			const results =  await this.movieService.addActorForMovie(req);
+			res.status(200).json({
+				message: "successful",
+				rowEffected:results
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
+
+	deleteActorOfMovie= async(req: Request, res: Response) => {
+		try {
+			const results =  await this.movieService.deleteActorOfMovie(req);
+			res.status(200).json({
+				message: "successful",
+				rowEffected:results
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
 }

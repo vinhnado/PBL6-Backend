@@ -28,6 +28,8 @@ class MovieRoutes extends BaseRoutes {
 		this.router.get('/get/nations', this.controller.getAllNations);
 		this.router.get('/get/years', this.controller.getAllReleaseYears);
 		this.router.get('/get/presign-url', validategetPresignUrlToUpload, validate, this.controller.getPresignUrlToUpload);
+		this.router.post('/movie-actor', this.controller.addActorForMovie);
+		this.router.delete('/movie-actor', this.controller.deleteActorOfMovie);
 	}
 }
 
