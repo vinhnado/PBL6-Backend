@@ -97,4 +97,18 @@ export class EpisodeController{
 		}
 	}
 
+	getPresignUrlToUploadPosterAndMovie = async (req: Request, res: Response) => {
+		try {
+			const rs = await await this.episodeService.getPresignUrlToUploadPosterAndMovie(req);
+			res.status(200).json({
+				message: "Successful",
+                data: rs
+            });
+		} catch (error) {
+			res.status(500).json({
+				message: "Server error"
+			})	
+		}
+	}
+ 
 }
