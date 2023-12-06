@@ -47,12 +47,12 @@ export class MovieService implements IMovieService {
 		}); // Initialize the Redis client
 	}
 
-	public clearCache(){
+	public clearCache() {
 		this.redis.flushall((err, reply) => {
 			if (err) {
-			  console.error(err);
+				console.error(err);
 			} else {
-			  console.log('Cache cleared:', reply === 'OK');
+				console.log('Cache cleared:', reply === 'OK');
 			}
 			this.redis.quit();
 		});
@@ -156,7 +156,7 @@ export class MovieService implements IMovieService {
 			}
 
 			let movie = await this.movieRepository.getMovieById(id);
-			
+
 			if (movie) {
 				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
 				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
@@ -222,23 +222,15 @@ export class MovieService implements IMovieService {
 		}
 	}
 
-	async createMovie(
-		req: Request
-	): Promise<Movie> {
+	async createMovie(req: Request): Promise<Movie> {
 		try {
 			const posterURL = '';
 			const trailerURL = '';
 			const backgroundURL = '';
 			const averageRating = 0.0;
 			const episodeNum = 0;
-			const {
-				title,
-				description,
-				releaseDate,
-				nation,
-				level,
-				isSeries
-			} = req.body;
+			const { title, description, releaseDate, nation, level, isSeries } =
+				req.body;
 			const newMovie = await this.movieRepository.createMovie(
 				title,
 				description,
@@ -255,14 +247,23 @@ export class MovieService implements IMovieService {
 			const actorIds = req.body.actorIds;
 			const directorIds = req.body.directorIds;
 			const genreIds = req.body.genreIds;
-			if(actorIds){
-				await this.movieActorRepository.addActorsForMovie(newMovie.movieId, actorIds);
+			if (actorIds) {
+				await this.movieActorRepository.addActorsForMovie(
+					newMovie.movieId,
+					actorIds
+				);
 			}
-			if(directorIds){
-				await this.movieDirectorRepository.addDirectorsForMovie(newMovie.movieId, directorIds);
+			if (directorIds) {
+				await this.movieDirectorRepository.addDirectorsForMovie(
+					newMovie.movieId,
+					directorIds
+				);
 			}
-			if(genreIds){
-				await this.movieGenreRepository.addGenresForMovie(newMovie.movieId, genreIds);
+			if (genreIds) {
+				await this.movieGenreRepository.addGenresForMovie(
+					newMovie.movieId,
+					genreIds
+				);
 			}
 			return newMovie;
 		} catch (error) {
@@ -274,7 +275,8 @@ export class MovieService implements IMovieService {
 		try {
 			const { id } = req.params;
 			const updatedData = req.body;
-			const [rowsAffected, updatedMovies] = await this.movieRepository.updateMovie(parseInt(id), updatedData);
+			const [rowsAffected, updatedMovies] =
+				await this.movieRepository.updateMovie(parseInt(id), updatedData);
 
 			if (rowsAffected > 0) {
 				return updatedMovies[0]; // Return the first updated movie
@@ -374,10 +376,9 @@ export class MovieService implements IMovieService {
 		}
 	}
 
-	async getAllNations():Promise<string[]>
-	{
+	async getAllNations(): Promise<string[]> {
 		try {
-			const nations = await this.movieRepository.getAllNations() as any;
+			const nations = (await this.movieRepository.getAllNations()) as any;
 
 			return nations;
 		} catch (error) {
@@ -385,8 +386,7 @@ export class MovieService implements IMovieService {
 		}
 	}
 
-	async getAllReleaseYears(): Promise<number[]>
-	{
+	async getAllReleaseYears(): Promise<number[]> {
 		try {
 			return await this.movieRepository.getAllReleaseDates();
 		} catch (error) {
@@ -394,56 +394,81 @@ export class MovieService implements IMovieService {
 		}
 	}
 
-	async getPresignUrlToUploadMovie(movieId: number, option: string):  Promise<{ key: string, value: string }[]>
-	{
+	async getPresignUrlToUploadMovie(
+		movieId: number,
+		option: string
+	): Promise<{ key: string; value: string }[]> {
 		try {
-			if(option === 'onlyPoster'){
-				const poster = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/poster.jpg','image/jpeg');
-				const presignedUrls: { key: string, value: string }[] = [
+			if (option === 'onlyPoster') {
+				const poster = await this.s3Service.generatePresignedUrlUpdate(
+					'movies/' + movieId + '/poster.jpg',
+					'image/jpeg'
+				);
+				const presignedUrls: { key: string; value: string }[] = [
 					{ key: 'poster', value: poster },
-				  ];
-			  
-				  return presignedUrls;
-			}else if(option === 'onlyBackground'){
-				const background = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/background.jpg','image/jpeg');
-				const presignedUrls: { key: string, value: string }[] = [
-					{ key: 'background', value: background },
-				  ];
-				  return presignedUrls;	
-			}else if(option === 'onlyTrailer'){
-				const trailer = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/trailer.mp4','video/mp4');
-	
-				const presignedUrls: { key: string, value: string }[] = [
-					{ key: 'trailer', value: trailer },
-				  ];
-			  
-				  return presignedUrls;
-			}else if(option === 'posterAndBackground'){
-				const poster = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/poster.jpg','image/jpeg');
-				const background = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/background.jpg','image/jpeg');
-	
-				const presignedUrls: { key: string, value: string }[] = [
-					{ key: 'poster', value: poster },
-					{ key: 'background', value: background },
-				  ];
-			  
-				  return presignedUrls;
-			}else{
-				const poster = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/poster.jpg','image/jpeg');
-				const background = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/background.jpg','image/jpeg');
-				const trailer = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/trailer.mp4','video/mp4');
-	
-				const presignedUrls: { key: string, value: string }[] = [
-					{ key: 'poster', value: poster },
-					{ key: 'background', value: background },
-					{ key: 'trailer', value: trailer },
-				  ];
-			  
-				  return presignedUrls;
-			}
+				];
 
+				return presignedUrls;
+			} else if (option === 'onlyBackground') {
+				const background = await this.s3Service.generatePresignedUrlUpdate(
+					'movies/' + movieId + '/background.jpg',
+					'image/jpeg'
+				);
+				const presignedUrls: { key: string; value: string }[] = [
+					{ key: 'background', value: background },
+				];
+				return presignedUrls;
+			} else if (option === 'onlyTrailer') {
+				const trailer = await this.s3Service.generatePresignedUrlUpdate(
+					'movies/' + movieId + '/trailer.mp4',
+					'video/mp4'
+				);
+
+				const presignedUrls: { key: string; value: string }[] = [
+					{ key: 'trailer', value: trailer },
+				];
+
+				return presignedUrls;
+			} else if (option === 'posterAndBackground') {
+				const poster = await this.s3Service.generatePresignedUrlUpdate(
+					'movies/' + movieId + '/poster.jpg',
+					'image/jpeg'
+				);
+				const background = await this.s3Service.generatePresignedUrlUpdate(
+					'movies/' + movieId + '/background.jpg',
+					'image/jpeg'
+				);
+
+				const presignedUrls: { key: string; value: string }[] = [
+					{ key: 'poster', value: poster },
+					{ key: 'background', value: background },
+				];
+
+				return presignedUrls;
+			} else {
+				const poster = await this.s3Service.generatePresignedUrlUpdate(
+					'movies/' + movieId + '/poster.jpg',
+					'image/jpeg'
+				);
+				const background = await this.s3Service.generatePresignedUrlUpdate(
+					'movies/' + movieId + '/background.jpg',
+					'image/jpeg'
+				);
+				const trailer = await this.s3Service.generatePresignedUrlUpdate(
+					'movies/' + movieId + '/trailer.mp4',
+					'video/mp4'
+				);
+
+				const presignedUrls: { key: string; value: string }[] = [
+					{ key: 'poster', value: poster },
+					{ key: 'background', value: background },
+					{ key: 'trailer', value: trailer },
+				];
+
+				return presignedUrls;
+			}
 		} catch (error) {
-			throw(error);
+			throw error;
 		}
 	}
 
@@ -451,57 +476,106 @@ export class MovieService implements IMovieService {
 		try {
 			const movieId = Number(req.body.movieId);
 			const actorIds = req.body.actorIds;
-			return await this.movieActorRepository.addActorsForMovie(movieId, actorIds);
+			return await this.movieActorRepository.addActorsForMovie(
+				movieId,
+				actorIds
+			);
 		} catch (error) {
-			throw(error);
+			throw error;
 		}
 	}
 
-	async deleteActorOfMovie(req: Request): Promise<number>
-	{
+	async deleteActorOfMovie(req: Request): Promise<number> {
 		try {
 			const movieId = Number(req.body.movieId);
 			const actorIds = req.body.actorIds;
-			return await this.movieActorRepository.deleteActorsOfMovie(movieId, actorIds);
+			return await this.movieActorRepository.deleteActorsOfMovie(
+				movieId,
+				actorIds
+			);
 		} catch (error) {
-			throw(error);
+			throw error;
 		}
 	}
 
-	async addDirectorsForMovie(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<MovieDirector[]> {
+	async addDirectorsForMovie(
+		req: express.Request<
+			ParamsDictionary,
+			any,
+			any,
+			ParsedQs,
+			Record<string, any>
+		>
+	): Promise<MovieDirector[]> {
 		try {
 			const movieId = Number(req.body.movieId);
 			const directorIds = req.body.directorIds;
-			return await this.movieDirectorRepository.addDirectorsForMovie(movieId, directorIds);
+			return await this.movieDirectorRepository.addDirectorsForMovie(
+				movieId,
+				directorIds
+			);
 		} catch (error) {
-			throw(error);
+			throw error;
 		}
 	}
-	async deleteDirectorsOfMovie(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<number> {
+	async deleteDirectorsOfMovie(
+		req: express.Request<
+			ParamsDictionary,
+			any,
+			any,
+			ParsedQs,
+			Record<string, any>
+		>
+	): Promise<number> {
 		try {
 			const movieId = Number(req.body.movieId);
 			const directorIds = req.body.directorIds;
-			return await this.movieDirectorRepository.deleteDirectorsOfMovie(movieId, directorIds);
+			return await this.movieDirectorRepository.deleteDirectorsOfMovie(
+				movieId,
+				directorIds
+			);
 		} catch (error) {
-			throw(error);
-		} 
-	}
-	async addGenresForMovie(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<MovieGenre[]> {
-		try {
-			const movieId = Number(req.body.movieId);
-			const genreIds = req.body.genreIds;
-			return await this.movieGenreRepository.addGenresForMovie(movieId, genreIds);
-		} catch (error) {
-			throw(error);
+			throw error;
 		}
 	}
-	async deleteGenresOfMovie(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<number> {
+	async addGenresForMovie(
+		req: express.Request<
+			ParamsDictionary,
+			any,
+			any,
+			ParsedQs,
+			Record<string, any>
+		>
+	): Promise<MovieGenre[]> {
 		try {
 			const movieId = Number(req.body.movieId);
 			const genreIds = req.body.genreIds;
-			return await this.movieGenreRepository.deleteGenresOfMovie(movieId, genreIds);
+			return await this.movieGenreRepository.addGenresForMovie(
+				movieId,
+				genreIds
+			);
 		} catch (error) {
-			throw(error);
+			throw error;
+		}
+	}
+	async deleteGenresOfMovie(
+		req: express.Request<
+			ParamsDictionary,
+			any,
+			any,
+			ParsedQs,
+			Record<string, any>
+		>
+	): Promise<number> {
+		try {
+			const movieId = Number(req.body.movieId);
+			const genreIds = req.body.genreIds;
+			return await this.movieGenreRepository.deleteGenresOfMovie(
+				movieId,
+				genreIds
+			);
+		} catch (error) {
+			throw error;
 		}
 	}
 	// async updatePosterMovie()

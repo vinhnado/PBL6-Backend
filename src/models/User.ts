@@ -34,6 +34,7 @@ export class User extends Model {
 	private static USER_GENDER = 'gender' as string;
 	private static USER_EMAIL = 'email' as string;
 	private static USER_ACTIVE = 'active' as string;
+	private static USER_ROLE = 'role' as string;
 	private static USER_AVATAR_URL = 'avatar_url' as string;
 	private static USER_ACCOUNT_ID = 'account_id' as string;
 	private static USER_SUBSCIRPTION_ID = 'subscription_id' as string;
@@ -73,7 +74,14 @@ export class User extends Model {
 	active!: boolean;
 
 	@Column({
-		type: DataType.STRING(255),
+		type: DataType.INTEGER,
+		field: User.USER_ROLE,
+		defaultValue: 2,
+	})
+	role!: number;
+
+	@Column({
+		type: DataType.STRING(),
 		field: User.USER_AVATAR_URL,
 		defaultValue: 'default/user/avatar_default.jpg',
 	})

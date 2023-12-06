@@ -1,3 +1,5 @@
+import { SubscriptionType } from './../models/SubscriptionType';
+import { SubscriptionInfo } from './../models/SubscriptionInfo';
 import { User } from '../models/User';
 
 export class UserDTO {
@@ -12,6 +14,7 @@ export class UserDTO {
 		closeAt: Date;
 		updatedAt: Date;
 		subscriptionType: string | null;
+		duration: string | null;
 	};
 
 	constructor(user: User) {
@@ -23,9 +26,11 @@ export class UserDTO {
 		this.active = user.active;
 		this.username = user.account.username;
 		this.subscription = {
-			closeAt: user.subscription.closedAt,
+			closeAt: user.subscription.closeAt,
 			updatedAt: user.subscription.updatedAt,
-			subscriptionType: user.subscription.subscriptionType.name,
+			subscriptionType:
+				user.subscription.subscriptionInfo.subscriptionType.name,
+			duration: user.subscription.subscriptionInfo.duration.time.toString(),
 		};
 	}
 

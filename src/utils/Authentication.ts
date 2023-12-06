@@ -3,8 +3,9 @@ import jwt from 'jsonwebtoken';
 
 interface Payload {
 	userId: number;
-	email: string;
+	role: number;
 	username: string;
+	subscriptionTypeId: number;
 }
 
 class Authentication {
@@ -21,14 +22,16 @@ class Authentication {
 
 	public static generateToken(
 		id: number,
-		email: string,
-		username: string
+		role: number,
+		username: string,
+		subscriptionTypeId: number
 	): string {
 		const secretKey: string = process.env.JWT_SECRET_KEY || 'my-secret-key';
 		const payload: Payload = {
 			userId: id,
-			email: email,
+			role: role,
 			username: username,
+			subscriptionTypeId: subscriptionTypeId,
 		};
 		const option = { expiresIn: process.env.JWT_EXPIRES_IN };
 

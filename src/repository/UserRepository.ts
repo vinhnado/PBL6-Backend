@@ -11,6 +11,8 @@ import { SubscriptionType } from '../models/SubscriptionType';
 import { Movie } from '../models/Movie';
 import { Episode } from '../models/Episode';
 import { Genre } from '../models/Genre';
+import { SubscriptionInfo } from '../models/SubscriptionInfo';
+import { Duration } from '../models/Duration';
 
 @Service()
 export class UserRepository
@@ -57,11 +59,21 @@ export class UserRepository
 				},
 				{
 					model: Subscription,
-					// attributes: ['closedAt'],
+					attributes: ['closeAt'],
 					include: [
 						{
-							model: SubscriptionType, // Đặt tên mối quan hệ mà bạn đã định nghĩa trong model Subcription
-							attributes: ['subscription_type_id', 'name'], // Thay thế bằng các trường bạn muốn lấy từ SubcriptionType
+							model: SubscriptionInfo,
+							attributes: ['subscription_info_id'],
+							include: [
+								{
+									model: SubscriptionType,
+									attributes: ['name'],
+								},
+								{
+									model: Duration,
+									attributes: ['time'],
+								},
+							],
 						},
 					],
 				},

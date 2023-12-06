@@ -23,34 +23,32 @@ export class SubscriptionService {
 		subscriptionTypeId: number | null = null
 	) => {
 		try {
-			const user = await this.userRepository.findOneUser({
-				userId: userId,
-			});
-			if (user) {
-				let subscription = user.subscription;
-				if (subscriptionTypeId !== null && closedAt !== null) {
-					subscription.subscriptionTypeId = subscriptionTypeId;
-
-					subscription.closedAt = closedAt;
-				} else if (subscriptionTypeId !== null) {
-					subscription.subscriptionTypeId = subscriptionTypeId;
-					const subcriptionType =
-						await this.subscriptionTypeRepository.findById(subscriptionTypeId);
-					const currentDate = new Date();
-
-					const newDate: Date = addMonths(
-						currentDate,
-						subcriptionType.duration
-					);
-					subscription.closedAt = newDate;
-				}
-				if (closedAt !== null) {
-					subscription.closedAt = closedAt;
-				}
-				return await this.subscriptionRepository.save(subscription);
-			} else {
-				throw new Error('UserId not found for the given ID');
-			}
+			// const user = await this.userRepository.findOneUser({
+			// 	userId: userId,
+			// });
+			// if (user) {
+			// 	let subscription = user.subscription;
+			// 	if (subscriptionTypeId !== null && closedAt !== null) {
+			// 		subscription.subscriptionTypeId = subscriptionTypeId;
+			// 		subscription.closedAt = closedAt;
+			// 	} else if (subscriptionTypeId !== null) {
+			// 		subscription.subscriptionTypeId = subscriptionTypeId;
+			// 		const subcriptionType =
+			// 			await this.subscriptionTypeRepository.findById(subscriptionTypeId);
+			// 		const currentDate = new Date();
+			// 		const newDate: Date = addMonths(
+			// 			currentDate,
+			// 			subcriptionType.duration
+			// 		);
+			// 		subscription.closedAt = newDate;
+			// 	}
+			// 	if (closedAt !== null) {
+			// 		subscription.closedAt = closedAt;
+			// 	}
+			// 	return await this.subscriptionRepository.save(subscription);
+			// } else {
+			// 	throw new Error('UserId not found for the given ID');
+			// }
 		} catch (error: any) {
 			throw new Error(
 				'Lỗi khi tạo hoặc cập nhật gói dịch vụ: ' + error.message
