@@ -56,7 +56,8 @@ export class AuthenticationService implements IAuthenticationService {
 		dateOfBirth: Date,
 		gender: string,
 		username: string,
-		password: string
+		password: string,
+		isAdmin: boolean = false
 	): Promise<void> {
 		try {
 			const hashedPassword: string = await Authentication.passwordHash(
@@ -72,6 +73,9 @@ export class AuthenticationService implements IAuthenticationService {
 				dateOfBirth: dateOfBirth,
 				gender: gender,
 			});
+			if (isAdmin) {
+				newUser.role = 1;
+			}
 			newUser.account = newAccount;
 			newUser.subscription = newSubscription;
 			await this.userRepository.createNewUser(

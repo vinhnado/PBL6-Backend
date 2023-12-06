@@ -1,5 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+import Container from 'typedi';
+import { UserService } from '../services/UserService';
+
+const userService = Container.get(UserService);
 
 declare global {
 	namespace Express {
@@ -9,26 +13,43 @@ declare global {
 	}
 }
 
-export const authAdmin = (
+export const authRoot = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
-): any => {
-	if (!req.headers.authorization) {
-		return res.status(401).send('No token!');
-	}
-
-	let secretKey = process.env.JWT_SECRET_KEY || 'my-secret-key';
-	const token: string = req.headers.authorization.split(' ')[1];
-
+) => {
 	try {
-		const credential: string | object = jwt.verify(token, secretKey);
-		if (credential) {
-			req.app.locals.credential = credential;
-			req.payload = credential;
-			return next();
+		if (req.payload.role == 0) {
+			const searchConditions = {
+				userId: req.payload.userId,
+			};
+			const role = (await userService.findOneUser(searchConditions)).role;
+			if (role == req.payload.role) {
+				return next();
+			}
 		}
-		return res.send('token invalid');
+		return res.status(403).send('Not permission!');
+	} catch (err) {
+		return res.send(err);
+	}
+};
+
+export const authAdmin = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		if (req.payload.role == 1 || req.payload.role == 0) {
+			const searchConditions = {
+				userId: req.payload.userId,
+			};
+			const role = (await userService.findOneUser(searchConditions)).role;
+			if (role == req.payload.role) {
+				return next();
+			}
+		}
+		return res.status(403).send('Not permission!');
 	} catch (err) {
 		return res.send(err);
 	}
@@ -49,7 +70,7 @@ export const auth = (req: Request, res: Response, next: NextFunction): any => {
 			req.payload = credential;
 			return next();
 		}
-		return res.send('token invalid');
+		return res.status(403).send('Token invalid');
 	} catch (err) {
 		return res.send(err);
 	}
