@@ -10,6 +10,7 @@ export class UserDTO {
 	createdAt: string;
 	username: string;
 	active: boolean;
+	role: number;
 	subscription: {
 		closeAt: Date;
 		updatedAt: Date;
@@ -25,6 +26,7 @@ export class UserDTO {
 		this.createdAt = user.createdAt;
 		this.active = user.active;
 		this.username = user.account.username;
+		this.role = user.role;
 		this.subscription = {
 			closeAt: user.subscription.closeAt,
 			updatedAt: user.subscription.updatedAt,
