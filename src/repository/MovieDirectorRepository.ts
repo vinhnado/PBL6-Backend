@@ -17,14 +17,14 @@ export class MovieDirectorRepository extends BaseRepository<MovieDirector> imple
     async addDirectorsForMovie(movieId: number, directorIds: number[]): Promise<MovieDirector[]> {
         try {
             const movieGenresData = directorIds.map(directorId => ({
-                movieId: movieId,
-                actorId: directorId,
+                movieID: movieId,
+                directorID: directorId,
             }));
             // Kiểm tra xem có bản ghi bị xóa mềm hay không
             const deletedRecords = await this.model.findAll({
                 where: {
-                    movieId: movieId,
-                    actorId: directorIds,
+                    movieID: movieId,
+                    directorID: directorIds,
                 },
                 paranoid: false, // Bật paranoid mode để lấy cả bản ghi đã bị xóa mềm
             });
@@ -45,8 +45,8 @@ export class MovieDirectorRepository extends BaseRepository<MovieDirector> imple
         try {
             const deletedRows = await this.model.destroy({
                 where: {
-                  movieId,
-                  genreId: { [Op.in]: directorIds },
+                  movieID: movieId,
+                  directorID: { [Op.in]: directorIds },
                 },
               });
           

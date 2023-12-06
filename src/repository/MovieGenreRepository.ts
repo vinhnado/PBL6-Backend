@@ -16,17 +16,17 @@ export class MovieGenreRepository extends BaseRepository<MovieGenre> implements 
 		super(MovieGenre);
 	}
 
-    async addGenresForMovie(movieId: number, genreIds: number[]): Promise<MovieGenre[] | undefined> {
+    async addGenresForMovie(movieId: number, genreIds: number[]): Promise<MovieGenre[]> {
         try {
             const movieGenresData = genreIds.map(genreId => ({
                 movieId: movieId,
-                actorId: genreId,
+                genreId: genreId,
             }));
             // Kiểm tra xem có bản ghi bị xóa mềm hay không
             const deletedRecords = await this.model.findAll({
                 where: {
                     movieId: movieId,
-                    actorId: genreIds,
+                    genreId: genreIds,
                 },
                 paranoid: false, // Bật paranoid mode để lấy cả bản ghi đã bị xóa mềm
             });

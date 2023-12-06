@@ -89,14 +89,7 @@ export class MovieController {
 
 		try {
 			// Gọi service để tạo bộ phim mới
-			const newMovie = await this.movieService.createMovie(
-				title,
-				description,
-				releaseDate,
-				nation,
-				level,
-				isSeries
-			);
+			const newMovie = await this.movieService.createMovie(req);
 
 			res.status(201).json(newMovie);
 		} catch (error) {
@@ -221,6 +214,66 @@ export class MovieController {
 	deleteActorOfMovie= async(req: Request, res: Response) => {
 		try {
 			const results =  await this.movieService.deleteActorOfMovie(req);
+			res.status(200).json({
+				message: "successful",
+				rowEffected:results
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
+
+	addDirectorsForMovie= async(req: Request, res: Response) => {
+		try {
+			const results =  await this.movieService.addDirectorsForMovie(req);
+			res.status(200).json({
+				message: "successful",
+				rowEffected:results
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
+
+	deleteDirectorsOfMovie= async(req: Request, res: Response) => {
+		try {
+			const results =  await this.movieService.deleteDirectorsOfMovie(req);
+			res.status(200).json({
+				message: "successful",
+				rowEffected:results
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
+
+	addGenresForMovie= async(req: Request, res: Response) => {
+		try {
+			const results =  await this.movieService.addGenresForMovie(req);
+			res.status(200).json({
+				message: "successful",
+				rowEffected:results
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
+
+	deleteGenresOfMovie= async(req: Request, res: Response) => {
+		try {
+			const results =  await this.movieService.deleteGenresOfMovie(req);
 			res.status(200).json({
 				message: "successful",
 				rowEffected:results

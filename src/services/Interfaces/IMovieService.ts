@@ -13,14 +13,7 @@ export interface IMovieService {
 	getMovieById(id: number): Promise<Movie | null>;
 	getAllMovies(): Promise<Movie[]>;
 	deleteMovieById(id: number): Promise<void>;
-	createMovie(
-		title: string,
-		description: string,
-		releaseDate: Date,
-		nation: string,
-		level: number,
-		isSeries: boolean
-	  ): Promise<Movie>;
+	createMovie(req: Request): Promise<Movie>;
 	updateMovie(req: Request, res: Response): Promise<Movie | null>;
 	getMoviesTrending(): Promise<Movie[]>;
 	getMoviesRecommender(): Promise<Movie[]>;

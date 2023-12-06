@@ -223,12 +223,7 @@ export class MovieService implements IMovieService {
 	}
 
 	async createMovie(
-		title: string,
-		description: string,
-		releaseDate: Date,
-		nation: string,
-		level: number,
-		isSeries: boolean
+		req: Request
 	): Promise<Movie> {
 		try {
 			const posterURL = '';
@@ -236,6 +231,14 @@ export class MovieService implements IMovieService {
 			const backgroundURL = '';
 			const averageRating = 0.0;
 			const episodeNum = 0;
+			const {
+				title,
+				description,
+				releaseDate,
+				nation,
+				level,
+				isSeries
+			} = req.body;
 			const newMovie = await this.movieRepository.createMovie(
 				title,
 				description,
@@ -249,7 +252,18 @@ export class MovieService implements IMovieService {
 				backgroundURL,
 				isSeries
 			);
-
+			const actorIds = req.body.actorIds;
+			const directorIds = req.body.directorIds;
+			const genreIds = req.body.genreIds;
+			if(actorIds){
+				await this.movieActorRepository.addActorsForMovie(newMovie.movieId, actorIds);
+			}
+			if(directorIds){
+				await this.movieDirectorRepository.addDirectorsForMovie(newMovie.movieId, directorIds);
+			}
+			if(genreIds){
+				await this.movieGenreRepository.addGenresForMovie(newMovie.movieId, genreIds);
+			}
 			return newMovie;
 		} catch (error) {
 			throw new Error('Could not create movie');
@@ -421,7 +435,13 @@ export class MovieService implements IMovieService {
 	}
 
 	async addDirectorsForMovie(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<MovieDirector[]> {
-		throw new Error('Method not implemented.');
+		try {
+			const movieId = Number(req.body.movieId);
+			const directorIds = req.body.directorIds;
+			return await this.movieDirectorRepository.addDirectorsForMovie(movieId, directorIds);
+		} catch (error) {
+			throw(error);
+		}
 	}
 	async deleteDirectorsOfMovie(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<number> {
 		try {
@@ -433,13 +453,19 @@ export class MovieService implements IMovieService {
 		} 
 	}
 	async addGenresForMovie(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<MovieGenre[]> {
-		throw new Error('Method not implemented.');
+		try {
+			const movieId = Number(req.body.movieId);
+			const genreIds = req.body.genreIds;
+			return await this.movieGenreRepository.addGenresForMovie(movieId, genreIds);
+		} catch (error) {
+			throw(error);
+		}
 	}
 	async deleteGenresOfMovie(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<number> {
 		try {
 			const movieId = Number(req.body.movieId);
-			const actorIds = req.body.actorIds;
-			return await this.movieActorRepository.deleteActorsOfMovie(movieId, actorIds);
+			const genreIds = req.body.genreIds;
+			return await this.movieGenreRepository.deleteGenresOfMovie(movieId, genreIds);
 		} catch (error) {
 			throw(error);
 		}
