@@ -8,6 +8,7 @@ class HomeRoutes extends BaseRoutes {
 		this.router.get('/genres', this.controller.getMoviesByGenre);
 		this.router.get('/genres/:genreId', this.controller.getMoviesOfGenre);
 		this.router.get('/posters', this.controller.getHomePoster);
+		this.router.get('/headers', this.controller.getInfoHeader);
 	}
 }
 

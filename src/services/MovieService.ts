@@ -9,11 +9,31 @@ import { Op } from 'sequelize';
 import Redis from 'ioredis';
 import crypto from 'crypto'; // Import the built-in crypto library
 import express, { Request, Response } from 'express';
+import { MovieActor } from '../models/MovieActor';
+import { MovieActorRepository } from '../repository/MovieActorRepository';
+import { IMovieActorRepository } from '../repository/Interfaces/IMovieActorRepository';
+import { MovieDirectorRepository } from '../repository/MovieDirectorRepository';
+import { IMovieDirectorRepository } from '../repository/Interfaces/IMovieDirectorRepository';
+import { IMovieGenreRepository } from '../repository/Interfaces/IMovieGenreRepository';
+import { MovieGenreRepository } from '../repository/MovieGenreRepository';
+import { ParamsDictionary } from 'express-serve-static-core';
+import { ParsedQs } from 'qs';
+import { MovieDirector } from '../models/MovieDirector';
+import { MovieGenre } from '../models/MovieGenre';
 
 @Service()
 export class MovieService implements IMovieService {
 	@Inject(() => MovieRepository)
 	private movieRepository!: IMovieRepository;
+
+	@Inject(() => MovieActorRepository)
+	private movieActorRepository!: IMovieActorRepository;
+
+	@Inject(() => MovieDirectorRepository)
+	private movieDirectorRepository!: IMovieDirectorRepository;
+
+	@Inject(() => MovieGenreRepository)
+	private movieGenreRepository!: IMovieGenreRepository;
 
 	@Inject(() => S3Service)
 	private s3Service!: S3Service;
@@ -202,20 +222,15 @@ export class MovieService implements IMovieService {
 		}
 	}
 
-	async createMovie(
-		title: string,
-		description: string,
-		releaseDate: Date,
-		nation: string,
-		level: number,
-		isSeries: boolean
-	): Promise<Movie> {
+	async createMovie(req: Request): Promise<Movie> {
 		try {
 			const posterURL = '';
 			const trailerURL = '';
 			const backgroundURL = '';
 			const averageRating = 0.0;
 			const episodeNum = 0;
+			const { title, description, releaseDate, nation, level, isSeries } =
+				req.body;
 			const newMovie = await this.movieRepository.createMovie(
 				title,
 				description,
@@ -229,7 +244,27 @@ export class MovieService implements IMovieService {
 				backgroundURL,
 				isSeries
 			);
-
+			const actorIds = req.body.actorIds;
+			const directorIds = req.body.directorIds;
+			const genreIds = req.body.genreIds;
+			if (actorIds) {
+				await this.movieActorRepository.addActorsForMovie(
+					newMovie.movieId,
+					actorIds
+				);
+			}
+			if (directorIds) {
+				await this.movieDirectorRepository.addDirectorsForMovie(
+					newMovie.movieId,
+					directorIds
+				);
+			}
+			if (genreIds) {
+				await this.movieGenreRepository.addGenresForMovie(
+					newMovie.movieId,
+					genreIds
+				);
+			}
 			return newMovie;
 		} catch (error) {
 			throw new Error('Could not create movie');
@@ -360,30 +395,188 @@ export class MovieService implements IMovieService {
 	}
 
 	async getPresignUrlToUploadMovie(
-		movieId: number
+		movieId: number,
+		option: string
 	): Promise<{ key: string; value: string }[]> {
 		try {
-			const poster = await this.s3Service.generatePresignedUrlUpdate(
-				'movies/' + movieId + '/poster.jpg'
-			);
-			const background = await this.s3Service.generatePresignedUrlUpdate(
-				'movies/' + movieId + '/background.jpg'
-			);
-			const trailer = await this.s3Service.generatePresignedUrlUpdate(
-				'movies/' + movieId + '/trailer.mp4'
-			);
+			if (option === 'onlyPoster') {
+				const poster = await this.s3Service.generatePresignedUrlUpdate(
+					'movies/' + movieId + '/poster.jpg',
+					'image/jpeg'
+				);
+				const presignedUrls: { key: string; value: string }[] = [
+					{ key: 'poster', value: poster },
+				];
 
-			const presignedUrls: { key: string; value: string }[] = [
-				{ key: 'poster', value: poster },
-				{ key: 'background', value: background },
-				{ key: 'trailer', value: trailer },
-			];
+				return presignedUrls;
+			} else if (option === 'onlyBackground') {
+				const background = await this.s3Service.generatePresignedUrlUpdate(
+					'movies/' + movieId + '/background.jpg',
+					'image/jpeg'
+				);
+				const presignedUrls: { key: string; value: string }[] = [
+					{ key: 'background', value: background },
+				];
+				return presignedUrls;
+			} else if (option === 'onlyTrailer') {
+				const trailer = await this.s3Service.generatePresignedUrlUpdate(
+					'movies/' + movieId + '/trailer.mp4',
+					'video/mp4'
+				);
 
-			return presignedUrls;
+				const presignedUrls: { key: string; value: string }[] = [
+					{ key: 'trailer', value: trailer },
+				];
+
+				return presignedUrls;
+			} else if (option === 'posterAndBackground') {
+				const poster = await this.s3Service.generatePresignedUrlUpdate(
+					'movies/' + movieId + '/poster.jpg',
+					'image/jpeg'
+				);
+				const background = await this.s3Service.generatePresignedUrlUpdate(
+					'movies/' + movieId + '/background.jpg',
+					'image/jpeg'
+				);
+
+				const presignedUrls: { key: string; value: string }[] = [
+					{ key: 'poster', value: poster },
+					{ key: 'background', value: background },
+				];
+
+				return presignedUrls;
+			} else {
+				const poster = await this.s3Service.generatePresignedUrlUpdate(
+					'movies/' + movieId + '/poster.jpg',
+					'image/jpeg'
+				);
+				const background = await this.s3Service.generatePresignedUrlUpdate(
+					'movies/' + movieId + '/background.jpg',
+					'image/jpeg'
+				);
+				const trailer = await this.s3Service.generatePresignedUrlUpdate(
+					'movies/' + movieId + '/trailer.mp4',
+					'video/mp4'
+				);
+
+				const presignedUrls: { key: string; value: string }[] = [
+					{ key: 'poster', value: poster },
+					{ key: 'background', value: background },
+					{ key: 'trailer', value: trailer },
+				];
+
+				return presignedUrls;
+			}
 		} catch (error) {
-			throw new Error('Could not get presignUrl to upload movies.');
+			throw error;
 		}
 	}
 
+	async addActorForMovie(req: Request): Promise<MovieActor[]> {
+		try {
+			const movieId = Number(req.body.movieId);
+			const actorIds = req.body.actorIds;
+			return await this.movieActorRepository.addActorsForMovie(
+				movieId,
+				actorIds
+			);
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async deleteActorOfMovie(req: Request): Promise<number> {
+		try {
+			const movieId = Number(req.body.movieId);
+			const actorIds = req.body.actorIds;
+			return await this.movieActorRepository.deleteActorsOfMovie(
+				movieId,
+				actorIds
+			);
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async addDirectorsForMovie(
+		req: express.Request<
+			ParamsDictionary,
+			any,
+			any,
+			ParsedQs,
+			Record<string, any>
+		>
+	): Promise<MovieDirector[]> {
+		try {
+			const movieId = Number(req.body.movieId);
+			const directorIds = req.body.directorIds;
+			return await this.movieDirectorRepository.addDirectorsForMovie(
+				movieId,
+				directorIds
+			);
+		} catch (error) {
+			throw error;
+		}
+	}
+	async deleteDirectorsOfMovie(
+		req: express.Request<
+			ParamsDictionary,
+			any,
+			any,
+			ParsedQs,
+			Record<string, any>
+		>
+	): Promise<number> {
+		try {
+			const movieId = Number(req.body.movieId);
+			const directorIds = req.body.directorIds;
+			return await this.movieDirectorRepository.deleteDirectorsOfMovie(
+				movieId,
+				directorIds
+			);
+		} catch (error) {
+			throw error;
+		}
+	}
+	async addGenresForMovie(
+		req: express.Request<
+			ParamsDictionary,
+			any,
+			any,
+			ParsedQs,
+			Record<string, any>
+		>
+	): Promise<MovieGenre[]> {
+		try {
+			const movieId = Number(req.body.movieId);
+			const genreIds = req.body.genreIds;
+			return await this.movieGenreRepository.addGenresForMovie(
+				movieId,
+				genreIds
+			);
+		} catch (error) {
+			throw error;
+		}
+	}
+	async deleteGenresOfMovie(
+		req: express.Request<
+			ParamsDictionary,
+			any,
+			any,
+			ParsedQs,
+			Record<string, any>
+		>
+	): Promise<number> {
+		try {
+			const movieId = Number(req.body.movieId);
+			const genreIds = req.body.genreIds;
+			return await this.movieGenreRepository.deleteGenresOfMovie(
+				movieId,
+				genreIds
+			);
+		} catch (error) {
+			throw error;
+		}
+	}
 	// async updatePosterMovie()
 }

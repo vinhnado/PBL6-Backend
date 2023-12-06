@@ -89,14 +89,7 @@ export class MovieController {
 
 		try {
 			// Gọi service để tạo bộ phim mới
-			const newMovie = await this.movieService.createMovie(
-				title,
-				description,
-				releaseDate,
-				nation,
-				level,
-				isSeries
-			);
+			const newMovie = await this.movieService.createMovie(req);
 
 			res.status(201).json(newMovie);
 		} catch (error) {
@@ -152,8 +145,6 @@ export class MovieController {
 	
 	getMoviesRecommender = async (req: Request, res: Response) => {
 		try {
-			console.log("Hello");
-			
 			const page = Number(req.query.page) || 1; // Trang mặc định là 1
 			const pageSize = Number(req.query.pageSize) || 5; // Số lượng kết quả trên mỗi trang mặc định là 10
 			// const searchConditions = {
@@ -195,12 +186,103 @@ export class MovieController {
 	getPresignUrlToUpload = async (req: Request, res: Response) => {
 		try {
 			const movieId = Number(req.query.movieId);
-			const url = await this.movieService.getPresignUrlToUploadMovie(movieId);
+			let option = req.query.option+'';
+			const url = await this.movieService.getPresignUrlToUploadMovie(movieId, option);
 			return res.status(200).json(url);
 		} catch (error) {
 			console.log("Could not get presignUrl to upload movies.");
 			return res.status(404).json({
 				message: "Could not get presignUrl",
+			});
+		}
+	}
+
+ 	addActorForMovie= async(req: Request, res: Response) => {
+		try {
+			const results =  await this.movieService.addActorForMovie(req);
+			res.status(200).json({
+				message: "successful",
+				rowEffected:results
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
+
+	deleteActorOfMovie= async(req: Request, res: Response) => {
+		try {
+			const results =  await this.movieService.deleteActorOfMovie(req);
+			res.status(200).json({
+				message: "successful",
+				rowEffected:results
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
+
+	addDirectorsForMovie= async(req: Request, res: Response) => {
+		try {
+			const results =  await this.movieService.addDirectorsForMovie(req);
+			res.status(200).json({
+				message: "successful",
+				rowEffected:results
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
+
+	deleteDirectorsOfMovie= async(req: Request, res: Response) => {
+		try {
+			const results =  await this.movieService.deleteDirectorsOfMovie(req);
+			res.status(200).json({
+				message: "successful",
+				rowEffected:results
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
+
+	addGenresForMovie= async(req: Request, res: Response) => {
+		try {
+			const results =  await this.movieService.addGenresForMovie(req);
+			res.status(200).json({
+				message: "successful",
+				rowEffected:results
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
+
+	deleteGenresOfMovie= async(req: Request, res: Response) => {
+		try {
+			const results =  await this.movieService.deleteGenresOfMovie(req);
+			res.status(200).json({
+				message: "successful",
+				rowEffected:results
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
 			});
 		}
 	}

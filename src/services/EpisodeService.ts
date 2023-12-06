@@ -171,4 +171,35 @@ export class EpisodeService implements IEpisodeService {
 		}
 	}
 
+	async getPresignUrlToUploadPosterAndMovie(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<{ key: string, value: string }[]> {
+		try {
+			const movieId = req.query.movieId;
+			const episodeNo = req.query.episodeNo;
+			const option = req.query.option;
+			if(option==='onlyMovie'){
+				const movie = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episode/'+episodeNo+'/movie.mp4','video/mp4');
+				const presignedUrls: { key: string, value: string }[] = [
+					{ key: 'movie', value: movie },
+				];
+				return presignedUrls;
+			}else if(option==='onlyPoster'){
+				const poster = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episode/'+episodeNo+'/poster.jpg','image/jpeg');
+				const presignedUrls: { key: string, value: string }[] = [
+					{ key: 'poster', value: poster },
+				];
+				return presignedUrls;
+			}else{
+				const poster = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episode/'+episodeNo+'/poster.jpg','image/jpeg');
+				const movie = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episode/'+episodeNo+'/movie.mp4','video/mp4');
+				const presignedUrls: { key: string, value: string }[] = [
+					{ key: 'poster', value: poster },
+					{ key: 'movie', value: movie },
+				];
+				return presignedUrls;
+			}
+		} catch (error) {
+			console.log(error);
+			throw(error);
+		}
+	}
 }
