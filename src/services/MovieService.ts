@@ -394,20 +394,54 @@ export class MovieService implements IMovieService {
 		}
 	}
 
-	async getPresignUrlToUploadMovie(movieId: number):  Promise<{ key: string, value: string }[]>
+	async getPresignUrlToUploadMovie(movieId: number, option: string):  Promise<{ key: string, value: string }[]>
 	{
 		try {
-			const poster = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/poster.jpg','image/jpeg');
-			const background = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/background.jpg','image/jpeg');
-			const trailer = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/trailer.mp4','video/mp4');
+			if(option === 'onlyPoster'){
+				const poster = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/poster.jpg','image/jpeg');
+				const presignedUrls: { key: string, value: string }[] = [
+					{ key: 'poster', value: poster },
+				  ];
+			  
+				  return presignedUrls;
+			}else if(option === 'onlyBackground'){
+				const background = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/background.jpg','image/jpeg');
+				const presignedUrls: { key: string, value: string }[] = [
+					{ key: 'background', value: background },
+				  ];
+				  return presignedUrls;	
+			}else if(option === 'onlyTrailer'){
+				const trailer = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/trailer.mp4','video/mp4');
+	
+				const presignedUrls: { key: string, value: string }[] = [
+					{ key: 'trailer', value: trailer },
+				  ];
+			  
+				  return presignedUrls;
+			}else if(option === 'posterAndBackground'){
+				const poster = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/poster.jpg','image/jpeg');
+				const background = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/background.jpg','image/jpeg');
+	
+				const presignedUrls: { key: string, value: string }[] = [
+					{ key: 'poster', value: poster },
+					{ key: 'background', value: background },
+				  ];
+			  
+				  return presignedUrls;
+			}else{
+				const poster = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/poster.jpg','image/jpeg');
+				const background = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/background.jpg','image/jpeg');
+				const trailer = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/trailer.mp4','video/mp4');
+	
+				const presignedUrls: { key: string, value: string }[] = [
+					{ key: 'poster', value: poster },
+					{ key: 'background', value: background },
+					{ key: 'trailer', value: trailer },
+				  ];
+			  
+				  return presignedUrls;
+			}
 
-			const presignedUrls: { key: string, value: string }[] = [
-				{ key: 'poster', value: poster },
-				{ key: 'background', value: background },
-				{ key: 'trailer', value: trailer },
-			  ];
-		  
-			  return presignedUrls;
 		} catch (error) {
 			throw(error);
 		}

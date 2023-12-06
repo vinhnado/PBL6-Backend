@@ -1,6 +1,6 @@
 import BaseRoutes from './Base/BaseRouter';
 import { EpisodeController } from '../controller/EpisodeController';
-import { validateCreateEpisode, validateDeleteEpisodeById, validateGetEpisodeById, validateUpdateEpisode } from '../validators/EpisodeValidator';
+import { validateCreateEpisode, validateDeleteEpisodeById, validateGetEpisodeById, validateGetPresignURL, validateUpdateEpisode } from '../validators/EpisodeValidator';
 import { validate } from '../validators/Validator';
 class EpisodeRoutes extends BaseRoutes {
 	constructor() {
@@ -12,6 +12,7 @@ class EpisodeRoutes extends BaseRoutes {
 		this.router.post('/create', validateCreateEpisode, validate, this.controller.createEpisode);
 		this.router.put('/update/:episodeId', validateUpdateEpisode, validate, this.controller.updateEpisode);
 		this.router.delete('/delete/:episodeId',validateDeleteEpisodeById, validate, this.controller.deleteEpisode);
+		this.router.get('/presignURL/upload', validateGetPresignURL, validate, this.controller.getPresignUrlToUploadPosterAndMovie);
 	}
 }
 

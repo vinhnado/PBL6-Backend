@@ -515,6 +515,41 @@ paths:
                 genreIds:
                   type: array
                   default: [1,2,3]
+  /movies/get/presign-url:
+    get:
+      tags:
+        - movie
+      summary: Returns presign url to upload movie to s3
+      description: Returns presign url to upload movie to s3
+      parameters:
+        - name: movieId
+          in: query
+          description: ID of movie
+          required: true
+          explode: true
+          schema:
+            type: integer
+            format: int64
+        - name: option
+          in: query
+          required: true
+          description:  Option to get
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - onlyBackground
+                - onlyPoster
+                - onlyTrailer
+                - posterAndBackground
+                - all
+      responses:
+        '200':
+          description: successful operation
+      security:
+        - api_key: []
   /episode/{id}:
     get:
       tags:
@@ -712,7 +747,46 @@ paths:
                   format: int32
       security:
         - bearerAuth: []
-
+  /episode/presignURL/upload:
+    get:
+      tags:
+        - episode
+      summary: Returns presign url to upload movie to s3
+      description: Returns presign url to upload movie to s3
+      parameters:
+        - name: movieId
+          in: query
+          description: ID of movie
+          required: true
+          explode: true
+          schema:
+            type: integer
+            format: int64
+        - name: episodeNum
+          in: query
+          required: true
+          description:  Number of episode of movie
+          explode: true
+          schema:
+            type: number
+        - name: option
+          in: query
+          required: true
+          description:  Option to get
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - onlyMovie
+                - onlyPoster
+                - movieAndPoster
+      responses:
+        '200':
+          description: successful operation
+      security:
+        - api_key: []
   /genres:
     get:
       tags:
