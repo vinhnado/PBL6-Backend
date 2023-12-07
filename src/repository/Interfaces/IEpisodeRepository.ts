@@ -8,4 +8,5 @@ export interface IEpisodeRepository extends BaseInterface{
     updateEpisode(episodeId: number ,updatedData: Partial<Episode>): Promise<[number, Episode[]]>;
     getAllEpisodeOfMovie(movie_id: number): Promise<Episode[]>;
     updateNumEpisodeInMovie(movieId: number, n: number): Promise<boolean>;
+    getTheLastEpisodeOfMovie(movieId: number): Promise<Episode[]>;
 }
