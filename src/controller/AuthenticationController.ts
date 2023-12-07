@@ -60,6 +60,32 @@ export class AuthenticationController {
 		}
 	};
 
+	registerAdmin = async (req: Request, res: Response) => {
+		try {
+			const { email, dateOfBirth, gender, username, password } = req.body;
+
+			await this.authenticationService.register(
+				email,
+				dateOfBirth,
+				gender,
+				username,
+				password,
+				true
+			);
+
+			return res.status(200).json({
+				status: '200',
+				message: 'Successfully registered admin!',
+			});
+		} catch (error) {
+			console.log(error);
+			return res.status(500).json({
+				status: '500',
+				message: 'Internal server Error!',
+			});
+		}
+	};
+
 	forgotPassword = async (req: Request, res: Response) => {
 		try {
 			const { email, token, password } = req.body;

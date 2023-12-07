@@ -1,14 +1,59 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+import Container from 'typedi';
+import { UserService } from '../services/UserService';
+
+const userService = Container.get(UserService);
 
 declare global {
 	namespace Express {
-	  interface Request {
-		payload?: any; 
-	  }
+		interface Request {
+			payload?: any;
+		}
 	}
-  }
+}
 
+export const authRoot = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		if (req.payload.role == 0) {
+			const searchConditions = {
+				userId: req.payload.userId,
+			};
+			const role = (await userService.findOneUser(searchConditions)).role;
+			if (role == req.payload.role) {
+				return next();
+			}
+		}
+		return res.status(403).send('Not permission!');
+	} catch (err) {
+		return res.send(err);
+	}
+};
+
+export const authAdmin = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		if (req.payload.role == 1 || req.payload.role == 0) {
+			const searchConditions = {
+				userId: req.payload.userId,
+			};
+			const role = (await userService.findOneUser(searchConditions)).role;
+			if (role == req.payload.role) {
+				return next();
+			}
+		}
+		return res.status(403).send('Not permission!');
+	} catch (err) {
+		return res.send(err);
+	}
+};
 
 export const auth = (req: Request, res: Response, next: NextFunction): any => {
 	if (!req.headers.authorization) {
@@ -22,10 +67,10 @@ export const auth = (req: Request, res: Response, next: NextFunction): any => {
 		const credential: string | object = jwt.verify(token, secretKey);
 		if (credential) {
 			req.app.locals.credential = credential;
-			req.payload = credential; 
+			req.payload = credential;
 			return next();
 		}
-		return res.send('token invalid');
+		return res.status(403).send('Token invalid');
 	} catch (err) {
 		return res.send(err);
 	}
