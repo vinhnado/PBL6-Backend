@@ -19,7 +19,7 @@ import { SubscriptionInfo } from './SubscriptionInfo';
 export class Subscription extends Model {
 	private static SUBSCRIPTION_TABLE_NAME = 'subscriptions' as string;
 	private static SUBSCRIPTION_ID = 'subscription_id' as string;
-	private static SUBSCRIPTION_INFO_ID = 'subscription_info_id' as string;
+	private static SUBSCRIPTION_TYPE_ID = 'subscription_type_id' as string;
 	private static CLOSED_AT = 'closeAt' as string;
 
 	@Column({
@@ -36,16 +36,16 @@ export class Subscription extends Model {
 	})
 	closeAt!: Date;
 
-	@ForeignKey(() => SubscriptionInfo)
+	@ForeignKey(() => SubscriptionType)
 	@Column({
 		type: DataType.INTEGER,
-		field: Subscription.SUBSCRIPTION_INFO_ID,
+		field: Subscription.SUBSCRIPTION_TYPE_ID,
 		defaultValue: 1,
 	})
-	subscriptionInfoId!: number;
+	subscriptionTypeId!: number;
 
-	@BelongsTo(() => SubscriptionInfo)
-	subscriptionInfo!: SubscriptionInfo;
+	@BelongsTo(() => SubscriptionType)
+	subscriptionType!: SubscriptionType;
 
 	@DeletedAt
 	deletedAt!: Date;
