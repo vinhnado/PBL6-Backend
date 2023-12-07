@@ -10,7 +10,10 @@ export interface IMovieRepository extends BaseInterface {
 		pageSize: number,
 		sortField: string,
 		sortBy: string
-	): Promise<Movie[]>;
+	): Promise<{
+		movies: Movie[];
+		totalCount: number;
+	  }>;
 	getMovieById(id: number): Promise<Movie | null>;
 	getAllMovies(): Promise<Movie[]>;
 	deleteMovieById(id: number): Promise<void>;

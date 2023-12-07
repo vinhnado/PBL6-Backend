@@ -670,13 +670,9 @@ paths:
                 releaseDate:
                   type: string
                   format: date
-                duration:
-                  type: integer
-                episodeNo:
-                  type: integer
                 description:
                   type: string
-                  default: null
+                  
       responses:
         '200':
           description: successful operation

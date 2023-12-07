@@ -10,6 +10,8 @@ import { ICommentRepository } from '../repository/Interfaces/ICommentRepository'
 import { Request } from 'express';
 import { ParamsDictionary } from 'express-serve-static-core';
 import { ParsedQs } from 'qs';
+import { MovieRepository } from '../repository/MovieRepository';
+import { IMovieRepository } from '../repository/Interfaces/IMovieRepository';
 
 @Service()
 export class EpisodeService implements IEpisodeService {
@@ -23,6 +25,8 @@ export class EpisodeService implements IEpisodeService {
 	@Inject(() => CommentRepository)
 	private commentRepository!: ICommentRepository;
 	
+	@Inject(() => MovieRepository)
+	private movieRepository!: IMovieRepository;
 
 	/**
 	 * Get details a episode of movie by episode_id
@@ -117,18 +121,21 @@ export class EpisodeService implements IEpisodeService {
 				title,
 				description,
 				releaseDate,
-				duration,
-				episodeNo,
 			} = req.body;
+			const lastEpisode =await this.episodeRepository.getTheLastEpisodeOfMovie(movieId);
+			let episodeNo = 1;
+			if(lastEpisode.length !==0){
+				episodeNo = lastEpisode[0].episodeNo+1
+			}
 			const formattedPosterURL = `movies/${movieId}/episodes/${episodeNo}/poster.jpg`;
 			const formattedMovieURL = `movies/${movieId}/episodes/${episodeNo}/movie.mp4`;
-
+			
 			const episodeData = {
 				movieId : movieId,
 				title: title,
 				description: description,
 				releaseDate: releaseDate,
-				duration: duration,
+				duration: 0,
 				episodeNo: episodeNo,
 				numView:0,
 				posterURL: formattedPosterURL,
@@ -139,6 +146,20 @@ export class EpisodeService implements IEpisodeService {
 			return newEpisode;
 		} catch (error) {
 			throw(error);
+		}
+	}
+	async checkMovieIsSeries(movieId: number): Promise<boolean> {
+		try {
+
+			const movie = await this.movieRepository.findOneByCondition({
+				movieId: movieId
+			});
+			console.log(movie.isSeries);
+			
+			return movie.isSeries;
+		} catch (error) {
+			console.log(error);
+			throw(error);			
 		}
 	}
 

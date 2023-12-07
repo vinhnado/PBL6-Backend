@@ -34,8 +34,8 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 				model: Genre,
 				attributes: ['genre_id', 'name'],
 				as: 'genres',
-				//   required: true,
-				where: whereConditionGenre, // Lọc theo ID thể loại
+				// required: true,
+				...(Object.keys(whereConditionGenre).length > 0 ? { where: whereConditionGenre } : {}),
 				through: { attributes: [] },
 			},
 			{
@@ -70,8 +70,15 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 		  limit: pageSize, // Số lượng kết quả trên mỗi trang
 		  offset: offset, // Vị trí bắt đầu
 		});
-	  
-		return movies;
+		    // Truy vấn lấy tổng số phim
+			const totalCount = await Movie.count({
+				where: whereCondition,
+			  });
+		  
+		return {
+			movies,
+			totalCount,
+		  };
 	  }
 
 	/**
