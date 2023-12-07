@@ -9,7 +9,10 @@ export interface IMovieService {
 		searchConditions: any,
 		page: number,
 		pageSize: number
-	): Promise<Movie[]>;
+	): Promise<{
+		movies: Movie[];
+		totalCount: number;
+	  }>;
 	getMovieById(id: number): Promise<Movie | null>;
 	getAllMovies(): Promise<Movie[]>;
 	deleteMovieById(id: number): Promise<void>;

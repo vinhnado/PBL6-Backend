@@ -30,12 +30,18 @@ export class MovieController {
 			const page = Number(req.query.page) || 1; // Trang mặc định là 1
 			const pageSize = Number(req.query.pageSize) || 5; // Số lượng kết quả trên mỗi trang mặc định là 10
 
-			const movies = await this.movieService.searchMovies(
+			const { movies, totalCount } = await this.movieService.searchMovies(
 				options,
 				Number(page),
 				Number(pageSize)
 			);
-			return res.status(200).json(movies);
+			return res.status(200).json({
+				message:"Successful",
+				totalCount: totalCount,
+				totalPage: Math.floor(totalCount/pageSize),
+				movies: movies
+
+			});
 		} catch (error: any) {
 			console.log(error);
 			return res.status(500).json({ error: 'Lỗi khi lấy danh sách phim.' });

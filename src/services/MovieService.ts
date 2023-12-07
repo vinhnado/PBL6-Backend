@@ -54,7 +54,6 @@ export class MovieService implements IMovieService {
 			} else {
 			  console.log('Cache cleared:', reply === 'OK');
 			}
-			this.redis.quit();
 		});
 	}
 
@@ -66,7 +65,10 @@ export class MovieService implements IMovieService {
 		options: ISearchMovieOption,
 		page: number,
 		pageSize: number
-	): Promise<Movie[]> {
+	): Promise<{
+		movies: Movie[];
+		totalCount: number;
+	  }> {
 		try {
 			const cacheKey = MovieService.generateMD5Hash(
 				`searchMovies:${JSON.stringify(options)}:${page}:${pageSize}`
@@ -114,7 +116,7 @@ export class MovieService implements IMovieService {
 			};
 
 			let sortField = 'movie_id';
-			let sortBy = 'ASC';
+			let sortBy = 'DESC';
 			if (sort) {
 				sortField = sortFieldMap[sort] || 'movieId';
 			}
@@ -122,7 +124,7 @@ export class MovieService implements IMovieService {
 				sortBy = sortType || 'ASC';
 			}
 
-			let movies = await this.movieRepository.searchMovies(
+			let { movies, totalCount } = await this.movieRepository.searchMovies(
 				whereCondition,
 				whereConditionGenre,
 				(page = page),
@@ -138,10 +140,14 @@ export class MovieService implements IMovieService {
 				);
 			}
 
-			await this.redis.set(cacheKey, JSON.stringify(movies), 'EX', 60);
+			await this.redis.set(cacheKey, JSON.stringify({ movies, totalCount }), 'EX', 60);
 
-			return movies;
+			return {
+				movies,
+				totalCount,
+			  };;
 		} catch (error: any) {
+			console.log(error);
 			throw new Error('Không thể lấy danh sách phim: ' + error.message);
 		}
 	}
@@ -209,16 +215,20 @@ export class MovieService implements IMovieService {
 		try {
 			return await this.movieRepository.getAllMovies();
 		} catch (error) {
-			throw new Error('Could not fetch movies');
+			console.log(error);
+			throw(error);
 		}
 	}
 
 	async deleteMovieById(id: number): Promise<void> {
 		try {
 			const movie = await this.movieRepository.findById(id);
-			return await this.movieRepository.delete(movie);
+			 const rs = await this.movieRepository.delete(movie);
+			this.clearCache();
+			return rs;
 		} catch (error) {
-			throw new Error('Could not delete movie');
+			console.log(error);
+			throw(error);
 		}
 	}
 
@@ -264,9 +274,11 @@ export class MovieService implements IMovieService {
 			if(genreIds){
 				await this.movieGenreRepository.addGenresForMovie(newMovie.movieId, genreIds);
 			}
+			this.clearCache();
 			return newMovie;
 		} catch (error) {
-			throw new Error('Could not create movie');
+			console.log(error);
+			throw(error);
 		}
 	}
 
@@ -277,11 +289,13 @@ export class MovieService implements IMovieService {
 			const [rowsAffected, updatedMovies] = await this.movieRepository.updateMovie(parseInt(id), updatedData);
 
 			if (rowsAffected > 0) {
+				this.clearCache();
 				return updatedMovies[0]; // Return the first updated movie
 			}
 			return null;
 		} catch (error) {
-			throw new Error('Update movie failed');
+			console.log(error);
+			throw(error);
 		}
 	}
 	// service.ts
@@ -304,7 +318,8 @@ export class MovieService implements IMovieService {
 			await this.redis.set(cacheKey, JSON.stringify(movies), 'EX', 600);
 			return movies;
 		} catch (error) {
-			throw new Error('Could not get movies trending.');
+			console.log(error);
+			throw(error);
 		}
 	}
 
@@ -326,7 +341,8 @@ export class MovieService implements IMovieService {
 			await this.redis.set(cacheKey, JSON.stringify(movies), 'EX', 600);
 			return movies;
 		} catch (error) {
-			throw new Error('Could not get movies Recommender.');
+			console.log(error);
+			throw(error);
 		}
 	}
 
@@ -348,7 +364,8 @@ export class MovieService implements IMovieService {
 			await this.redis.set(cacheKey, JSON.stringify(movies), 'EX', 600);
 			return movies;
 		} catch (error) {
-			throw new Error('Could not get movies upcoming.');
+			console.log(error);
+			throw(error);
 		}
 	}
 
@@ -370,7 +387,8 @@ export class MovieService implements IMovieService {
 			await this.redis.set(cacheKey, JSON.stringify(movies), 'EX', 600);
 			return movies;
 		} catch (error) {
-			throw new Error('Could not get movies for VIP privileges.');
+			console.log(error);
+			throw(error);
 		}
 	}
 
@@ -381,7 +399,8 @@ export class MovieService implements IMovieService {
 
 			return nations;
 		} catch (error) {
-			throw new Error('Could not get nations of movies.');
+			console.log(error);
+			throw(error);
 		}
 	}
 
@@ -390,7 +409,8 @@ export class MovieService implements IMovieService {
 		try {
 			return await this.movieRepository.getAllReleaseDates();
 		} catch (error) {
-			throw new Error('Could not get nations of movies.');
+			console.log(error);
+			throw(error);
 		}
 	}
 
@@ -451,7 +471,9 @@ export class MovieService implements IMovieService {
 		try {
 			const movieId = Number(req.body.movieId);
 			const actorIds = req.body.actorIds;
-			return await this.movieActorRepository.addActorsForMovie(movieId, actorIds);
+			const movieActor = await this.movieActorRepository.addActorsForMovie(movieId, actorIds);
+			this.clearCache();
+			return movieActor;
 		} catch (error) {
 			throw(error);
 		}
@@ -462,7 +484,9 @@ export class MovieService implements IMovieService {
 		try {
 			const movieId = Number(req.body.movieId);
 			const actorIds = req.body.actorIds;
-			return await this.movieActorRepository.deleteActorsOfMovie(movieId, actorIds);
+			const n =  await this.movieActorRepository.deleteActorsOfMovie(movieId, actorIds);
+			this.clearCache();
+			return n;
 		} catch (error) {
 			throw(error);
 		}
@@ -472,7 +496,9 @@ export class MovieService implements IMovieService {
 		try {
 			const movieId = Number(req.body.movieId);
 			const directorIds = req.body.directorIds;
-			return await this.movieDirectorRepository.addDirectorsForMovie(movieId, directorIds);
+			const movieActor = await this.movieDirectorRepository.addDirectorsForMovie(movieId, directorIds);
+			this.clearCache();
+			return movieActor;
 		} catch (error) {
 			throw(error);
 		}
@@ -481,7 +507,9 @@ export class MovieService implements IMovieService {
 		try {
 			const movieId = Number(req.body.movieId);
 			const directorIds = req.body.directorIds;
-			return await this.movieDirectorRepository.deleteDirectorsOfMovie(movieId, directorIds);
+			const n = await this.movieDirectorRepository.deleteDirectorsOfMovie(movieId, directorIds);
+			this.clearCache();
+			return n;
 		} catch (error) {
 			throw(error);
 		} 
@@ -490,7 +518,9 @@ export class MovieService implements IMovieService {
 		try {
 			const movieId = Number(req.body.movieId);
 			const genreIds = req.body.genreIds;
-			return await this.movieGenreRepository.addGenresForMovie(movieId, genreIds);
+			const movieGenre = await this.movieGenreRepository.addGenresForMovie(movieId, genreIds);
+			this.clearCache();
+			return movieGenre;
 		} catch (error) {
 			throw(error);
 		}
@@ -499,7 +529,9 @@ export class MovieService implements IMovieService {
 		try {
 			const movieId = Number(req.body.movieId);
 			const genreIds = req.body.genreIds;
-			return await this.movieGenreRepository.deleteGenresOfMovie(movieId, genreIds);
+			const n = await this.movieGenreRepository.deleteGenresOfMovie(movieId, genreIds);
+			this.clearCache();
+			return n;
 		} catch (error) {
 			throw(error);
 		}
