@@ -45,6 +45,9 @@ export class SubscriptionType extends Model {
 	@HasMany(() => SubscriptionInfo)
 	subscriptionInfos!: SubscriptionInfo[];
 
+	@HasMany(() => Subscription)
+	subscriptions!: Subscription[];
+
 	@DeletedAt
 	deletedAt!: Date;
 }

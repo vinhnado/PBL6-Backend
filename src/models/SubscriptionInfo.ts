@@ -60,9 +60,6 @@ export class SubscriptionInfo extends Model {
 	@BelongsTo(() => Duration)
 	duration!: Duration;
 
-	@HasMany(() => Subscription)
-	subscriptions!: Subscription[];
-
 	@DeletedAt
 	deletedAt!: Date;
 }

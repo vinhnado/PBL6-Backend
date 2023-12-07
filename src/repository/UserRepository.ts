@@ -62,18 +62,8 @@ export class UserRepository
 					attributes: ['closeAt'],
 					include: [
 						{
-							model: SubscriptionInfo,
-							attributes: ['subscription_info_id'],
-							include: [
-								{
-									model: SubscriptionType,
-									attributes: ['name'],
-								},
-								{
-									model: Duration,
-									attributes: ['time'],
-								},
-							],
+							model: SubscriptionType,
+							attributes: ['subscription_type_id', 'name'],
 						},
 					],
 				},

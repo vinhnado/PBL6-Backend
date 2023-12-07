@@ -15,7 +15,6 @@ export class UserDTO {
 		closeAt: Date;
 		updatedAt: Date;
 		subscriptionType: string | null;
-		duration: string | null;
 	};
 
 	constructor(user: User) {
@@ -30,9 +29,7 @@ export class UserDTO {
 		this.subscription = {
 			closeAt: user.subscription.closeAt,
 			updatedAt: user.subscription.updatedAt,
-			subscriptionType:
-				user.subscription.subscriptionInfo.subscriptionType.name,
-			duration: user.subscription.subscriptionInfo.duration.time.toString(),
+			subscriptionType: user.subscription.subscriptionType.name,
 		};
 	}
 
