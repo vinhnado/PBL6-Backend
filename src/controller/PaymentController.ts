@@ -12,52 +12,57 @@ export class PaymentController {
 	private vnPayService: VNPayService;
 	private momoService: MomoService;
 	private paypalService: PaypalService;
-	
+
 	@Inject(() => PaymentService)
 	private paymentService!: PaymentService;
 
 	constructor() {
 		this.vnPayService = new VNPayService({
-            tmnCode: process.env.VNP_TMN_CODE || '4YOYYZHU',
-            secureSecret: process.env.VNP_HASH_SECRET|| 'MBIDOAOKAURPHPQIQVKYWQNHCSNNVWHU',
-            returnUrl: process.env.VNP_RETURN_URL||'https://sandbox.vnpayment.vn/tryitnow/Home/ReturnResult',
-        });
-        this.momoService = Container.get(MomoService);
-        this.paypalService = Container.get(PaypalService);
-    }
+			tmnCode: process.env.VNP_TMN_CODE || '4YOYYZHU',
+			secureSecret:
+				process.env.VNP_HASH_SECRET || 'MBIDOAOKAURPHPQIQVKYWQNHCSNNVWHU',
+			returnUrl:
+				process.env.VNP_RETURN_URL ||
+				'https://sandbox.vnpayment.vn/tryitnow/Home/ReturnResult',
+		});
+		this.momoService = Container.get(MomoService);
+		this.paypalService = Container.get(PaypalService);
+	}
 
 	/**
-     * @param date
-     * @param format
-     * @return number
-     */
-		private dateFormat(date: Date, format = 'yyyyMMddHHmmss'): number {
-			const pad = (n: number) => (n < 10 ? `0${n}` : n).toString();
-			const year = date.getFullYear();
-			const month = pad(date.getMonth() + 1);
-			const day = pad(date.getDate());
-			const hour = pad(date.getHours());
-			const minute = pad(date.getMinutes());
-			const second = pad(date.getSeconds());
-		
-			return Number(
-				format
-					.replace('yyyy', year.toString())
-					.replace('MM', month)
-					.replace('dd', day)
-					.replace('HH', hour)
-					.replace('mm', minute)
-					.replace('ss', second),
-			);
-		}
+	 * @param date
+	 * @param format
+	 * @return number
+	 */
+	private dateFormat(date: Date, format = 'yyyyMMddHHmmss'): number {
+		const pad = (n: number) => (n < 10 ? `0${n}` : n).toString();
+		const year = date.getFullYear();
+		const month = pad(date.getMonth() + 1);
+		const day = pad(date.getDate());
+		const hour = pad(date.getHours());
+		const minute = pad(date.getMinutes());
+		const second = pad(date.getSeconds());
+
+		return Number(
+			format
+				.replace('yyyy', year.toString())
+				.replace('MM', month)
+				.replace('dd', day)
+				.replace('HH', hour)
+				.replace('mm', minute)
+				.replace('ss', second)
+		);
+	}
 
 	getVNPayPaymentURL = async (req: Request, res: Response) => {
 		try {
 			const price = req.body.price;
 			const ipAdd = req.body.ipAddress;
-            const timeGMT7 = timezone(new Date()).tz('Asia/Ho_Chi_Minh').format();
+			const timeGMT7 = timezone(new Date()).tz('Asia/Ho_Chi_Minh').format();
 
-			const id = this.dateFormat(new Date(timeGMT7), 'yyyyMMddHHmmss')+(Math.floor(Math.random() * 90000) + 10000).toString();
+			const id =
+				this.dateFormat(new Date(timeGMT7), 'yyyyMMddHHmmss') +
+				(Math.floor(Math.random() * 90000) + 10000).toString();
 			// const id_subscription = req.body.price;
 			const paymentUrl = await this.vnPayService.buildPaymentUrl({
 				vnp_Amount: price,
@@ -70,7 +75,7 @@ export class PaymentController {
 				type: 'vn-pay',
 				price: price,
 				transactionId: id,
-				orderInfo: "",
+				orderInfo: '',
 				status: 'Not checkout',
 				userId: 1,
 				isPayment: false,
@@ -112,35 +117,35 @@ export class PaymentController {
 		}
 	};
 
-    getMomoPaymentURL = async (req: Request, res: Response) => {
-        try {
-            this.momoService.getPaymentUrl( 'MM'+new Date().getTime(),'pay with MoMo', '', 55000)
-              .then(paymentUrl => {
-                res.status(200).json({
-                    message: "Successfully",
-                    success: true,
-                    data: {
-                        url: paymentUrl
-                    },
-                });
-              })
-              .catch(error => {
-                console.error('Error:', error);
-                    res.status(200).json({
-                        message: "Failed",
-                        success: false,
-                    });
-              });
-        } catch (error) {
-            res.status(500).json({ message: 'Internal Server Error', error: error });
-        } 
-    }
+	getMomoPaymentURL = async (req: Request, res: Response) => {
+		try {
+			this.momoService
+				.getPaymentUrl('MM' + new Date().getTime(), 'pay with MoMo', '', 55000)
+				.then((paymentUrl) => {
+					res.status(200).json({
+						message: 'Successfully',
+						success: true,
+						data: {
+							url: paymentUrl,
+						},
+					});
+				})
+				.catch((error) => {
+					console.error('Error:', error);
+					res.status(200).json({
+						message: 'Failed',
+						success: false,
+					});
+				});
+		} catch (error) {
+			res.status(500).json({ message: 'Internal Server Error', error: error });
+		}
+	};
 
 	createPaypalOrder = async (req: Request, res: Response) => {
 		this.paypalService
-			.createOrder(req.body.price)
+			.createOrder(3, req.body.subscriptionInfoId)
 			.then((json) => {
-				console.log(json);
 				res.send(json);
 			})
 			.catch((err) => {
@@ -169,9 +174,8 @@ export class PaymentController {
 			});
 	};
 
-    verifyReturnUrlMomo = async (req: Request, res: Response) => {
+	verifyReturnUrlMomo = async (req: Request, res: Response) => {
 		console.log(req.body);
-		console.log("Momo return");
-
+		console.log('Momo return');
 	};
 }

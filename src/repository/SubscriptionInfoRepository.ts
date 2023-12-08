@@ -29,7 +29,6 @@ export class SubscriptionInfoRepository extends BaseRepository<SubscriptionInfo>
 						},
 					},
 				],
-				order: ['subscriptionInfoId', 'ASC'],
 			});
 			return data;
 		} catch (error: any) {
