@@ -25,9 +25,9 @@ export class PaymentService {
 
 	addOrEditPayment = async (paymentData: Partial<Payment>) => {
 		try {
-			const { paymentId, transactionId } = paymentData;
-
-			if (paymentId || transactionId) {
+			const { transactionId } = paymentData;
+			console.log(transactionId);
+			if (transactionId) {
 				const paymentToUpdate = await this.paymentRepository.findOneByCondition(
 					{
 						transactionId: paymentData.transactionId,
@@ -42,7 +42,6 @@ export class PaymentService {
 			const newPayment = Payment.build(paymentData);
 			return await this.paymentRepository.save(newPayment);
 		} catch (error: any) {
-			// Handle errors appropriately (log, throw, etc.)
 			throw new Error(`Failed to create or edit payment: ${error.message}`);
 		}
 	};

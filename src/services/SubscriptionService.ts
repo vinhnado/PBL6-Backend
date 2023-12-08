@@ -164,6 +164,14 @@ export class SubscriptionService {
 		}
 	};
 
+	getSubscriptionInfoById = async (id: number) => {
+		try {
+			return await this.subscriptionInfoRepository.getSubscriptionInfoById(id);
+		} catch (error: any) {
+			throw new Error(error.message);
+		}
+	};
+
 	deleteSupscriptionInfo = async (subscriptionInfoId: number) => {
 		try {
 			return await this.subscriptionInfoRepository.delete(

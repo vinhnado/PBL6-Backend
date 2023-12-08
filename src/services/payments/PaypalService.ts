@@ -64,7 +64,9 @@ export class PaypalService {
 				price: price,
 				transactionId: id,
 				status: 'Not checkout',
-				userId: 1,
+				userId: 2,
+				isPayment: false,
+				subscriptionTypeId: 2,
 			};
 			await this.paymentService.addOrEditPayment(partialObject);
 			return json;
