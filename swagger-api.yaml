@@ -74,6 +74,26 @@ paths:
         '500':
           description: Internal server error
 
+  /auth/register-admin:
+    post:
+      summary: Admin registration
+      tags:
+        - authentication
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Admin data for registration
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+
   /movies:
     get:
       tags:
@@ -330,7 +350,7 @@ paths:
                   type: number
                   format: float
                   default: 0.0
-                episode: 
+                episode:
                   type: number
                   format: int8
                   default: 0
@@ -375,7 +395,7 @@ paths:
     delete:
       tags:
         - movie
-      summary:  Delete actors of movie
+      summary: Delete actors of movie
       description: Delete actors of movie by actorIds and movieId
       requestBody:
         content:
@@ -389,7 +409,7 @@ paths:
                   default: 1
                 actorIds:
                   type: array
-                  default: [1,2,3]
+                  default: [1, 2, 3]
       responses:
         '200':
           description: successful
@@ -418,12 +438,12 @@ paths:
                   default: 1
                 actorIds:
                   type: array
-                  default: [1,2,3]
+                  default: [1, 2, 3]
   '/movies/movie-director':
     delete:
       tags:
         - movie
-      summary:  Delete directors of movie
+      summary: Delete directors of movie
       description: Delete directors of movie by directorIds and movieId
       requestBody:
         content:
@@ -437,7 +457,7 @@ paths:
                   default: 1
                 directorIds:
                   type: array
-                  default: [1,2,3]
+                  default: [1, 2, 3]
       responses:
         '200':
           description: successful
@@ -466,12 +486,12 @@ paths:
                   default: 1
                 directorIds:
                   type: array
-                  default: [1,2,3]
+                  default: [1, 2, 3]
   '/movies/movie-genre':
     delete:
       tags:
         - movie
-      summary:  Delete genres of movie
+      summary: Delete genres of movie
       description: Delete genres of movie by genreIds and movieId
       requestBody:
         content:
@@ -485,7 +505,7 @@ paths:
                   default: 1
                 genreIds:
                   type: array
-                  default: [1,2,3]
+                  default: [1, 2, 3]
       responses:
         '200':
           description: successful
@@ -514,7 +534,7 @@ paths:
                   default: 1
                 genreIds:
                   type: array
-                  default: [1,2,3]
+                  default: [1, 2, 3]
   /movies/get/presign-url:
     get:
       tags:
@@ -533,7 +553,7 @@ paths:
         - name: option
           in: query
           required: true
-          description:  Option to get
+          description: Option to get
           explode: true
           schema:
             type: array
@@ -761,14 +781,14 @@ paths:
         - name: episodeNum
           in: query
           required: true
-          description:  Number of episode of movie
+          description: Number of episode of movie
           explode: true
           schema:
             type: number
         - name: option
           in: query
           required: true
-          description:  Option to get
+          description: Option to get
           explode: true
           schema:
             type: array
@@ -840,7 +860,7 @@ paths:
                   format: int64
                 name:
                   type: string
-                  default: "Name of genre to update"
+                  default: 'Name of genre to update'
       responses:
         '200':
           description: successful operation
@@ -1068,7 +1088,7 @@ paths:
         '200':
           description: successful operation
         '500':
-          description:  Server Error
+          description: Server Error
   /home/genres/{genreId}:
     get:
       tags:

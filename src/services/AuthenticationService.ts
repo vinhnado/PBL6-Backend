@@ -45,7 +45,7 @@ export class AuthenticationService implements IAuthenticationService {
 				user.userId,
 				user.role,
 				user.account.username,
-				user.subscription.subscriptionInfo.subscriptionTypeId
+				user.subscription.subscriptionTypeId
 			);
 		}
 		return '';

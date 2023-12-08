@@ -50,7 +50,6 @@ export class UserService {
 		pageSize: number
 	): Promise<User[]> => {
 		try {
-			console.log(this.userRepository);
 			return this.userRepository.searchUsers(searchConditions, page, pageSize);
 		} catch (err: any) {
 			throw new Error(err.message);
