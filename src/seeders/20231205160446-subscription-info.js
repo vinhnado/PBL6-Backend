@@ -75,34 +75,6 @@ module.exports = {
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},
-				{
-					discount: 0,
-					subscription_type_id: 4,
-					duration_id: 2,
-					createdAt: new Date(),
-					updatedAt: new Date(),
-				},
-				{
-					discount: 0.1,
-					subscription_type_id: 4,
-					duration_id: 3,
-					createdAt: new Date(),
-					updatedAt: new Date(),
-				},
-				{
-					discount: 0.2,
-					subscription_type_id: 4,
-					duration_id: 4,
-					createdAt: new Date(),
-					updatedAt: new Date(),
-				},
-				{
-					discount: 0.3,
-					subscription_type_id: 4,
-					duration_id: 5,
-					createdAt: new Date(),
-					updatedAt: new Date(),
-				},
 			],
 			{}
 		);

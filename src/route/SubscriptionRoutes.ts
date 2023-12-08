@@ -22,6 +22,22 @@ class SubscriptionRoutes extends BaseRoutes {
 			'/delete-subscription-type',
 			this.controller.deleteSubscriptionType
 		);
+		this.router.get(
+			'/get-all-subscription-info',
+			this.controller.getAllSubscriptionInfo
+		);
+		this.router.post(
+			'/create-subscription-info',
+			this.controller.createSubscriptionInfo
+		);
+		this.router.put(
+			'/update-subscription-info',
+			this.controller.updateSubscriptionInfo
+		);
+		this.router.delete(
+			'/delete-subscription-info',
+			this.controller.deleteSubscriptionInfo
+		);
 	}
 }
 
