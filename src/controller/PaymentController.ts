@@ -48,7 +48,7 @@ export class PaymentController {
 				isPayment: false,
 			};
 
-			await this.paymentService.addOrEditPayment(partialObject);
+			// await this.paymentService.addOrEditPayment(partialObject);
 			res.status(200).json({
 				message: 'Successfully',
 				success: true,
@@ -57,6 +57,7 @@ export class PaymentController {
 				},
 			});
 		} catch (error) {
+			console.log(error);
 			res.status(500).json({ message: 'Internal Server Error', error: error });
 		}
 	};
