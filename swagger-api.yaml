@@ -1030,12 +1030,32 @@ paths:
       responses:
         '200':
           description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
+        '400':
+          description: Error while get movies by genres
+  /home/posters:
+    get:
+      tags:
+        - home
+      summary: Get movie for home page
+      description: Get movie for home page
+      parameters:
+        - name: page
+          in: query
+          description: Use to pagination, default page = 1
+          required: false
+          explode: true
+          schema:
+            type: number
+        - name: pageSize
+          in: query
+          description: Use to pagination, default pageSize = 6
+          required: false
+          explode: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: successful operation
         '400':
           description: Error while get movies by genres
   /home/headers:
