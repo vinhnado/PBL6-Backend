@@ -1050,12 +1050,32 @@ paths:
       responses:
         '200':
           description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
+        '400':
+          description: Error while get movies by genres
+  /home/posters:
+    get:
+      tags:
+        - home
+      summary: Get movie for home page
+      description: Get movie for home page
+      parameters:
+        - name: page
+          in: query
+          description: Use to pagination, default page = 1
+          required: false
+          explode: true
+          schema:
+            type: number
+        - name: pageSize
+          in: query
+          description: Use to pagination, default pageSize = 6
+          required: false
+          explode: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: successful operation
         '400':
           description: Error while get movies by genres
   /home/headers:
@@ -1502,7 +1522,7 @@ paths:
     put:
       tags:
         - subscription
-      summary: Update Subscription
+      summary: Update Subscription cách sử dụng  nếu truyền chỉ một mình subscriptionInfoId thì là cập nhật theo gói (có nó thì chỉ có mình nó truyền vào), closeAt và subscriptionTypeId thì truyền về cái nào sửa cái đấy, userId bắt buộc
       requestBody:
         required: true
         content:
@@ -1514,9 +1534,11 @@ paths:
                   type: integer
                 userId:
                   type: integer
-                closedAt:
+                closeAt:
                   type: string
                   format: date-time
+                subscriptionInfoId:
+                  type: integer
       responses:
         '200':
           description: OK
@@ -1563,6 +1585,8 @@ paths:
               properties:
                 name:
                   type: string
+                price:
+                  type: number
                 subscriptionTypeId:
                   type: integer
       responses:
@@ -1608,6 +1632,98 @@ paths:
               example:
                 status: Ok!
                 message: Successfully
+
+  /subscription/create-subscription-info:
+    post:
+      tags:
+        - subscription
+      summary: Create Subscription Type
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subscriptionTypeId:
+                  type: number
+                durationId:
+                  type: number
+                discount:
+                  type: number
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                status: Ok!
+                message: Successfully
+
+  /subscription/update-subscription-info:
+    put:
+      tags:
+        - subscription
+      summary: Update Subscription Info
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subscriptionTypeId:
+                  type: number
+                durationId:
+                  type: number
+                discount:
+                  type: number
+                subscriptionInfoId:
+                  type: number
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                status: Ok!
+                message: Successfully
+
+  /subscription/get-all-subscription-info:
+    get:
+      tags:
+        - subscription
+      summary: Get All Subscription Info
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                status: Ok!
+                message: Successfully
+                data: []
+
+  /subscription/delete-subscription-info:
+    delete:
+      tags:
+        - subscription
+      summary: Delete Subscription Info
+      parameters:
+        - name: subscriptionInfoId
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                status: Ok!
+                message: Successfully
+
   '/statisticals/getRevenue':
     get:
       tags:

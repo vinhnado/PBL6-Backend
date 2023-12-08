@@ -59,7 +59,7 @@ export class UserRepository
 				},
 				{
 					model: Subscription,
-					attributes: ['closeAt'],
+					// attributes: ['closeAt'],
 					include: [
 						{
 							model: SubscriptionType,
