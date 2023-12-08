@@ -28,8 +28,6 @@ export const validateCreateEpisode = [
     body('title').notEmpty().withMessage('Title is required').isString().withMessage('Title must be a string'),
     body('description').optional().isString().withMessage('Description must be a string'),
     body('releaseDate').notEmpty().isISO8601().withMessage('Release date is required and must be a valid ISO8601 date'),
-    body('duration').notEmpty().isInt().withMessage('Duration is required and must be an integer'),
-    body('episodeNo').notEmpty().isInt().withMessage('Episode number is required and must be an integer'),
 ]
 
 export const validateGetPresignURL = [

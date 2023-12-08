@@ -29,7 +29,7 @@ export class CommentRepository extends BaseRepository<Comment> implements IComme
                 include: [
                     {
                         model: User, // Assuming the model for subcomments is named 'Subcomment'
-                        attributes: ['user_id', 'gender', 'avatar_url'],
+                        attributes: ['user_id','email', 'gender', 'avatar_url'],
                     },
                     {
                         model: SubComment,
@@ -38,7 +38,7 @@ export class CommentRepository extends BaseRepository<Comment> implements IComme
                         include:[
                             {
                                 model: User,
-                                attributes: ['user_id', 'gender', 'avatar_url'],
+                                attributes: ['user_id','email', 'gender', 'avatar_url'],
                             },
                         ]
                     },

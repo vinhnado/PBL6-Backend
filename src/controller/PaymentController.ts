@@ -6,6 +6,7 @@ import { MomoService } from '../services/payments/MomoService';
 import { PaypalService } from '../services/payments/PaypalService';
 import { Payment } from '../models/Payment';
 import { PaymentService } from '../services/PaymentService';
+import timezone from 'moment-timezone';
 
 export class PaymentController {
 	private vnPayService: VNPayService;
@@ -25,12 +26,39 @@ export class PaymentController {
         this.paypalService = Container.get(PaypalService);
     }
 
+	/**
+     * @param date
+     * @param format
+     * @return number
+     */
+		private dateFormat(date: Date, format = 'yyyyMMddHHmmss'): number {
+			const pad = (n: number) => (n < 10 ? `0${n}` : n).toString();
+			const year = date.getFullYear();
+			const month = pad(date.getMonth() + 1);
+			const day = pad(date.getDate());
+			const hour = pad(date.getHours());
+			const minute = pad(date.getMinutes());
+			const second = pad(date.getSeconds());
+		
+			return Number(
+				format
+					.replace('yyyy', year.toString())
+					.replace('MM', month)
+					.replace('dd', day)
+					.replace('HH', hour)
+					.replace('mm', minute)
+					.replace('ss', second),
+			);
+		}
+
 	getVNPayPaymentURL = async (req: Request, res: Response) => {
 		try {
 			const price = req.body.price;
 			const ipAdd = req.body.ipAddress;
-			const id = (Math.floor(Math.random() * 90000) + 10000).toString();
-			const id_subscription = req.body.price;
+            const timeGMT7 = timezone(new Date()).tz('Asia/Ho_Chi_Minh').format();
+
+			const id = this.dateFormat(new Date(timeGMT7), 'yyyyMMddHHmmss')+(Math.floor(Math.random() * 90000) + 10000).toString();
+			// const id_subscription = req.body.price;
 			const paymentUrl = await this.vnPayService.buildPaymentUrl({
 				vnp_Amount: price,
 				vnp_IpAddr: ipAdd,
@@ -48,7 +76,7 @@ export class PaymentController {
 				isPayment: false,
 			};
 
-			await this.paymentService.addOrEditPayment(partialObject);
+			// await this.paymentService.addOrEditPayment(partialObject);
 			res.status(200).json({
 				message: 'Successfully',
 				success: true,
@@ -57,6 +85,7 @@ export class PaymentController {
 				},
 			});
 		} catch (error) {
+			console.log(error);
 			res.status(500).json({ message: 'Internal Server Error', error: error });
 		}
 	};

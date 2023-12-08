@@ -9,4 +9,5 @@ export interface IEpisodeService {
     updateEpisode(req: Request): Promise<[number, Episode[]]>;
     deleteEpisode(req: Request): Promise<boolean>;
     getPresignUrlToUploadPosterAndMovie(req: Request): Promise<{ key: string, value: string }[]>;
+    checkMovieIsSeries(movieId: number): Promise<boolean>
 }

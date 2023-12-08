@@ -92,15 +92,29 @@ export class EpisodeRepository extends BaseRepository<Episode> implements IEpiso
 
     async getAllEpisodeOfMovie(movie_id: number): Promise<Episode[]> {
         try {
-            const episodes = await Episode.findAll({
+            const episodes = await this.model.findAll({
               where: {
                 movie_id: movie_id,
               },
             });
             return episodes;
         } catch (error: any) {
-            throw new Error('Can not get episodes of movie: ' + error.message);
-          }
+            throw(error);
+        }
     }
 
+    async getTheLastEpisodeOfMovie(movieId: number): Promise<Episode[]> {
+        try {
+            const episodes = await this.model.findAll({
+              where: {
+                movie_id: movieId,
+              },
+              order: [['episodeNo', 'DESC']],
+              limit :1
+            });
+            return episodes;
+        } catch (error: any) {
+            throw(error);
+        }
+    }
 }

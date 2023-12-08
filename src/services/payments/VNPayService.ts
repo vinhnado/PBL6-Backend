@@ -76,7 +76,7 @@ export class VNPayService {
      * @returns {string} The payment url string
      */
     public buildPaymentUrl(payload: VNPayPaymentUrlDTO): Promise<string> {
-        
+        console.log(payload);
         return new Promise((resolve, reject) => {
             const err = this.validateGlobalConfig();
             if (err instanceof Error) {
