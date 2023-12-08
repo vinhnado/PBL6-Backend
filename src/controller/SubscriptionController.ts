@@ -12,26 +12,25 @@ export class SubscriptionController {
 
 	updateSubscription = async (req: Request, res: Response) => {
 		try {
-			const { subscriptionTypeId, userId, closedAt } = req.body;
+			const { subscriptionTypeId, userId, closeAt, subscriptionInfoId } =
+				req.body;
+			const updateParams = {
+				userId: Number(userId),
+				closeAt: closeAt ? new Date(closeAt) : null,
+				subscriptionTypeId: subscriptionTypeId
+					? Number(subscriptionTypeId)
+					: null,
+				subscriptionInfoId: subscriptionInfoId
+					? Number(subscriptionInfoId)
+					: null,
+			};
 
-			if (subscriptionTypeId && closedAt) {
-				await this.subscriptionService.updateSubscription(
-					Number(userId),
-					new Date(closedAt),
-					Number(subscriptionTypeId)
-				);
-			} else if (closedAt) {
-				await this.subscriptionService.updateSubscription(
-					Number(userId),
-					new Date(closedAt)
-				);
-			} else if (subscriptionTypeId) {
-				await this.subscriptionService.updateSubscription(
-					Number(userId),
-					null,
-					Number(subscriptionTypeId)
-				);
-			}
+			await this.subscriptionService.updateSubscription(
+				updateParams.userId,
+				updateParams.closeAt,
+				updateParams.subscriptionTypeId,
+				updateParams.subscriptionInfoId
+			);
 			return res.status(200).json({
 				status: 'Ok!',
 				message: 'Successfully',
@@ -44,8 +43,11 @@ export class SubscriptionController {
 
 	createSubscriptionType = async (req: Request, res: Response) => {
 		try {
-			const { name } = req.body;
-			await this.subscriptionService.createOrUpdateSubscriptionType(name);
+			const { name, price } = req.body;
+			await this.subscriptionService.createOrUpdateSubscriptionType(
+				name,
+				price
+			);
 			return res.status(200).json({
 				status: 'Ok!',
 				message: 'Successfully',
@@ -57,10 +59,11 @@ export class SubscriptionController {
 
 	updateSubscriptionType = async (req: Request, res: Response) => {
 		try {
-			const { name, subcriptionTypeId } = req.body;
+			const { name, price, subscriptionTypeId } = req.body;
 			await this.subscriptionService.createOrUpdateSubscriptionType(
 				name,
-				subcriptionTypeId
+				price,
+				subscriptionTypeId
 			);
 			return res.status(200).json({
 				status: 'Ok!',
@@ -88,6 +91,87 @@ export class SubscriptionController {
 			const { subscriptionTypeId } = req.query;
 			await this.subscriptionService.deleteSupscriptionType(
 				Number(subscriptionTypeId)
+			);
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully',
+			});
+		} catch (error) {
+			res.status(500).json({ error: 'Can not' });
+		}
+	};
+
+	getAllSubscriptionInfo = async (req: Request, res: Response) => {
+		try {
+			const data = await this.subscriptionService.getAllSubscriptionInfo();
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully',
+				data: data,
+			});
+		} catch (error) {
+			res.status(500).json({ error: 'Can not' });
+		}
+	};
+
+	createSubscriptionInfo = async (req: Request, res: Response) => {
+		try {
+			const { subscriptionTypeId, durationId, discount } = req.body;
+			if (!subscriptionTypeId || !durationId || !discount) {
+				return res.status(400).json({
+					status: 'Error',
+					message: 'Lack of Param',
+				});
+			}
+
+			await this.subscriptionService.createOrUpdateSubscriptionInfo(
+				Number(subscriptionTypeId),
+				Number(durationId),
+				Number(discount)
+			);
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully',
+			});
+		} catch (error) {
+			res.status(500).json({ error: 'Can not' });
+		}
+	};
+
+	updateSubscriptionInfo = async (req: Request, res: Response) => {
+		try {
+			const { subscriptionTypeId, durationId, discount, subscriptionInfoId } =
+				req.body;
+			const updateParams = {
+				subscriptionInfoId: subscriptionInfoId
+					? Number(subscriptionInfoId)
+					: null,
+				discount: discount ? Number(discount) : null,
+				durationId: durationId ? Number(durationId) : null,
+				subscriptionTypeId: subscriptionTypeId
+					? Number(subscriptionTypeId)
+					: null,
+			};
+			await this.subscriptionService.createOrUpdateSubscriptionInfo(
+				updateParams.subscriptionTypeId,
+				updateParams.durationId,
+				updateParams.discount,
+				updateParams.subscriptionInfoId
+			);
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully',
+			});
+		} catch (error) {
+			res.status(500).json({ error: 'Can not' });
+		}
+	};
+
+	deleteSubscriptionInfo = async (req: Request, res: Response) => {
+		try {
+			const { subscriptionInfoId } = req.query;
+			await this.subscriptionService.deleteSupscriptionInfo(
+				Number(subscriptionInfoId)
 			);
 			return res.status(200).json({
 				status: 'Ok!',

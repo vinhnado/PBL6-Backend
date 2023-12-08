@@ -54,9 +54,9 @@ export abstract class BaseRepository<T extends Model<T>>
 		}
 	}
 
-	async delete(model: T): Promise<void> {
+	async delete(model: T, force: boolean = false): Promise<void> {
 		try {
-			await model.destroy();
+			await model.destroy({ force: force });
 		} catch (error) {
 			throw new Error('Không thể delete' + error);
 		}
