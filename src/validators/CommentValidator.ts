@@ -14,4 +14,16 @@ export const validateAddComment = [
     body('content').notEmpty().withMessage('Content is required').isString().withMessage('Content must be a string'),
   ];
 
-    
+  export const validateAddSubComment = [
+    body('parentId').notEmpty().withMessage('parentId is required').isInt().withMessage('parentId must be an integer'),
+    body('content').notEmpty().withMessage('Content is required').isString().withMessage('Content must be a string'),
+  ];
+
+  export const validateDeleteSubComment = [
+    param('subCommentId').notEmpty().withMessage('SubComment ID is required').isInt().withMessage('SubComment ID must be an integer'),
+];
+
+export const validateUpdateSubComment = [
+  param('subCommentId').notEmpty().withMessage('SubComment ID is required').isInt().withMessage('SubComment ID must be an integer'),
+  body('content').notEmpty().isString().withMessage('Content must be a string'),
+];

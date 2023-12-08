@@ -28,7 +28,7 @@ export class CommentService implements ICommentService {
 
             const comment = await this.commentRepository.findById(commentId);
             if (comment && comment.userId === userId) {
-                await this.commentRepository.delete(comment);
+                await this.commentRepository.delete(comment, true);
                 return true;
             }
             return false;
@@ -113,7 +113,20 @@ export class CommentService implements ICommentService {
         }
     }
     async deleteSubComment(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<boolean> {
-        throw new Error("Method not implemented.");
+        try {
+            const subCommentId = Number(req.params.subCommentId);
+            
+            const userId = Number(req.payload.userId);
+
+            const comment = await this.subCommentRepository.findById(subCommentId);
+            if (comment && comment.userId === userId) {
+                await this.subCommentRepository.delete(comment, true);
+                return true;
+            }
+            return false;
+        } catch (error) {
+            throw(error);
+        }
     }
     async updateSubComment(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<SubComment | null> {
         try {

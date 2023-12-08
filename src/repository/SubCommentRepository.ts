@@ -12,9 +12,9 @@ export class SubCommentRepository extends BaseRepository<SubComment> implements 
 		super(SubComment);
 	}
 
-    addSubComment(comment: Partial<SubComment>): Promise<SubComment> {
+    addSubComment(subComment: Partial<SubComment>): Promise<SubComment> {
         try {
-            return this.model.create(comment);
+            return this.model.create(subComment);
         } catch (error) {
             throw(error);
         }

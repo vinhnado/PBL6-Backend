@@ -994,6 +994,101 @@ paths:
                   format: int32
       security:
         - bearerAuth: []
+
+  /comments/sub-comments/create:
+    post:
+      tags:
+        - comment
+      summary: Add sub comment for episode
+      description: Add sub comment for episode
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                parentId:
+                  type: integer
+                  format: int64
+                  default: 1
+                content:
+                  type: string
+                  default: 'Add comment here'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security:
+        - bearerAuth: []
+  /comments/sub-comments/delete/{subCommentId}:
+    delete:
+      tags:
+        - comment
+      summary: Delete sub comment
+      description: Delete sub comment by id
+      parameters:
+        - name: subCommentId
+          in: path
+          description: subCommentId to delete
+          required: true
+          explode: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security:
+        - bearerAuth: []
+  /comments/sub-comments/edit/{subCommentId}:
+    put:
+      tags:
+        - comment
+      summary: Edit sub comment
+      description: Edit sub comment
+      parameters:
+        - name: subCommentId
+          in: path
+          description: subCommentId to update
+          required: true
+          explode: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  default: 'content to update'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security:
+        - bearerAuth: []
   /ratings/create:
     post:
       tags:
