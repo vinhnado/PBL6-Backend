@@ -28,6 +28,23 @@ export class EpisodeService implements IEpisodeService {
 	@Inject(() => MovieRepository)
 	private movieRepository!: IMovieRepository;
 
+	hideEmail(email:string) {
+		const atIndex = email.indexOf('@');
+		
+		if (atIndex > 1) {
+		  const username = email.substring(0, atIndex);
+		  const domain = email.substring(atIndex);
+		  
+		  // Hiển thị 3 ký tự đầu, sau đó thêm dấu sao và hiển thị 3 ký tự cuối
+		  const hiddenUsername = username.substring(0, 4) + '*'.repeat(username.length - 3);
+		  
+		  return hiddenUsername + domain;
+		}
+		
+		// Trường hợp không có ký tự @ trong email
+		return email;
+	  }
+
 	/**
 	 * Get details a episode of movie by episode_id
 	 *
@@ -62,13 +79,18 @@ export class EpisodeService implements IEpisodeService {
 		} catch (error) {
 			throw new Error('Can not get episode.');
 		}
-	}	async getCommentsOfEpisode(episodeId: number, page: number, pageSize:number): Promise<Comment[]> {
+	}
+
+	async getCommentsOfEpisode(episodeId: number, page: number, pageSize:number): Promise<Comment[]> {
 		try {
 			let comments = await this.commentRepository.getCommentsByEpisodeId(episodeId, page, pageSize);
 			let url = '';
 			const userArr = new Map<number, string>();
 			userArr.set(0, await this.s3Service.getObjectUrl('default/avatar.jpg'));
 			for(let comment of comments){
+				if(comment.user.email){
+					comment.user.setDataValue('email',this.hideEmail(comment.user.getDataValue('email')));
+				}
 				if(!comment.user.avatarURL){
 					const id = Number(comment.user.getDataValue('user_id'));
 					if (!userArr.has(id)) {
@@ -78,6 +100,9 @@ export class EpisodeService implements IEpisodeService {
 				}
 
 				for(let subComment of comment.subcomments){
+					if(subComment.user.email){
+						subComment.user.setDataValue('email',this.hideEmail(subComment.user.getDataValue('email')));
+					}
 					if(!subComment.user.avatarURL){
 						const id = Number(subComment.user.getDataValue('user_id'));
 						if (!userArr.has(id)) {
