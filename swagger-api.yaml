@@ -692,7 +692,7 @@ paths:
                   format: date
                 description:
                   type: string
-                  
+
       responses:
         '200':
           description: successful operation
@@ -1452,19 +1452,6 @@ paths:
         - user
       security:
         - bearerAuth: []
-      parameters:
-        - name: page
-          in: query
-          description: Page number
-          required: true
-          schema:
-            type: integer
-        - name: pageSize
-          in: query
-          description: Number of items per page
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: Successful response
@@ -1512,19 +1499,6 @@ paths:
         - user
       security:
         - bearerAuth: []
-      parameters:
-        - name: page
-          in: query
-          description: Page number
-          required: true
-          schema:
-            type: integer
-        - name: pageSize
-          in: query
-          description: Number of items per page
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: Successful response
@@ -1578,19 +1552,6 @@ paths:
         - user
       security:
         - bearerAuth: []
-      parameters:
-        - name: page
-          in: query
-          description: Page number
-          required: true
-          schema:
-            type: integer
-        - name: pageSize
-          in: query
-          description: Number of items per page
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: Successful response
