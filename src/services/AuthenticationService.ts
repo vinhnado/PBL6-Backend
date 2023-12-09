@@ -10,6 +10,10 @@ import { Subscription } from '../models/Subscription';
 import Mail from '../utils/Mail';
 import { Token } from '../utils/Token';
 
+// const sleep = (millis: number) => {
+// 	var stop = new Date().getTime();
+// 	while (new Date().getTime() < stop + millis) {}
+// };
 @Service()
 export class AuthenticationService implements IAuthenticationService {
 	@Inject(() => UserRepository)
@@ -25,6 +29,10 @@ export class AuthenticationService implements IAuthenticationService {
 	private token!: Token;
 
 	async login(username: string, password: string): Promise<string> {
+		// console.log('Before sleep');
+		// sleep(10000); // Wait for one second
+		// console.log('After sleep');
+
 		const searchConditions = {
 			username,
 		};

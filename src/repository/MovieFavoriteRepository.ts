@@ -11,12 +11,10 @@ export class MovieFavoriteRepository extends BaseRepository<MovieFavorite> {
 		super(MovieFavorite);
 	}
 
-	async findAll(userId: number, page: number, pageSize: number) {
+	async findAll(userId: number) {
 		try {
 			const movieFavoriteList = await User.findOne({
 				where: { userId: userId },
-				offset: (page - 1) * pageSize,
-				limit: pageSize,
 				attributes: ['userId'],
 				include: [
 					{
