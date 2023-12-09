@@ -36,9 +36,19 @@ export class UserService {
 
 	findOneUser = async (searchConditions: any): Promise<UserDTO> => {
 		try {
-			return UserDTO.userToUserDTO(
+			let userDTO = UserDTO.userToUserDTO(
 				await this.userRepository.findOneUser(searchConditions)
 			);
+			if (userDTO!.avatarURL) {
+				userDTO!.avatarURL = await this.s3Service.getObjectUrl(
+					userDTO!.avatarURL
+				);
+			} else {
+				userDTO!.avatarURL = await this.s3Service.getObjectUrl(
+					'default/user/default_avatar.jpg'
+				);
+			}
+			return userDTO;
 		} catch (err: any) {
 			throw new Error(err.message);
 		}
@@ -92,8 +102,10 @@ export class UserService {
 				}
 			);
 
-			if (movieFavorite != null && movieFavorite.deleteAt != null) {
+			if (movieFavorite != null && movieFavorite.deletedAt != null) {
 				return await this.movieFavoriteRepository.restore(movieFavorite);
+			} else if (movieFavorite != null && movieFavorite.deletedAt == null) {
+				throw new Error('Dữ liệu đã tồn tại');
 			}
 
 			return await this.movieFavoriteRepository.save(
@@ -120,17 +132,9 @@ export class UserService {
 		}
 	};
 
-	findAllMovieFavorite = async (
-		userId: number,
-		page: number,
-		pageSize: number
-	) => {
+	findAllMovieFavorite = async (userId: number) => {
 		try {
-			const userMovie = await this.movieFavoriteRepository.findAll(
-				userId,
-				page,
-				pageSize
-			);
+			const userMovie = await this.movieFavoriteRepository.findAll(userId);
 			return new MovieDTO(userMovie!, 'MovieFavorite');
 		} catch (error: any) {
 			throw new Error(error.message);
@@ -148,8 +152,8 @@ export class UserService {
 				episode_id: episodeId,
 			});
 			if (watchHistory != null && watchHistory.deletedAt != null) {
+				await this.watchHistoryRepository.restore(watchHistory);
 				watchHistory.duration = duration;
-				watchHistory.deletedAt = null;
 				return await this.watchHistoryRepository.save(watchHistory);
 			} else if (watchHistory != null && watchHistory.deletedAt == null) {
 				watchHistory.duration = duration;
@@ -163,7 +167,6 @@ export class UserService {
 				})
 			);
 		} catch (error: any) {
-			console.log(error);
 			throw new Error(error.message);
 		}
 	};
@@ -180,11 +183,11 @@ export class UserService {
 		}
 	};
 
-	deleteWatchHistory = async (userId: number, movieId: number) => {
+	deleteWatchHistory = async (userId: number, episodeId: number) => {
 		try {
 			let watchHistory = await this.watchHistoryRepository.findOneByCondition({
 				user_id: userId,
-				movie_id: movieId,
+				episode_id: episodeId,
 			});
 			return await this.watchHistoryRepository.delete(watchHistory);
 		} catch (error: any) {
@@ -193,17 +196,9 @@ export class UserService {
 		}
 	};
 
-	findAllWatchHistory = async (
-		userId: number,
-		page: number,
-		pageSize: number
-	) => {
+	findAllWatchHistory = async (userId: number) => {
 		try {
-			let userMovie = await this.watchHistoryRepository.findAll(
-				userId,
-				page,
-				pageSize
-			);
+			let userMovie = await this.watchHistoryRepository.findAll(userId);
 			return new MovieDTO(userMovie!, 'WatchHistory');
 			return userMovie;
 		} catch (error: any) {
@@ -217,7 +212,7 @@ export class UserService {
 				user_id: userId,
 				movie_id: movieId,
 			});
-			if (watchLater != null && watchLater.deleteAt != null) {
+			if (watchLater != null && watchLater.deletedAt == null) {
 				return await this.movieFavoriteRepository.restore(watchLater);
 			}
 			return await this.watchLaterRepository.save(
@@ -242,17 +237,9 @@ export class UserService {
 		}
 	};
 
-	findAllWatchLater = async (
-		userId: number,
-		page: number,
-		pageSize: number
-	) => {
+	findAllWatchLater = async (userId: number) => {
 		try {
-			let userMovie = await this.watchLaterRepository.findAll(
-				userId,
-				page,
-				pageSize
-			);
+			let userMovie = await this.watchLaterRepository.findAll(userId);
 			return new MovieDTO(userMovie!, 'WatchLater');
 		} catch (error: any) {
 			throw new Error(error.message);

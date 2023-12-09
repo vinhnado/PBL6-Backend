@@ -119,12 +119,8 @@ export class UserController {
 
 	getFavoriteMovieList = async (req: Request, res: Response) => {
 		try {
-			const { page, pageSize } = req.query;
-
 			const data = await this.userService.findAllMovieFavorite(
-				req.payload.userId,
-				Number(page),
-				Number(pageSize)
+				req.payload.userId
 			);
 			return res.status(200).json({
 				status: 'Ok!',
@@ -139,12 +135,8 @@ export class UserController {
 
 	getWatchHistoryList = async (req: Request, res: Response) => {
 		try {
-			const { page, pageSize } = req.query;
-
 			const data = await this.userService.findAllWatchHistory(
-				req.payload.userId,
-				Number(page),
-				Number(pageSize)
+				req.payload.userId
 			);
 			return res.status(200).json({
 				status: 'Ok!',
@@ -159,13 +151,7 @@ export class UserController {
 
 	getAllWatchLaterList = async (req: Request, res: Response) => {
 		try {
-			const { page, pageSize } = req.query;
-
-			const data = await this.userService.findAllWatchLater(
-				req.payload.userId,
-				Number(page),
-				Number(pageSize)
-			);
+			const data = await this.userService.findAllWatchLater(req.payload.userId);
 			return res.status(200).json({
 				status: 'Ok!',
 				message: 'Successfully',
