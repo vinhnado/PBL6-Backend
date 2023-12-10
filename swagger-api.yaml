@@ -1640,8 +1640,8 @@ paths:
         '200':
           description: Successful response
     delete:
-      summary: Get actor details
-      description: Get actor details
+      summary: Delete actor
+      description: Delete actor
       tags:
         - individuals
       parameters:
@@ -1707,8 +1707,8 @@ paths:
         '200':
           description: Successful response
     post:
-      summary: Create a new actor
-      description: Create a new actor
+      summary: Create a new director
+      description: Create a new director
       tags:
         - individuals
       requestBody:
@@ -1736,8 +1736,8 @@ paths:
 
   /individuals/directors/{directorId}:
     get:
-      summary: Get actor details
-      description: Get actor details
+      summary: Get director details
+      description: Get director details
       tags:
         - individuals
       parameters:
@@ -1752,8 +1752,8 @@ paths:
         '200':
           description: Successful response
     delete:
-      summary: Get actor details
-      description: Get actor details
+      summary: Delete a director
+      description:  Delete a director by directorId
       tags:
         - individuals
       parameters:
@@ -1768,8 +1768,8 @@ paths:
         '200':
           description: Successful response
     put:
-      summary: Update actor informations
-      description: Update actor informations
+      summary: Update director informations
+      description: Update director informations
       tags:
         - individuals
       parameters:
