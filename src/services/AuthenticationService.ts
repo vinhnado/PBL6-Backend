@@ -28,7 +28,7 @@ export class AuthenticationService implements IAuthenticationService {
 	@Inject(() => Token)
 	private token!: Token;
 
-	async login(username: string, password: string): Promise<string> {
+	async login(username: string, password: string): Promise<any> {
 		// console.log('Before sleep');
 		// sleep(10000); // Wait for one second
 		// console.log('After sleep');
