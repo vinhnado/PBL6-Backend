@@ -30,6 +30,8 @@ tags:
     description: Operations about user
   - name: subscription
     description: API for subscription
+  - name: payment
+    description: API for payment
   - name: statistical
     description: API for statistical
     externalDocs:
@@ -1818,7 +1820,70 @@ paths:
               example:
                 status: Ok!
                 message: Successfully
-
+  /payments/vn-pay:
+    post:
+      tags:
+        - payment
+      summary: Create VN Pay Payment URL
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                price:
+                  type: number
+                  format: int64
+                  default: 100000
+                ipAddress:
+                  type: string
+                  default: '127.0.0.1'
+                idSubscription:
+                  type: number
+                  format: int8
+                  default: 2
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                success: true
+                message: Successfully
+                data:
+                  - url: "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=10000000&vnp_Command=pay&vnp_CreateDate=20231209102913&vnp_CurrCode=VND&vnp_IpAddr=127.0.0.1&vnp_Locale=vn&vnp_OrderInfo=User_1+Thanh+to%C3%A1n+g%C3%B3i+Ti%C3%AAu+chu%E1%BA%A9n+1+th%C3%A1ng&vnp_OrderType=other&vnp_ReturnUrl=http%3A%2F%2Flocalhost%3A8000%2Fapi%2Fpayments%2Fvn-pay%2Fverify&vnp_TmnCode=4YOYYZHU&vnp_TxnRef=2023120910291357803&vnp_Version=2.1.0&vnp_SecureHash=4b9ed3e360fbfd091839431bcba949cd11157f64a5ffc5a9b8cd635056f771fcf66979e99bbffdb79fdf829b72a70f8e0cef7e86e645c86025505ef2f93217bc"       
+  /payments/vn-pay/verify:
+    get:
+      tags:
+        - payment
+      summary: Verify VN Pay return URL
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                price:
+                  type: number
+                  format: int64
+                  default: 100000
+                ipAddress:
+                  type: string
+                  default: '127.0.0.1'
+                idSubscription:
+                  type: number
+                  format: int8
+                  default: 2
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                status: Ok!
+                message: Successfully
   '/statisticals/getRevenue':
     get:
       tags:

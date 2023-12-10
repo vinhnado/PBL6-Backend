@@ -42,6 +42,7 @@ export class PaymentService {
 			const newPayment = Payment.build(paymentData);
 			return await this.paymentRepository.save(newPayment);
 		} catch (error: any) {
+			console.log(error);
 			throw new Error(`Failed to create or edit payment: ${error.message}`);
 		}
 	};
@@ -71,4 +72,5 @@ export class PaymentService {
 			throw new Error(`Failed to find payment: ${error.message}`);
 		}
 	};
+
 }

@@ -42,7 +42,6 @@ export class PaypalService {
 				await this.subscriptionService.getPriceBySubscriptionInfoId(
 					subscriptionInfoId
 				);
-			console.log(price);
 			const access_token = await this.get_access_token();
 			let order_data_json = {
 				intent: 'CAPTURE',

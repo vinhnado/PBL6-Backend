@@ -7,14 +7,14 @@ import { PaypalService } from '../services/payments/PaypalService';
 import { Payment } from '../models/Payment';
 import { PaymentService } from '../services/PaymentService';
 import timezone from 'moment-timezone';
+import { SubscriptionService } from '../services/SubscriptionService';
 
 export class PaymentController {
 	private vnPayService: VNPayService;
 	private momoService: MomoService;
 	private paypalService: PaypalService;
-
-	@Inject(() => PaymentService)
-	private paymentService!: PaymentService;
+	private paymentService: PaymentService;
+	private subscriptionService: SubscriptionService;
 
 	constructor() {
 		this.vnPayService = new VNPayService({
@@ -27,6 +27,8 @@ export class PaymentController {
 		});
 		this.momoService = Container.get(MomoService);
 		this.paypalService = Container.get(PaypalService);
+		this.paymentService = Container.get(PaymentService);
+		this.subscriptionService = Container.get(SubscriptionService);
 	}
 
 	/**
@@ -59,29 +61,40 @@ export class PaymentController {
 			const price = req.body.price;
 			const ipAdd = req.body.ipAddress;
 			const timeGMT7 = timezone(new Date()).tz('Asia/Ho_Chi_Minh').format();
-
+			const userId = Number(req.payload.userId);
 			const id =
 				this.dateFormat(new Date(timeGMT7), 'yyyyMMddHHmmss') +
 				(Math.floor(Math.random() * 90000) + 10000).toString();
-			// const id_subscription = req.body.price;
+			const idSubscription = req.body.idSubscription;
+			const { subscriptionTypeId, price:priceSub } = await this.subscriptionService.getPriceBySubscriptionInfoId(idSubscription);
+			if(priceSub!== price) {
+				return res.status(400).json({
+                    message: 'Price not match',
+                });
+			}
+			const subInfo = await this.subscriptionService.getSubscriptionInfoById(idSubscription);
+			const nameSubscription  = subInfo?.subscriptionType.getDataValue('name');
+			const timeSubscription = subInfo?.duration.getDataValue('time');
+			
 			const paymentUrl = await this.vnPayService.buildPaymentUrl({
 				vnp_Amount: price,
 				vnp_IpAddr: ipAdd,
 				vnp_TxnRef: id,
-				vnp_OrderInfo: '123456',
+				vnp_OrderInfo: 'User_'+userId+' Thanh toán gói '+nameSubscription+' '+timeSubscription+' tháng',
 			});
 
 			const partialObject: Partial<Payment> = {
-				type: 'vn-pay',
+				type: 'VN Pay',
 				price: price,
 				transactionId: id,
-				orderInfo: '',
+				orderInfo: 'User_'+userId+' Thanh toán gói '+nameSubscription+' '+timeSubscription+' tháng',
 				status: 'Not checkout',
-				userId: 1,
+				userId: userId,
 				isPayment: false,
+				subscriptionTypeId:idSubscription
 			};
 
-			// await this.paymentService.addOrEditPayment(partialObject);
+			await this.paymentService.addOrEditPayment(partialObject);
 			res.status(200).json({
 				message: 'Successfully',
 				success: true,
@@ -100,14 +113,28 @@ export class PaymentController {
 			// console.log(req.query);
 			const query: any = req.query;
 			const results = await this.vnPayService.verifyReturnUrl(query);
+			const userId = Number(req.payload.userId);
+			
 			if (results.isSuccess) {
-				res.status(200).json({
+				const partialObject: Partial<Payment> = {
+					orderInfo: results.vnp_OrderInfo,
+					status: 'Completed',
+					transactionId: results.vnp_TxnRef,
+					isPayment: true,
+				};
+
+				// add Subscription for user
+				// await this.subscriptionService.updateSubscription(userId,null, null,);
+
+				await this.paymentService.addOrEditPayment(partialObject);
+
+				return res.status(200).json({
 					message: 'Payment With VN Pay Successfully',
 					success: true,
 					results: results,
 				});
 			}
-			res.status(200).json({
+			return res.status(200).json({
 				message: 'Payment With VN Pay Failed',
 				success: false,
 				results: results,
