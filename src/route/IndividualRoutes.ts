@@ -1,4 +1,7 @@
 import { IndividualController } from '../controller/IndividualController';
+import { validateDeleteActor, validateGetActorDetails, validateGetActors } from '../validators/ActorValidator';
+import { validateDeleteDirector, validateGetDirectorDetails, validateGetDirectors } from '../validators/DirectorValidate';
+import { validate } from '../validators/Validator';
 import BaseRoutes from './Base/BaseRouter';
 class IndividualRoutes extends BaseRoutes {
 	constructor() {
@@ -6,15 +9,17 @@ class IndividualRoutes extends BaseRoutes {
 	}
 	public routes(): void {
 		// this.router.get('/actor', this.controller.findActorInfomation);
-		this.router.delete('/actors/:actorId', this.controller.deleteActor);
-		this.router.post('/actors',this.controller.createActor);
-		this.router.get('/actors/:actorId', this.controller.getActorDetails);
-		this.router.get('/actors', this.controller.getActors);
+		this.router.delete('/actors/:actorId',validateDeleteActor, validate, this.controller.deleteActor);
+		this.router.get('/actors/:actorId',validateGetActorDetails,validate, this.controller.getActorDetails);
+		this.router.get('/actors',validateGetActors, validate, this.controller.getActors);
 		this.router.put('/actors/:actorId', this.controller.updateActor);
+		this.router.post('/actors',this.controller.createActor);
 
-		this.router.get('/directors', this.controller.getDirectors);
-		this.router.delete('/directors/:directorId', this.controller.deleteDirector);
-		this.router.get('/directors/:directorId', this.controller.getDirectorDetails);
+		this.router.get('/directors', validateGetDirectors, validate, this.controller.getDirectors);
+		this.router.delete('/directors/:directorId',validateDeleteDirector, validate, this.controller.deleteDirector);
+		this.router.get('/directors/:directorId',validateGetDirectorDetails, validate, this.controller.getDirectorDetails);
+		this.router.put('/directors/:directorId', this.controller.updateDirector);
+		this.router.post('/directors',this.controller.createDirector);
 
 	}
 }

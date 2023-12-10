@@ -61,7 +61,7 @@ export class IndividualController {
 			});
 		} catch (error: any) {
 			console.log(error);
-			return res.status(500).json({ error: 'Lỗi :' + error.message });
+			return res.status(404).json({ message: 'Actor not found!' });
 		}
 	};
 
@@ -110,23 +110,35 @@ export class IndividualController {
 		}
 	};
 
-	createOrUpdateDirector = async (req: Request, res: Response) => {
+	createDirector = async (req: Request, res: Response) => {
 		try {
-			const { directorId, name, gender, dateOfBirth, description } = req.body;
-
-			const data: Partial<Director> = {};
-			if (directorId !== undefined) data.directorId = directorId;
-			if (name !== undefined) data.name = name;
-			if (gender !== undefined) data.gender = gender;
-			if (dateOfBirth !== undefined) data.dateOfBirth = dateOfBirth;
-			if (description !== undefined) data.description = description;
-
-			await this.directorService.createOrUpdate(data);
+			const result = await this.directorService.createDirector(req);
 
 			return res.status(200).json({
 				status: 'Ok!',
 				message: 'Successfully',
+				data: result
 			});
+		} catch (error: any) {
+			console.log(error);
+			return res.status(500).json({ message: "Server error!" });
+		}
+	};
+
+	updateDirector = async (req: Request, res: Response) => {
+		try {
+			const result = await this.actorService.updateActor(req);
+			if(result) {
+				return res.status(200).json({
+					status: 'Ok!',
+					message: 'Successfully',
+					data: result
+				});
+			}
+			return res.status(404).json({
+				message: 'Failed, Director not found',
+			});
+
 		} catch (error: any) {
 			console.log(error);
 			return res.status(500).json({ error: 'Lỗi :' + error.message });
