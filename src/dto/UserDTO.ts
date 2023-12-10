@@ -3,6 +3,7 @@ import { SubscriptionInfo } from './../models/SubscriptionInfo';
 import { User } from '../models/User';
 
 export class UserDTO {
+	userId: number;
 	dateOfBirth: Date;
 	gender: string;
 	email: string;
@@ -18,6 +19,7 @@ export class UserDTO {
 	};
 
 	constructor(user: User) {
+		this.userId = user.userId;
 		this.dateOfBirth = user.dateOfBirth;
 		this.gender = user.gender;
 		this.email = user.email;
