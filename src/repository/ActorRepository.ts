@@ -45,15 +45,6 @@ export class ActorRepository extends BaseRepository<Actor> {
 				attributes: {
 					exclude: ['createdAt', 'updatedAt', 'deletedAt'],
 				},
-				include: [
-					{
-						model: Movie,
-						attributes: {
-							exclude: ['createdAt', 'updatedAt', 'deletedAt'],
-						},
-						through: { attributes: [] },
-					},
-				],
 			});
 
 			return data;

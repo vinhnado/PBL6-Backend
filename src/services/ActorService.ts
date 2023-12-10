@@ -2,6 +2,7 @@ import { Actor } from '../models/Actor';
 import { ActorRepository } from './../repository/ActorRepository';
 import { Inject, Service } from 'typedi';
 import { S3Service } from './S3Service';
+import { Request, Response } from 'express';
 
 @Service()
 export class ActorService {
@@ -43,25 +44,39 @@ export class ActorService {
 		}
 	};
 
-	createOrUpdate = async (actorData: Partial<Actor>) => {
+	createActor =  async (req: Request) => {
 		try {
-			if (actorData.actorId) {
-				const actorToUpdate = await this.actorRepository.findById(
-					actorData.actorId
-				);
-				if (actorToUpdate) {
-					await actorToUpdate.update(actorData);
-					return await this.actorRepository.save(actorToUpdate);
-				} else {
-					throw new Error('Actor not found for the given ID');
-				}
-			} else {
-				return await this.actorRepository.save(Actor.build(actorData));
-			}
+			const { name, gender, dateOfBirth, description } = req.body;
+			const actorData: Partial<Actor> = {
+				name, gender, dateOfBirth, description
+			};
+
+			return await this.actorRepository.save(Actor.build(actorData));
+
 		} catch (error: any) {
-			throw new Error(error.message);
+			throw(error);
 		}
-	};
+	}
+
+	updateActor = async (req: Request) => {
+			const { name, gender, dateOfBirth, description } = req.body;
+			const actorId = Number(req.params.actorId);
+			const actorData: Partial<Actor> = {
+				name, gender, dateOfBirth, description
+			};
+
+			const actorToUpdate = await this.actorRepository.findById(
+				actorId
+			);
+
+			if (actorToUpdate) {
+				await actorToUpdate.update(actorData);
+				await this.actorRepository.save(actorToUpdate);
+				return actorToUpdate;
+			} else {
+				return null;
+			}
+	}
 
 	findByActorId = async (actorId: number) => {
 		try {
@@ -74,28 +89,41 @@ export class ActorService {
 	deleteActorByActorId = async (actorId: number) => {
 		try {
 			const actor = await this.actorRepository.findById(actorId);
-			return await this.actorRepository.delete(actor);
+			if(!actor){
+				return false;
+			}
+			 await this.actorRepository.delete(actor);
+			 return true;
 		} catch (error: any) {
 			throw new Error(error.message);
 		}
 	};
 
-	getAllActor = async () => {
-		try {
-			return await this.actorRepository.findMany();
-		} catch (error: any) {
-			throw new Error(error.message);
-		}
-	};
 
-	searchActor = async (search: string, page: number, pageSize: number) => {
+	getActors = async (search: string, page: number, pageSize: number) => {
 		try {
-			const data = await this.actorRepository.searchAllActor(
+			const actors = await this.actorRepository.searchAllActor(
 				search,
 				page,
 				pageSize
 			);
-			return data;
+			for (const actor of actors.rows) {
+				if (actor!.avatar) {
+					actor!.avatar = await this.s3Service.getObjectUrl(actor!.avatar);
+				} else {
+					actor!.avatar = await this.s3Service.getObjectUrl(
+						'default/actor/default_avatar.jpg'
+					);
+				}
+				if (actor!.poster) {
+					actor!.poster = await this.s3Service.getObjectUrl(actor!.poster);
+				} else {
+					actor!.poster = await this.s3Service.getObjectUrl(
+						'default/actor/default_poster.jpg'
+					);
+				}
+			}
+			return actors;
 		} catch (error: any) {
 			throw new Error(error.message);
 		}

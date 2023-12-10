@@ -13,6 +13,8 @@ class PaymentRoutes extends BaseRoutes {
 		this.router.post('/momo', this.controller.getMomoPaymentURL);
 		this.router.get('/vn-pay/verify',auth, this.controller.verifyReturnUrlVNPay);
 		this.router.get('/momo/verify', this.controller.verifyReturnUrlMomo);
+		this.router.get('/momo/verify/test', this.controller.verifyReturnUrlMomoTest);
+		
 	}
 }
 
