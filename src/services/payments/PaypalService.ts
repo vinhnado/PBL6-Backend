@@ -38,11 +38,10 @@ export class PaypalService {
 
 	createOrder = async (userId: number, subscriptionInfoId: number) => {
 		try {
-			const { subscriptionTypeId, price } =
-				await this.subscriptionService.getPriceBySubscriptionInfoId(
-					subscriptionInfoId
-				);
-			console.log(price);
+			const price = await this.subscriptionService.getPriceBySubscriptionInfoId(
+				subscriptionInfoId
+			);
+
 			const access_token = await this.get_access_token();
 			let order_data_json = {
 				intent: 'CAPTURE',
@@ -75,7 +74,7 @@ export class PaypalService {
 				status: 'Not checkout',
 				userId: userId,
 				isPayment: false,
-				subscriptionTypeId: subscriptionTypeId,
+				subscriptionInfoId: subscriptionInfoId,
 			};
 			await this.paymentService.addOrEditPayment(partialObject);
 			return json;
@@ -104,6 +103,7 @@ export class PaypalService {
 			const partialObject: Partial<Payment> = {
 				orderInfo: JSON.stringify(json),
 				status: 'Success',
+				isPayment: true,
 				transactionId: id,
 			};
 

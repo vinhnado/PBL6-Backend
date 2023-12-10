@@ -1428,7 +1428,7 @@ paths:
           description: Successful response
 
   /user/delete-favorite-movie:
-    get:
+    delete:
       summary: Remove a movie from the favorites
       tags:
         - user
@@ -1475,7 +1475,7 @@ paths:
           description: Successful response
 
   /user/delete-watch-list:
-    get:
+    delete:
       summary: Remove a movie from the watch list
       tags:
         - user
@@ -1528,7 +1528,7 @@ paths:
           description: Successful response
 
   /user/delete-movie-history:
-    get:
+    delete:
       summary: Remove a movie from the watch history
       tags:
         - user
