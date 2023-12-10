@@ -212,8 +212,10 @@ export class UserService {
 				user_id: userId,
 				movie_id: movieId,
 			});
-			if (watchLater != null && watchLater.deletedAt == null) {
+			if (watchLater != null && watchLater.deletedAt != null) {
 				return await this.movieFavoriteRepository.restore(watchLater);
+			} else if (watchLater != null && watchLater.deletedAt == null) {
+				throw new Error('Dữ liệu đã tồn tại');
 			}
 			return await this.watchLaterRepository.save(
 				WatchLater.build({ userId: userId, movieId: movieId })

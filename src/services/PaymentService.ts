@@ -26,7 +26,6 @@ export class PaymentService {
 	addOrEditPayment = async (paymentData: Partial<Payment>) => {
 		try {
 			const { transactionId } = paymentData;
-			console.log(transactionId);
 			if (transactionId) {
 				const paymentToUpdate = await this.paymentRepository.findOneByCondition(
 					{
@@ -59,6 +58,16 @@ export class PaymentService {
 	findPaymentById = async (paymentId: number) => {
 		try {
 			return await this.paymentRepository.findById(paymentId);
+		} catch (error: any) {
+			throw new Error(`Failed to find payment: ${error.message}`);
+		}
+	};
+
+	findPaymentByTransactionId = async (transactionId: number) => {
+		try {
+			await this.paymentRepository.findOneByCondition({
+				transactionId: transactionId,
+			});
 		} catch (error: any) {
 			throw new Error(`Failed to find payment: ${error.message}`);
 		}

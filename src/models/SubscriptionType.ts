@@ -49,9 +49,6 @@ export class SubscriptionType extends Model {
 	@HasMany(() => Subscription)
 	subscriptions!: Subscription[];
 
-	@HasMany(() => Payment)
-	payments!: Payment[];
-
 	@DeletedAt
 	deletedAt!: Date;
 }

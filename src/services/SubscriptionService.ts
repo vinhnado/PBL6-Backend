@@ -179,10 +179,7 @@ export class SubscriptionService {
 			const price =
 				subscriptionInfo!.subscriptionType.price *
 				(1 - subscriptionInfo!.discount);
-			const subscriptionTypeId =
-				subscriptionInfo!.subscriptionType.subscriptionTypeId;
-
-			return { subscriptionTypeId: subscriptionTypeId, price: price };
+			return price;
 		} catch (error: any) {
 			throw new Error(error.message);
 		}
