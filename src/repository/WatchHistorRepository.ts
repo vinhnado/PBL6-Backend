@@ -12,12 +12,10 @@ export class WatchHistoryRepository extends BaseRepository<WatchHistory> {
 		super(WatchHistory);
 	}
 
-	async findAll(userId: number, page: number, pageSize: number) {
+	async findAll(userId: number) {
 		try {
 			const movieHistoryList = await User.findOne({
 				where: { userId: userId },
-				offset: (page - 1) * pageSize,
-				limit: pageSize,
 				attributes: ['userId'],
 				include: [
 					{

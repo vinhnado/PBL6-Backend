@@ -11,12 +11,10 @@ export class WatchLaterRepository extends BaseRepository<WatchLater> {
 		super(WatchLater);
 	}
 
-	async findAll(userId: number, page: number, pageSize: number) {
+	async findAll(userId: number) {
 		try {
 			const watchLaterList = await User.findOne({
 				where: { userId: userId },
-				offset: (page - 1) * pageSize,
-				limit: pageSize,
 				attributes: ['userId'],
 				include: [
 					{

@@ -65,14 +65,14 @@ export class PaymentController {
 			const id =
 				this.dateFormat(new Date(timeGMT7), 'yyyyMMddHHmmss') +
 				(Math.floor(Math.random() * 90000) + 10000).toString();
-			const idSubscription = req.body.idSubscription;
-			const { subscriptionTypeId, price:priceSub } = await this.subscriptionService.getPriceBySubscriptionInfoId(idSubscription);
+			const subscriptionInfoId = req.body.subscriptionInfoId;
+			const priceSub  = await this.subscriptionService.getPriceBySubscriptionInfoId(subscriptionInfoId);
 			if(priceSub!== price) {
 				return res.status(400).json({
                     message: 'Price not match',
                 });
 			}
-			const subInfo = await this.subscriptionService.getSubscriptionInfoById(idSubscription);
+			const subInfo = await this.subscriptionService.getSubscriptionInfoById(subscriptionInfoId);
 			const nameSubscription  = subInfo?.subscriptionType.getDataValue('name');
 			const timeSubscription = subInfo?.duration.getDataValue('time');
 			
@@ -91,7 +91,7 @@ export class PaymentController {
 				status: 'Not checkout',
 				userId: userId,
 				isPayment: false,
-				subscriptionTypeId:idSubscription
+				subscriptionInfoId:subscriptionInfoId
 			};
 
 			await this.paymentService.addOrEditPayment(partialObject);
@@ -113,18 +113,20 @@ export class PaymentController {
 			// console.log(req.query);
 			const query: any = req.query;
 			const results = await this.vnPayService.verifyReturnUrl(query);
-			const userId = Number(req.payload.userId);
-			
+			// const userId = Number(req.payload.userId);
+			const transactionId = results.vnp_TxnRef;
 			if (results.isSuccess) {
 				const partialObject: Partial<Payment> = {
 					orderInfo: results.vnp_OrderInfo,
 					status: 'Completed',
-					transactionId: results.vnp_TxnRef,
+					transactionId: transactionId,
 					isPayment: true,
 				};
-
+				
+				const payment =await this.paymentService.findPaymentByTransactionId(transactionId);
+				
 				// add Subscription for user
-				// await this.subscriptionService.updateSubscription(userId,null, null,);
+				await this.subscriptionService.updateSubscription(payment.getDataValue('userId'),null, null,payment.getDataValue('subscriptionInfoId'));
 
 				await this.paymentService.addOrEditPayment(partialObject);
 
@@ -140,6 +142,7 @@ export class PaymentController {
 				results: results,
 			});
 		} catch (error) {
+			console.log(error);
 			res.status(500).json({ message: 'Internal Server Error', error: error });
 		}
 	};

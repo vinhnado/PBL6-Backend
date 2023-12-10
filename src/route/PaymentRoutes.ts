@@ -11,7 +11,7 @@ class PaymentRoutes extends BaseRoutes {
 		this.router.post('/paypal/capture', this.controller.capturePaypalOrder);
 		this.router.post('/vn-pay',auth, this.controller.getVNPayPaymentURL);
 		this.router.post('/momo', this.controller.getMomoPaymentURL);
-		this.router.get('/vn-pay/verify', this.controller.verifyReturnUrlVNPay);
+		this.router.get('/vn-pay/verify',auth, this.controller.verifyReturnUrlVNPay);
 		this.router.get('/momo/verify', this.controller.verifyReturnUrlMomo);
 	}
 }

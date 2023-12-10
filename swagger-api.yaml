@@ -694,7 +694,7 @@ paths:
                   format: date
                 description:
                   type: string
-                  
+
       responses:
         '200':
           description: successful operation
@@ -1430,7 +1430,7 @@ paths:
           description: Successful response
 
   /user/delete-favorite-movie:
-    get:
+    delete:
       summary: Remove a movie from the favorites
       tags:
         - user
@@ -1454,19 +1454,6 @@ paths:
         - user
       security:
         - bearerAuth: []
-      parameters:
-        - name: page
-          in: query
-          description: Page number
-          required: true
-          schema:
-            type: integer
-        - name: pageSize
-          in: query
-          description: Number of items per page
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: Successful response
@@ -1490,7 +1477,7 @@ paths:
           description: Successful response
 
   /user/delete-watch-list:
-    get:
+    delete:
       summary: Remove a movie from the watch list
       tags:
         - user
@@ -1514,19 +1501,6 @@ paths:
         - user
       security:
         - bearerAuth: []
-      parameters:
-        - name: page
-          in: query
-          description: Page number
-          required: true
-          schema:
-            type: integer
-        - name: pageSize
-          in: query
-          description: Number of items per page
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: Successful response
@@ -1556,7 +1530,7 @@ paths:
           description: Successful response
 
   /user/delete-movie-history:
-    get:
+    delete:
       summary: Remove a movie from the watch history
       tags:
         - user
@@ -1580,19 +1554,6 @@ paths:
         - user
       security:
         - bearerAuth: []
-      parameters:
-        - name: page
-          in: query
-          description: Page number
-          required: true
-          schema:
-            type: integer
-        - name: pageSize
-          in: query
-          description: Number of items per page
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: Successful response
@@ -1839,10 +1800,12 @@ paths:
                 ipAddress:
                   type: string
                   default: '127.0.0.1'
-                idSubscription:
+                subscriptionInfoId:
                   type: number
                   format: int8
                   default: 2
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: OK
@@ -1858,24 +1821,105 @@ paths:
       tags:
         - payment
       summary: Verify VN Pay return URL
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                price:
-                  type: number
-                  format: int64
-                  default: 100000
-                ipAddress:
-                  type: string
-                  default: '127.0.0.1'
-                idSubscription:
-                  type: number
-                  format: int8
-                  default: 2
+      parameters:
+        - name: vnp_TmnCode
+          in: query
+          description: vnp_TmnCode
+          required: true
+          explode: true
+          schema:
+            type: string
+            default: 4YOYYZHU
+        - name: vnp_Amount
+          in: query
+          description: vnp_Amount
+          required: true
+          explode: true
+          schema:
+            type: number
+            default: 10000000
+        - name: vnp_BankCode
+          in: query
+          description: vnp_BankCode
+          required: true
+          explode: true
+          schema:
+            type: string
+            default: NCB
+        - name: vnp_BankTranNo
+          in: query
+          description: vnp_BankTranNo
+          required: true
+          explode: true
+          schema:
+            type: string
+            default: VNP14232454
+        - name: vnp_CardType
+          in: query
+          description: vnp_CardType
+          required: true
+          explode: true
+          schema:
+            type: string
+            default: ATM
+        - name: vnp_PayDate
+          in: query
+          description: vnp_PayDate
+          required: true
+          explode: true
+          schema:
+            type: string
+            default: 20231210110705
+        - name: vnp_OrderInfo
+          in: query
+          description: vnp_OrderInfo
+          required: true
+          explode: true
+          schema:
+            type: string
+            default: User_1 Thanh toán gói Tiêu chuẩn 1 tháng
+        - name: vnp_TransactionNo
+          in: query
+          description: vnp_TransactionNo
+          required: true
+          explode: true
+          schema:
+            type: number
+            default: 14232454
+        - name: vnp_ResponseCode
+          in: query
+          description: vnp_ResponseCode
+          required: true
+          explode: true
+          schema:
+            type: string
+            default: "00"
+        - name: vnp_TransactionStatus
+          in: query
+          description: vnp_TransactionStatus
+          required: true
+          explode: true
+          schema:
+            type: string
+            default: "00"
+        - name: vnp_TxnRef
+          in: query
+          description: vnp_TxnRef
+          required: true
+          explode: true
+          schema:
+            type: string
+            default: "2023121004045115486"
+        - name: vnp_SecureHash
+          in: query
+          description: vnp_SecureHash
+          required: true
+          explode: true
+          schema:
+            type: string
+            default: "22eada02e5262e051300b1c05b12e76bf5f3e4cf7117cab1d06c659d3e805129489ffae0fb52554c7f9630aa90ed963453a52d391299aae88df33c209302e7e6"
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: OK

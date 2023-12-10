@@ -19,7 +19,7 @@ class UserRoutes extends BaseRoutes {
 			auth,
 			this.controller.saveMovieFavorite
 		);
-		this.router.get(
+		this.router.delete(
 			'/delete-favorite-movie',
 			auth,
 			this.controller.deleteMovieFavorite
@@ -30,7 +30,7 @@ class UserRoutes extends BaseRoutes {
 			this.controller.getFavoriteMovieList
 		);
 		this.router.get('/add-watch-list', auth, this.controller.addWatchLater);
-		this.router.get(
+		this.router.delete(
 			'/delete-watch-list',
 			auth,
 			this.controller.deleteWatchLater
@@ -45,7 +45,7 @@ class UserRoutes extends BaseRoutes {
 			auth,
 			this.controller.saveWatchHistory
 		);
-		this.router.get(
+		this.router.delete(
 			'/delete-movie-history',
 			auth,
 			this.controller.deleteWatchHistory
