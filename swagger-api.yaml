@@ -1613,6 +1613,18 @@ paths:
           required: false
           schema:
             type: string
+        - name: page
+          in: query
+          description: page, default is 1
+          required: false
+          schema:
+            type: string   
+        - name: pageSize
+          in: query
+          description: pageSize, default is 10
+          required: false
+          schema:
+            type: string     
       responses:
         '200':
           description: Successful response
@@ -1725,6 +1737,18 @@ paths:
           required: false
           schema:
             type: string
+        - name: page
+          in: query
+          description: page, default is 1
+          required: false
+          schema:
+            type: string   
+        - name: pageSize
+          in: query
+          description: pageSize, default is 10
+          required: false
+          schema:
+            type: string 
       responses:
         '200':
           description: Successful response
