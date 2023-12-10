@@ -25,7 +25,7 @@ class Authentication {
 		role: number,
 		username: string,
 		subscriptionTypeId: number
-	): string {
+	) {
 		const secretKey: string = process.env.JWT_SECRET_KEY || 'my-secret-key';
 		const payload: Payload = {
 			userId: id,
@@ -33,9 +33,13 @@ class Authentication {
 			username: username,
 			subscriptionTypeId: subscriptionTypeId,
 		};
-		const option = { expiresIn: process.env.JWT_EXPIRES_IN };
+		const optionAccess = { expiresIn: process.env.JWT_ACCESS_EXPIRES_IN };
+		const optionRefresh = { expiresIn: process.env.JWT_REFRESH_EXPIRES_IN };
 
-		return jwt.sign(payload, secretKey, option);
+		return {
+			accessToken: jwt.sign(payload, secretKey, optionAccess),
+			refreshToken: jwt.sign(payload, secretKey, optionRefresh),
+		};
 	}
 
 	public static validateToken(token: string): Payload | null {
