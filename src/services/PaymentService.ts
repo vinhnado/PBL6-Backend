@@ -41,6 +41,7 @@ export class PaymentService {
 			const newPayment = Payment.build(paymentData);
 			return await this.paymentRepository.save(newPayment);
 		} catch (error: any) {
+			console.log(error);
 			throw new Error(`Failed to create or edit payment: ${error.message}`);
 		}
 	};
@@ -63,13 +64,13 @@ export class PaymentService {
 		}
 	};
 
-	findPaymentByTransactionId = async (transactionId: number) => {
+	findPaymentByTransactionId = async (transactionId: string) => {
 		try {
-			await this.paymentRepository.findOneByCondition({
+			return await this.paymentRepository.findOneByCondition({
 				transactionId: transactionId,
 			});
 		} catch (error: any) {
-			throw new Error(`Failed to find payment: ${error.message}`);
+			console.log(error);
 		}
 	};
 
@@ -80,4 +81,5 @@ export class PaymentService {
 			throw new Error(`Failed to find payment: ${error.message}`);
 		}
 	};
+
 }

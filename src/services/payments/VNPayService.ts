@@ -76,7 +76,6 @@ export class VNPayService {
      * @returns {string} The payment url string
      */
     public buildPaymentUrl(payload: VNPayPaymentUrlDTO): Promise<string> {
-        console.log(payload);
         return new Promise((resolve, reject) => {
             const err = this.validateGlobalConfig();
             if (err instanceof Error) {
@@ -113,7 +112,7 @@ export class VNPayService {
 
                     redirectUrl.searchParams.append(key, value.toString());
                 });
-            console.log(this.globalConfig.secureSecret);
+            // console.log(this.globalConfig.secureSecret);
             var crypto = require("crypto");     
             const hmac = crypto.createHmac(this.CRYPTO_ALGORITHM, this.globalConfig.secureSecret);
 
