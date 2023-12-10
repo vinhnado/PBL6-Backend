@@ -64,20 +64,16 @@ export class DirectorService {
 	deleteDirector = async (directorId: number) => {
 		try {
 			const director = await this.directorRepository.findById(directorId);
-			return await this.directorRepository.delete(director);
+			if(!director){
+				return false;
+			}
+			await this.directorRepository.delete(director);
+			return true;
 		} catch (error: any) {
-			throw new Error(error.message);
+			throw(error);
 		}
 	};
 
-	deleteActorByDirectorId = async (directorId: number) => {
-		try {
-			const director = await this.directorRepository.findById(directorId);
-			return await this.directorRepository.delete(director);
-		} catch (error: any) {
-			throw new Error(error.message);
-		}
-	};
 	getAllDirector = async () => {
 		try {
 			return await this.directorRepository.findMany();
@@ -86,18 +82,34 @@ export class DirectorService {
 		}
 	};
 
-	searchAllDirector = async (
+	getDirectors = async (
 		search: string,
 		page: number,
 		pageSize: number
 	) => {
 		try {
-			const data = await this.directorRepository.searchAllDirector(
+			const directors = await this.directorRepository.searchAllDirector(
 				search,
 				page,
 				pageSize
 			);
-			return data;
+			for (const director of directors.rows) {
+				if (director!.avatar) {
+					director!.avatar = await this.s3Service.getObjectUrl(director!.avatar);
+				} else {
+					director!.avatar = await this.s3Service.getObjectUrl(
+						'default/director/default_avatar.jpg'
+					);
+				}
+				if (director!.poster) {
+					director!.poster = await this.s3Service.getObjectUrl(director!.poster);
+				} else {
+					director!.poster = await this.s3Service.getObjectUrl(
+						'default/director/default_poster.jpg'
+					);
+				}
+			}
+			return directors;
 		} catch (error: any) {
 			throw new Error(error.message);
 		}

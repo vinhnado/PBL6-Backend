@@ -14,32 +14,44 @@ export class IndividualController {
 		this.directorService = Container.get(DirectorService);
 	}
 
-	createOrUpdateActor = async (req: Request, res: Response) => {
+	createActor = async (req: Request, res: Response) => {
 		try {
-			const { actorId, name, gender, dateOfBirth, description } = req.body;
-
-			const data: Partial<Actor> = {};
-			if (actorId !== undefined) data.actorId = actorId;
-			if (name !== undefined) data.name = name;
-			if (gender !== undefined) data.gender = gender;
-			if (dateOfBirth !== undefined) data.dateOfBirth = dateOfBirth;
-			if (description !== undefined) data.description = description;
-
-			await this.actorService.createOrUpdate(data);
+			const result = await this.actorService.createActor(req);
 
 			return res.status(200).json({
 				status: 'Ok!',
 				message: 'Successfully',
+				data: result
 			});
+		} catch (error: any) {
+			console.log(error);
+			return res.status(500).json({ message: "Server error!" });
+		}
+	};
+
+	updateActor = async (req: Request, res: Response) => {
+		try {
+			const result = await this.actorService.updateActor(req);
+			if(result) {
+				return res.status(200).json({
+					status: 'Ok!',
+					message: 'Successfully',
+					data: result
+				});
+			}
+			return res.status(404).json({
+				message: 'Failed, Actor not found',
+			});
+
 		} catch (error: any) {
 			console.log(error);
 			return res.status(500).json({ error: 'Lỗi :' + error.message });
 		}
 	};
 
-	findActorInfomation = async (req: Request, res: Response) => {
+	getActorDetails = async (req: Request, res: Response) => {
 		try {
-			const { actorId } = req.query;
+			const { actorId } = req.params;
 
 			const data = await this.actorService.findActorInfomation(Number(actorId));
 			return res.status(200).json({
@@ -53,37 +65,32 @@ export class IndividualController {
 		}
 	};
 
-	getAllActor = async (req: Request, res: Response) => {
-		try {
-			const data = await this.actorService.getAllActor();
-			return res.status(200).json({
-				status: 'Ok!',
-				message: 'Successfully',
-				data: data,
-			});
-		} catch (error: any) {
-			throw new Error(error.message);
-		}
-	};
-
 	deleteActor = async (req: Request, res: Response) => {
 		try {
-			const { actorId } = req.query;
+			const { actorId } = req.params;
 
-			await this.actorService.deleteActorByActorId(Number(actorId));
-			return res.status(200).json({
-				status: 'Ok!',
-				message: 'Successfully',
+			const rs = await this.actorService.deleteActorByActorId(Number(actorId));
+			if(rs){
+				return res.status(200).json({
+					status: 'Ok!',
+					message: 'Successfully',
+				});
+			}
+			return res.status(404).json({
+				message: 'Failed!, Actor not found!',
 			});
 		} catch (error: any) {
 			throw new Error(error.message);
 		}
 	};
 
-	searchActor = async (req: Request, res: Response) => {
+	getActors = async (req: Request, res: Response) => {
 		try {
-			const { search, page, pageSize } = req.query;
-			const data = await this.actorService.searchActor(
+			let search = req.query.name ||'';
+			let page = req.query.page||1;
+			let pageSize = req.query.pageSize||10;
+
+			const data = await this.actorService.getActors(
 				String(search),
 				Number(page),
 				Number(pageSize)
@@ -91,7 +98,12 @@ export class IndividualController {
 			return res.status(200).json({
 				status: 'Ok!',
 				message: 'Successfully',
-				data: data,
+				data: {
+					totalActors: data.count,
+					totalPages: Math.floor(data.count/Number(pageSize)),
+					actorsPerPage: Number(pageSize),
+					actors: data.rows,
+				},
 			});
 		} catch (error: any) {
 			throw new Error(error.message);
@@ -121,9 +133,9 @@ export class IndividualController {
 		}
 	};
 
-	findDirectortorInfomation = async (req: Request, res: Response) => {
+	getDirectorDetails = async (req: Request, res: Response) => {
 		try {
-			const { directorId } = req.query;
+			const { directorId } = req.params;
 
 			const data = await this.directorService.findDirectortorInfomation(
 				Number(directorId)
@@ -139,37 +151,32 @@ export class IndividualController {
 		}
 	};
 
-	getAllDirector = async (req: Request, res: Response) => {
-		try {
-			const data = await this.directorService.getAllDirector();
-			return res.status(200).json({
-				status: 'Ok!',
-				message: 'Successfully',
-				data: data,
-			});
-		} catch (error: any) {
-			throw new Error(error.message);
-		}
-	};
-
 	deleteDirector = async (req: Request, res: Response) => {
 		try {
-			const { directorId } = req.query;
+			const { directorId } = req.params;
 
-			await this.directorService.deleteActorByDirectorId(Number(directorId));
-			return res.status(200).json({
-				status: 'Ok!',
-				message: 'Successfully',
+			const rs = await this.directorService.deleteDirector(Number(directorId));
+			if(rs){
+				return res.status(200).json({
+                    status: 'Ok!',
+                    message: 'Successfully',
+                });
+			}
+			return res.status(404).json({
+				message: 'Failed!, Director not found!',
 			});
 		} catch (error: any) {
-			throw new Error(error.message);
+			throw(error);
 		}
 	};
 
-	searchDirector = async (req: Request, res: Response) => {
+	getDirectors = async (req: Request, res: Response) => {
 		try {
-			const { search, page, pageSize } = req.query;
-			const data = await this.directorService.searchAllDirector(
+			let search = req.query.name ||'';
+			let page = req.query.page||1;
+			let pageSize = req.query.pageSize||10;
+
+			const data = await this.directorService.getDirectors(
 				String(search),
 				Number(page),
 				Number(pageSize)
@@ -177,10 +184,17 @@ export class IndividualController {
 			return res.status(200).json({
 				status: 'Ok!',
 				message: 'Successfully',
-				data: data,
+				data: {
+					totalDirectors: data.count,
+					totalPages: Math.floor(data.count/Number(pageSize)),
+					directorsPerPage: Number(pageSize),
+					directors: data.rows,
+				},
 			});
 		} catch (error: any) {
-			throw new Error(error.message);
+			return res.status(500).json({
+				message: "Server error!"
+			});
 		}
 	};
 }

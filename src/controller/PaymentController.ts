@@ -193,6 +193,7 @@ export class PaymentController {
 				res.status(500).json({ message: 'Internal Server Error', error: err });
 			});
 	};
+
 	capturePaypalOrder = async (req: Request, res: Response) => {
 		this.paypalService
 			.captureOrder(req.body.order_id)
@@ -205,7 +206,13 @@ export class PaymentController {
 	};
 
 	verifyReturnUrlMomo = async (req: Request, res: Response) => {
-		console.log(req.body);
+		console.log(req.query);
 		console.log('Momo return');
 	};
+
+	verifyReturnUrlMomoTest = async (req: Request, res: Response) => {
+		console.log(req.body);
+		console.log('Momo return test');
+	};
+
 }

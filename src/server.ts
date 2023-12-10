@@ -47,7 +47,7 @@ class App {
 		this.app.use('/api/auth', AuthenticationRouter);
 		this.app.use('/api/user', UserRouter);
 		this.app.use('/api/home', HomeRouter);
-		this.app.use('/api/individual', IndividualRouter);
+		this.app.use('/api/individuals', IndividualRouter);
 		this.app.use('/api/episode', EpisodeRouter);
 		this.app.use('/api/subscription', SubscriptionRouter);
 		this.app.use('/api/payments', PaymentRouter);

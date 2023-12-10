@@ -17,7 +17,7 @@ export class MomoService {
       this.accessKey = 'F8BBA842ECF85';
       this.secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
       this.partnerCode = 'MOMO';
-      this.redirectUrl = 'localhost:3000';
+      this.redirectUrl = 'http://localhost:8000/api/payments/momo/verify';
       this.ipnUrl = 'http://localhost:8000/api/payments/momo/verify';
       this.requestType = 'payWithMethod';
       this.lang = 'vi';
