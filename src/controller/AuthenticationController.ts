@@ -135,4 +135,32 @@ export class AuthenticationController {
 			});
 		}
 	};
+
+	getAccessToken = async (req: Request, res: Response) => {
+		try {
+			const { refreshToken } = req.body;
+			const token =
+				await this.authenticationService.getAccessTokenByRefreshToken(
+					refreshToken
+				);
+			if (token === '') {
+				return res.status(400).json({
+					status: 'Bad Request!',
+					message: 'Token hết hiệu lực hoặc không tồn tại',
+				});
+			}
+			const res_token = { type: 'Bearer', token: token };
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Get new token successfully!',
+				result: res_token,
+			});
+		} catch (error) {
+			console.log(error);
+			return res.status(500).json({
+				status: 'Internal server Error!',
+				message: 'Internal server Error!',
+			});
+		}
+	};
 }

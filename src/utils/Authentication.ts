@@ -2,10 +2,10 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 interface Payload {
-	userId: number;
-	role: number;
+	userId?: number;
+	role?: number;
 	username: string;
-	subscriptionTypeId: number;
+	subscriptionTypeId?: number;
 }
 
 class Authentication {
@@ -20,7 +20,7 @@ class Authentication {
 		return await bcrypt.compare(text, encryptedText);
 	}
 
-	public static generateToken(
+	public static generateAccessToken(
 		id: number,
 		role: number,
 		username: string,
@@ -34,12 +34,16 @@ class Authentication {
 			subscriptionTypeId: subscriptionTypeId,
 		};
 		const optionAccess = { expiresIn: process.env.JWT_ACCESS_EXPIRES_IN };
-		const optionRefresh = { expiresIn: process.env.JWT_REFRESH_EXPIRES_IN };
+		return jwt.sign(payload, secretKey, optionAccess);
+	}
 
-		return {
-			accessToken: jwt.sign(payload, secretKey, optionAccess),
-			refreshToken: jwt.sign(payload, secretKey, optionRefresh),
+	public static generateRefreshToken(username: string) {
+		const secretKey: string = process.env.JWT_SECRET_KEY || 'my-secret-key';
+		const payload: Payload = {
+			username: username,
 		};
+		const optionRefresh = { expiresIn: process.env.JWT_REFRESH_EXPIRES_IN };
+		return jwt.sign(payload, secretKey, optionRefresh);
 	}
 
 	public static validateToken(token: string): Payload | null {
