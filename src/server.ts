@@ -1,5 +1,7 @@
 import 'reflect-metadata';
 import express, { Application, Request, Response } from 'express';
+import cluster from 'cluster';
+import { cpus } from 'os';
 import Database from './config/database';
 import UserRouter from './route/UserRoutes';
 import MovieRouter from './route/MovieRoutes';
@@ -13,7 +15,7 @@ import PaymentRouter from './route/PaymentRoutes';
 import GenreRouter from './route/GenreRoutes';
 import CommentRouter from './route/CommentRoutes';
 import RatingRouter from './route/RatingRoutes';
-import StatisticalRoutes from './route/StatisticalRoutes';
+import StatisticalRouter from './route/StatisticalRoutes';
 
 class App {
 	public app: Application;
@@ -30,7 +32,7 @@ class App {
 		movieRepository
 			.sequelize!.sync({ force: true })
 			.then(() => {
-				console.log('✅ Cơ sở dữ liệu đã được đồng bộ hóa.');
+				// console.log('✅ Cơ sở dữ liệu đã được đồng bộ hóa.');
 			})
 			.catch((error) => {
 				console.error('❌ Lỗi đồng bộ hóa cơ sở dữ liệu:', error);
@@ -45,14 +47,14 @@ class App {
 		this.app.use('/api/auth', AuthenticationRouter);
 		this.app.use('/api/user', UserRouter);
 		this.app.use('/api/home', HomeRouter);
-		this.app.use('/api/individual', IndividualRouter);
+		this.app.use('/api/individuals', IndividualRouter);
 		this.app.use('/api/episode', EpisodeRouter);
 		this.app.use('/api/subscription', SubscriptionRouter);
 		this.app.use('/api/payments', PaymentRouter);
 		this.app.use('/api/genres', GenreRouter);
 		this.app.use('/api/comments', CommentRouter);
 		this.app.use('/api/ratings', RatingRouter);
-		this.app.use('/api/statisticals', StatisticalRoutes);
+		this.app.use('/api/statisticals', StatisticalRouter);
 	}
 
 	private plugins(): void {
@@ -70,3 +72,12 @@ const app = new App().app;
 app.listen(port, () => {
 	console.log(`✅ Server started successfully at Port: ${port}`);
 });
+
+// if (cluster.isPrimary === true) {
+// 	const CPUS: any = cpus();
+// 	CPUS.forEach(() => cluster.fork());
+// } else {
+// 	app.listen(port, () => {
+// 		console.log(`✅ Server started successfully at Port: ${port}`);
+// 	});
+// }

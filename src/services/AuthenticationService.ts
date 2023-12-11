@@ -10,6 +10,10 @@ import { Subscription } from '../models/Subscription';
 import Mail from '../utils/Mail';
 import { Token } from '../utils/Token';
 
+// const sleep = (millis: number) => {
+// 	var stop = new Date().getTime();
+// 	while (new Date().getTime() < stop + millis) {}
+// };
 @Service()
 export class AuthenticationService implements IAuthenticationService {
 	@Inject(() => UserRepository)
@@ -24,7 +28,11 @@ export class AuthenticationService implements IAuthenticationService {
 	@Inject(() => Token)
 	private token!: Token;
 
-	async login(username: string, password: string): Promise<string> {
+	async login(username: string, password: string): Promise<any> {
+		// console.log('Before sleep');
+		// sleep(10000); // Wait for one second
+		// console.log('After sleep');
+
 		const searchConditions = {
 			username,
 		};
@@ -41,14 +49,19 @@ export class AuthenticationService implements IAuthenticationService {
 
 		// generate token
 		if (compare) {
-			return Authentication.generateToken(
-				user.userId,
-				user.role,
-				user.account.username,
-				user.subscription.subscriptionTypeId
-			);
+			return {
+				accessToken: Authentication.generateAccessToken(
+					user.userId,
+					user.role,
+					user.account.username,
+					user.subscription.subscriptionTypeId
+				),
+				refreshToken: Authentication.generateRefreshToken(
+					user.account.username
+				),
+			};
 		}
-		return '';
+		return null;
 	}
 
 	async register(
@@ -156,4 +169,31 @@ export class AuthenticationService implements IAuthenticationService {
 			throw new Error('Error!' + error.message);
 		}
 	}
+
+	getAccessTokenByRefreshToken = async (refreshToken: string) => {
+		try {
+			const payload = Authentication.validateToken(refreshToken);
+			if (!payload) {
+				return '';
+			}
+			const searchConditions = {
+				username: payload.username,
+			};
+			const user = await this.userRepository.findOneUser(searchConditions);
+			if (user) {
+				return {
+					accessToken: Authentication.generateAccessToken(
+						user.userId,
+						user.role,
+						user.account.username,
+						user.subscription.subscriptionTypeId
+					),
+				};
+			} else {
+				return '';
+			}
+		} catch (error: any) {
+			throw new Error('Error!' + error.message);
+		}
+	};
 }

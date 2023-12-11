@@ -10,6 +10,7 @@ import {
 	DeletedAt,
 } from 'sequelize-typescript';
 import { SubscriptionInfo } from './SubscriptionInfo';
+import { Payment } from './Payment';
 
 @Table({
 	tableName: SubscriptionType.SUBSCRIPTION_TYPE_TABLE_NAME,

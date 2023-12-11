@@ -49,20 +49,10 @@ export class DirecorRepository extends BaseRepository<Director> {
 				attributes: {
 					exclude: ['createdAt', 'updatedAt', 'deletedAt'],
 				},
-				include: [
-					{
-						model: Movie,
-						attributes: {
-							exclude: ['createdAt', 'updatedAt', 'deletedAt'],
-						},
-						through: { attributes: [] },
-					},
-				],
 			});
-
 			return data;
 		} catch (error: any) {
-			throw new Error(error.message);
+			throw(error);
 		}
 	};
 }

@@ -1,3 +1,4 @@
+import { SubscriptionInfo } from './../models/SubscriptionInfo';
 import { Subscription } from './../models/Subscription';
 import { UserRepository } from '../repository/UserRepository';
 import { Inject, Service } from 'typedi';
@@ -35,20 +36,23 @@ export class SubscriptionService {
 				let subscription = user.subscription;
 				if (subscriptionInfoId !== null) {
 					const subcriptionInfo =
-						await this.subscriptionTypeRepository.findById(subscriptionInfoId);
+						await this.subscriptionInfoRepository.getSubscriptionInfoById(
+							subscriptionInfoId
+						);
 					const newDate: Date = addMonths(
 						new Date(),
-						subcriptionInfo.duration.time
+						subcriptionInfo!.duration.time
 					);
 
 					subscription.closeAt = newDate;
-					subscription.subscriptionTypeId = subcriptionInfo.subscriptionTypeId;
+					subscription.subscriptionTypeId = subcriptionInfo!.subscriptionTypeId;
 				} else {
 					if (subscriptionTypeId !== null) {
 						subscription.subscriptionTypeId = subscriptionTypeId;
 					}
 
 					if (closeAt !== null) {
+						console.log('first');
 						subscription.closeAt = closeAt;
 					}
 				}
@@ -106,6 +110,85 @@ export class SubscriptionService {
 		try {
 			return await this.subscriptionTypeRepository.delete(
 				await this.subscriptionTypeRepository.findById(subcriptionTypeId)
+			);
+		} catch (error: any) {
+			throw new Error(error.message);
+		}
+	};
+
+	createOrUpdateSubscriptionInfo = async (
+		subscriptionTypeId: number | null = null,
+		durationId: number | null = null,
+		discount: number | null = null,
+		subscriptionInfoId: number | null = null
+	) => {
+		try {
+			if (subscriptionInfoId !== null) {
+				const subcriptionInfoToUpdate =
+					await this.subscriptionInfoRepository.findById(subscriptionInfoId);
+				if (subscriptionTypeId !== null) {
+					await subcriptionInfoToUpdate.update({
+						subscriptionTypeId: subscriptionTypeId,
+					});
+				}
+				if (durationId !== null) {
+					await subcriptionInfoToUpdate.update({ durationId: durationId });
+				}
+				if (discount !== null) {
+					await subcriptionInfoToUpdate.update({ discount: discount });
+				}
+				return await this.subscriptionInfoRepository.save(
+					subcriptionInfoToUpdate
+				);
+			} else {
+				return await this.subscriptionInfoRepository.save(
+					SubscriptionInfo.build({
+						subscriptionTypeId: subscriptionTypeId,
+						durationId: durationId,
+						discount: discount,
+					})
+				);
+			}
+		} catch (error: any) {
+			throw new Error(
+				'Lỗi khi tạo hoặc cập nhật gói thông tin dịch vụ: ' + error.message
+			);
+		}
+	};
+
+	getAllSubscriptionInfo = async () => {
+		try {
+			return await this.subscriptionInfoRepository.getAllSubscriptionInfo();
+		} catch (error: any) {
+			throw new Error(error.message);
+		}
+	};
+
+	getSubscriptionInfoById = async (id: number) => {
+		try {
+			return await this.subscriptionInfoRepository.getSubscriptionInfoById(id);
+		} catch (error: any) {
+			throw new Error(error.message);
+		}
+	};
+
+	getPriceBySubscriptionInfoId = async (id: number) => {
+		try {
+			const subscriptionInfo =
+				await this.subscriptionInfoRepository.getSubscriptionInfoById(id);
+			const price =
+				subscriptionInfo!.subscriptionType.price *
+				(1 - subscriptionInfo!.discount);
+			return price;
+		} catch (error: any) {
+			throw new Error(error.message);
+		}
+	};
+
+	deleteSupscriptionInfo = async (subscriptionInfoId: number) => {
+		try {
+			return await this.subscriptionInfoRepository.delete(
+				await this.subscriptionInfoRepository.findById(subscriptionInfoId)
 			);
 		} catch (error: any) {
 			throw new Error(error.message);

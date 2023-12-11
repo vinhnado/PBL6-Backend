@@ -34,7 +34,7 @@ module.exports = {
 					updatedAt: new Date(),
 				},
 				{
-					subscription_type_id: 4,
+					subscription_type_id: 2,
 					closeAt: new Date(),
 					createdAt: new Date(),
 					updatedAt: new Date(),
@@ -58,7 +58,7 @@ module.exports = {
 					updatedAt: new Date(),
 				},
 				{
-					subscription_type_id: 4,
+					subscription_type_id: 2,
 					closeAt: new Date(),
 					createdAt: new Date(),
 					updatedAt: new Date(),

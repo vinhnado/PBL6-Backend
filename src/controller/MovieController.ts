@@ -51,11 +51,19 @@ export class MovieController {
 	getMovieById = async (req: Request, res: Response) => {
 		const { id } = req.params;
 		try {
+			const userId = Number(req.payload.userId);
+
 			const movie = await this.movieService.getMovieById(Number(id));
 			if (!movie) {
 				return res.status(404).json({ error: 'Can not find movie.' });
 			}
+
+			if(movie.level ===0){
+				return res.json(movie);
+			}
+			
 			return res.json(movie);
+
 		} catch (error) {
 			return res.status(500).json({ error: 'Can not get movie.' });
 		}

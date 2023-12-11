@@ -12,6 +12,7 @@ import {
 	HasOne,
 } from 'sequelize-typescript';
 import { SubscriptionType } from './SubscriptionType';
+import { Payment } from './Payment';
 
 @Table({
 	tableName: SubscriptionInfo.SUBSCRIPTION_INFO_TABLE_NAME,
@@ -59,6 +60,9 @@ export class SubscriptionInfo extends Model {
 
 	@BelongsTo(() => Duration)
 	duration!: Duration;
+
+	@HasMany(() => Payment)
+	payments!: Payment[];
 
 	@DeletedAt
 	deletedAt!: Date;

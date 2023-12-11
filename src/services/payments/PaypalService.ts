@@ -1,11 +1,15 @@
 import { Inject, Service } from 'typedi';
 import { PaymentService } from '../PaymentService';
 import { Payment } from '../../models/Payment';
+import { SubscriptionService } from '../SubscriptionService';
 
 @Service()
 export class PaypalService {
 	@Inject(() => PaymentService)
 	private paymentService!: PaymentService;
+
+	@Inject(() => SubscriptionService)
+	private subscriptionService!: SubscriptionService;
 
 	environment = process.env.ENVIRONMENT;
 	client_id = process.env.CLIENT_ID;
@@ -32,8 +36,12 @@ export class PaypalService {
 			});
 	}
 
-	createOrder = async (price: number) => {
+	createOrder = async (userId: number, subscriptionInfoId: number) => {
 		try {
+			const price = await this.subscriptionService.getPriceBySubscriptionInfoId(
+				subscriptionInfoId
+			);
+
 			const access_token = await this.get_access_token();
 			let order_data_json = {
 				intent: 'CAPTURE',
@@ -41,7 +49,7 @@ export class PaypalService {
 					{
 						amount: {
 							currency_code: 'USD',
-							value: price.toString(),
+							value: price,
 						},
 					},
 				],
@@ -61,10 +69,12 @@ export class PaypalService {
 			const id = json.id?.toString();
 			const partialObject: Partial<Payment> = {
 				type: 'paypal',
-				price: price,
+				price: Number(price),
 				transactionId: id,
 				status: 'Not checkout',
-				userId: 1,
+				userId: userId,
+				isPayment: false,
+				subscriptionInfoId: subscriptionInfoId,
 			};
 			await this.paymentService.addOrEditPayment(partialObject);
 			return json;
@@ -93,6 +103,7 @@ export class PaypalService {
 			const partialObject: Partial<Payment> = {
 				orderInfo: JSON.stringify(json),
 				status: 'Success',
+				isPayment: true,
 				transactionId: id,
 			};
 

@@ -10,6 +10,8 @@ import {
 	HasOne,
 } from 'sequelize-typescript';
 import { User } from './User';
+import { SubscriptionType } from './SubscriptionType';
+import { SubscriptionInfo } from './SubscriptionInfo';
 
 @Table({
 	tableName: Payment.PAYMENT_TABLE_NAME,
@@ -26,7 +28,8 @@ export class Payment extends Model {
 	private static PAYMENT_TRANSACTION_ID = 'transaction_id' as string;
 	private static PAYMENT_STATUS = 'status' as string;
 	private static PAYMENT_ISPAYMENT = 'is_payment' as string;
-
+	private static PAYMENT_SUBSCRIPTION_INFO_ID =
+		'subscription_info_id' as string;
 
 	@Column({
 		type: DataType.INTEGER,
@@ -80,13 +83,25 @@ export class Payment extends Model {
 
 	@ForeignKey(() => User)
 	@Column({
-		type: DataType.INTEGER(),
+		type: DataType.INTEGER,
 		field: Payment.PAYMENT_USER_ID,
+		allowNull: false,
 	})
 	userId!: number;
 
 	@BelongsTo(() => User)
-	movie!: User;
+	user!: User;
+
+	@ForeignKey(() => SubscriptionInfo)
+	@Column({
+		type: DataType.INTEGER,
+		field: Payment.PAYMENT_SUBSCRIPTION_INFO_ID,
+		allowNull: false,
+	})
+	subscriptionInfoId!: number;
+
+	@BelongsTo(() => SubscriptionInfo)
+	subscriptionInfo!: SubscriptionInfo;
 
 	@DeletedAt
 	deletedAt!: Date;

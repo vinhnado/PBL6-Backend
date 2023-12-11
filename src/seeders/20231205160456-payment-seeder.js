@@ -13,6 +13,7 @@ module.exports = {
 				order_info: `Order ${i + 1}`,
 				transaction_id: `Transaction${i + 1}`,
 				status: 'Completed',
+				subscription_info_id: 2,
 				is_payment: true,
 				user_id: 1, // Replace with the actual user ID
 				createdAt: new Date(),
@@ -28,6 +29,7 @@ module.exports = {
 				order_info: `Order ${i + 1}`,
 				transaction_id: `Transaction${i + 1}`,
 				status: 'Completed',
+				subscription_info_id: 2,
 				is_payment: true,
 				user_id: 2, // Replace with the actual user ID
 				createdAt: new Date('2022-12-12'),

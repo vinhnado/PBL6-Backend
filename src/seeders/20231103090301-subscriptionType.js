@@ -7,26 +7,20 @@ module.exports = {
 			'subscription_types',
 			[
 				{
-					name: 'Guest',
-					price: null,
+					name: 'Cơ bản',
+					price: 0,
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},
 				{
-					name: 'Standard',
+					name: 'Tiêu chuẩn',
 					price: 100,
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},
 				{
-					name: 'Vip 1',
+					name: 'Cao cấp',
 					price: 200,
-					createdAt: new Date(),
-					updatedAt: new Date(),
-				},
-				{
-					name: 'Vip 2',
-					price: 300,
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},
