@@ -127,7 +127,7 @@ export class IndividualController {
 
 	updateDirector = async (req: Request, res: Response) => {
 		try {
-			const result = await this.actorService.updateActor(req);
+			const result = await this.directorService.updateDirector(req);
 			if(result) {
 				return res.status(200).json({
 					status: 'Ok!',

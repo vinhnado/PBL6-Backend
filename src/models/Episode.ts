@@ -14,6 +14,7 @@ import { WatchHistory } from './WatchHistory';
 import { User } from './User';
 import { Comment } from './Comment';
 import { Rating } from './Rating';
+import { Quality } from './Quality';
 
 @Table({
 	tableName: Episode.TABLE_NAME,
@@ -107,4 +108,7 @@ export class Episode extends Model {
 
 	@HasMany(() => Comment)
 	comments!: Comment[];
+
+	@HasMany(() => Quality)
+	qualities!: Quality[];
 }

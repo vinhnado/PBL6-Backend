@@ -1765,7 +1765,7 @@ paths:
               properties:
                 name:
                   type: string
-                  default: New Actor
+                  default: New Director
                 gender:
                   type: string
                   default: Male
@@ -1819,9 +1819,9 @@ paths:
       tags:
         - individuals
       parameters:
-        - name: actorId
+        - name: directorId
           in: path
-          description: actorId
+          description: directorId
           required: true
           schema:
             type: number
@@ -1834,7 +1834,7 @@ paths:
               properties:
                 name:
                   type: string
-                  default: Name Actor To Update
+                  default: Name director To Update
                 gender:
                   type: string
                   default: Male
@@ -1844,7 +1844,7 @@ paths:
                   default: "1955-05-18T00:00:00.000Z"
                 description:
                   type: string
-                  default: New actor description
+                  default: New director description
       responses:
         '200':
           description: Successful response
