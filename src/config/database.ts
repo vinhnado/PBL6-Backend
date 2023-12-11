@@ -22,6 +22,7 @@ import { SubComment } from '../models/SubComment';
 import { Rating } from '../models/Rating';
 import { Duration } from '../models/Duration';
 import { SubscriptionInfo } from '../models/SubscriptionInfo';
+import { Quality } from '../models/Quality';
 
 dotenv.config();
 
@@ -90,6 +91,7 @@ class Database {
 			Rating,
 			Duration,
 			SubscriptionInfo,
+			Quality,
 		]);
 
 		await this.sequelize
