@@ -27,6 +27,7 @@ export class PaymentService {
 		try {
 			const { transactionId } = paymentData;
 			if (transactionId) {
+				console.log('first');
 				const paymentToUpdate = await this.paymentRepository.findOneByCondition(
 					{
 						transactionId: paymentData.transactionId,
@@ -81,5 +82,4 @@ export class PaymentService {
 			throw new Error(`Failed to find payment: ${error.message}`);
 		}
 	};
-
 }

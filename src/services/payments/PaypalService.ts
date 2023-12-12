@@ -97,8 +97,11 @@ export class PaypalService {
 					},
 				}
 			);
+			console.log(orderId);
 
 			const json = (await response.json()) as { id?: string };
+			console.log(json);
+
 			const id = json.id?.toString();
 			const partialObject: Partial<Payment> = {
 				orderInfo: JSON.stringify(json),
