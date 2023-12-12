@@ -32,6 +32,8 @@ tags:
     description: API for subscription
   - name: payment
     description: API for payment
+  - name: individuals
+    description: API for actors and directors
   - name: statistical
     description: API for statistical
     externalDocs:
@@ -1598,6 +1600,254 @@ paths:
         '200':
           description: Successful response
 
+  /individuals/actors:
+    get:
+      summary: Get actors
+      description: Get actors, include search parameters by name
+      tags:
+        - individuals
+      parameters:
+        - name: name
+          in: query
+          description: name of the actor to search
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: page, default is 1
+          required: false
+          schema:
+            type: string   
+        - name: pageSize
+          in: query
+          description: pageSize, default is 10
+          required: false
+          schema:
+            type: string     
+      responses:
+        '200':
+          description: Successful response
+    post:
+      summary: Create a new actor
+      description: Create a new actor
+      tags:
+        - individuals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  default: New Actor
+                gender:
+                  type: string
+                  default: Male
+                dateOfBirth:
+                  type: string
+                  format: date-time
+                  default: "1955-05-18T00:00:00.000Z"
+                description:
+                  type: string
+                  default: New actor description
+      responses:
+        '200':
+          description: Successful response
+
+  /individuals/actors/{actorId}:
+    get:
+      summary: Get actor details
+      description: Get actor details
+      tags:
+        - individuals
+      parameters:
+        - name: actorId
+          in: path
+          description: actorId
+          required: true
+          schema:
+            type: number
+            format: int64
+      responses:
+        '200':
+          description: Successful response
+    delete:
+      summary: Delete actor
+      description: Delete actor
+      tags:
+        - individuals
+      parameters:
+        - name: actorId
+          in: path
+          description: actorId
+          required: true
+          schema:
+            type: number
+            format: int64
+      responses:
+        '200':
+          description: Successful response
+    put:
+      summary: Update actor informations
+      description: Update actor informations
+      tags:
+        - individuals
+      parameters:
+        - name: actorId
+          in: path
+          description: actorId
+          required: true
+          schema:
+            type: number
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  default: Name Actor To Update
+                gender:
+                  type: string
+                  default: Male
+                dateOfBirth:
+                  type: string
+                  format: date-time
+                  default: "1955-05-18T00:00:00.000Z"
+                description:
+                  type: string
+                  default: New actor description
+      responses:
+        '200':
+          description: Successful response
+  /individuals/directors:
+    get:
+      summary: Get directors
+      description: Get directors, include search parameters by name
+      tags:
+        - individuals
+      parameters:
+        - name: name
+          in: query
+          description: name of the actor to search
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: page, default is 1
+          required: false
+          schema:
+            type: string   
+        - name: pageSize
+          in: query
+          description: pageSize, default is 10
+          required: false
+          schema:
+            type: string 
+      responses:
+        '200':
+          description: Successful response
+    post:
+      summary: Create a new director
+      description: Create a new director
+      tags:
+        - individuals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  default: New Director
+                gender:
+                  type: string
+                  default: Male
+                dateOfBirth:
+                  type: string
+                  format: date-time
+                  default: "1955-05-18T00:00:00.000Z"
+                description:
+                  type: string
+                  default: New actor description
+      responses:
+        '200':
+          description: Successful response
+
+  /individuals/directors/{directorId}:
+    get:
+      summary: Get director details
+      description: Get director details
+      tags:
+        - individuals
+      parameters:
+        - name: directorId
+          in: path
+          description: directorId
+          required: true
+          schema:
+            type: number
+            format: int64
+      responses:
+        '200':
+          description: Successful response
+    delete:
+      summary: Delete a director
+      description:  Delete a director by directorId
+      tags:
+        - individuals
+      parameters:
+        - name: directorId
+          in: path
+          description: directorId
+          required: true
+          schema:
+            type: number
+            format: int64
+      responses:
+        '200':
+          description: Successful response
+    put:
+      summary: Update director informations
+      description: Update director informations
+      tags:
+        - individuals
+      parameters:
+        - name: directorId
+          in: path
+          description: directorId
+          required: true
+          schema:
+            type: number
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  default: Name director To Update
+                gender:
+                  type: string
+                  default: Male
+                dateOfBirth:
+                  type: string
+                  format: date-time
+                  default: "1955-05-18T00:00:00.000Z"
+                description:
+                  type: string
+                  default: New director description
+      responses:
+        '200':
+          description: Successful response
   /subscription/update-subscription:
     put:
       tags:

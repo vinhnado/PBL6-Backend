@@ -16,7 +16,7 @@ class MovieRoutes extends BaseRoutes {
 	}
 	public routes(): void {
 		this.router.get('/', validateSearchMovies, validate, this.controller.searchMovies);
-		this.router.get('/:id', validateGetMovieById, validate, this.controller.getMovieById);
+		this.router.get('/:id',auth, validateGetMovieById, validate, this.controller.getMovieById);
 		this.router.get('/all', this.controller.getAllMovies);
 		this.router.get('/home/trending', this.controller.getMoviesTrending);
 		this.router.get('/home/upcoming', this.controller.getMoviesUpcoming);

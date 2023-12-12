@@ -207,6 +207,7 @@ export class MovieService implements IMovieService {
 			await this.redis.set(cacheKey, JSON.stringify(movie), 'EX', 60 * 5);
 			return movie;
 		} catch (error: any) {
+			console.log(error);
 			throw new Error('Can not get movie: ' + error.message);
 		}
 	}
