@@ -46,6 +46,7 @@ export class SubscriptionService {
 
 					subscription.closeAt = newDate;
 					subscription.subscriptionTypeId = subcriptionInfo!.subscriptionTypeId;
+					console.log(subscription.subscriptionTypeId);
 				} else {
 					if (subscriptionTypeId !== null) {
 						subscription.subscriptionTypeId = subscriptionTypeId;
