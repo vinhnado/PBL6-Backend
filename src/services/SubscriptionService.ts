@@ -39,20 +39,26 @@ export class SubscriptionService {
 						await this.subscriptionInfoRepository.getSubscriptionInfoById(
 							subscriptionInfoId
 						);
+					if (!subcriptionInfo) {
+						console.log('null');
+
+						return null;
+					}
 					const newDate: Date = addMonths(
 						new Date(),
 						subcriptionInfo!.duration.time
 					);
+					console.log(subcriptionInfo);
 
 					subscription.closeAt = newDate;
-					subscription.subscriptionTypeId = subcriptionInfo!.subscriptionTypeId;
+					subscription.subscriptionTypeId =
+						subcriptionInfo.subscriptionType.subscriptionTypeId;
 				} else {
 					if (subscriptionTypeId !== null) {
 						subscription.subscriptionTypeId = subscriptionTypeId;
 					}
 
 					if (closeAt !== null) {
-						console.log('first');
 						subscription.closeAt = closeAt;
 					}
 				}
