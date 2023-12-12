@@ -48,7 +48,6 @@ export class SubscriptionService {
 						new Date(),
 						subcriptionInfo!.duration.time
 					);
-					console.log(subcriptionInfo);
 
 					subscription.closeAt = newDate;
 					subscription.subscriptionTypeId =
