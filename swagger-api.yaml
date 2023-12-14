@@ -1852,7 +1852,8 @@ paths:
     put:
       tags:
         - subscription
-      summary: Update Subscription cách sử dụng  nếu truyền chỉ một mình subscriptionInfoId thì là cập nhật theo gói (có nó thì chỉ có mình nó truyền vào), closeAt và subscriptionTypeId thì truyền về cái nào sửa cái đấy, userId bắt buộc
+      summary: Update Subscription 
+      description: cách sử dụng  nếu truyền chỉ một mình subscriptionInfoId thì là cập nhật theo gói (có nó thì chỉ có mình nó truyền vào), closeAt và subscriptionTypeId thì truyền về cái nào sửa cái đấy, userId bắt buộc
       requestBody:
         required: true
         content:
