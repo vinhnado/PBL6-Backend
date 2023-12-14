@@ -14,7 +14,9 @@ class IndividualRoutes extends BaseRoutes {
 		this.router.get('/actors',validateGetActors, validate, this.controller.getActors);
 		this.router.put('/actors/:actorId',validateUpdateActor, validate, this.controller.updateActor);
 		this.router.post('/actors',validateCreateActor, validate ,this.controller.createActor);
+		this.router.get('/actors/populars/ok',this.controller.getPopularActors);
 
+		
 		this.router.get('/directors', validateGetDirectors, validate, this.controller.getDirectors);
 		this.router.delete('/directors/:directorId',validateDeleteDirector, validate, this.controller.deleteDirector);
 		this.router.get('/directors/:directorId',validateGetDirectorDetails, validate, this.controller.getDirectorDetails);

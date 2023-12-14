@@ -38,7 +38,7 @@ export class MovieController {
 			return res.status(200).json({
 				message:"Successful",
 				totalCount: totalCount,
-				totalPage: Math.floor(totalCount/pageSize),
+				totalPage: Math.ceil(totalCount/pageSize),
 				movies: movies
 
 			});

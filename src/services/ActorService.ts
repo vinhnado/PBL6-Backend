@@ -128,4 +128,12 @@ export class ActorService {
 			throw new Error(error.message);
 		}
 	};
+
+	getPopularActors = async (page: number, pageSize: number) => {
+		try{
+			return this.actorRepository.getPopularActors(1,5);
+		}catch(error){
+			throw(error);
+		}
+	}
 }
