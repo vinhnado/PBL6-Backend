@@ -22,6 +22,7 @@ export class MovieDTO {
 
 export class MovieItem {
 	id!: number;
+	movieId!: number;
 	title!: string;
 	posterURL!: string;
 	averageRating!: string;
@@ -47,6 +48,7 @@ export class MovieItem {
 			this.numFavorite = movie.numFavorite;
 		} else {
 			this.id = episode.episodeId;
+			this.movieId = episode.movie.movieId;
 			this.title = episode.title;
 			this.posterURL = episode.posterURL;
 			this.duration = duration;
