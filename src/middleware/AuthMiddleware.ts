@@ -75,3 +75,28 @@ export const auth = (req: Request, res: Response, next: NextFunction): any => {
 		return res.send(err);
 	}
 };
+
+export const getUserId = (
+	req: Request,
+	res: Response,
+	next: NextFunction
+): any => {
+	if (!req.headers.authorization) {
+		return next();
+	}
+
+	let secretKey = process.env.JWT_SECRET_KEY || 'my-secret-key';
+	const token: string = req.headers.authorization.split(' ')[1];
+
+	try {
+		const credential: string | object = jwt.verify(token, secretKey);
+		if (credential) {
+			req.app.locals.credential = credential;
+			req.payload = credential;
+			return next();
+		}
+		return next();
+	} catch (err) {
+		return res.send(err);
+	}
+};

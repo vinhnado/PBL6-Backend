@@ -8,6 +8,7 @@ import { Payment } from '../models/Payment';
 import { PaymentService } from '../services/PaymentService';
 import timezone from 'moment-timezone';
 import { SubscriptionService } from '../services/SubscriptionService';
+import { UserService } from '../services/UserService';
 
 export class PaymentController {
 	private vnPayService: VNPayService;
@@ -15,6 +16,8 @@ export class PaymentController {
 	private paypalService: PaypalService;
 	private paymentService: PaymentService;
 	private subscriptionService: SubscriptionService;
+	private userService: UserService;
+
 
 	constructor() {
 		this.vnPayService = new VNPayService({
@@ -29,6 +32,8 @@ export class PaymentController {
 		this.paypalService = Container.get(PaypalService);
 		this.paymentService = Container.get(PaymentService);
 		this.subscriptionService = Container.get(SubscriptionService);
+		this.userService = Container.get(UserService);
+
 	}
 
 	/**
@@ -113,7 +118,6 @@ export class PaymentController {
 			// console.log(req.query);
 			const query: any = req.query;
 			const results = await this.vnPayService.verifyReturnUrl(query);
-			// const userId = Number(req.payload.userId);
 			const transactionId = results.vnp_TxnRef;
 			if (results.isSuccess) {
 				const partialObject: Partial<Payment> = {
@@ -124,16 +128,20 @@ export class PaymentController {
 				};
 				
 				const payment =await this.paymentService.findPaymentByTransactionId(transactionId);
-				
+				await this.paymentService.addOrEditPayment(partialObject);
 				// add Subscription for user
 				await this.subscriptionService.updateSubscription(payment.getDataValue('userId'),null, null,payment.getDataValue('subscriptionInfoId'));
 
-				await this.paymentService.addOrEditPayment(partialObject);
+				const userInfo = await this.userService.findOneUser({
+					userId: payment.getDataValue('userId')
+				});
+
 
 				return res.status(200).json({
 					message: 'Payment With VN Pay Successfully',
 					success: true,
 					results: results,
+					userInfo: userInfo
 				});
 			}
 			return res.status(200).json({

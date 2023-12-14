@@ -39,20 +39,28 @@ export class SubscriptionService {
 						await this.subscriptionInfoRepository.getSubscriptionInfoById(
 							subscriptionInfoId
 						);
-					const newDate: Date = addMonths(
-						new Date(),
-						subcriptionInfo!.duration.time
-					);
-
-					subscription.closeAt = newDate;
-					subscription.subscriptionTypeId = subcriptionInfo!.subscriptionTypeId;
+					if (!subcriptionInfo) {
+						throw new Error('subscriptionInfoId not found for the given ID');
+					}
+					if (subscription.closeAt > new Date()) {
+						subscription.closeAt = addMonths(
+							subscription.closeAt,
+							subcriptionInfo!.duration.time
+						);
+					} else {
+						subscription.closeAt = addMonths(
+							new Date(),
+							subcriptionInfo!.duration.time
+						);
+					}
+					subscription.subscriptionTypeId =
+						subcriptionInfo.subscriptionType.subscriptionTypeId;
 				} else {
 					if (subscriptionTypeId !== null) {
 						subscription.subscriptionTypeId = subscriptionTypeId;
 					}
 
 					if (closeAt !== null) {
-						console.log('first');
 						subscription.closeAt = closeAt;
 					}
 				}
