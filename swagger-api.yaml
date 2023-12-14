@@ -326,7 +326,7 @@ paths:
         '404':
           description: Movie not found
       security:
-        - api_key: []
+        - bearerAuth: []
     put:
       tags:
         - movie
@@ -399,7 +399,7 @@ paths:
         '404':
           description: Movie not found
       security:
-        - api_key: []
+        - bearerAuth: []
   '/movies/get/years':
     get:
       tags:
@@ -415,7 +415,7 @@ paths:
         '404':
           description: Movie not found
       security:
-        - api_key: []
+        - bearerAuth: []
 
   '/movies/movie-actor':
     delete:
@@ -444,7 +444,7 @@ paths:
         '404':
           description: Movie not found
       security:
-        - api_key: []
+        - bearerAuth: []
     post:
       tags:
         - movie
@@ -492,7 +492,7 @@ paths:
         '404':
           description: Movie not found
       security:
-        - api_key: []
+        - bearerAuth: []
     post:
       tags:
         - movie
@@ -540,7 +540,7 @@ paths:
         '404':
           description: Movie not found
       security:
-        - api_key: []
+        - bearerAuth: []
     post:
       tags:
         - movie
@@ -595,7 +595,7 @@ paths:
         '200':
           description: successful operation
       security:
-        - api_key: []
+        - bearerAuth: []
   /episode/{id}:
     get:
       tags:
@@ -622,7 +622,7 @@ paths:
                   type: integer
                   format: int32
       security:
-        - api_key: []
+        - bearerAuth: []
 
   /episode/{id}/comments:
     get:
@@ -664,7 +664,7 @@ paths:
                   type: integer
                   format: int32
       security:
-        - api_key: []
+        - bearerAuth: []
 
   /episode/delete/{episodeId}:
     delete:
@@ -828,7 +828,7 @@ paths:
         '200':
           description: successful operation
       security:
-        - api_key: []
+        - bearerAuth: []
   /genres:
     get:
       tags:
@@ -846,7 +846,7 @@ paths:
                   type: integer
                   format: int32
       security:
-        - api_key: []
+        - bearerAuth: []
     post:
       tags:
         - genre
@@ -869,7 +869,7 @@ paths:
                 type: object
 
       security:
-        - api_key: []
+        - bearerAuth: []
     put:
       tags:
         - genre
@@ -898,7 +898,7 @@ paths:
                   type: integer
                   format: int32
       security:
-        - api_key: []
+        - bearerAuth: []
     delete:
       tags:
         - genre
@@ -925,7 +925,7 @@ paths:
                   type: integer
                   format: int32
       security:
-        - api_key: []
+        - bearerAuth: []
   /comments/create:
     post:
       tags:
@@ -2259,7 +2259,7 @@ paths:
         '404':
           description: Movie not found
       security:
-        - api_key: []
+        - bearerAuth: []
 externalDocs:
   description: Find out more about Swagger
   url: 'http://swagger.io'
@@ -2298,8 +2298,10 @@ components:
       properties:
         username:
           type: string
+          default: username3
         password:
           type: string
+          default: password
 
     Movie:
       type: object

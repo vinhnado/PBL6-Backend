@@ -76,12 +76,13 @@ export const auth = (req: Request, res: Response, next: NextFunction): any => {
 	}
 };
 
-export const getUserId = (
+export const authUser = (
 	req: Request,
 	res: Response,
 	next: NextFunction
 ): any => {
 	if (!req.headers.authorization) {
+		req.payload={userId :null}
 		return next();
 	}
 
@@ -95,6 +96,7 @@ export const getUserId = (
 			req.payload = credential;
 			return next();
 		}
+		req.payload={userId :null}
 		return next();
 	} catch (err) {
 		return res.send(err);
