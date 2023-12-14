@@ -40,17 +40,19 @@ export class SubscriptionService {
 							subscriptionInfoId
 						);
 					if (!subcriptionInfo) {
-						console.log('null');
-
-						return null;
+						throw new Error('subscriptionInfoId not found for the given ID');
 					}
-					const newDate: Date = addMonths(
-						new Date(),
-						subcriptionInfo!.duration.time
-					);
-					console.log(subcriptionInfo);
-
-					subscription.closeAt = newDate;
+					if (subscription.closeAt > new Date()) {
+						subscription.closeAt = addMonths(
+							subscription.closeAt,
+							subcriptionInfo!.duration.time
+						);
+					} else {
+						subscription.closeAt = addMonths(
+							new Date(),
+							subcriptionInfo!.duration.time
+						);
+					}
 					subscription.subscriptionTypeId =
 						subcriptionInfo.subscriptionType.subscriptionTypeId;
 				} else {
