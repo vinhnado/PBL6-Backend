@@ -12,6 +12,9 @@ import { ParamsDictionary } from 'express-serve-static-core';
 import { ParsedQs } from 'qs';
 import { MovieRepository } from '../repository/MovieRepository';
 import { IMovieRepository } from '../repository/Interfaces/IMovieRepository';
+import { Quality } from '../models/Quality';
+import { QualityRepository } from '../repository/QualityRepository';
+import { IQualityRepository } from '../repository/Interfaces/IQualityRepository';
 
 @Service()
 export class EpisodeService implements IEpisodeService {
@@ -27,6 +30,9 @@ export class EpisodeService implements IEpisodeService {
 	
 	@Inject(() => MovieRepository)
 	private movieRepository!: IMovieRepository;
+	
+	@Inject(() => QualityRepository)
+	private qualityRepository!: IQualityRepository;
 
 	hideEmail(email:string) {
 		const atIndex = email.indexOf('@');
@@ -248,4 +254,28 @@ export class EpisodeService implements IEpisodeService {
 			throw(error);
 		}
 	}
+
+	async getQualityMovie(req: Request): Promise<Quality|null>{
+		try{
+			const episodeId = req.params.episodeId;
+			const qualityFormat = req.query.quality?.toString();
+			if(!episodeId || !qualityFormat){
+				throw new Error('Invalid episode');
+			}
+
+			const quality = await this.qualityRepository.getQualityMovie(Number(episodeId), qualityFormat);
+			if(!quality){
+				return null;
+			}
+			if(quality.videoUrl){
+				quality.videoUrl = await this.s3Service.getObjectUrl(quality.videoUrl);
+			}else{
+				quality.videoUrl = await this.s3Service.getObjectUrl('movies/default_movie_4k.webm');
+			}
+			return quality;
+		}catch(error){
+			throw(error);
+		}
+	}
+ 
 }

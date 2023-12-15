@@ -73,6 +73,15 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 		    // Truy vấn lấy tổng số phim
 			const totalCount = await Movie.count({
 				where: whereCondition,
+				include: [
+					{
+						model: Genre,
+						attributes: ['genre_id', 'name'],
+						as: 'genres',
+						// required: true,
+						...(Object.keys(whereConditionGenre).length > 0 ? { where: whereConditionGenre } : {}),
+						through: { attributes: [] },
+					},]
 			  });
 		  
 		return {
