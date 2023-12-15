@@ -36,3 +36,9 @@ export const validateGetPresignURL = [
     query('option').notEmpty().isIn(['onlyMovie', 'onlyPoster','movieAndPoster']).withMessage('option is required and in onlyMovie, onlyPoster, movieAndPoster'),
 
 ];
+
+export const validateGetQuality = [
+    param('episodeId').notEmpty().isInt({min:1}).withMessage('episodeId is required and must be an integer'),
+    query('quality').notEmpty().isString().withMessage('quality is must be an string').isIn(['4k', '1080p']).withMessage('quality must be one of: 4k, 1080p'),
+
+];
