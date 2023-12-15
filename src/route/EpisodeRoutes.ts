@@ -1,6 +1,6 @@
 import BaseRoutes from './Base/BaseRouter';
 import { EpisodeController } from '../controller/EpisodeController';
-import { validateCreateEpisode, validateDeleteEpisodeById, validateGetEpisodeById, validateGetPresignURL, validateUpdateEpisode } from '../validators/EpisodeValidator';
+import { validateCreateEpisode, validateDeleteEpisodeById, validateGetEpisodeById, validateGetPresignURL, validateGetQuality, validateUpdateEpisode } from '../validators/EpisodeValidator';
 import { validate } from '../validators/Validator';
 import { auth, authUser } from '../middleware/AuthMiddleware';
 class EpisodeRoutes extends BaseRoutes {
@@ -14,7 +14,7 @@ class EpisodeRoutes extends BaseRoutes {
 		this.router.put('/update/:episodeId', validateUpdateEpisode, validate, this.controller.updateEpisode);
 		this.router.delete('/delete/:episodeId',validateDeleteEpisodeById, validate, this.controller.deleteEpisode);
 		this.router.get('/presignURL/upload', validateGetPresignURL, validate, this.controller.getPresignUrlToUploadPosterAndMovie);
-		this.router.get('/qualities/:episodeId',auth, this.controller.getQuality);
+		this.router.get('/qualities/:episodeId',auth, validateGetQuality, validate, this.controller.getQuality);
 	}
 }
 
