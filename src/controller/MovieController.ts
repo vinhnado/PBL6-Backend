@@ -6,19 +6,21 @@ import { IRecommenderService } from '../services/Interfaces/IRecommenderService'
 import { RecommenderSerivce } from '../services/RecommenderService';
 import { UserService } from '../services/UserService';
 import { QRCodeService } from '../services/QRCodeService';
+import { RatingService } from '../services/RatingService';
 
 export class MovieController {
 	private movieService: IMovieService;
 	private recommenderService: IRecommenderService;
 	private userService: UserService;
 	private qrCodeService: QRCodeService;
-
+	private ratingService: RatingService;
 
 	constructor() {
 		this.userService = Container.get(UserService);
 		this.movieService = Container.get(MovieService);
 		this.recommenderService = Container.get(RecommenderSerivce)
 		this.qrCodeService = Container.get(QRCodeService)
+		this.ratingService = Container.get(RatingService)
 	}
 
 	searchMovies = async (req: Request, res: Response) => {
@@ -55,13 +57,21 @@ export class MovieController {
 	getMovieById = async (req: Request, res: Response) => {
 		const { id } = req.params;
 		try {
-
+			
 			const movie = await this.movieService.getMovieById(Number(id));
 			if (!movie) {
 				return res.status(404).json({ error: 'Can not find movie.' });
 			}
-			
-			return res.json(movie);
+			const userId = req.payload!.userId!;
+			let rating =0;
+			if(userId) {
+				rating =await this.ratingService.getRatingMovieOfUser(userId,Number(id));
+			}
+			return res.json({
+				message: "success",
+				movie: movie,
+				rating: rating
+			});
 
 		} catch (error) {
 			console.log(error);
