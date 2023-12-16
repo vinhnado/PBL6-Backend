@@ -400,6 +400,29 @@ paths:
           description: Movie not found
       security:
         - bearerAuth: []
+  '/movies/get/qrcode':
+    get:
+      tags:
+        - movie
+      summary: Get QR code Of Movie
+      description: Returns QR code of movies
+      parameters:
+        - name: url
+          in: query
+          description: Enter url of movie to create QR Code
+          required: false
+          explode: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Movie not found
+      security:
+        - bearerAuth: []
   '/movies/get/years':
     get:
       tags:

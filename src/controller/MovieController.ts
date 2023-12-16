@@ -5,16 +5,20 @@ import { IMovieService } from '../services/Interfaces/IMovieService';
 import { IRecommenderService } from '../services/Interfaces/IRecommenderService';
 import { RecommenderSerivce } from '../services/RecommenderService';
 import { UserService } from '../services/UserService';
+import { QRCodeService } from '../services/QRCodeService';
 
 export class MovieController {
 	private movieService: IMovieService;
 	private recommenderService: IRecommenderService;
 	private userService: UserService;
+	private qrCodeService: QRCodeService;
+
 
 	constructor() {
 		this.userService = Container.get(UserService);
 		this.movieService = Container.get(MovieService);
 		this.recommenderService = Container.get(RecommenderSerivce)
+		this.qrCodeService = Container.get(QRCodeService)
 	}
 
 	searchMovies = async (req: Request, res: Response) => {
@@ -289,6 +293,22 @@ export class MovieController {
 			res.status(200).json({
 				message: "successful",
 				rowEffected:results
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
+
+	getQRCodeOfMovie= async(req: Request, res: Response) => {
+		try {
+			const url = req.query.url!.toString();
+			const results =  await this.qrCodeService.createQRCode(url);
+			res.status(200).json({
+				message: "successful",
+				qrCode:results
 			});
 		} catch (error) {
 			console.log(error);
