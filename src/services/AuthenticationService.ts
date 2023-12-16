@@ -9,6 +9,7 @@ import { IUserRepository } from '../repository/Interfaces/IUserRepository';
 import { Subscription } from '../models/Subscription';
 import Mail from '../utils/Mail';
 import { Token } from '../utils/Token';
+import { CustomErrors } from '../error/CustomErrors';
 
 // const sleep = (millis: number) => {
 // 	var stop = new Date().getTime();
@@ -64,15 +65,22 @@ export class AuthenticationService implements IAuthenticationService {
 		return null;
 	}
 
-	async register(
+	register = async (
 		email: string,
 		dateOfBirth: Date,
 		gender: string,
 		username: string,
 		password: string,
 		isAdmin: boolean = false
-	): Promise<void> {
+	) => {
 		try {
+			const check1 = await this.checkUsername(username);
+			if (check1) {
+				throw new CustomErrors.UsernameValidError('Invalid Username');
+			}
+			if (await this.checkEmail(email)) {
+				throw new CustomErrors.EmailValidError('Invalid Email');
+			}
 			const hashedPassword: string = await Authentication.passwordHash(
 				password
 			);
@@ -96,10 +104,11 @@ export class AuthenticationService implements IAuthenticationService {
 				newAccount,
 				newSubscription
 			);
+			return 'Create user successfully';
 		} catch (error: any) {
 			throw new Error('Error register!' + error.message);
 		}
-	}
+	};
 
 	async forgotPassword(
 		email: string,
@@ -191,6 +200,37 @@ export class AuthenticationService implements IAuthenticationService {
 				};
 			} else {
 				return '';
+			}
+		} catch (error: any) {
+			throw new Error('Error!' + error.message);
+		}
+	};
+
+	checkUsername = async (username: string): Promise<Boolean> => {
+		try {
+			const account = await this.accountRepository.findOneByCondition({
+				username: username,
+			});
+			console.log(account);
+			if (account) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (error: any) {
+			throw new Error('Error!' + error.message);
+		}
+	};
+
+	checkEmail = async (email: string) => {
+		try {
+			const user = await this.userRepository.findOneByCondition({
+				email: email,
+			});
+			if (user) {
+				return true;
+			} else {
+				return false;
 			}
 		} catch (error: any) {
 			throw new Error('Error!' + error.message);

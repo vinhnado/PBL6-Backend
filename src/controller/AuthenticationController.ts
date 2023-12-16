@@ -1,3 +1,4 @@
+import { CustomErrors } from './../error/CustomErrors';
 import { Request, Response } from 'express';
 import Container, { Inject, Service } from 'typedi';
 import { IAuthenticationService } from '../services/Interfaces/IAuthenticationService';
@@ -53,6 +54,19 @@ export class AuthenticationController {
 			});
 		} catch (error) {
 			console.log(error);
+			if (error instanceof CustomErrors.UsernameValidError) {
+				return res.status(400).json({
+					status: 'Bad Request',
+					message: error.message,
+				});
+			}
+			if (error instanceof CustomErrors.EmailValidError) {
+				return res.status(400).json({
+					status: 'Bad Request',
+					message: error.message,
+				});
+			}
+
 			return res.status(500).json({
 				status: 'Internal server Error!',
 				message: 'Internal server Error!',
@@ -87,6 +101,33 @@ export class AuthenticationController {
 	};
 
 	forgotPassword = async (req: Request, res: Response) => {
+		try {
+			const { email, token, password } = req.body;
+			let data;
+			if (token == null) {
+				data = await this.authenticationService.forgotPassword(email);
+			} else {
+				data = await this.authenticationService.forgotPassword(
+					email,
+					token,
+					password
+				);
+			}
+
+			return res.status(200).json({
+				status: 'Ok!',
+				message: data,
+			});
+		} catch (error) {
+			console.log(error);
+			return res.status(500).json({
+				status: 'Internal server Error!',
+				message: 'Internal server Error!',
+			});
+		}
+	};
+
+	changePassword = async (req: Request, res: Response) => {
 		try {
 			const { email, token, password } = req.body;
 			let data;
@@ -154,6 +195,29 @@ export class AuthenticationController {
 				status: 'Ok!',
 				message: 'Get new token successfully!',
 				result: res_token,
+			});
+		} catch (error) {
+			console.log(error);
+			return res.status(500).json({
+				status: 'Internal server Error!',
+				message: 'Internal server Error!',
+			});
+		}
+	};
+
+	validRegister = async (req: Request, res: Response) => {
+		try {
+			const { email, token } = req.body;
+			let data;
+			if (token == null) {
+				data = await this.authenticationService.activeUser(email);
+			} else {
+				data = await this.authenticationService.activeUser(email, token);
+			}
+
+			return res.status(200).json({
+				status: 'Ok!',
+				message: data,
 			});
 		} catch (error) {
 			console.log(error);
