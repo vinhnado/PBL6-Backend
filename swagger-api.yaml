@@ -665,6 +665,40 @@ paths:
                   format: int32
       security:
         - bearerAuth: []
+  /episode/qualities/{episodeId}:
+    get:
+      tags:
+        - episode
+      summary: Returns quality (4k or 1080p) movie of episode
+      description: Returns quality movie of episode 4k or 1080p
+      parameters:
+        - name: episodeId
+          in: path
+          description: episodeId of episode to return
+          required: true
+          explode: true
+          schema:
+            type: integer
+            format: int64
+        - name: quality
+          in: query
+          description: Quality of video, 1080p or 4k
+          required: true
+          explode: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security:
+        - bearerAuth: []
 
   /episode/delete/{episodeId}:
     delete:

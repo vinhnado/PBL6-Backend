@@ -14,6 +14,7 @@ export class EpisodeController{
 		this.episodeService = Container.get(EpisodeService);
 		this.movieService = Container.get(MovieService);
 	}
+
     getEpisode = async (req: Request, res: Response) => {
 		const { id } = req.params;
 		try {
@@ -137,6 +138,42 @@ export class EpisodeController{
                 data: rs
             });
 		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server error"
+			})	
+		}
+	}
+
+	getQuality = async (req: Request, res: Response) => {
+		try {
+			const userId = req.payload!.userId!;
+			if(!userId){
+				res.status(404).json({
+					message: "fail, please login",
+				});	
+			}
+			const subscriptionTypeId = req.payload!.subscriptionTypeId!;
+			if(subscriptionTypeId===1){
+				return res.status(403).json({
+					message: "Update your subscription to watch movie!"
+				});
+			}
+
+			if(subscriptionTypeId===2){
+				if(req.query.quality?.toString()==='4k')
+				return res.status(403).json({
+					message: "Update your subscription to watch movie 4k!"
+				});
+			}
+
+			const rs = await await this.episodeService.getQualityMovie(req);
+			res.status(200).json({
+				message: "Successful",
+                data: rs
+            });
+		} catch (error) {
+			console.log(error);
 			res.status(500).json({
 				message: "Server error"
 			})	

@@ -40,7 +40,7 @@ export class Quality extends Model {
 		type: DataType.TEXT,
 		field: Quality.VIDEO_QUALITY,
 	})
-	videoQuanlity!: string;
+	videoQuality!: string;
 
     @Column({
 		type: DataType.TEXT,
