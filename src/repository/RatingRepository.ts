@@ -67,4 +67,18 @@ export class RatingRepository extends BaseRepository<Rating> implements IRatingR
             throw error;
           }
     }
+
+    async getRatingMovieOfUser(userId: number, movieId: number): Promise<number> {
+      try{
+          const rating = await this.model.findOne({
+            where: {
+              movie_id: movieId,
+              user_id: userId
+            }
+          });
+          return rating?.rating || 0;
+      }catch(error){
+        throw(error);
+      }
+    }
 }

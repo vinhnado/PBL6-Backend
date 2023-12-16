@@ -34,4 +34,12 @@ export class RatingService implements IRatingService {
         }
     }
 
+    async getRatingMovieOfUser(userId: number, movieId: number): Promise<number> {
+        try{
+            const rating = await this.ratingRepository.getRatingMovieOfUser(userId,movieId);
+            return rating || 0;
+        }catch(error){
+          throw(error);
+        }    }
+
 }
