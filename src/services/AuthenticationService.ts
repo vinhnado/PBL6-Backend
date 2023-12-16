@@ -9,11 +9,12 @@ import { IUserRepository } from '../repository/Interfaces/IUserRepository';
 import { Subscription } from '../models/Subscription';
 import Mail from '../utils/Mail';
 import { Token } from '../utils/Token';
+import {
+	EmailValidError,
+	OldPasswordError,
+	UsernameValidError,
+} from '../error/CustomErrors';
 
-// const sleep = (millis: number) => {
-// 	var stop = new Date().getTime();
-// 	while (new Date().getTime() < stop + millis) {}
-// };
 @Service()
 export class AuthenticationService implements IAuthenticationService {
 	@Inject(() => UserRepository)
@@ -28,24 +29,21 @@ export class AuthenticationService implements IAuthenticationService {
 	@Inject(() => Token)
 	private token!: Token;
 
-	async login(username: string, password: string): Promise<any> {
-		// console.log('Before sleep');
-		// sleep(10000); // Wait for one second
-		// console.log('After sleep');
-
+	login = async (username: string, password: string): Promise<any> => {
 		const searchConditions = {
 			username,
 		};
 		const user = await this.userRepository.findOneUser(searchConditions);
 
 		if (!user) {
-			throw new Error('Bad Request!');
+			throw new Error('User not found');
 		}
 		// check password
 		let compare = await Authentication.passwordCompare(
 			password,
 			user.account.password
 		);
+		console.log(compare);
 
 		// generate token
 		if (compare) {
@@ -62,17 +60,24 @@ export class AuthenticationService implements IAuthenticationService {
 			};
 		}
 		return null;
-	}
+	};
 
-	async register(
+	register = async (
 		email: string,
 		dateOfBirth: Date,
 		gender: string,
 		username: string,
 		password: string,
 		isAdmin: boolean = false
-	): Promise<void> {
+	) => {
 		try {
+			const check1 = await this.checkUsername(username);
+			if (check1) {
+				throw new UsernameValidError('Invalid Username');
+			}
+			if (await this.checkEmail(email)) {
+				throw new EmailValidError('Invalid Email');
+			}
 			const hashedPassword: string = await Authentication.passwordHash(
 				password
 			);
@@ -96,16 +101,24 @@ export class AuthenticationService implements IAuthenticationService {
 				newAccount,
 				newSubscription
 			);
+			return 'Create user successfully';
 		} catch (error: any) {
-			throw new Error('Error register!' + error.message);
+			if (
+				error instanceof UsernameValidError ||
+				error instanceof EmailValidError
+			) {
+				throw error;
+			} else {
+				throw new Error('Error registering user: ' + error.message);
+			}
 		}
-	}
+	};
 
-	async forgotPassword(
+	forgotPassword = async (
 		email: string,
 		token: string | null = null,
 		password: string | null = null
-	) {
+	) => {
 		try {
 			const searchConditions = {
 				email,
@@ -120,7 +133,6 @@ export class AuthenticationService implements IAuthenticationService {
 				return 'Hãy kiểm tra email';
 			} else {
 				const data = await this.token.verifyToken(token);
-				console.log(data);
 				if (data != null && data?.email == email && password) {
 					const account = (
 						await this.userRepository.findOneUser(searchConditions)
@@ -138,9 +150,47 @@ export class AuthenticationService implements IAuthenticationService {
 		} catch (error: any) {
 			throw new Error('Error!' + error.message);
 		}
-	}
+	};
 
-	async activeUser(email: string, token: string | null = null) {
+	changePassword = async (
+		userId: number,
+		oldPassword: string,
+		newPassword: string
+	) => {
+		try {
+			const searchConditions = {
+				userId,
+			};
+			const user = await this.userRepository.findOneUser(searchConditions);
+
+			if (!user) {
+				throw new Error('Bad Request!');
+			}
+			// check password
+			const compare = await Authentication.passwordCompare(
+				oldPassword,
+				user.account.password
+			);
+			if (compare) {
+				let account = user.account;
+				const hashedPassword: string = await Authentication.passwordHash(
+					newPassword
+				);
+				account.update({ password: hashedPassword });
+				return await this.accountRepository.save(account);
+			} else {
+				throw new OldPasswordError('Wrong old password');
+			}
+		} catch (error: any) {
+			if (error instanceof OldPasswordError) {
+				throw error;
+			} else {
+				throw new Error('Error change password: ' + error.message);
+			}
+		}
+	};
+
+	activeUser = async (email: string, token: string | null = null) => {
 		try {
 			const searchConditions = {
 				email,
@@ -168,7 +218,7 @@ export class AuthenticationService implements IAuthenticationService {
 		} catch (error: any) {
 			throw new Error('Error!' + error.message);
 		}
-	}
+	};
 
 	getAccessTokenByRefreshToken = async (refreshToken: string) => {
 		try {
@@ -191,6 +241,36 @@ export class AuthenticationService implements IAuthenticationService {
 				};
 			} else {
 				return '';
+			}
+		} catch (error: any) {
+			throw new Error('Error!' + error.message);
+		}
+	};
+
+	checkUsername = async (username: string): Promise<Boolean> => {
+		try {
+			const account = await this.accountRepository.findOneByCondition({
+				username: username,
+			});
+			if (account) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (error: any) {
+			throw new Error('Error!' + error.message);
+		}
+	};
+
+	checkEmail = async (email: string) => {
+		try {
+			const user = await this.userRepository.findOneByCondition({
+				email: email,
+			});
+			if (user) {
+				return true;
+			} else {
+				return false;
 			}
 		} catch (error: any) {
 			throw new Error('Error!' + error.message);
