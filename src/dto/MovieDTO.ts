@@ -25,6 +25,8 @@ export class MovieItem {
 	movieId!: number;
 	title!: string;
 	posterURL!: string;
+	posterMovieURL!: string;
+	backgroundMovieURL!: string;
 	averageRating!: string;
 	episodeNum!: number;
 	level: number;
@@ -43,12 +45,15 @@ export class MovieItem {
 			this.id = movie.movieId;
 			this.title = movie.title;
 			this.posterURL = movie.posterURL;
+			this.backgroundMovieURL = movie.backgroundURL;
 			this.averageRating = movie.averageRating;
 			this.episodeNum = movie.episodeNum;
 			this.numFavorite = movie.numFavorite;
 		} else {
 			this.id = episode.episodeId;
 			this.movieId = episode.movie.movieId;
+			this.posterMovieURL = episode.movie.posterURL;
+			this.backgroundMovieURL = episode.movie.backgroundURL;
 			this.title = episode.title;
 			this.posterURL = episode.posterURL;
 			this.duration = duration;
