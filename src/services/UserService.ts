@@ -58,10 +58,10 @@ export class UserService {
 		searchConditions: any,
 		page: number,
 		pageSize: number
-	):Promise<{
+	): Promise<{
 		users: User[];
 		totalCount: number;
-	  }> => {
+	}> => {
 		try {
 			return this.userRepository.searchUsers(searchConditions, page, pageSize);
 		} catch (err: any) {
@@ -148,6 +148,7 @@ export class UserService {
 					'movies/'.concat(favoriteMovie.id.toString(), '/background.jpg')
 				);
 			}
+			return movieFavoriteDTOlist;
 		} catch (error: any) {
 			throw new Error(error.message);
 		}
@@ -224,6 +225,7 @@ export class UserService {
 					'movies/'.concat(history.movieId.toString(), '/background.jpg')
 				);
 			}
+			return watchHistoryDTOList;
 		} catch (error: any) {
 			throw new Error(error.message);
 		}
@@ -275,6 +277,7 @@ export class UserService {
 					'movies/'.concat(watchLaterMovie.id.toString(), '/background.jpg')
 				);
 			}
+			return watchLaterDTOList;
 		} catch (error: any) {
 			throw new Error(error.message);
 		}
