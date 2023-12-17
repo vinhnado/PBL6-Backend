@@ -2155,6 +2155,111 @@ paths:
               example:
                 status: Ok!
                 message: Successfully
+  /payments:
+    get:
+      tags:
+        - payment
+      summary: Get payments by filter
+      description: Get payments by filter
+      parameters:
+        - name: search
+          in: query
+          description: Enter value to search by orderInfo
+          required: false
+          explode: true
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: type of payment
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - VN Pay
+                - Paypal
+        - name: isPayment
+          in: query
+          description: status of payment
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: boolean
+              enum:
+                - true
+                - false
+        - name: status
+          in: query
+          description: information status of payment
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: boolean
+              enum:
+                - Unpaid
+                - Completed   
+                - Processing        
+                - Failed        
+        - name: subscriptionInfoId
+          in: query
+          description: Id of subscription to find
+          required: false
+          explode: true
+          schema:
+            type: string
+        - name: userId
+          in: query
+          description: Id of User to find
+          required: false
+          explode: true
+          schema:
+            type: number
+        - name: startDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Start date
+          example: 2020-01-01
+        - name: endDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: End date
+          example: 2024-01-01      
+        - name: page
+          in: query
+          description: Use to pagination, default page = 1
+          required: false
+          explode: true
+          schema:
+            type: number
+        - name: pageSize
+          in: query
+          description: Use to pagination, default pageSize = 15
+          required: false
+          explode: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+        '400':
+          description: Khong the lay danh sach phim
   /payments/vn-pay:
     post:
       tags:

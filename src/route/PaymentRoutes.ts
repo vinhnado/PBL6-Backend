@@ -1,5 +1,7 @@
 import { PaymentController } from '../controller/PaymentController';
 import { auth } from '../middleware/AuthMiddleware';
+import { validateGetPayments } from '../validators/PaymentValidatator';
+import { validate } from '../validators/Validator';
 import BaseRoutes from './Base/BaseRouter';
 class PaymentRoutes extends BaseRoutes {
 	constructor() {
@@ -14,6 +16,7 @@ class PaymentRoutes extends BaseRoutes {
 		this.router.get('/vn-pay/verify', this.controller.verifyReturnUrlVNPay);
 		this.router.get('/momo/verify', this.controller.verifyReturnUrlMomo);
 		this.router.get('/momo/verify/test', this.controller.verifyReturnUrlMomoTest);
+		this.router.get('/',validateGetPayments, validate, this.controller.getPayments);
 		
 	}
 }
