@@ -2221,32 +2221,20 @@ paths:
           explode: true
           schema:
             type: number
-        - name: sort
+        - name: startDate
           in: query
-          description: Choose addition to sort
           required: false
-          explode: true
           schema:
-            type: array
-            items:
-              type: string
-              enum:
-                - highFavorited
-                - newest
-                - highRated
-        - name: sortBy
+            type: string
+          description: Start date
+          example: 2020-01-01
+        - name: endDate
           in: query
-          description: Default sort ASC, if you want change to DESC, select below
           required: false
-          explode: true
           schema:
-            type: array
-            items:
-              type: string
-              enum:
-                - ASC
-                - DESC
-              default: ASC
+            type: string
+          description: End date
+          example: 2024-01-01      
         - name: page
           in: query
           description: Use to pagination, default page = 1
