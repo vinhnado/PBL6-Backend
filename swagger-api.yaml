@@ -444,6 +444,29 @@ paths:
           description: Movie not found
       security:
         - bearerAuth: []
+  '/movies/get/qrcode':
+    get:
+      tags:
+        - movie
+      summary: Get QR code Of Movie
+      description: Returns QR code of movies
+      parameters:
+        - name: url
+          in: query
+          description: Enter url of movie to create QR Code
+          required: false
+          explode: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Movie not found
+      security:
+        - bearerAuth: []
   '/movies/get/years':
     get:
       tags:
@@ -1184,6 +1207,67 @@ paths:
       responses:
         '200':
           description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security:
+        - bearerAuth: []
+  /ratings:   
+    put:
+      tags:
+        - rating
+      summary: Update rating information
+      description: Update rating information
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  format: int64
+                movieId:
+                  type: integer
+                  format: int64
+                rating:
+                  type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - rating
+      summary: Delete a rating
+      description: Delete a rating
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  format: int64
+                movieId:
+                  type: integer
+                  format: int64
+      responses:
+        '204':
+          description: successful
           content:
             application/json:
               schema:
@@ -2132,6 +2216,111 @@ paths:
               example:
                 status: Ok!
                 message: Successfully
+  /payments:
+    get:
+      tags:
+        - payment
+      summary: Get payments by filter
+      description: Get payments by filter
+      parameters:
+        - name: search
+          in: query
+          description: Enter value to search by orderInfo
+          required: false
+          explode: true
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: type of payment
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - VN Pay
+                - Paypal
+        - name: isPayment
+          in: query
+          description: status of payment
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: boolean
+              enum:
+                - true
+                - false
+        - name: status
+          in: query
+          description: information status of payment
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: boolean
+              enum:
+                - Unpaid
+                - Completed   
+                - Processing        
+                - Failed        
+        - name: subscriptionInfoId
+          in: query
+          description: Id of subscription to find
+          required: false
+          explode: true
+          schema:
+            type: string
+        - name: userId
+          in: query
+          description: Id of User to find
+          required: false
+          explode: true
+          schema:
+            type: number
+        - name: startDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Start date
+          example: 2020-01-01
+        - name: endDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: End date
+          example: 2024-01-01      
+        - name: page
+          in: query
+          description: Use to pagination, default page = 1
+          required: false
+          explode: true
+          schema:
+            type: number
+        - name: pageSize
+          in: query
+          description: Use to pagination, default pageSize = 15
+          required: false
+          explode: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+        '400':
+          description: Khong the lay danh sach phim
   /payments/vn-pay:
     post:
       tags:

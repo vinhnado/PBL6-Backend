@@ -7,4 +7,5 @@ export interface IRatingRepository extends BaseInterface {
 
     getRatingOfMovie(movie_id: number): Promise<Rating[]>;
     addRating(data: any): Promise<Rating>;
+    getRatingMovieOfUser(userId: number, movieId: number): Promise<number>;
 }

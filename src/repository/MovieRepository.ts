@@ -34,7 +34,7 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 				model: Genre,
 				attributes: ['genre_id', 'name'],
 				as: 'genres',
-				// required: true,
+				required: true,
 				...(Object.keys(whereConditionGenre).length > 0 ? { where: whereConditionGenre } : {}),
 				through: { attributes: [] },
 			},
@@ -71,22 +71,23 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 		  offset: offset, // Vị trí bắt đầu
 		});
 		    // Truy vấn lấy tổng số phim
-			const totalCount = await Movie.count({
-				where: whereCondition,
-				include: [
-					{
-						model: Genre,
-						attributes: ['genre_id', 'name'],
-						as: 'genres',
-						// required: true,
-						...(Object.keys(whereConditionGenre).length > 0 ? { where: whereConditionGenre } : {}),
-						through: { attributes: [] },
-					},]
-			  });
+		const { count } = await Movie.findAndCountAll({
+			where: whereCondition,
+			include: [
+				{
+					model: Genre,
+					attributes: ['genre_id', 'name'],
+					as: 'genres',
+					required: true,
+					...(Object.keys(whereConditionGenre).length > 0 ? { where: whereConditionGenre } : {}),
+					through: { attributes: [] },
+				},
+			]
+		});
 		  
 		return {
 			movies,
-			totalCount,
+			totalCount:count,
 		  };
 	  }
 

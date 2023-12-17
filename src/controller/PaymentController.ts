@@ -223,4 +223,22 @@ export class PaymentController {
 		console.log('Momo return test');
 	};
 
+	getPayments = async (req: Request, res: Response) => {
+		try{
+			const {payments,totalCount} = await this.paymentService.getPayments(req);
+			const page = req.query.page ||1;
+			const pageSize = req.query.pageSize ||15;
+			return res.json({
+				message: "Success",
+				page: Number(page),
+				pageSize: pageSize,
+				totalPages: Math.ceil(totalCount / Number(pageSize)),
+				totalCount: totalCount,
+				data: payments,
+			});
+		}catch(error){
+			console.log(error);
+		}
+	};
+
 }

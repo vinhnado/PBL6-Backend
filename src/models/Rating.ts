@@ -36,7 +36,7 @@ export class Rating extends Model {
 	movieId!: number;
 
 	@Column({
-		type: DataType.INTEGER(),
+		type: DataType.FLOAT(),
 		field: Rating.RATING,
 	})
 	rating!: number;

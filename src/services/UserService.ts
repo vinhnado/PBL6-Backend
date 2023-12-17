@@ -58,7 +58,10 @@ export class UserService {
 		searchConditions: any,
 		page: number,
 		pageSize: number
-	): Promise<User[]> => {
+	):Promise<{
+		users: User[];
+		totalCount: number;
+	  }> => {
 		try {
 			return this.userRepository.searchUsers(searchConditions, page, pageSize);
 		} catch (err: any) {

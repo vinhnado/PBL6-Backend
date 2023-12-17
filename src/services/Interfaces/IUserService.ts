@@ -6,7 +6,10 @@ export interface IUserService {
 		searchConditions: any,
 		page: number,
 		pageSize: number
-	): Promise<User[]>;
+	): Promise<{
+		users: User[];
+		totalCount: number;
+	  }>;
 	addFavoriteMovie(userId: number, movieId: number): Promise<void>;
 	addWatchHistory(
 		userId: number,
