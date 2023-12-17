@@ -135,7 +135,16 @@ export class UserService {
 	findAllMovieFavorite = async (userId: number) => {
 		try {
 			const userMovie = await this.movieFavoriteRepository.findAll(userId);
-			return new MovieDTO(userMovie!, 'MovieFavorite');
+			let movieFavoriteDTOlist = new MovieDTO(userMovie!, 'MovieFavorite');
+
+			for (let favoriteMovie of movieFavoriteDTOlist.ListMovie || []) {
+				favoriteMovie.posterURL = await this.s3Service.getObjectUrl(
+					favoriteMovie.posterURL
+				);
+				favoriteMovie.backgroundMovieURL = await this.s3Service.getObjectUrl(
+					'movies/'.concat(favoriteMovie.id.toString(), '/background.jpg')
+				);
+			}
 		} catch (error: any) {
 			throw new Error(error.message);
 		}
@@ -171,11 +180,11 @@ export class UserService {
 		}
 	};
 
-	getWatchHistory = async (userId: number, movieId: number) => {
+	getWatchHistory = async (userId: number, episodeId: number) => {
 		try {
 			return await this.watchHistoryRepository.findOneByCondition({
 				user_id: userId,
-				movie_id: movieId,
+				episode_id: episodeId,
 			});
 		} catch (error: any) {
 			console.log(error);
@@ -199,8 +208,19 @@ export class UserService {
 	findAllWatchHistory = async (userId: number) => {
 		try {
 			let userMovie = await this.watchHistoryRepository.findAll(userId);
-			return new MovieDTO(userMovie!, 'WatchHistory');
-			return userMovie;
+			let watchHistoryDTOList = new MovieDTO(userMovie!, 'WatchHistory');
+
+			for (let history of watchHistoryDTOList.ListMovie || []) {
+				history.posterURL = await this.s3Service.getObjectUrl(
+					history.posterURL
+				);
+				history.posterMovieURL = await this.s3Service.getObjectUrl(
+					history.posterMovieURL
+				);
+				history.backgroundMovieURL = await this.s3Service.getObjectUrl(
+					'movies/'.concat(history.movieId.toString(), '/background.jpg')
+				);
+			}
 		} catch (error: any) {
 			throw new Error(error.message);
 		}
@@ -242,7 +262,16 @@ export class UserService {
 	findAllWatchLater = async (userId: number) => {
 		try {
 			let userMovie = await this.watchLaterRepository.findAll(userId);
-			return new MovieDTO(userMovie!, 'WatchLater');
+			let watchLaterDTOList = new MovieDTO(userMovie!, 'WatchLater');
+
+			for (let watchLaterMovie of watchLaterDTOList.ListMovie || []) {
+				watchLaterMovie.posterURL = await this.s3Service.getObjectUrl(
+					watchLaterMovie.posterURL
+				);
+				watchLaterMovie.backgroundMovieURL = await this.s3Service.getObjectUrl(
+					'movies/'.concat(watchLaterMovie.id.toString(), '/background.jpg')
+				);
+			}
 		} catch (error: any) {
 			throw new Error(error.message);
 		}

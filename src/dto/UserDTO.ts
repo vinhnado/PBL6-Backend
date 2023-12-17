@@ -1,5 +1,3 @@
-import { SubscriptionType } from './../models/SubscriptionType';
-import { SubscriptionInfo } from './../models/SubscriptionInfo';
 import { User } from '../models/User';
 
 export class UserDTO {

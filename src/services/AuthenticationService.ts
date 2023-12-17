@@ -71,8 +71,7 @@ export class AuthenticationService implements IAuthenticationService {
 		isAdmin: boolean = false
 	) => {
 		try {
-			const check1 = await this.checkUsername(username);
-			if (check1) {
+			if (await this.checkUsername(username)) {
 				throw new UsernameValidError('Invalid Username');
 			}
 			if (await this.checkEmail(email)) {
