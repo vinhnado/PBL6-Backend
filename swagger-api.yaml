@@ -1216,6 +1216,67 @@ paths:
                   format: int32
       security:
         - bearerAuth: []
+  /ratings:   
+    put:
+      tags:
+        - rating
+      summary: Update rating information
+      description: Update rating information
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  format: int64
+                movieId:
+                  type: integer
+                  format: int64
+                rating:
+                  type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - rating
+      summary: Delete a rating
+      description: Delete a rating
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  format: int64
+                movieId:
+                  type: integer
+                  format: int64
+      responses:
+        '204':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security:
+        - bearerAuth: []
   /ratings/create:
     post:
       tags:

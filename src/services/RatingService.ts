@@ -2,6 +2,8 @@ import { Inject, Service } from "typedi";
 import { IRatingService } from "./Interfaces/IRatingSerivce";
 import { IRatingRepository } from "../repository/Interfaces/IRatingRepository";
 import { RatingRepository } from "../repository/RatingRepository";
+import { Rating } from "../models/Rating";
+import { Request } from "express";
 
 
 @Service()
@@ -40,6 +42,49 @@ export class RatingService implements IRatingService {
             return rating || 0;
         }catch(error){
           throw(error);
-        }    }
+        }    
+    }
 
+    async updateRating(req: Request): Promise<Rating | null> {
+        try{
+            const userId = Number(req.body.userId);
+            const movieId = Number(req.body.movieId);
+            const rating = Number(req.body.rating);
+            
+            const ratingToUpdate = await this.ratingRepository.findOneByCondition({
+                userId,
+                movieId
+            });
+
+            if(!ratingToUpdate){
+                return null;
+            }
+            ratingToUpdate.rating = rating;
+            await this.ratingRepository.save(ratingToUpdate);
+            return ratingToUpdate;
+        }catch(error){
+            console.log(error);
+            
+          throw(error);
+        }       
+    }
+
+    async deleteRating(req: Request): Promise<boolean> {
+        try{
+            const userId = Number(req.body.userId);
+            const movieId = Number(req.body.movieId);
+
+            const rating = await this.ratingRepository.findOneByCondition({
+                userId,
+                movieId
+            });
+            if(rating) {
+                 await this.ratingRepository.delete(rating,true);
+                 return true;
+            }
+            return false;
+        }catch(error){
+          throw(error);
+        }       
+    }
 }
