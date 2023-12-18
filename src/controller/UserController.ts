@@ -47,14 +47,16 @@ export class UserController {
 
 	searchUsers = async (req: Request, res: Response) => {
 		try {
-			const { username, email, gender, page, pageSize } = req.query;
+			let { username, email, gender } = req.query;
+			const page = Number(req.query.page) || 1; // Trang mặc định là 1
+			const pageSize = Number(req.query.pageSize) || 10; // Số lượng kết quả trên mỗi trang mặc định là 10
+
 			const searchConditions = {
 				username,
 				email,
 				gender,
 			};
-			console.log(this.userService);
-			const users = await this.userService.searchUsers(
+			const { users, totalCount } = await this.userService.searchUsers(
 				searchConditions,
 				Number(page),
 				Number(pageSize)
@@ -62,9 +64,11 @@ export class UserController {
 			// return res.json(users);
 			return res.json({
 				status: 'success',
-				data: users,
+				totalCount: totalCount,
 				page: page,
 				pageSize: pageSize,
+				totalPage: Math.ceil(totalCount / pageSize),
+				data: users,
 			}) as any;
 		} catch (error: any) {
 			console.log(error);

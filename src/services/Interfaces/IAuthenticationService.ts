@@ -6,5 +6,5 @@ export interface IAuthenticationService {
 		gender: string,
 		username: string,
 		password: string
-	): Promise<void>;
+	): Promise<string>;
 }

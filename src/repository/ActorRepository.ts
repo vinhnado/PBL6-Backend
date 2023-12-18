@@ -2,7 +2,8 @@ import { Service } from 'typedi';
 import { Actor } from '../models/Actor';
 import { Movie } from '../models/Movie';
 import { BaseRepository } from './BaseRepository';
-import { Op } from 'sequelize';
+import { Op, Sequelize, QueryTypes } from 'sequelize';
+import { MovieActor } from '../models/MovieActor';
 
 @Service()
 export class ActorRepository extends BaseRepository<Actor> {
@@ -49,7 +50,7 @@ export class ActorRepository extends BaseRepository<Actor> {
 
 			return data;
 		} catch (error: any) {
-			throw new Error(error.message);
+			throw(error);
 		}
 	};
 }

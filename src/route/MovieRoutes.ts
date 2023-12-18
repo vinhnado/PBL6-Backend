@@ -9,14 +9,15 @@ import {
 	validategetPresignUrlToUpload
 } from '../validators/MovieValidator';
 import { validate } from '../validators/Validator';
-import { auth } from '../middleware/AuthMiddleware';
+import { auth, authUser } from '../middleware/AuthMiddleware';
 class MovieRoutes extends BaseRoutes {
 	constructor() {
 		super(new MovieController());
 	}
 	public routes(): void {
 		this.router.get('/', validateSearchMovies, validate, this.controller.searchMovies);
-		this.router.get('/:id',auth, validateGetMovieById, validate, this.controller.getMovieById);
+		this.router.get('/get/qrcode', this.controller.getQRCodeOfMovie);
+		this.router.get('/:id',authUser, validateGetMovieById, validate, this.controller.getMovieById);
 		this.router.get('/all', this.controller.getAllMovies);
 		this.router.get('/home/trending', this.controller.getMoviesTrending);
 		this.router.get('/home/upcoming', this.controller.getMoviesUpcoming);

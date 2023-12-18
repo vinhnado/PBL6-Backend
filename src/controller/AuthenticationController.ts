@@ -1,7 +1,9 @@
+import { EmailValidError, UsernameValidError } from './../error/CustomErrors';
 import { Request, Response } from 'express';
 import Container, { Inject, Service } from 'typedi';
 import { IAuthenticationService } from '../services/Interfaces/IAuthenticationService';
 import { AuthenticationService } from '../services/AuthenticationService';
+import { CloudHSM } from 'aws-sdk';
 
 export class AuthenticationController {
 	private authenticationService = Container.get(AuthenticationService);
@@ -14,7 +16,7 @@ export class AuthenticationController {
 		try {
 			const { username, password } = req.body;
 			const token = await this.authenticationService.login(username, password);
-			if (token === '') {
+			if (!token) {
 				return res.status(400).json({
 					status: 'Bad Request!',
 					message: 'Wrong email or password!',
@@ -51,8 +53,20 @@ export class AuthenticationController {
 				status: 'Ok!',
 				message: 'Successfully registerd users!',
 			});
-		} catch (error) {
-			console.log(error);
+		} catch (error: any) {
+			if (error.name === 'UsernameValidError') {
+				return res.status(400).json({
+					status: 'Bad Request',
+					message: error.message,
+				});
+			}
+			if (error.name === 'EmailValidError') {
+				return res.status(400).json({
+					status: 'Bad Request',
+					message: error.message,
+				});
+			}
+
 			return res.status(500).json({
 				status: 'Internal server Error!',
 				message: 'Internal server Error!',
@@ -77,10 +91,22 @@ export class AuthenticationController {
 				status: '200',
 				message: 'Successfully registered admin!',
 			});
-		} catch (error) {
-			console.log(error);
+		} catch (error: any) {
+			if (error.name === 'UsernameValidError') {
+				return res.status(400).json({
+					status: 'Bad Request',
+					message: error.message,
+				});
+			}
+			if (error.name === 'EmailValidError') {
+				return res.status(400).json({
+					status: 'Bad Request',
+					message: error.message,
+				});
+			}
+
 			return res.status(500).json({
-				status: '500',
+				status: 'Internal server Error!',
 				message: 'Internal server Error!',
 			});
 		}
@@ -105,7 +131,36 @@ export class AuthenticationController {
 				message: data,
 			});
 		} catch (error) {
+			return res.status(500).json({
+				status: 'Internal server Error!',
+				message: 'Internal server Error!',
+			});
+		}
+	};
+
+	changePassword = async (req: Request, res: Response) => {
+		try {
+			const userId = req.payload.userId;
+			const { oldPassword, newPassword } = req.body;
+			await this.authenticationService.changePassword(
+				userId,
+				oldPassword,
+				newPassword
+			);
+
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Success',
+			});
+		} catch (error: any) {
 			console.log(error);
+			if (error.name === 'OldPasswordError') {
+				return res.status(400).json({
+					status: 'Bad Request',
+					message: error.message,
+				});
+			}
+
 			return res.status(500).json({
 				status: 'Internal server Error!',
 				message: 'Internal server Error!',
@@ -155,6 +210,50 @@ export class AuthenticationController {
 				message: 'Get new token successfully!',
 				result: res_token,
 			});
+		} catch (error) {
+			console.log(error);
+			return res.status(500).json({
+				status: 'Internal server Error!',
+				message: 'Internal server Error!',
+			});
+		}
+	};
+
+	validRegister = async (req: Request, res: Response) => {
+		try {
+			const { username, email } = req.query;
+			if (username) {
+				if (
+					await this.authenticationService.checkUsername(username.toString())
+				) {
+					return res.status(409).json({
+						status: 'Conflict',
+						message: 'Username already exist',
+					});
+				} else {
+					return res.status(200).json({
+						status: 'Ok!',
+						message: 'Can be use',
+					});
+				}
+			} else if (email) {
+				if (await this.authenticationService.checkEmail(email.toString())) {
+					return res.status(409).json({
+						status: 'Conflict!',
+						message: 'Email already exist',
+					});
+				} else {
+					return res.status(200).json({
+						status: 'Ok!',
+						message: 'Can be use',
+					});
+				}
+			} else {
+				return res.status(400).json({
+					status: 'No Param',
+					message: 'Check param please',
+				});
+			}
 		} catch (error) {
 			console.log(error);
 			return res.status(500).json({

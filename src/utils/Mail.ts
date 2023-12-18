@@ -41,9 +41,9 @@ export class Mail {
 			console.log(token);
 			const replacements = {
 				username: username,
-				replaceLink: 'https://example.com/reset-password/' + token,
+				replaceLink:
+					'https://example.com/reset-password?token=' + token + '&email=' + to,
 			};
-
 			let htmlContent = fs.readFileSync(
 				'src/utils/ForgotPasswordMail.html',
 				'utf8'

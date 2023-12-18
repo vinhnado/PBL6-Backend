@@ -13,7 +13,7 @@ services:
   redis:
     image: redis:alpine
     container_name: PBL6-redis
-    ports:
+    ports: 
       - "6379:6379"
     volumes:
       - data-redis:/data

@@ -209,4 +209,19 @@ export class IndividualController {
 			});
 		}
 	};
+
+	// getPopularActors = async (req: Request, res: Response)=>{
+	// 	try {
+    //         const data = await this.actorService.getPopularActors(1,5);
+    //         return res.status(200).json({
+    //             status: 'Ok!',
+    //             message: 'Successfully',
+    //             data: data,
+    //         });
+    //     } catch (error: any) {
+    //         return res.status(500).json({
+    //             message: "Server error!"
+    //         });
+    //     }
+	// }
 }

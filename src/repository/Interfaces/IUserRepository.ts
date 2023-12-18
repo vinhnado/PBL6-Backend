@@ -9,7 +9,10 @@ export interface IUserRepository extends BaseInterface {
 		searchConditions: any,
 		page: number,
 		pageSize: number
-	): Promise<User[]>;
+	): Promise<{
+		users: User[];
+		totalCount: number;
+	  }>;
 	createNewUser(
 		newUser: User,
 		newAccount: Account,

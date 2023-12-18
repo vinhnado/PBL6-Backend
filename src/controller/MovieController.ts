@@ -5,16 +5,22 @@ import { IMovieService } from '../services/Interfaces/IMovieService';
 import { IRecommenderService } from '../services/Interfaces/IRecommenderService';
 import { RecommenderSerivce } from '../services/RecommenderService';
 import { UserService } from '../services/UserService';
+import { QRCodeService } from '../services/QRCodeService';
+import { RatingService } from '../services/RatingService';
 
 export class MovieController {
 	private movieService: IMovieService;
 	private recommenderService: IRecommenderService;
 	private userService: UserService;
+	private qrCodeService: QRCodeService;
+	private ratingService: RatingService;
 
 	constructor() {
 		this.userService = Container.get(UserService);
 		this.movieService = Container.get(MovieService);
 		this.recommenderService = Container.get(RecommenderSerivce)
+		this.qrCodeService = Container.get(QRCodeService)
+		this.ratingService = Container.get(RatingService)
 	}
 
 	searchMovies = async (req: Request, res: Response) => {
@@ -38,7 +44,7 @@ export class MovieController {
 			return res.status(200).json({
 				message:"Successful",
 				totalCount: totalCount,
-				totalPage: Math.floor(totalCount/pageSize),
+				totalPage: Math.ceil(totalCount/pageSize),
 				movies: movies
 
 			});
@@ -51,20 +57,25 @@ export class MovieController {
 	getMovieById = async (req: Request, res: Response) => {
 		const { id } = req.params;
 		try {
-			const userId = Number(req.payload.userId);
-
+			
 			const movie = await this.movieService.getMovieById(Number(id));
 			if (!movie) {
 				return res.status(404).json({ error: 'Can not find movie.' });
 			}
-
-			if(movie.level ===0){
-				return res.json(movie);
+			const userId = req.payload!.userId!;
+			let rating =0;
+			if(userId) {
+				rating =await this.ratingService.getRatingMovieOfUser(userId,Number(id));
 			}
-			
-			return res.json(movie);
+			return res.json({
+				message: "success",
+				movie: movie,
+				rating: rating
+			});
 
 		} catch (error) {
+			console.log(error);
+			
 			return res.status(500).json({ error: 'Can not get movie.' });
 		}
 	};
@@ -292,6 +303,22 @@ export class MovieController {
 			res.status(200).json({
 				message: "successful",
 				rowEffected:results
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
+
+	getQRCodeOfMovie= async(req: Request, res: Response) => {
+		try {
+			const url = req.query.url!.toString();
+			const results =  await this.qrCodeService.createQRCode(url);
+			res.status(200).json({
+				message: "successful",
+				qrCode:results
 			});
 		} catch (error) {
 			console.log(error);

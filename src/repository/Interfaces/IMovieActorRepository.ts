@@ -1,3 +1,4 @@
+import { Actor } from '../../models/Actor';
 import { MovieActor } from '../../models/MovieActor';
 import { BaseInterface } from './BaseInterface';
 

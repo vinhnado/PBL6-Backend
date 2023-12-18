@@ -2,22 +2,55 @@ import express, { Request, Response, Router } from 'express';
 import { EpisodeService } from '../services/EpisodeService';
 import { IEpisodeService } from '../services/Interfaces/IEpisodeService';
 import Container from 'typedi';
+import { IMovieService } from '../services/Interfaces/IMovieService';
+import { MovieService } from '../services/MovieService';
 
 export class EpisodeController{
 	private episodeService: IEpisodeService;
+	private movieService: IMovieService;
+
 
 	constructor() {
 		this.episodeService = Container.get(EpisodeService);
+		this.movieService = Container.get(MovieService);
 	}
+
     getEpisode = async (req: Request, res: Response) => {
 		const { id } = req.params;
 		try {
+			const userId = req.payload!.userId!;
+			
 			const episode = await this.episodeService.getEpisode(Number(id));
-			if (!episode) {
+			const movieId = episode?.getDataValue('movieId');
+			const movie = await this.movieService.getMovieById(Number(movieId));
+
+			if (!episode || !movie) {
 				return res.status(404).json({ error: 'Can not find episode.' });
 			}
+			
+			if(!userId){
+				episode.movieURL = movie!.trailerURL;
+			}else{
+				if(movie.level===0){
+					return res.status(200).json(episode);
+				}
+
+				if(movie.level===1){
+					const subscriptionTypeId = req.payload!.subscriptionTypeId!;
+					if(subscriptionTypeId!==1){
+						return res.status(200).json(episode);
+					}
+					return res.status(403).json({
+						message: "Update your subscription to watch movie!"
+					});
+				}
+				
+			}
+
 			return res.status(200).json(episode);
 		} catch (error) {
+			console.log(error);
+			
 			return res.status(500).json({ error: 'Err while get episode.' });
 		}
 	};
@@ -105,6 +138,42 @@ export class EpisodeController{
                 data: rs
             });
 		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server error"
+			})	
+		}
+	}
+
+	getQuality = async (req: Request, res: Response) => {
+		try {
+			const userId = req.payload!.userId!;
+			if(!userId){
+				res.status(404).json({
+					message: "fail, please login",
+				});	
+			}
+			const subscriptionTypeId = req.payload!.subscriptionTypeId!;
+			if(subscriptionTypeId===1){
+				return res.status(403).json({
+					message: "Update your subscription to watch movie!"
+				});
+			}
+
+			if(subscriptionTypeId===2){
+				if(req.query.quality?.toString()==='4k')
+				return res.status(403).json({
+					message: "Update your subscription to watch movie 4k!"
+				});
+			}
+
+			const rs = await await this.episodeService.getQualityMovie(req);
+			res.status(200).json({
+				message: "Successful",
+                data: rs
+            });
+		} catch (error) {
+			console.log(error);
 			res.status(500).json({
 				message: "Server error"
 			})	

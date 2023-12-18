@@ -97,7 +97,10 @@ export class UserRepository
 		searchConditions: any,
 		page: number,
 		pageSize: number
-	): Promise<User[]> {
+	):Promise<{
+		users: User[];
+		totalCount: number;
+	  }> {
 		try {
 			const { username, email, gender } = searchConditions;
 			let user_name: string;
@@ -137,7 +140,23 @@ export class UserRepository
 					},
 				],
 			});
-			return users;
+
+			const totalCount = await User.count({ 
+				where: whereConditions,
+				include: [
+					{
+						model: Account,
+						attributes: ['username'],
+						where: {
+							username: {
+								[Op.like]: `%${user_name}%`,
+							},
+						},
+					},
+				],
+			});
+
+			return {users, totalCount};
 		} catch (error: any) {
 			throw new Error('Không thể lấy danh sách user ' + error.message);
 		}

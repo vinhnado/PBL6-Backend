@@ -98,6 +98,50 @@ paths:
         '500':
           description: Internal server error
 
+  /auth/valid-register:
+    get:
+      summary: Valid username or password when register
+      tags:
+        - authentication
+      parameters:
+        - name: username
+          in: query
+          description: Username
+          required: false
+          schema:
+            type: string
+        - name: email
+          in: query
+          description: Email of the user
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '409':
+          description: Valid error
+
+  /auth/change-password:
+    post:
+      summary: Change password
+      tags:
+        - authentication
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Change password
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserChangePassword'
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+
   /auth/get-access-token:
     post:
       summary: Get new Access Token By Refresh Token
@@ -326,7 +370,7 @@ paths:
         '404':
           description: Movie not found
       security:
-        - api_key: []
+        - bearerAuth: []
     put:
       tags:
         - movie
@@ -399,7 +443,30 @@ paths:
         '404':
           description: Movie not found
       security:
-        - api_key: []
+        - bearerAuth: []
+  '/movies/get/qrcode':
+    get:
+      tags:
+        - movie
+      summary: Get QR code Of Movie
+      description: Returns QR code of movies
+      parameters:
+        - name: url
+          in: query
+          description: Enter url of movie to create QR Code
+          required: false
+          explode: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Movie not found
+      security:
+        - bearerAuth: []
   '/movies/get/years':
     get:
       tags:
@@ -415,7 +482,7 @@ paths:
         '404':
           description: Movie not found
       security:
-        - api_key: []
+        - bearerAuth: []
 
   '/movies/movie-actor':
     delete:
@@ -444,7 +511,7 @@ paths:
         '404':
           description: Movie not found
       security:
-        - api_key: []
+        - bearerAuth: []
     post:
       tags:
         - movie
@@ -492,7 +559,7 @@ paths:
         '404':
           description: Movie not found
       security:
-        - api_key: []
+        - bearerAuth: []
     post:
       tags:
         - movie
@@ -540,7 +607,7 @@ paths:
         '404':
           description: Movie not found
       security:
-        - api_key: []
+        - bearerAuth: []
     post:
       tags:
         - movie
@@ -595,7 +662,7 @@ paths:
         '200':
           description: successful operation
       security:
-        - api_key: []
+        - bearerAuth: []
   /episode/{id}:
     get:
       tags:
@@ -622,7 +689,7 @@ paths:
                   type: integer
                   format: int32
       security:
-        - api_key: []
+        - bearerAuth: []
 
   /episode/{id}/comments:
     get:
@@ -664,7 +731,41 @@ paths:
                   type: integer
                   format: int32
       security:
-        - api_key: []
+        - bearerAuth: []
+  /episode/qualities/{episodeId}:
+    get:
+      tags:
+        - episode
+      summary: Returns quality (4k or 1080p) movie of episode
+      description: Returns quality movie of episode 4k or 1080p
+      parameters:
+        - name: episodeId
+          in: path
+          description: episodeId of episode to return
+          required: true
+          explode: true
+          schema:
+            type: integer
+            format: int64
+        - name: quality
+          in: query
+          description: Quality of video, 1080p or 4k
+          required: true
+          explode: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security:
+        - bearerAuth: []
 
   /episode/delete/{episodeId}:
     delete:
@@ -828,7 +929,7 @@ paths:
         '200':
           description: successful operation
       security:
-        - api_key: []
+        - bearerAuth: []
   /genres:
     get:
       tags:
@@ -846,7 +947,7 @@ paths:
                   type: integer
                   format: int32
       security:
-        - api_key: []
+        - bearerAuth: []
     post:
       tags:
         - genre
@@ -869,7 +970,7 @@ paths:
                 type: object
 
       security:
-        - api_key: []
+        - bearerAuth: []
     put:
       tags:
         - genre
@@ -898,7 +999,7 @@ paths:
                   type: integer
                   format: int32
       security:
-        - api_key: []
+        - bearerAuth: []
     delete:
       tags:
         - genre
@@ -925,7 +1026,7 @@ paths:
                   type: integer
                   format: int32
       security:
-        - api_key: []
+        - bearerAuth: []
   /comments/create:
     post:
       tags:
@@ -1106,6 +1207,67 @@ paths:
       responses:
         '200':
           description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security:
+        - bearerAuth: []
+  /ratings:   
+    put:
+      tags:
+        - rating
+      summary: Update rating information
+      description: Update rating information
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  format: int64
+                movieId:
+                  type: integer
+                  format: int64
+                rating:
+                  type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - rating
+      summary: Delete a rating
+      description: Delete a rating
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  format: int64
+                movieId:
+                  type: integer
+                  format: int64
+      responses:
+        '204':
+          description: successful
           content:
             application/json:
               schema:
@@ -1618,13 +1780,13 @@ paths:
           description: page, default is 1
           required: false
           schema:
-            type: string   
+            type: string
         - name: pageSize
           in: query
           description: pageSize, default is 10
           required: false
           schema:
-            type: string     
+            type: string
       responses:
         '200':
           description: Successful response
@@ -1648,7 +1810,7 @@ paths:
                 dateOfBirth:
                   type: string
                   format: date-time
-                  default: "1955-05-18T00:00:00.000Z"
+                  default: '1955-05-18T00:00:00.000Z'
                 description:
                   type: string
                   default: New actor description
@@ -1717,7 +1879,7 @@ paths:
                 dateOfBirth:
                   type: string
                   format: date-time
-                  default: "1955-05-18T00:00:00.000Z"
+                  default: '1955-05-18T00:00:00.000Z'
                 description:
                   type: string
                   default: New actor description
@@ -1742,13 +1904,13 @@ paths:
           description: page, default is 1
           required: false
           schema:
-            type: string   
+            type: string
         - name: pageSize
           in: query
           description: pageSize, default is 10
           required: false
           schema:
-            type: string 
+            type: string
       responses:
         '200':
           description: Successful response
@@ -1772,7 +1934,7 @@ paths:
                 dateOfBirth:
                   type: string
                   format: date-time
-                  default: "1955-05-18T00:00:00.000Z"
+                  default: '1955-05-18T00:00:00.000Z'
                 description:
                   type: string
                   default: New actor description
@@ -1799,7 +1961,7 @@ paths:
           description: Successful response
     delete:
       summary: Delete a director
-      description:  Delete a director by directorId
+      description: Delete a director by directorId
       tags:
         - individuals
       parameters:
@@ -1841,7 +2003,7 @@ paths:
                 dateOfBirth:
                   type: string
                   format: date-time
-                  default: "1955-05-18T00:00:00.000Z"
+                  default: '1955-05-18T00:00:00.000Z'
                 description:
                   type: string
                   default: New director description
@@ -1852,7 +2014,7 @@ paths:
     put:
       tags:
         - subscription
-      summary: Update Subscription 
+      summary: Update Subscription
       description: cách sử dụng  nếu truyền chỉ một mình subscriptionInfoId thì là cập nhật theo gói (có nó thì chỉ có mình nó truyền vào), closeAt và subscriptionTypeId thì truyền về cái nào sửa cái đấy, userId bắt buộc
       requestBody:
         required: true
@@ -2054,6 +2216,111 @@ paths:
               example:
                 status: Ok!
                 message: Successfully
+  /payments:
+    get:
+      tags:
+        - payment
+      summary: Get payments by filter
+      description: Get payments by filter
+      parameters:
+        - name: search
+          in: query
+          description: Enter value to search by orderInfo
+          required: false
+          explode: true
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: type of payment
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - VN Pay
+                - Paypal
+        - name: isPayment
+          in: query
+          description: status of payment
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: boolean
+              enum:
+                - true
+                - false
+        - name: status
+          in: query
+          description: information status of payment
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: boolean
+              enum:
+                - Unpaid
+                - Completed   
+                - Processing        
+                - Failed        
+        - name: subscriptionInfoId
+          in: query
+          description: Id of subscription to find
+          required: false
+          explode: true
+          schema:
+            type: string
+        - name: userId
+          in: query
+          description: Id of User to find
+          required: false
+          explode: true
+          schema:
+            type: number
+        - name: startDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Start date
+          example: 2020-01-01
+        - name: endDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: End date
+          example: 2024-01-01      
+        - name: page
+          in: query
+          description: Use to pagination, default page = 1
+          required: false
+          explode: true
+          schema:
+            type: number
+        - name: pageSize
+          in: query
+          description: Use to pagination, default pageSize = 15
+          required: false
+          explode: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+        '400':
+          description: Khong the lay danh sach phim
   /payments/vn-pay:
     post:
       tags:
@@ -2088,7 +2355,7 @@ paths:
                 success: true
                 message: Successfully
                 data:
-                  - url: "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=10000000&vnp_Command=pay&vnp_CreateDate=20231209102913&vnp_CurrCode=VND&vnp_IpAddr=127.0.0.1&vnp_Locale=vn&vnp_OrderInfo=User_1+Thanh+to%C3%A1n+g%C3%B3i+Ti%C3%AAu+chu%E1%BA%A9n+1+th%C3%A1ng&vnp_OrderType=other&vnp_ReturnUrl=http%3A%2F%2Flocalhost%3A8000%2Fapi%2Fpayments%2Fvn-pay%2Fverify&vnp_TmnCode=4YOYYZHU&vnp_TxnRef=2023120910291357803&vnp_Version=2.1.0&vnp_SecureHash=4b9ed3e360fbfd091839431bcba949cd11157f64a5ffc5a9b8cd635056f771fcf66979e99bbffdb79fdf829b72a70f8e0cef7e86e645c86025505ef2f93217bc"       
+                  - url: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=10000000&vnp_Command=pay&vnp_CreateDate=20231209102913&vnp_CurrCode=VND&vnp_IpAddr=127.0.0.1&vnp_Locale=vn&vnp_OrderInfo=User_1+Thanh+to%C3%A1n+g%C3%B3i+Ti%C3%AAu+chu%E1%BA%A9n+1+th%C3%A1ng&vnp_OrderType=other&vnp_ReturnUrl=http%3A%2F%2Flocalhost%3A8000%2Fapi%2Fpayments%2Fvn-pay%2Fverify&vnp_TmnCode=4YOYYZHU&vnp_TxnRef=2023120910291357803&vnp_Version=2.1.0&vnp_SecureHash=4b9ed3e360fbfd091839431bcba949cd11157f64a5ffc5a9b8cd635056f771fcf66979e99bbffdb79fdf829b72a70f8e0cef7e86e645c86025505ef2f93217bc'
   /payments/vn-pay/verify:
     get:
       tags:
@@ -2166,7 +2433,7 @@ paths:
           explode: true
           schema:
             type: string
-            default: "00"
+            default: '00'
         - name: vnp_TransactionStatus
           in: query
           description: vnp_TransactionStatus
@@ -2174,7 +2441,7 @@ paths:
           explode: true
           schema:
             type: string
-            default: "00"
+            default: '00'
         - name: vnp_TxnRef
           in: query
           description: vnp_TxnRef
@@ -2182,7 +2449,7 @@ paths:
           explode: true
           schema:
             type: string
-            default: "2023121004045115486"
+            default: '2023121004045115486'
         - name: vnp_SecureHash
           in: query
           description: vnp_SecureHash
@@ -2190,7 +2457,7 @@ paths:
           explode: true
           schema:
             type: string
-            default: "22eada02e5262e051300b1c05b12e76bf5f3e4cf7117cab1d06c659d3e805129489ffae0fb52554c7f9630aa90ed963453a52d391299aae88df33c209302e7e6"
+            default: '22eada02e5262e051300b1c05b12e76bf5f3e4cf7117cab1d06c659d3e805129489ffae0fb52554c7f9630aa90ed963453a52d391299aae88df33c209302e7e6'
       security:
         - bearerAuth: []
       responses:
@@ -2259,7 +2526,7 @@ paths:
         '404':
           description: Movie not found
       security:
-        - api_key: []
+        - bearerAuth: []
 externalDocs:
   description: Find out more about Swagger
   url: 'http://swagger.io'
@@ -2298,8 +2565,20 @@ components:
       properties:
         username:
           type: string
+          default: username3
         password:
           type: string
+          default: password
+
+    UserChangePassword:
+      type: object
+      properties:
+        oldPassword:
+          type: string
+          default: password
+        newPassword:
+          type: string
+          default: password1
 
     Movie:
       type: object
