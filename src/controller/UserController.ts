@@ -56,7 +56,7 @@ export class UserController {
 				email,
 				gender,
 			};
-			const {users, totalCount} = await this.userService.searchUsers(
+			const { users, totalCount } = await this.userService.searchUsers(
 				searchConditions,
 				Number(page),
 				Number(pageSize)
@@ -64,10 +64,10 @@ export class UserController {
 			// return res.json(users);
 			return res.json({
 				status: 'success',
-				totalCount:totalCount,
+				totalCount: totalCount,
 				page: page,
 				pageSize: pageSize,
-				totalPage: Math.ceil(totalCount/pageSize),
+				totalPage: Math.ceil(totalCount / pageSize),
 				data: users,
 			}) as any;
 		} catch (error: any) {
