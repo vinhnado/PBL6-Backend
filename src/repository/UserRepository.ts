@@ -94,36 +94,18 @@ export class UserRepository
 	}
 
 	async searchUsers(
-		searchConditions: any,
+		whereConditions: any,
+		whereAccConditions: any,
+		whereSubTypeCons: any,
 		page: number,
-		pageSize: number
-	):Promise<{
+		pageSize: number,
+		sortField: string,
+		sortBy: string
+	): Promise<{
 		users: User[];
 		totalCount: number;
-	  }> {
+	}> {
 		try {
-			const { username, email, gender } = searchConditions;
-			let user_name: string;
-			const whereConditions: { [key: string]: any } = {};
-
-			if (email) {
-				whereConditions.email = {
-					[Op.iLike]: `%${email}%`,
-				};
-			}
-
-			if (username) {
-				user_name = username;
-			} else {
-				user_name = '';
-			}
-
-			if (gender) {
-				whereConditions.nation = {
-					[Op.eq]: gender,
-				};
-			}
-
 			const users = await User.findAll({
 				where: whereConditions,
 				offset: (page - 1) * pageSize,
@@ -132,31 +114,25 @@ export class UserRepository
 					{
 						model: Account,
 						attributes: ['username'],
-						where: {
-							username: {
-								[Op.like]: `%${user_name}%`,
-							},
-						},
+						required: true,
+						...(Object.keys(whereAccConditions).length > 0
+							? { where: whereAccConditions }
+							: {}),
 					},
-				],
-			});
-
-			const totalCount = await User.count({ 
-				where: whereConditions,
-				include: [
 					{
-						model: Account,
-						attributes: ['username'],
-						where: {
-							username: {
-								[Op.like]: `%${user_name}%`,
-							},
+						model: Subscription,
+						attributes: {
+							exclude: ['createdAt', 'updatedAt', 'deletedAt'],
 						},
+						required: true,
+						...(Object.keys(whereSubTypeCons).length > 0
+							? { where: whereSubTypeCons }
+							: {}),
 					},
 				],
+				order: [[`${sortField}`, `${sortBy}`]],
 			});
-
-			return {users, totalCount};
+			return { users, totalCount: 1 };
 		} catch (error: any) {
 			throw new Error('Không thể lấy danh sách user ' + error.message);
 		}

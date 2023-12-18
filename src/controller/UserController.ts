@@ -33,7 +33,6 @@ export class UserController {
 
 	getSelfInfo = async (req: Request, res: Response) => {
 		try {
-			console.log(req.payload.userId);
 			const searchConditions = {
 				userId: req.payload.userId,
 			};
@@ -47,32 +46,31 @@ export class UserController {
 
 	searchUsers = async (req: Request, res: Response) => {
 		try {
-			let { username, email, gender } = req.query;
-			const page = Number(req.query.page) || 1; // Trang mặc định là 1
-			const pageSize = Number(req.query.pageSize) || 10; // Số lượng kết quả trên mỗi trang mặc định là 10
-
-			const searchConditions = {
-				username,
-				email,
-				gender,
+			const options = {
+				search: req.query.search?.toString(),
+				gender: req.query.gender?.toString(),
+				subscriptionType: req.query.subscriptionType?.toString(),
+				sort: req.query.sort?.toString(),
+				sortTye: req.query.sortType?.toString(),
 			};
-			const {users, totalCount} = await this.userService.searchUsers(
-				searchConditions,
+
+			const page = Number(req.query.page) || 1;
+			const pageSize = Number(req.query.pageSize) || 5;
+
+			const { users, totalCount } = await this.userService.searchUsers(
+				options,
 				Number(page),
 				Number(pageSize)
 			);
-			// return res.json(users);
-			return res.json({
-				status: 'success',
-				totalCount:totalCount,
-				page: page,
-				pageSize: pageSize,
-				totalPage: Math.ceil(totalCount/pageSize),
-				data: users,
-			}) as any;
+			return res.status(200).json({
+				message: 'Successful',
+				totalCount: totalCount,
+				totalPage: Math.ceil(totalCount / pageSize),
+				movies: users,
+			});
 		} catch (error: any) {
 			console.log(error);
-			return res.status(500).json({ error: 'Lỗi khi lấy danh sách user' });
+			return res.status(500).json({ error: 'Lỗi khi lấy danh sách user.' });
 		}
 	};
 
