@@ -4,9 +4,13 @@ import { Movie } from '../models/Movie';
 import { BaseRepository } from './BaseRepository';
 import { Op, Sequelize, QueryTypes } from 'sequelize';
 import { MovieActor } from '../models/MovieActor';
+import { IActorRepository } from './Interfaces/IActorRepository';
 
 @Service()
-export class ActorRepository extends BaseRepository<Actor> {
+export class ActorRepository
+	extends BaseRepository<Actor>
+	implements IActorRepository
+{
 	constructor() {
 		super(Actor);
 	}
@@ -50,7 +54,7 @@ export class ActorRepository extends BaseRepository<Actor> {
 
 			return data;
 		} catch (error: any) {
-			throw(error);
+			throw error;
 		}
 	};
 }

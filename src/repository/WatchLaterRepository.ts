@@ -4,9 +4,13 @@ import { User } from '../models/User';
 import { Movie } from '../models/Movie';
 import { WatchLater } from '../models/WatchLater';
 import { Genre } from '../models/Genre';
+import { IWatchLaterRepository } from './Interfaces/IWatchLaterRepository';
 
 @Service()
-export class WatchLaterRepository extends BaseRepository<WatchLater> {
+export class WatchLaterRepository
+	extends BaseRepository<WatchLater>
+	implements IWatchLaterRepository
+{
 	constructor() {
 		super(WatchLater);
 	}

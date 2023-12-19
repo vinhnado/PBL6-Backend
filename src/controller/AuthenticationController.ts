@@ -6,7 +6,7 @@ import { AuthenticationService } from '../services/AuthenticationService';
 import { CloudHSM } from 'aws-sdk';
 
 export class AuthenticationController {
-	private authenticationService = Container.get(AuthenticationService);
+	private authenticationService: IAuthenticationService;
 
 	constructor() {
 		this.authenticationService = Container.get(AuthenticationService);
