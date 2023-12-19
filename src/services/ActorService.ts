@@ -2,12 +2,14 @@ import { Actor } from '../models/Actor';
 import { ActorRepository } from './../repository/ActorRepository';
 import { Inject, Service } from 'typedi';
 import { S3Service } from './S3Service';
-import { Request, Response } from 'express';
+import { Request } from 'express';
+import { IActorRepository } from '../repository/Interfaces/IActorRepository';
+import { IActorService } from './Interfaces/IActorService';
 
 @Service()
-export class ActorService {
+export class ActorService implements IActorService {
 	@Inject(() => ActorRepository)
-	private actorRepository!: ActorRepository;
+	private actorRepository!: IActorRepository;
 
 	@Inject(() => S3Service)
 	private s3Service!: S3Service;
@@ -44,39 +46,42 @@ export class ActorService {
 		}
 	};
 
-	createActor =  async (req: Request) => {
+	createActor = async (req: Request) => {
 		try {
 			const { name, gender, dateOfBirth, description } = req.body;
 			const actorData: Partial<Actor> = {
-				name, gender, dateOfBirth, description
+				name,
+				gender,
+				dateOfBirth,
+				description,
 			};
 
 			return await this.actorRepository.save(Actor.build(actorData));
-
 		} catch (error: any) {
-			throw(error);
+			throw error;
 		}
-	}
+	};
 
 	updateActor = async (req: Request) => {
-			const { name, gender, dateOfBirth, description } = req.body;
-			const actorId = Number(req.params.actorId);
-			const actorData: Partial<Actor> = {
-				name, gender, dateOfBirth, description
-			};
+		const { name, gender, dateOfBirth, description } = req.body;
+		const actorId = Number(req.params.actorId);
+		const actorData: Partial<Actor> = {
+			name,
+			gender,
+			dateOfBirth,
+			description,
+		};
 
-			const actorToUpdate = await this.actorRepository.findById(
-				actorId
-			);
+		const actorToUpdate = await this.actorRepository.findById(actorId);
 
-			if (actorToUpdate) {
-				await actorToUpdate.update(actorData);
-				await this.actorRepository.save(actorToUpdate);
-				return actorToUpdate;
-			} else {
-				return null;
-			}
-	}
+		if (actorToUpdate) {
+			await actorToUpdate.update(actorData);
+			await this.actorRepository.save(actorToUpdate);
+			return actorToUpdate;
+		} else {
+			return null;
+		}
+	};
 
 	findByActorId = async (actorId: number) => {
 		try {
@@ -89,16 +94,15 @@ export class ActorService {
 	deleteActorByActorId = async (actorId: number) => {
 		try {
 			const actor = await this.actorRepository.findById(actorId);
-			if(!actor){
+			if (!actor) {
 				return false;
 			}
-			 await this.actorRepository.delete(actor);
-			 return true;
+			await this.actorRepository.delete(actor);
+			return true;
 		} catch (error: any) {
 			throw new Error(error.message);
 		}
 	};
-
 
 	getActors = async (search: string, page: number, pageSize: number) => {
 		try {

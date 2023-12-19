@@ -3,9 +3,13 @@ import { Movie } from '../models/Movie';
 import { BaseRepository } from './BaseRepository';
 import { Director } from '../models/Director';
 import { Op } from 'sequelize';
+import { IDirectorRepository } from './Interfaces/IDicrectorRepository';
 
 @Service()
-export class DirecorRepository extends BaseRepository<Director> {
+export class DirecorRepository
+	extends BaseRepository<Director>
+	implements IDirectorRepository
+{
 	constructor() {
 		super(Director);
 	}
@@ -52,7 +56,7 @@ export class DirecorRepository extends BaseRepository<Director> {
 			});
 			return data;
 		} catch (error: any) {
-			throw(error);
+			throw error;
 		}
 	};
 }

@@ -3,11 +3,13 @@ import { DirecorRepository } from '../repository/DirectorRepository';
 import { Inject, Service } from 'typedi';
 import { S3Service } from './S3Service';
 import { Request, Response } from 'express';
+import { IDirectorRepository } from '../repository/Interfaces/IDicrectorRepository';
+import IDirectorService from './Interfaces/IDirectorService';
 
 @Service()
-export class DirectorService {
+export class DirectorService implements IDirectorService {
 	@Inject(() => DirecorRepository)
-	private directorRepository!: DirecorRepository;
+	private directorRepository!: IDirectorRepository;
 
 	@Inject(() => S3Service)
 	private s3Service!: S3Service;
@@ -34,30 +36,33 @@ export class DirectorService {
 		}
 	};
 
-	createDirector =  async (req: Request) => {
+	createDirector = async (req: Request) => {
 		try {
 			const { name, gender, dateOfBirth, description } = req.body;
 			const directorData: Partial<Director> = {
-				name, gender, dateOfBirth, description
+				name,
+				gender,
+				dateOfBirth,
+				description,
 			};
 
 			return await this.directorRepository.save(Director.build(directorData));
-
 		} catch (error: any) {
-			throw(error);
+			throw error;
 		}
-	}
+	};
 
 	updateDirector = async (req: Request) => {
 		const { name, gender, dateOfBirth, description } = req.body;
 		const directorId = Number(req.params.directorId);
 		const actorData: Partial<Director> = {
-			name, gender, dateOfBirth, description
+			name,
+			gender,
+			dateOfBirth,
+			description,
 		};
 
-		const directorToUpdate = await this.directorRepository.findById(
-			directorId
-		);
+		const directorToUpdate = await this.directorRepository.findById(directorId);
 
 		if (directorToUpdate) {
 			await directorToUpdate.update(actorData);
@@ -66,7 +71,7 @@ export class DirectorService {
 		} else {
 			return null;
 		}
-	}
+	};
 
 	findByDirectorId = async (directorId: number) => {
 		try {
@@ -79,13 +84,13 @@ export class DirectorService {
 	deleteDirector = async (directorId: number) => {
 		try {
 			const director = await this.directorRepository.findById(directorId);
-			if(!director){
+			if (!director) {
 				return false;
 			}
 			await this.directorRepository.delete(director);
 			return true;
 		} catch (error: any) {
-			throw(error);
+			throw error;
 		}
 	};
 
@@ -97,11 +102,7 @@ export class DirectorService {
 		}
 	};
 
-	getDirectors = async (
-		search: string,
-		page: number,
-		pageSize: number
-	) => {
+	getDirectors = async (search: string, page: number, pageSize: number) => {
 		try {
 			const directors = await this.directorRepository.searchAllDirector(
 				search,
@@ -110,14 +111,18 @@ export class DirectorService {
 			);
 			for (const director of directors.rows) {
 				if (director!.avatar) {
-					director!.avatar = await this.s3Service.getObjectUrl(director!.avatar);
+					director!.avatar = await this.s3Service.getObjectUrl(
+						director!.avatar
+					);
 				} else {
 					director!.avatar = await this.s3Service.getObjectUrl(
 						'default/director/default_avatar.jpg'
 					);
 				}
 				if (director!.poster) {
-					director!.poster = await this.s3Service.getObjectUrl(director!.poster);
+					director!.poster = await this.s3Service.getObjectUrl(
+						director!.poster
+					);
 				} else {
 					director!.poster = await this.s3Service.getObjectUrl(
 						'default/director/default_poster.jpg'

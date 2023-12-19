@@ -10,6 +10,8 @@ import { PaymentRepository } from '../repository/PaymentRepository';
 import { Payment } from '../models/Payment';
 import express, { Request } from 'express';
 import { Op } from 'sequelize';
+import { IPaymentRepository } from '../repository/Interfaces/IPaymentRepository';
+import { IPaymentService } from './Interfaces/IPaymentService';
 
 interface PaymentAttributes {
 	type: string;
@@ -21,9 +23,9 @@ interface PaymentAttributes {
 }
 
 @Service()
-export class PaymentService {
+export class PaymentService implements IPaymentService {
 	@Inject(() => PaymentRepository)
-	private paymentRepository!: PaymentRepository;
+	private paymentRepository!: IPaymentRepository;
 
 	addOrEditPayment = async (paymentData: Partial<Payment>) => {
 		try {
@@ -95,56 +97,59 @@ export class PaymentService {
 			const endDate = req.query.endDate || null;
 			const search = req.query.search || null;
 
-			const page = req.query.page ||1;
-			const pageSize = req.query.pageSize ||15;
-			
+			const page = req.query.page || 1;
+			const pageSize = req.query.pageSize || 15;
+
 			const whereCondition: any = {};
 			if (status) {
-				whereCondition['status'] = { [Op.iLike]: `%${status}%`}
+				whereCondition['status'] = { [Op.iLike]: `%${status}%` };
 			}
 
 			if (search) {
-				whereCondition['orderInfo'] = { [Op.iLike]: `%${search}%`}
+				whereCondition['orderInfo'] = { [Op.iLike]: `%${search}%` };
 			}
 
-			if(type){
+			if (type) {
 				whereCondition['type'] = type;
 			}
 
-			if(userId){
+			if (userId) {
 				whereCondition['userId'] = userId;
 			}
 
-			if(isPayment){
+			if (isPayment) {
 				whereCondition['isPayment'] = isPayment;
 			}
 
-			if(subscriptionInfoId){
+			if (subscriptionInfoId) {
 				whereCondition['subscriptionInfoId'] = subscriptionInfoId;
 			}
 
 			if (!startDate && !endDate) {
 				whereCondition['createdAt'] = {
-					[Op.between]: [new Date(2020,1,1),new Date()],
+					[Op.between]: [new Date(2020, 1, 1), new Date()],
 				};
 			}
 
 			if (startDate && !endDate) {
 				whereCondition['createdAt'] = {
-					[Op.between]: [startDate,new Date()],
+					[Op.between]: [startDate, new Date()],
 				};
 			}
 
 			if (!startDate && endDate) {
 				whereCondition['createdAt'] = {
-					[Op.between]: [new Date(2020,1,1),endDate],
+					[Op.between]: [new Date(2020, 1, 1), endDate],
 				};
 			}
 
-			return await this.paymentRepository.getPayments(whereCondition,Number(page),Number(pageSize));
+			return await this.paymentRepository.getPayments(
+				whereCondition,
+				Number(page),
+				Number(pageSize)
+			);
 		} catch (error: any) {
-			throw(error);
+			throw error;
 		}
 	};
-
 }

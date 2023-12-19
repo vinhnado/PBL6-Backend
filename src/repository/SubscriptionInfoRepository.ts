@@ -3,9 +3,13 @@ import { BaseRepository } from './BaseRepository';
 import { SubscriptionInfo } from '../models/SubscriptionInfo';
 import { SubscriptionType } from '../models/SubscriptionType';
 import { Duration } from '../models/Duration';
+import { ISubscriptionInfoRepository } from './Interfaces/ISubscriptionInfoRepository';
 
 @Service()
-export class SubscriptionInfoRepository extends BaseRepository<SubscriptionInfo> {
+export class SubscriptionInfoRepository
+	extends BaseRepository<SubscriptionInfo>
+	implements ISubscriptionInfoRepository
+{
 	constructor() {
 		super(SubscriptionInfo);
 	}

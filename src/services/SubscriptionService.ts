@@ -1,3 +1,4 @@
+import { ISubscriptionService } from './Interfaces/ISubscriptionService';
 import { SubscriptionInfo } from './../models/SubscriptionInfo';
 import { Subscription } from './../models/Subscription';
 import { UserRepository } from '../repository/UserRepository';
@@ -7,20 +8,24 @@ import { SubscriptionRepository } from '../repository/SubscriptionRepository';
 import { SubscriptionTypeRepository } from '../repository/SubscriptionTypeRepository';
 import { addMonths } from 'date-fns';
 import { SubscriptionInfoRepository } from '../repository/SubscriptionInfoRepository';
+import { IUserRepository } from '../repository/Interfaces/IUserRepository';
+import { ISubscriptionTypeRepository } from '../repository/Interfaces/ISubscriptionTypeRepository';
+import { ISubscriptionRepository } from '../repository/Interfaces/ISubscriptionRepository';
+import { ISubscriptionInfoRepository } from '../repository/Interfaces/ISubscriptionInfoRepository';
 
 @Service()
-export class SubscriptionService {
+export class SubscriptionService implements ISubscriptionService {
 	@Inject(() => SubscriptionRepository)
-	private subscriptionRepository!: SubscriptionRepository;
+	private subscriptionRepository!: ISubscriptionRepository;
 
 	@Inject(() => SubscriptionTypeRepository)
-	private subscriptionTypeRepository!: SubscriptionTypeRepository;
+	private subscriptionTypeRepository!: ISubscriptionTypeRepository;
 
 	@Inject(() => SubscriptionInfoRepository)
-	private subscriptionInfoRepository!: SubscriptionInfoRepository;
+	private subscriptionInfoRepository!: ISubscriptionInfoRepository;
 
 	@Inject(() => UserRepository)
-	private userRepository!: UserRepository;
+	private userRepository!: IUserRepository;
 
 	updateSubscription = async (
 		userId: number,
