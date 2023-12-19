@@ -9,12 +9,11 @@ export class QRCodeService implements IQRCodeService {
         try {
             let img = '';
             const qr = await QRCode.toDataURL(url);
-            img = `<image src= ' `+qr+ `' />`;
+            img = `<img src= ' `+qr+ `' />`;
             return img;
           } catch (error) {
             console.error('Error:', error);
             throw(error);
           }
     }
-
 }
