@@ -4,10 +4,12 @@ import { ActorService } from '../services/ActorService';
 import { Request, Response } from 'express';
 import { Actor } from '../models/Actor';
 import { Director } from '../models/Director';
+import { IActorService } from '../services/Interfaces/IActorService';
+import IDirectorService from '../services/Interfaces/IDirectorService';
 
 export class IndividualController {
-	private actorService: ActorService;
-	private directorService: DirectorService;
+	private actorService: IActorService;
+	private directorService: IDirectorService;
 
 	constructor() {
 		this.actorService = Container.get(ActorService);

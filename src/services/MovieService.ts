@@ -170,14 +170,15 @@ export class MovieService implements IMovieService {
 					'movies/'.concat(movie.movieId.toString(), '/background.jpg')
 				);
 				for (const episode of movie.episodes) {
-					if (episode.posterURL) {
-						episode.posterURL = await this.s3Service.getObjectUrl(
-							episode.posterURL
-						);
+					if (episode.getDataValue('poster_url')) {
+						console.log(episode.getDataValue('poster_url'));
+						episode.setDataValue('poster_url',await this.s3Service.getObjectUrl(
+							episode.getDataValue('poster_url')
+						)) ;
 					} else {
-						episode.posterURL = await this.s3Service.getObjectUrl(
+						episode.setDataValue('poster_url',await this.s3Service.getObjectUrl(
 							'default/poster_default.jpg'
-						);
+						)) ;
 					}
 				}
 

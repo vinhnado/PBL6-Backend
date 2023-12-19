@@ -1,10 +1,10 @@
-import { Subscription } from '../models/Subscription';
 import express, { Request, Response, Router } from 'express';
 import Container from 'typedi';
 import { SubscriptionService } from '../services/SubscriptionService';
+import { ISubscriptionService } from '../services/Interfaces/ISubscriptionService';
 
 export class SubscriptionController {
-	private subscriptionService: SubscriptionService;
+	private subscriptionService: ISubscriptionService;
 
 	constructor() {
 		this.subscriptionService = Container.get(SubscriptionService);
