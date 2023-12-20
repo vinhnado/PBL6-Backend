@@ -4,9 +4,13 @@ import { MovieFavorite } from '../models/MovieFavorite';
 import { User } from '../models/User';
 import { Movie } from '../models/Movie';
 import { Genre } from '../models/Genre';
+import { IMovieFavoriteRepository } from './Interfaces/IMovieFavoriteRepository';
 
 @Service()
-export class MovieFavoriteRepository extends BaseRepository<MovieFavorite> {
+export class MovieFavoriteRepository
+	extends BaseRepository<MovieFavorite>
+	implements IMovieFavoriteRepository
+{
 	constructor() {
 		super(MovieFavorite);
 	}

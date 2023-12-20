@@ -24,6 +24,7 @@ export class MovieItem {
 	id!: number;
 	movieId!: number;
 	title!: string;
+	movieTitle!: string;
 	posterURL!: string;
 	posterMovieURL!: string;
 	backgroundMovieURL!: string;
@@ -55,6 +56,7 @@ export class MovieItem {
 			this.posterMovieURL = episode.movie.posterURL;
 			this.backgroundMovieURL = episode.movie.backgroundURL;
 			this.title = episode.title;
+			this.movieTitle = episode.movie.title;
 			this.posterURL = episode.posterURL;
 			this.duration = duration;
 		}

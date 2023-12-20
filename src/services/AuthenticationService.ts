@@ -14,6 +14,7 @@ import {
 	OldPasswordError,
 	UsernameValidError,
 } from '../error/CustomErrors';
+import { IAccountRepository } from '../repository/Interfaces/IAccountRepository';
 
 @Service()
 export class AuthenticationService implements IAuthenticationService {
@@ -21,7 +22,7 @@ export class AuthenticationService implements IAuthenticationService {
 	private userRepository!: IUserRepository;
 
 	@Inject(() => AccountRepository)
-	private accountRepository!: AccountRepository;
+	private accountRepository!: IAccountRepository;
 
 	@Inject(() => Mail)
 	private mail!: Mail;

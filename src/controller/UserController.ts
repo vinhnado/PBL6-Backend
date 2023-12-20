@@ -1,14 +1,15 @@
 import { User } from '../models/User';
 import { AuthenticationService } from '../services/AuthenticationService';
-import { S3Service } from './../services/S3Service';
+import { IAuthenticationService } from '../services/Interfaces/IAuthenticationService';
+import { IUserService } from '../services/Interfaces/IUserService';
 import { UserService } from './../services/UserService';
 import { Request, Response } from 'express';
 
 import Container from 'typedi';
 
 export class UserController {
-	private userService: UserService;
-	private authenticationService: AuthenticationService;
+	private userService: IUserService;
+	private authenticationService: IAuthenticationService;
 
 	constructor() {
 		this.userService = Container.get(UserService);

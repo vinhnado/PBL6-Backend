@@ -13,22 +13,24 @@ import { WatchLater } from '../models/WatchLater';
 import { MovieDTO } from '../dto/MovieDTO';
 import { S3Service } from './S3Service';
 import { AuthenticationService } from './AuthenticationService';
-import { IUserSearchOption } from './Interfaces/IUserSearchOption';
-import { Op } from 'sequelize';
+import { IMovieFavoriteRepository } from '../repository/Interfaces/IMovieFavoriteRepository';
+import { IWatchHistoryRepository } from '../repository/Interfaces/IWatchHistorRepository';
+import { IWatchLaterRepository } from '../repository/Interfaces/IWatchLaterRepository';
+import { IUserService } from './Interfaces/IUserService';
 
 @Service()
-export class UserService {
+export class UserService implements IUserService {
 	@Inject(() => UserRepository)
-	private userRepository!: UserRepository;
+	private userRepository!: IUserRepository;
 
 	@Inject(() => MovieFavoriteRepository)
-	private movieFavoriteRepository!: MovieFavoriteRepository;
+	private movieFavoriteRepository!: IMovieFavoriteRepository;
 
 	@Inject(() => WatchHistoryRepository)
-	private watchHistoryRepository!: WatchHistoryRepository;
+	private watchHistoryRepository!: IWatchHistoryRepository;
 
 	@Inject(() => WatchLaterRepository)
-	private watchLaterRepository!: WatchLaterRepository;
+	private watchLaterRepository!: IWatchLaterRepository;
 
 	@Inject(() => S3Service)
 	private s3Service!: S3Service;

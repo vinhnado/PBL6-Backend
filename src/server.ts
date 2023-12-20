@@ -16,6 +16,8 @@ import GenreRouter from './route/GenreRoutes';
 import CommentRouter from './route/CommentRoutes';
 import RatingRouter from './route/RatingRoutes';
 import StatisticalRouter from './route/StatisticalRoutes';
+import * as fs from 'fs';
+import * as https from 'https';
 
 class App {
 	public app: Application;
@@ -72,6 +74,21 @@ const app = new App().app;
 app.listen(port, () => {
 	console.log(`✅ Server started successfully at Port: ${port}`);
 });
+
+// var path = require('path');
+// var options = {
+// 	key: fs.readFileSync(path.resolve('src/ssl/key.pem')),
+// 	cert: fs.readFileSync(path.resolve('src/ssl/cert.pem')),
+// };
+
+// // Tích hợp SSL/TLS với server
+// const httpsServer = https.createServer(options, app);
+
+// Lắng nghe trên cổng 4000 (hoặc bất kỳ cổng bạn muốn sử dụng)
+// const httpsPort: number = 8000;
+// httpsServer.listen(httpsPort, () => {
+// 	console.log(`✅ Server started successfully at Port: ${httpsPort}`);
+// });
 
 // if (cluster.isPrimary === true) {
 // 	const CPUS: any = cpus();

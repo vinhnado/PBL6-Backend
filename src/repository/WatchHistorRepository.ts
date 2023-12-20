@@ -5,9 +5,13 @@ import { Movie } from '../models/Movie';
 import { WatchHistory } from '../models/WatchHistory';
 import { Genre } from '../models/Genre';
 import { Episode } from '../models/Episode';
+import { IWatchHistoryRepository } from './Interfaces/IWatchHistorRepository';
 
 @Service()
-export class WatchHistoryRepository extends BaseRepository<WatchHistory> {
+export class WatchHistoryRepository
+	extends BaseRepository<WatchHistory>
+	implements IWatchHistoryRepository
+{
 	constructor() {
 		super(WatchHistory);
 	}
