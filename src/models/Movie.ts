@@ -108,7 +108,7 @@ export class Movie extends Model {
 	level!: number;
 
 	@Column({
-		type: DataType.SMALLINT(),
+		type: DataType.INTEGER(),
 		field: Movie.NUM_FAVORITE,
 	})
 	numFavorite!: number;
