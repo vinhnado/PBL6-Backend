@@ -16,6 +16,7 @@ import GenreRouter from './route/GenreRoutes';
 import CommentRouter from './route/CommentRoutes';
 import RatingRouter from './route/RatingRoutes';
 import StatisticalRouter from './route/StatisticalRoutes';
+import ChatRoutes from './route/ChatRoutes';
 
 class App {
 	public app: Application;
@@ -55,6 +56,8 @@ class App {
 		this.app.use('/api/comments', CommentRouter);
 		this.app.use('/api/ratings', RatingRouter);
 		this.app.use('/api/statisticals', StatisticalRouter);
+		this.app.use('/api/chat', ChatRoutes);
+
 	}
 
 	private plugins(): void {
