@@ -75,6 +75,66 @@ module.exports = {
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},
+				{
+					subscription_type_id: 1,
+					closeAt: new Date(),
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
+				{
+					subscription_type_id: 2,
+					closeAt: new Date(),
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
+				{
+					subscription_type_id: 3,
+					closeAt: new Date(),
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
+				{
+					subscription_type_id: 2,
+					closeAt: new Date(),
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
+				{
+					subscription_type_id: 1,
+					closeAt: new Date(),
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
+				{
+					subscription_type_id: 2,
+					closeAt: new Date(),
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
+				{
+					subscription_type_id: 3,
+					closeAt: new Date(),
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
+				{
+					subscription_type_id: 2,
+					closeAt: new Date(),
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
+				{
+					subscription_type_id: 1,
+					closeAt: new Date(),
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
+				{
+					subscription_type_id: 2,
+					closeAt: new Date(),
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
 			],
 			{}
 		);
