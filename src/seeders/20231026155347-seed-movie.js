@@ -1047,7 +1047,7 @@ module.exports = {
 				episodes: 1,
 				level: 1,
 				num_favorite: 2501,
-				is_series: false,
+				is_series: false,Pay
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},

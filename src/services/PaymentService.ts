@@ -143,6 +143,12 @@ export class PaymentService implements IPaymentService {
 				};
 			}
 
+			if (startDate && endDate) {
+				whereCondition['createdAt'] = {
+					[Op.between]: [startDate, endDate],
+				};
+			}
+
 			return await this.paymentRepository.getPayments(
 				whereCondition,
 				Number(page),
