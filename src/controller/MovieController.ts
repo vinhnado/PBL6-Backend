@@ -327,4 +327,20 @@ export class MovieController {
 			});
 		}
 	}
+
+	test= async(req: Request, res: Response) => {
+		try {
+			const userId = Number(req.payload.userId);
+			const results =  await this.recommenderService.testData(userId);
+			res.status(200).json({
+				message: "successful",
+				qrCode:results
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
 }

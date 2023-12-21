@@ -7,4 +7,5 @@ export interface IPaymentRepository extends BaseInterface {
 		payments: Payment[];
 		totalCount: number;
 	  }>;
+	findOnePaymentByCondition(searchConditions: any): Promise<Payment | null>;
 }

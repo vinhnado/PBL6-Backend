@@ -26,6 +26,8 @@ class MovieRoutes extends BaseRoutes {
 		this.router.post('/', validateCreateMovie, validate, this.controller.createMovie);
 		this.router.put('/:id', validateUpdateMovie, validate, this.controller.updateMovie);
 		this.router.get('/recommend/get',auth, this.controller.getMoviesRecommender);
+		this.router.get('/recommend/test',auth, this.controller.test);
+
 		this.router.get('/get/nations', this.controller.getAllNations);
 		this.router.get('/get/years', this.controller.getAllReleaseYears);
 		this.router.get('/get/presign-url', validategetPresignUrlToUpload, validate, this.controller.getPresignUrlToUpload);
