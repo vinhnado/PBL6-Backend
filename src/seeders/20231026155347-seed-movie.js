@@ -935,7 +935,7 @@ module.exports = {
 			{
 				//54
 				title: "Everything Everywhere All at Once",
-				description:'Cuộc Phiêu Lưu Của Mr. Peabody & Cậu Bé Sherman - Mr. Peabody & Sherman kể về ông Peabody - người được xem là một doanh nhân vĩ đại, nhà khoa học, nhà phát minh, tay ăn uống tài',
+				description:'Câu chuyện về gia đình người phụ nữ châu Á Evelyn Wang làm chấn động cả thế giới. Đưa khán giả trải nghiệm hàng loạt cung bậc cảm xúc khác nhau, đi từ bất ngờ này đến bất ngờ khác, mở ra đa vũ trụ hỗn loạn hơn cả “multiverse of madness” của Doctor Strange.',
 				release_date: new Date(2024,2,2),
 				nation: 'American',
 				poster_url: 'movies/54/poster.jpg',
@@ -951,8 +951,8 @@ module.exports = {
 			},
 			{
 				//55
-				title: "Land of the Lost",
-				description:'Cuộc Phiêu Lưu Của Mr. Peabody & Cậu Bé Sherman - Mr. Peabody & Sherman kể về ông Peabody - người được xem là một doanh nhân vĩ đại, nhà khoa học, nhà phát minh, tay ăn uống tài',
+				title: "Trôi về thời tiền sử - Land of the Lost",
+				description:'Trôi Về Thời Tiền Sử xoay quanh chuyến phiêu lưu của tiến sỹ Rick Marshall, một người đàn ông không có gì trong tay, ít tài nghệ và tài trí cũng có vấn đề. Marshall bị hút vào một hố đen thời gian tới một thế giới kì lạ, nơi ông ta phải chiến đấu để sinh tồn giữa những sinh vật từ thời tiền sử, đặc ...',
 				release_date: new Date(2024,2,2),
 				nation: 'American',
 				poster_url: 'movies/55/poster.jpg',
@@ -1037,7 +1037,7 @@ module.exports = {
 			{
 				//60
 				title: "Khuynh Thế Cẩm Lân Cốc Vũ Lai",
-				description:'Cuộc Phiêu Lưu Của Mr. Peabody & Cậu Bé Sherman - Mr. Peabody & Sherman kể về ông Peabody - người được xem là một doanh nhân vĩ đại, nhà khoa học, nhà phát minh, tay ăn uống tài',
+				description:'Ninh Tu Duệ - Nhị điện hạ của Long tộc lén chạy lên bờ vui chơi, tình cờ chứng kiến nạn hạn hán nghìn năm hiếm thấy. Ninh Tu Duệ không nhớ tới lời dặn dò của cha, gọi mây ban mưa xuống, đồng thời giao vật chí bảo của Long tộc là vảy ngược cho một thiếu nữ làng chài tên Cẩm Nhi để hóa giải dịch bệnh trong làng. Bỗng vảy rồng và Cẩm Nhi đồng thời biến mất, mặt biển cũng xuất hiện lớp kết giới khiến Ninh Tu Duệ không thể quay về. Năm trăm năm sau, cuối cùng Ninh Tu Duệ cũng gặp lại Cẩm Nhi mà hắn vô cùng căm hận, mối tình đầy bất ngờ và mạo hiểm giữa hai người lặng lẽ mở màn.',
 				release_date: new Date(2024,2,2),
 				nation: 'Trung Quốc',
 				poster_url: 'movies/60/poster.jpg',
