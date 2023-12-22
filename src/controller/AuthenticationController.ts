@@ -76,6 +76,7 @@ export class AuthenticationController {
 
 	registerAdmin = async (req: Request, res: Response) => {
 		try {
+			console.log(req.payload.userId);
 			const { email, dateOfBirth, gender, username, password } = req.body;
 
 			await this.authenticationService.register(

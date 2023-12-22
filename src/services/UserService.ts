@@ -17,6 +17,8 @@ import { IMovieFavoriteRepository } from '../repository/Interfaces/IMovieFavorit
 import { IWatchHistoryRepository } from '../repository/Interfaces/IWatchHistorRepository';
 import { IWatchLaterRepository } from '../repository/Interfaces/IWatchLaterRepository';
 import { IUserService } from './Interfaces/IUserService';
+import { IUserSearchOption } from './Interfaces/IUserSearchOption';
+import { Op } from 'sequelize';
 
 @Service()
 export class UserService implements IUserService {
@@ -57,11 +59,7 @@ export class UserService implements IUserService {
 			throw new Error(err.message);
 		}
 	};
-	// search?: string;
-	// genre?: string;
-	// subscriptionType?: '1' | '2' | '3' | '2,3';
-	// sort?: 'userId' | 'createdAt' | 'subscriptionType';
-	// sortType?: 'ASC' | 'DESC';
+
 	searchUsers = async (
 		options: IUserSearchOption,
 		page: number,

@@ -128,6 +128,12 @@ export class UserRepository
 						...(Object.keys(whereSubTypeCons).length > 0
 							? { where: whereSubTypeCons }
 							: {}),
+						include: [
+							{
+								model: SubscriptionType,
+								attributes: ['name'],
+							},
+						],
 					},
 				],
 				order: [[`${sortField}`, `${sortBy}`]],

@@ -54,7 +54,7 @@ export class UserController {
 				sort: req.query.sort?.toString(),
 				sortTye: req.query.sortType?.toString(),
 			};
-
+			console.log(options.search);
 			const page = Number(req.query.page) || 1;
 			const pageSize = Number(req.query.pageSize) || 5;
 

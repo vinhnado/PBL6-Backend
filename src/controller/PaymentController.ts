@@ -18,7 +18,6 @@ export class PaymentController {
 	private subscriptionService: SubscriptionService;
 	private userService: UserService;
 
-
 	constructor() {
 		this.vnPayService = new VNPayService({
 			tmnCode: process.env.VNP_TMN_CODE || '4YOYYZHU',
@@ -33,7 +32,6 @@ export class PaymentController {
 		this.paymentService = Container.get(PaymentService);
 		this.subscriptionService = Container.get(SubscriptionService);
 		this.userService = Container.get(UserService);
-
 	}
 
 	/**
@@ -71,32 +69,51 @@ export class PaymentController {
 				this.dateFormat(new Date(timeGMT7), 'yyyyMMddHHmmss') +
 				(Math.floor(Math.random() * 90000) + 10000).toString();
 			const subscriptionInfoId = req.body.subscriptionInfoId;
-			const priceSub  = await this.subscriptionService.getPriceBySubscriptionInfoId(subscriptionInfoId);
-			if(priceSub!== price) {
+			const priceSub =
+				await this.subscriptionService.getPriceBySubscriptionInfoId(
+					subscriptionInfoId
+				);
+			if (priceSub !== price) {
 				return res.status(400).json({
-                    message: 'Price not match',
-                });
+					message: 'Price not match',
+				});
 			}
-			const subInfo = await this.subscriptionService.getSubscriptionInfoById(subscriptionInfoId);
-			const nameSubscription  = subInfo?.subscriptionType.getDataValue('name');
+			const subInfo = await this.subscriptionService.getSubscriptionInfoById(
+				subscriptionInfoId
+			);
+			const nameSubscription = subInfo?.subscriptionType.getDataValue('name');
 			const timeSubscription = subInfo?.duration.getDataValue('time');
-			
+
 			const paymentUrl = await this.vnPayService.buildPaymentUrl({
 				vnp_Amount: price,
 				vnp_IpAddr: ipAdd,
 				vnp_TxnRef: id,
-				vnp_OrderInfo: 'User_'+userId+' Thanh toán gói '+nameSubscription+' '+timeSubscription+' tháng',
+				vnp_OrderInfo:
+					'User_' +
+					userId +
+					' Thanh toán gói ' +
+					nameSubscription +
+					' ' +
+					timeSubscription +
+					' tháng',
 			});
 
 			const partialObject: Partial<Payment> = {
 				type: 'VN Pay',
 				price: price,
 				transactionId: id,
-				orderInfo: 'User_'+userId+' Thanh toán gói '+nameSubscription+' '+timeSubscription+' tháng',
+				orderInfo:
+					'User_' +
+					userId +
+					' Thanh toán gói ' +
+					nameSubscription +
+					' ' +
+					timeSubscription +
+					' tháng',
 				status: 'Not checkout',
 				userId: userId,
 				isPayment: false,
-				subscriptionInfoId:subscriptionInfoId
+				subscriptionInfoId: subscriptionInfoId,
 			};
 
 			await this.paymentService.addOrEditPayment(partialObject);
@@ -126,22 +143,28 @@ export class PaymentController {
 					transactionId: transactionId,
 					isPayment: true,
 				};
-				
-				const payment =await this.paymentService.findPaymentByTransactionId(transactionId);
+
+				const payment = await this.paymentService.findPaymentByTransactionId(
+					transactionId
+				);
 				await this.paymentService.addOrEditPayment(partialObject);
 				// add Subscription for user
-				await this.subscriptionService.updateSubscription(payment.getDataValue('userId'),null, null,payment.getDataValue('subscriptionInfoId'));
+				await this.subscriptionService.updateSubscription(
+					payment.getDataValue('userId'),
+					null,
+					null,
+					payment.getDataValue('subscriptionInfoId')
+				);
 
 				const userInfo = await this.userService.findOneUser({
-					userId: payment.getDataValue('userId')
+					userId: payment.getDataValue('userId'),
 				});
-
 
 				return res.status(200).json({
 					message: 'Payment With VN Pay Successfully',
 					success: true,
 					results: results,
-					userInfo: userInfo
+					userInfo: userInfo,
 				});
 			}
 			return res.status(200).json({
@@ -181,36 +204,50 @@ export class PaymentController {
 	};
 
 	createPaypalOrder = async (req: Request, res: Response) => {
-		this.paypalService
-			.createOrder(3, req.body.subscriptionInfoId)
-			.then((json) => {
-				res.send(json);
-			})
-			.catch((err) => {
-				res.status(500).json({ message: 'Internal Server Error', error: err });
+		try {
+			const userId = Number(req.payload.userId);
+			const subscriptionInfoId = req.body.subscriptionInfoId;
+			const data = await this.paypalService.createOrder(
+				userId,
+				subscriptionInfoId
+			);
+			res.status(200).json({
+				status: 'OK',
+				message: 'Done',
+				data: data,
 			});
+		} catch (error) {
+			res.status(500).json({ message: 'Internal Server Error', error: error });
+		}
 	};
 
-	completePaypalOrder = async (req: Request, res: Response) => {
-		this.paypalService
-			.completeOrder(req.body.order_id)
-			.then((json) => {
-				res.send(json);
-			})
-			.catch((err) => {
-				res.status(500).json({ message: 'Internal Server Error', error: err });
-			});
+	cancelPaypalOrder = async (req: Request, res: Response) => {
+		// this.paypalService
+		// 	.completeOrder(req.body.order_id)
+		// 	.then((json) => {
+		// 		res.send(json);
+		// 	})
+		// 	.catch((err) => {
+		// 		res.status(500).json({ message: 'Internal Server Error', error: err });
+		// 	});
 	};
 
 	capturePaypalOrder = async (req: Request, res: Response) => {
-		this.paypalService
-			.captureOrder(req.body.order_id)
-			.then((json) => {
-				res.send(json);
-			})
-			.catch((err) => {
-				res.status(500).json({ message: 'Internal Server Error', error: err });
+		try {
+			const token = req.query.token?.toString();
+			const data = await this.paypalService.captureOrder(token || '');
+
+			return res.status(200).json({
+				status: 'OK',
+				message: 'Done',
+				data: data,
 			});
+		} catch (error: any) {
+			console.log(error.message);
+			return res
+				.status(500)
+				.json({ message: 'Internal Server Error', error: error.message });
+		}
 	};
 
 	verifyReturnUrlMomo = async (req: Request, res: Response) => {
@@ -224,21 +261,22 @@ export class PaymentController {
 	};
 
 	getPayments = async (req: Request, res: Response) => {
-		try{
-			const {payments,totalCount} = await this.paymentService.getPayments(req);
-			const page = req.query.page ||1;
-			const pageSize = req.query.pageSize ||15;
+		try {
+			const { payments, totalCount } = await this.paymentService.getPayments(
+				req
+			);
+			const page = req.query.page || 1;
+			const pageSize = req.query.pageSize || 15;
 			return res.json({
-				message: "Success",
+				message: 'Success',
 				page: Number(page),
 				pageSize: pageSize,
 				totalPages: Math.ceil(totalCount / Number(pageSize)),
 				totalCount: totalCount,
 				data: payments,
 			});
-		}catch(error){
+		} catch (error) {
 			console.log(error);
 		}
 	};
-
 }

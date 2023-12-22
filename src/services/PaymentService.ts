@@ -30,6 +30,7 @@ export class PaymentService implements IPaymentService {
 	addOrEditPayment = async (paymentData: Partial<Payment>) => {
 		try {
 			const { transactionId } = paymentData;
+			console.log(paymentData);
 			if (transactionId) {
 				const paymentToUpdate = await this.paymentRepository.findOneByCondition(
 					{
@@ -41,7 +42,7 @@ export class PaymentService implements IPaymentService {
 					return await this.paymentRepository.save(paymentToUpdate);
 				}
 			}
-
+			console.log('first');
 			const newPayment = Payment.build(paymentData);
 			return await this.paymentRepository.save(newPayment);
 		} catch (error: any) {
