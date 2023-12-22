@@ -1801,6 +1801,22 @@ paths:
       responses:
         '200':
           description: Successful response
+  /individuals/actors/get-presign-url/avatar:
+    get:
+      summary: Get presign url to upload avatar actor
+      description: Get presign url to upload avatar actor
+      tags:
+        - individuals
+      parameters:
+        - name: directorId
+          in: query
+          description: id of the actor
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Successful response
     post:
       summary: Create a new actor
       description: Create a new actor
@@ -1922,6 +1938,22 @@ paths:
           required: false
           schema:
             type: string
+      responses:
+        '200':
+          description: Successful response
+  /individuals/directors/get-presign-url/avatar:
+    get:
+      summary: Get presign url to upload avatar actor
+      description: Get presign url to upload avatar actor
+      tags:
+        - individuals
+      parameters:
+        - name: directorId
+          in: query
+          description: id of the actor
+          required: true
+          schema:
+            type: number
       responses:
         '200':
           description: Successful response
