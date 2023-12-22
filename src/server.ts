@@ -18,7 +18,6 @@ import RatingRouter from './route/RatingRoutes';
 import StatisticalRouter from './route/StatisticalRoutes';
 import * as fs from 'fs';
 import * as https from 'https';
-
 class App {
 	public app: Application;
 

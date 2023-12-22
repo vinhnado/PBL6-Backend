@@ -11,6 +11,9 @@ import { SubscriptionService } from '../services/SubscriptionService';
 import { UserService } from '../services/UserService';
 
 export class PaymentController {
+	static getExchangeRates() {
+		throw new Error('Method not implemented.');
+	}
 	private vnPayService: VNPayService;
 	private momoService: MomoService;
 	private paypalService: PaypalService;
@@ -222,20 +225,36 @@ export class PaymentController {
 	};
 
 	cancelPaypalOrder = async (req: Request, res: Response) => {
-		// this.paypalService
-		// 	.completeOrder(req.body.order_id)
-		// 	.then((json) => {
-		// 		res.send(json);
-		// 	})
-		// 	.catch((err) => {
-		// 		res.status(500).json({ message: 'Internal Server Error', error: err });
-		// 	});
+		try {
+			const token = req.query.token;
+			if (!token) {
+				return res.status(400).json({
+					status: 'Bad Request',
+					message: 'No token',
+				});
+			}
+			await this.paypalService.cancelOrder(token.toString());
+			return res.status(200).json({
+				status: 'OK',
+				message: 'Delete Successfully',
+			});
+		} catch (error: any) {
+			return res
+				.status(500)
+				.json({ message: 'Internal Server Error', error: error.message });
+		}
 	};
 
 	capturePaypalOrder = async (req: Request, res: Response) => {
 		try {
-			const token = req.query.token?.toString();
-			const data = await this.paypalService.captureOrder(token || '');
+			const token = req.query.token;
+			if (!token) {
+				return res.status(400).json({
+					status: 'Bad Request',
+					message: 'No token',
+				});
+			}
+			const data = await this.paypalService.captureOrder(token.toString());
 
 			return res.status(200).json({
 				status: 'OK',
