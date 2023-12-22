@@ -1,5 +1,5 @@
 import { IndividualController } from '../controller/IndividualController';
-import { validateCreateActor, validateDeleteActor, validateGetActorDetails, validateGetActors, validateUpdateActor } from '../validators/ActorValidator';
+import { validateCreateActor, validateDeleteActor, validateGetActorDetails, validateGetActors, validateUpdateActor,validateGetPresignUrlActor } from '../validators/ActorValidator';
 import { validateCreateDirector, validateDeleteDirector, validateGetDirectorDetails, validateGetDirectors, validateUpdateDirector } from '../validators/DirectorValidate';
 import { validate } from '../validators/Validator';
 import BaseRoutes from './Base/BaseRouter';
@@ -14,6 +14,7 @@ class IndividualRoutes extends BaseRoutes {
 		this.router.get('/actors',validateGetActors, validate, this.controller.getActors);
 		this.router.put('/actors/:actorId',validateUpdateActor, validate, this.controller.updateActor);
 		this.router.post('/actors',validateCreateActor, validate ,this.controller.createActor);
+		this.router.get('/actors/get-presign-url/avatar',validateGetPresignUrlActor, validate, this.controller.getPresignUrlToUploadAvatar);
 		
 		this.router.get('/directors', validateGetDirectors, validate, this.controller.getDirectors);
 		this.router.delete('/directors/:directorId',validateDeleteDirector, validate, this.controller.deleteDirector);

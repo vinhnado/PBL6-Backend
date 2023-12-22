@@ -211,7 +211,33 @@ export class IndividualController {
 			});
 		}
 	};
-
+	
+	getPresignUrlToUploadAvatar = async (req: Request, res: Response)=>{
+		try {
+			const actorId = req.query.actorId;
+			if(!actorId){
+				return res.status(200).json({
+					message:'actorId is required!',
+				});
+			}
+            const presignUrl = await this.actorService.getPresignUrlToUploadAvatar(Number(actorId));
+			if (!presignUrl) {
+				return res.status(404).json({
+					status: 'Ok!',
+					message: 'Actor not found or is deleted!',
+				});
+			}
+            return res.status(200).json({
+                status: 'Ok!',
+                message: 'Successfully',
+                data: presignUrl,
+            });
+        } catch (error: any) {
+            return res.status(500).json({
+                message: "Server error!"
+            });
+        }
+	}
 	// getPopularActors = async (req: Request, res: Response)=>{
 	// 	try {
     //         const data = await this.actorService.getPopularActors(1,5);
