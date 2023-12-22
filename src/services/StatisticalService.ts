@@ -40,4 +40,22 @@ export class StatisticalService implements IStatisticalService {
             throw(error);
         }
     }
+
+    async getStatisticsMoviesByGenres(): Promise<any[]> {
+        try{
+            return await this.statisticalRepository.getStatisticsMoviesByGenres();
+        }catch(error) {
+            throw(error);
+        }
+    }
+    async getStatisticsComments(): Promise<any> {
+        try{
+            const rs = await this.statisticalRepository.getStatisticsComments();
+            // console.log(rs);
+            return rs;
+        }catch(error) {
+            throw(error);
+        }
+    }
+
 }
