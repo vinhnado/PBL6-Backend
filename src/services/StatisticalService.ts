@@ -48,9 +48,19 @@ export class StatisticalService implements IStatisticalService {
             throw(error);
         }
     }
-    async getStatisticsComments(): Promise<any> {
+    async getStatisticsComments(req: Request): Promise<any> {
         try{
-            const rs = await this.statisticalRepository.getStatisticsComments();
+            let startDate: string | null = <string>req.query.startDate || null 
+            let endDate: string | null = <string>req.query.endDate || null 
+            const currentDate = new Date();
+            const oneYearAgo = new Date(currentDate);
+            if(!startDate){
+                startDate = oneYearAgo.toISOString().replace(/T/, ' ').replace(/\..+/, '');
+            }
+            if(!endDate){
+                endDate = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+            }
+            const rs = await this.statisticalRepository.getStatisticsComments(startDate,endDate);
             // console.log(rs);
             return rs;
         }catch(error) {

@@ -43,7 +43,7 @@ export class StatisticalController{
 
     getStatisticsComments = async (req: Request, res: Response) => {
         try {
-            const {comments, subComments} = await this.statisticalService.getStatisticsComments();
+            const {comments, subComments} = await this.statisticalService.getStatisticsComments(req);
             res.status(200).json({
                 message: "successful",
                 data: {

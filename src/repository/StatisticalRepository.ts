@@ -15,19 +15,54 @@ export class StatisticalRepository extends BaseRepository<Payment> implements IS
 	constructor(){
 		super(Payment);
 	}
-    async getStatisticsComments(): Promise<any> {
-        try{
-            const comments = await Comment.sequelize!.query(`select DATE_TRUNC('MONTH' , "comments"."createdAt") as month, count(*) from comments group by month`, { type: QueryTypes.SELECT });
-            const subComments = await SubComment.sequelize!.query(`select DATE_TRUNC('MONTH' , "sub_comments"."createdAt") as month, count(*) from sub_comments group by month`, { type: QueryTypes.SELECT });
+    // async getStatisticsComments(startDate: string, endDate: string): Promise<any> {
+    //     try{
+    //         const comments = await Comment.sequelize!.query(`select DATE_TRUNC('MONTH' , "comments"."createdAt") as month, count(*) from comments group by month`, { type: QueryTypes.SELECT });
+    //         const subComments = await SubComment.sequelize!.query(`select DATE_TRUNC('MONTH' , "sub_comments"."createdAt") as month, count(*) from sub_comments group by month`, { type: QueryTypes.SELECT });
+    //         return {
+    //             comments,
+    //             subComments
+    //         };
+    //     }catch(error){
+    //         console.log(error);
+    //         throw(error);
+    //     }    
+    // }
+
+    async getStatisticsComments(startDate: string, endDate: string): Promise<any> {
+        try {
+            const comments = await Comment.sequelize!.query(
+                `SELECT DATE_TRUNC('MONTH' , "createdAt") as month, COUNT(*) 
+                FROM comments 
+                WHERE "createdAt" >= :startDate AND "createdAt" <= :endDate
+                GROUP BY month`,
+                {
+                    replacements: { startDate, endDate },
+                    type: QueryTypes.SELECT,
+                }
+            );
+    
+            const subComments = await SubComment.sequelize!.query(
+                `SELECT DATE_TRUNC('MONTH' , "createdAt") as month, COUNT(*) 
+                FROM sub_comments 
+                WHERE "createdAt" >= :startDate AND "createdAt" <= :endDate
+                GROUP BY month`,
+                {
+                    replacements: { startDate, endDate },
+                    type: QueryTypes.SELECT,
+                }
+            );
+    
             return {
                 comments,
-                subComments
+                subComments,
             };
-        }catch(error){
+        } catch (error) {
             console.log(error);
-            throw(error);
-        }    
+            throw error;
+        }
     }
+    
 
     async getStatisticsMoviesByGenres(): Promise<any[]> {
         try{
