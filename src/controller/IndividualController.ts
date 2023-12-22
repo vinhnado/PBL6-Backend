@@ -212,7 +212,7 @@ export class IndividualController {
 		}
 	};
 	
-	getPresignUrlToUploadAvatar = async (req: Request, res: Response)=>{
+	getPresignUrlToUploadAvatarActor = async (req: Request, res: Response)=>{
 		try {
 			const actorId = req.query.actorId;
 			if(!actorId){
@@ -225,6 +225,33 @@ export class IndividualController {
 				return res.status(404).json({
 					status: 'Ok!',
 					message: 'Actor not found or is deleted!',
+				});
+			}
+            return res.status(200).json({
+                status: 'Ok!',
+                message: 'Successfully',
+                data: presignUrl,
+            });
+        } catch (error: any) {
+            return res.status(500).json({
+                message: "Server error!"
+            });
+        }
+	}
+
+	getPresignUrlToUploadAvatarDirector = async (req: Request, res: Response)=>{
+		try {
+			const directorId = req.query.directorId;
+			if(!directorId){
+				return res.status(200).json({
+					message:'directorId is required!',
+				});
+			}
+            const presignUrl = await this.directorService.getPresignUrlToUploadAvatar(Number(directorId));
+			if (!presignUrl) {
+				return res.status(404).json({
+					status: 'Ok!',
+					message: 'Director not found or is deleted!',
 				});
 			}
             return res.status(200).json({

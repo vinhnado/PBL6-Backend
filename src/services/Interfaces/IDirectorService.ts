@@ -13,6 +13,8 @@ interface IDirectorService {
 		page: number,
 		pageSize: number
 	) => Promise<{ rows: Director[]; count: number }>;
+	getPresignUrlToUploadAvatar: (actorId: number) => Promise<string|null>;
+
 }
 
 export default IDirectorService;
