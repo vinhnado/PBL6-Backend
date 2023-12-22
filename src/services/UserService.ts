@@ -286,4 +286,18 @@ export class UserService implements IUserService {
 			throw new Error(error.message);
 		}
 	};
+
+	async getPresignUrlToUploadAvatar(userId: number): Promise<string> {
+        try{
+			console.log(userId);
+			const data: Partial<User> = {};
+			data.userId = userId;
+			data.avatarURL = 'users/'+userId+'/avatar.jpg';
+			await this.updateUser(data);
+            return await this.s3Service.generatePresignedUrlUpdate(data.avatarURL,'image/jpeg');
+        }catch(error) {
+            throw(error);
+        }
+    }
+
 }

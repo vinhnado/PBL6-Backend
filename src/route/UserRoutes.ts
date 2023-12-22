@@ -15,6 +15,11 @@ class UserRoutes extends BaseRoutes {
 		this.router.delete('/delete-user', this.controller.deleteUser);
 
 		this.router.get(
+			'/get-presign-url-to-upload-avatar',
+			auth,
+			this.controller.getPresignUrlToUploadAvatar
+		);
+		this.router.get(
 			'/add-favorite-movie',
 			auth,
 			this.controller.saveMovieFavorite
