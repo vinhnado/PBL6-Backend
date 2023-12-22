@@ -42,7 +42,7 @@ export class ActorRepository
 			const data = await Actor.findAndCountAll({
 				where: {
 					name: {
-						[Op.like]: `%${search}%`,
+						[Op.iLike]: `%${search}%`,
 					},
 				},
 				offset: (page - 1) * pageSize,

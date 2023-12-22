@@ -28,7 +28,7 @@ export const validateCreateMovie = [
     body('releaseDate').isISO8601().withMessage('Release date must be a valid date'),
     body('nation').notEmpty().withMessage('Nation is required'),
     body('isSeries').isBoolean().withMessage('isSeries is must be boolean'),
-    body('level').isInt().withMessage('Level must be an integer').isIn([1,2,3]),
+    body('level').isInt().withMessage('Level must be an integer').isIn([1,0]),
 ];
 
 export const validateUpdateMovie = [
