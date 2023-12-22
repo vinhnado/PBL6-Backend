@@ -3,6 +3,10 @@ import { Payment } from "../models/Payment";
 import { BaseRepository } from "./BaseRepository";
 import { IStatisticalRepository } from "./Interfaces/IStatisticalRepository";
 import { Op, QueryTypes, literal, OrderItem, Sequelize } from 'sequelize';
+import sequelize from "sequelize/types/sequelize";
+import { Genre } from "../models/Genre";
+import { Comment } from "../models/Comment";
+import { SubComment } from "../models/SubComment";
 
 
 @Service()
@@ -11,6 +15,64 @@ export class StatisticalRepository extends BaseRepository<Payment> implements IS
 	constructor(){
 		super(Payment);
 	}
+    // async getStatisticsComments(startDate: string, endDate: string): Promise<any> {
+    //     try{
+    //         const comments = await Comment.sequelize!.query(`select DATE_TRUNC('MONTH' , "comments"."createdAt") as month, count(*) from comments group by month`, { type: QueryTypes.SELECT });
+    //         const subComments = await SubComment.sequelize!.query(`select DATE_TRUNC('MONTH' , "sub_comments"."createdAt") as month, count(*) from sub_comments group by month`, { type: QueryTypes.SELECT });
+    //         return {
+    //             comments,
+    //             subComments
+    //         };
+    //     }catch(error){
+    //         console.log(error);
+    //         throw(error);
+    //     }    
+    // }
+
+    async getStatisticsComments(startDate: string, endDate: string): Promise<any> {
+        try {
+            const comments = await Comment.sequelize!.query(
+                `SELECT DATE_TRUNC('MONTH' , "createdAt") as month, COUNT(*) 
+                FROM comments 
+                WHERE "createdAt" >= :startDate AND "createdAt" <= :endDate
+                GROUP BY month`,
+                {
+                    replacements: { startDate, endDate },
+                    type: QueryTypes.SELECT,
+                }
+            );
+    
+            const subComments = await SubComment.sequelize!.query(
+                `SELECT DATE_TRUNC('MONTH' , "createdAt") as month, COUNT(*) 
+                FROM sub_comments 
+                WHERE "createdAt" >= :startDate AND "createdAt" <= :endDate
+                GROUP BY month`,
+                {
+                    replacements: { startDate, endDate },
+                    type: QueryTypes.SELECT,
+                }
+            );
+    
+            return {
+                comments,
+                subComments,
+            };
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+    
+
+    async getStatisticsMoviesByGenres(): Promise<any[]> {
+        try{
+            const rs = await Genre.sequelize!.query("SELECT genres.genre_id, genres.name, count(movie_genres.movie_id) FROM public.genres left join movie_genres on genres.genre_id = movie_genres.genre_id group by genres.genre_id order by count DESC", { type: QueryTypes.SELECT });
+            return rs;
+        }catch(error){
+            console.log(error);
+            throw(error);
+        }
+    }
 
     getRevenueStatistics(startDate: string, endDate: string, statisBy: string, rawStringUserId: string): Promise<any[]> {
          try {
@@ -58,4 +120,6 @@ export class StatisticalRepository extends BaseRepository<Payment> implements IS
                 throw new Error(`Invalid statisBy value: ${statisBy}`);
         }
     }
+
+    
 }

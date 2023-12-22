@@ -34,6 +34,17 @@ export class RecommenderSerivce implements IRecommenderService {
 			port: 6379,
 		}); // Initialize the Redis client
 	}
+    
+    async testData(userId: number){
+        try{
+            const dataUser = await this.recommenderRepo.getDataMoviesOfUser(userId);
+            return dataUser;
+        }catch(error){
+            console.log(error);
+            throw(error);
+        }
+    }
+
     async getMovieIdsRecommend(userId: number): Promise<number[]> {
         try {
             const userRateMap = new Map<number, number>();

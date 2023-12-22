@@ -33,4 +33,14 @@ export class PaymentRepository extends BaseRepository<Payment> implements IPayme
 		}
 	}
 
+	async findOnePaymentByCondition(searchConditions: any): Promise<Payment | null> {
+		try {
+			return await this.model.findOne({
+				where: searchConditions,
+			});
+		} catch (error) {
+			throw new Error('Không thể tìm thấy: ' + error);
+		}
+	}
+
 }

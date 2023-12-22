@@ -63,7 +63,6 @@ export class PaymentController {
 
 	getVNPayPaymentURL = async (req: Request, res: Response) => {
 		try {
-			const price = req.body.price;
 			const ipAdd = req.body.ipAddress;
 			const timeGMT7 = timezone(new Date()).tz('Asia/Ho_Chi_Minh').format();
 			const userId = Number(req.payload.userId);
@@ -72,17 +71,17 @@ export class PaymentController {
 				(Math.floor(Math.random() * 90000) + 10000).toString();
 			const subscriptionInfoId = req.body.subscriptionInfoId;
 			const priceSub  = await this.subscriptionService.getPriceBySubscriptionInfoId(subscriptionInfoId);
-			if(priceSub!== price) {
-				return res.status(400).json({
-                    message: 'Price not match',
-                });
+			const paymentNotCheckout = await this.paymentService.findOnePaymentNotCheckoutByUserId(userId);
+			if (paymentNotCheckout){
+				await this.paymentService.deletePayment(Number(paymentNotCheckout.getDataValue('paymentId')));
 			}
+		
 			const subInfo = await this.subscriptionService.getSubscriptionInfoById(subscriptionInfoId);
 			const nameSubscription  = subInfo?.subscriptionType.getDataValue('name');
 			const timeSubscription = subInfo?.duration.getDataValue('time');
 			
 			const paymentUrl = await this.vnPayService.buildPaymentUrl({
-				vnp_Amount: price,
+				vnp_Amount: priceSub,
 				vnp_IpAddr: ipAdd,
 				vnp_TxnRef: id,
 				vnp_OrderInfo: 'User_'+userId+' Thanh toán gói '+nameSubscription+' '+timeSubscription+' tháng',
@@ -90,7 +89,7 @@ export class PaymentController {
 
 			const partialObject: Partial<Payment> = {
 				type: 'VN Pay',
-				price: price,
+				price: priceSub,
 				transactionId: id,
 				orderInfo: 'User_'+userId+' Thanh toán gói '+nameSubscription+' '+timeSubscription+' tháng',
 				status: 'Not checkout',

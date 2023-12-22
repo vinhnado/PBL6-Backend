@@ -4,9 +4,9 @@
 module.exports = {
 	async up(queryInterface, Sequelize) {
 		// Lấy danh sách userId từ 1 đến 10
-		const userIds = Array.from({ length: 10 }, (_, index) => index + 1);
-		// Lấy danh sách episodeId từ 1 đến 450
-		const episodeIds = Array.from({ length: 450 }, (_, index) => index + 1);
+		const userIds = Array.from({ length: 20 }, (_, index) => index + 1);
+		// Lấy danh sách episodeId từ 1 đến 640
+		const episodeIds = Array.from({ length: 640 }, (_, index) => index + 1);
 
 		const comments = [];
 		for (const userId of userIds) {
@@ -103,6 +103,51 @@ function getRandomContent() {
 		'Cảnh quay đẹp như mơ, không gian mở rộng.',
 		'Nó không chỉ là phim, mà là một tác phẩm nghệ thuật.',
 		'Những giây phút khó quên được lưu giữ trong tâm trí tôi.',
+		"Phim này là một tác phẩm nghệ thuật tuyệt vời!",
+		"Cốt truyện phim quá hấp dẫn, không thể rời mắt.",
+		"Diễn viên chính đã thực sự làm cho vai diễn của mình trở nên sống động.",
+		"Tôi yêu bản nhạc trong phim, nó làm tăng thêm cảm xúc.",
+		"Phim này có nhiều chi tiết nhỏ thú vị, bạn phải chú ý kỹ mới nhận ra.",
+		"Một bộ phim lãng mạn tuyệt vời, tôi đã xem đi xem lại nhiều lần.",
+		"Hiệu ứng đặc biệt trong phim thực sự ấn tượng.",
+		"Tuy không phải là một bom tấn, nhưng phim vẫn đáng xem.",
+		"Cảnh quay thiên nhiên trong phim là đẹp đến không ngờ.",
+		"Tôi thực sự thích bối cảnh thời gian phim diễn ra.",
+		"Một phim hài tình cảm phù hợp cho cả gia đình.",
+		"Đây là một bộ phim kinh điển mà tôi sẽ nhớ mãi.",
+		"Những tình tiết không lường trước được khiến cho phim trở nên thú vị.",
+		"Tôi đã cười nhiều khi xem phim này.",
+		"Bạn nên xem phim này nếu bạn thích những bất ngờ.",
+		"Đây là một trong những phim tâm lý hay nhất mà tôi từng xem.",
+		"Tôi đã cảm thấy thấu hiểu nhiều hơn về nhân văn sau khi xem xong.",
+		"Phim này đã tạo nên một thế giới rộng lớn và huyền bí.",
+		"Các diễn viên trẻ trong phim này đều xuất sắc.",
+		"Nếu bạn muốn một bức tranh về đời sống đô thị, hãy xem ngay.",
+		"Điểm đặc biệt của phim là sự đan xen giữa hài hước và cảm động.",
+		"Tôi đã không thể dự đoán được kết cục của câu chuyện.",
+		"Bạn sẽ cảm thấy như mình đang ở trong thế giới của phim.",
+		"Tôi thích cách mà phim đặt ra những câu hỏi về đời sống.",
+		"Một bộ phim kinh điển không thể bỏ qua.",
+		"Tôi thích cách phim diễn đạt thông điệp của mình.",
+		"Phim có những tình tiết rất thú vị và khó đoán.",
+		"Tuy không phải là phim hoạt hình, nhưng đồ hoạ rất đẹp.",
+		"Các pha hành động trong phim đều rất chất lượng.",
+		"Tác phẩm này thực sự là một kiệt tác điện ảnh.",
+		"Phim thực sự lôi cuốn tôi từ đầu đến cuối.",
+		"Một bức tranh xã hội sâu sắc và đầy ý nghĩa.",
+		"Bạn sẽ không thể nào không yêu nhân vật chính.",
+		"Phim thường xuyên đặt ra những vấn đề xã hội quan trọng.",
+		"Những tình tiết gây sốc khiến tôi không thể tin nổi.",
+		"Bạn sẽ cảm thấy hòa mình vào câu chuyện ngay từ đầu.",
+		"Phim đã đưa ra những ý tưởng mới mẻ và độc đáo.",
+		"Tôi thích cách phim khám phá tâm lý con người.",
+		"Phim đã mang lại cho tôi nhiều cảm xúc khác nhau.",
+		"Những câu đối thoại trong phim rất sâu sắc.",
+		"Tôi đã học được rất nhiều từ câu chuyện của phim.",
+		"Bạn sẽ không thể nào dừng lại khi đã bắt đầu xem phim.",
+		"Phim này đã thay đổi cách nhìn của tôi về thế giới.",
+		"Tôi muốn xem lại phim này lần nữa.",
+		"Nếu bạn thích sự kịch tính, đây là phim dành cho bạn.",
 	];
 
 	const randomIndex = Math.floor(Math.random() * contentOptions.length);

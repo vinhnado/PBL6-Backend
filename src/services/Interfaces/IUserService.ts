@@ -31,4 +31,6 @@ export interface IUserService {
 	saveWatchLater: (userId: number, movieId: number) => Promise<void>;
 	deleteWatchLater: (userId: number, movieId: number) => Promise<void>;
 	findAllWatchLater: (userId: number) => Promise<MovieDTO>;
+	getPresignUrlToUploadAvatar: (userId: number) => Promise<string>;
+
 }

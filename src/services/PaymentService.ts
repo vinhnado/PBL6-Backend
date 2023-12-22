@@ -86,6 +86,19 @@ export class PaymentService implements IPaymentService {
 		}
 	};
 
+
+	findOnePaymentNotCheckoutByUserId = async (userId: number) => {
+		try {
+			return await this.paymentRepository.findOnePaymentByCondition({ 
+				user_id: userId,
+				is_payment:false,
+				// deleteAt: null
+			 });
+		} catch (error: any) {
+			throw new Error(`Failed to find payment: ${error.message}`);
+		}
+	};
+
 	getPayments = async (req: Request) => {
 		try {
 			const status = req.query.status || null;
@@ -140,6 +153,12 @@ export class PaymentService implements IPaymentService {
 			if (!startDate && endDate) {
 				whereCondition['createdAt'] = {
 					[Op.between]: [new Date(2020, 1, 1), endDate],
+				};
+			}
+
+			if (startDate && endDate) {
+				whereCondition['createdAt'] = {
+					[Op.between]: [startDate, endDate],
 				};
 			}
 
