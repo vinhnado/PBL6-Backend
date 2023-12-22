@@ -144,7 +144,7 @@ export class DirectorService implements IDirectorService {
 
 			if (directorToUpdate) {
 				await directorToUpdate.update(directorData);
-				await this.directorRepository.save(directorData);
+				await this.directorRepository.save(directorToUpdate);
 				return await this.s3Service.generatePresignedUrlUpdate(directorData.avatar,'image/jpeg');
 			} else {
 				return null;

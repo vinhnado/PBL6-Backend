@@ -260,6 +260,7 @@ export class IndividualController {
                 data: presignUrl,
             });
         } catch (error: any) {
+			console.log(error);
             return res.status(500).json({
                 message: "Server error!"
             });
