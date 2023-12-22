@@ -289,7 +289,6 @@ export class UserService implements IUserService {
 
 	async getPresignUrlToUploadAvatar(userId: number): Promise<string> {
         try{
-			console.log(userId);
 			const data: Partial<User> = {};
 			data.userId = userId;
 			data.avatarURL = 'users/'+userId+'/avatar.jpg';

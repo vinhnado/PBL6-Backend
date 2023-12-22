@@ -133,6 +133,25 @@ export class ActorService implements IActorService {
 		}
 	};
 
+	async getPresignUrlToUploadAvatar(actorId: number): Promise<string|null> {
+        try{
+			const actorData: Partial<Actor> = {};
+			actorData.actorId = actorId;
+			actorData.avatar = 'actors/'+actorId+'/avatar.jpg';
+			const actorToUpdate = await this.actorRepository.findById(actorId);
+
+			if (actorToUpdate) {
+				await actorToUpdate.update(actorData);
+				await this.actorRepository.save(actorToUpdate);
+				return await this.s3Service.generatePresignedUrlUpdate(actorData.avatar,'image/jpeg');
+			} else {
+				return null;
+			}
+        }catch(error) {
+            throw(error);
+        }
+    }
+
 	// getPopularActors = async (page: number, pageSize: number) => {
 	// 	try{
 	// 		return this.actorRepository.getPopularActors(1,5);
