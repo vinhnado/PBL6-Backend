@@ -40,4 +40,32 @@ export class StatisticalService implements IStatisticalService {
             throw(error);
         }
     }
+
+    async getStatisticsMoviesByGenres(): Promise<any[]> {
+        try{
+            return await this.statisticalRepository.getStatisticsMoviesByGenres();
+        }catch(error) {
+            throw(error);
+        }
+    }
+    async getStatisticsComments(req: Request): Promise<any> {
+        try{
+            let startDate: string | null = <string>req.query.startDate || null 
+            let endDate: string | null = <string>req.query.endDate || null 
+            const currentDate = new Date();
+            const oneYearAgo = new Date(currentDate);
+            if(!startDate){
+                startDate = oneYearAgo.toISOString().replace(/T/, ' ').replace(/\..+/, '');
+            }
+            if(!endDate){
+                endDate = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+            }
+            const rs = await this.statisticalRepository.getStatisticsComments(startDate,endDate);
+            // console.log(rs);
+            return rs;
+        }catch(error) {
+            throw(error);
+        }
+    }
+
 }
