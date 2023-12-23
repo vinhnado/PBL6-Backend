@@ -17,6 +17,8 @@ import { IMovieFavoriteRepository } from '../repository/Interfaces/IMovieFavorit
 import { IWatchHistoryRepository } from '../repository/Interfaces/IWatchHistorRepository';
 import { IWatchLaterRepository } from '../repository/Interfaces/IWatchLaterRepository';
 import { IUserService } from './Interfaces/IUserService';
+import { IUserSearchOption } from './Interfaces/IUserSearchOption';
+import { Op } from 'sequelize';
 
 @Service()
 export class UserService implements IUserService {
@@ -59,7 +61,7 @@ export class UserService implements IUserService {
 	};
 
 	searchUsers = async (
-		searchConditions: any,
+		options: IUserSearchOption,
 		page: number,
 		pageSize: number
 	): Promise<{
@@ -67,7 +69,65 @@ export class UserService implements IUserService {
 		totalCount: number;
 	}> => {
 		try {
-			return this.userRepository.searchUsers(searchConditions, page, pageSize);
+			const { search, gender, subscriptionType, sort, sortType } = options;
+
+			const whereConditions: any = {};
+			const whereSubTypeCons: any = {};
+			const whereAccConditions: any = {};
+
+			if (search) {
+				if (search) {
+					whereConditions['email'] = {
+						[Op.iLike]: `%${search}%`,
+					};
+					whereAccConditions['username'] = {
+						[Op.iLike]: `%${search}`,
+					};
+				}
+			}
+			// else {
+			// 	const search = '';
+			// }
+
+			if (gender) {
+				whereConditions['gender'] = gender;
+			}
+
+			if (subscriptionType) {
+				if (subscriptionType == '1') {
+					whereSubTypeCons['subscription_type_id'] = 1;
+				} else if (subscriptionType == '2') {
+					whereSubTypeCons['subscription_type_id'] = 2;
+				} else if (subscriptionType == '3') {
+					whereSubTypeCons['subscription_type_id'] = 3;
+				} else if (subscriptionType == '2,3') {
+					whereSubTypeCons['subscription_type_id'] = [2, 3];
+				}
+			}
+
+			const sortFieldMap = {
+				createdAt: 'createdAt',
+				subscriptionType: 'subscription_type_id',
+			};
+
+			let sortField = 'user_id';
+			let sortBy = 'DESC';
+			if (sort) {
+				sortField = sortFieldMap[sort];
+			}
+			if (sortType) {
+				sortBy = sortType || 'ASC';
+			}
+
+			return await this.userRepository.searchUsers(
+				whereConditions,
+				whereAccConditions,
+				whereSubTypeCons,
+				(page = page),
+				(pageSize = pageSize),
+				sortField,
+				sortBy
+			);
 		} catch (err: any) {
 			throw new Error(err.message);
 		}

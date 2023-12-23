@@ -6,13 +6,17 @@ import { BaseInterface } from './BaseInterface';
 export interface IUserRepository extends BaseInterface {
 	findOneUser(searchConditions: any): Promise<User>;
 	searchUsers(
-		searchConditions: any,
+		whereConditions: any,
+		whereAccConditions: any,
+		whereSubTypeCons: any,
 		page: number,
-		pageSize: number
+		pageSize: number,
+		sortField: string,
+		sortBy: string
 	): Promise<{
 		users: User[];
 		totalCount: number;
-	  }>;
+	}>;
 	createNewUser(
 		newUser: User,
 		newAccount: Account,

@@ -115,7 +115,7 @@ export class AuthenticationService implements IAuthenticationService {
 	};
 
 	forgotPassword = async (
-		email: string,
+		email: string | null,
 		token: string | null = null,
 		password: string | null = null
 	) => {
@@ -123,7 +123,7 @@ export class AuthenticationService implements IAuthenticationService {
 			const searchConditions = {
 				email,
 			};
-			if (token == null) {
+			if (email != null) {
 				const user = await this.userRepository.findOneUser(searchConditions);
 				await this.mail.forgotPassword(
 					user.account.username,
@@ -131,9 +131,9 @@ export class AuthenticationService implements IAuthenticationService {
 					await this.token.generateToken(email)
 				);
 				return 'Hãy kiểm tra email';
-			} else {
+			} else if (token) {
 				const data = await this.token.verifyToken(token);
-				if (data != null && data?.email == email && password) {
+				if (data != null && password) {
 					const account = (
 						await this.userRepository.findOneUser(searchConditions)
 					).account;
