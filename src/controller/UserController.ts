@@ -286,4 +286,26 @@ export class UserController {
 			return res.status(500).json({ error: 'Lỗi khi tao moi' });
 		}
 	};
+
+	getPresignUrlToUploadAvatar = async (req: Request, res: Response) => {
+		try {
+			const userId = req.payload.userId;
+			if(!userId){
+				return res.status(404).json({
+					message: 'Faild!, Login to update avatar',
+				});
+			}
+			const data = await this.userService.getPresignUrlToUploadAvatar(
+				req.payload.userId
+			);
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully!',
+				data: data,
+			});
+		} catch (error: any) {
+			console.log(error);
+			return res.status(500).json({ error: 'Server error' });
+		}
+	};
 }

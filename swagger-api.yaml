@@ -1761,6 +1761,17 @@ paths:
       responses:
         '200':
           description: Successful response
+  /user/get-presign-url-to-upload-avatar:
+    get:
+      summary: Get presign to upload avatar
+      description : Get presign to upload avatar user to S3
+      tags:
+        - user
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
 
   /individuals/actors:
     get:
@@ -1787,6 +1798,22 @@ paths:
           required: false
           schema:
             type: string
+      responses:
+        '200':
+          description: Successful response
+  /individuals/actors/get-presign-url/avatar:
+    get:
+      summary: Get presign url to upload avatar actor
+      description: Get presign url to upload avatar actor
+      tags:
+        - individuals
+      parameters:
+        - name: directorId
+          in: query
+          description: id of the actor
+          required: true
+          schema:
+            type: number
       responses:
         '200':
           description: Successful response
@@ -1911,6 +1938,22 @@ paths:
           required: false
           schema:
             type: string
+      responses:
+        '200':
+          description: Successful response
+  /individuals/directors/get-presign-url/avatar:
+    get:
+      summary: Get presign url to upload avatar actor
+      description: Get presign url to upload avatar actor
+      tags:
+        - individuals
+      parameters:
+        - name: directorId
+          in: query
+          description: id of the actor
+          required: true
+          schema:
+            type: number
       responses:
         '200':
           description: Successful response
@@ -2468,7 +2511,7 @@ paths:
               example:
                 status: Ok!
                 message: Successfully
-  '/statisticals/getRevenue':
+  '/statisticals/revenues':
     get:
       tags:
         - statistical
@@ -2511,6 +2554,58 @@ paths:
                 - month
                 - paymentType
       operationId: getRevenueStatistics
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Pet'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Movie not found
+      security:
+        - bearerAuth: []
+  '/statisticals/movies-by-genres':
+    get:
+      tags:
+        - statistical
+      summary: Statistical number of movies by genres
+      description: Statistical number of movies by genres
+      responses:
+        '200':
+          description: successful
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Movie not found
+      security:
+        - bearerAuth: []
+  '/statisticals/comments':
+    get:
+      tags:
+        - statistical
+      summary: Statistical comment of user
+      description: Get revenue statistical by day, week, month, year or payment type
+      parameters:
+        - name: startDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Start date
+          example: 2020-01-01
+        - name: endDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: End date
+          example: 2024-01-01
       responses:
         '200':
           description: successful

@@ -171,7 +171,6 @@ export class MovieService implements IMovieService {
 				);
 				for (const episode of movie.episodes) {
 					if (episode.getDataValue('poster_url')) {
-						console.log(episode.getDataValue('poster_url'));
 						episode.setDataValue('poster_url',await this.s3Service.getObjectUrl(
 							episode.getDataValue('poster_url')
 						)) ;

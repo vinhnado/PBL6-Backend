@@ -16,5 +16,6 @@ export interface IActorService {
 		rows: Actor[];
 		count: number;
 	}>;
+	getPresignUrlToUploadAvatar: (actorId: number) => Promise<string|null>;
 	// getPopularActors: (page: number, pageSize: number) => Promise<{ rows: Actor[]; count: number }>;
 }

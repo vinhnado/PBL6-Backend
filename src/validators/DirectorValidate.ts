@@ -28,3 +28,7 @@ export const validateCreateDirector = [
     body('dateOfBirth').optional().isISO8601().withMessage('dateOfBirth must be a valid date'),
     body('description').optional().isString().withMessage('description must be a string'),
 ];
+
+export const validateGetPresignUrlDirector = [
+    query('directorId').notEmpty().withMessage('directorId is required').isInt({min:1}).withMessage('directorId must be an integer'),
+];

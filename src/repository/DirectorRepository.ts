@@ -45,7 +45,7 @@ export class DirecorRepository
 			const data = await Director.findAndCountAll({
 				where: {
 					name: {
-						[Op.like]: `%${search}%`,
+						[Op.iLike]: `%${search}%`,
 					},
 				},
 				offset: (page - 1) * pageSize,

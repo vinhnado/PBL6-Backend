@@ -18,6 +18,9 @@ import RatingRouter from './route/RatingRoutes';
 import StatisticalRouter from './route/StatisticalRoutes';
 import * as fs from 'fs';
 import * as https from 'https';
+import ChatRoutes from './route/ChatRoutes';
+import CronJob from './utils/CronJob';
+
 class App {
 	public app: Application;
 
@@ -26,6 +29,7 @@ class App {
 		this.databaseSync();
 		this.plugins();
 		this.routes();
+		this.initCronJob();
 	}
 
 	private databaseSync(): void {
@@ -56,6 +60,7 @@ class App {
 		this.app.use('/api/comments', CommentRouter);
 		this.app.use('/api/ratings', RatingRouter);
 		this.app.use('/api/statisticals', StatisticalRouter);
+		this.app.use('/api/chat', ChatRoutes);
 	}
 
 	private plugins(): void {
@@ -64,6 +69,11 @@ class App {
 
 		// Enable CORS for all routes
 		this.app.use(cors()); // Use the cors middleware here
+	}
+
+	private initCronJob(): void {
+		// Khởi tạo cron job
+		new CronJob();
 	}
 }
 

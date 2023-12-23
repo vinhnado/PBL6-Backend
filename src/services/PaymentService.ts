@@ -42,7 +42,6 @@ export class PaymentService implements IPaymentService {
 					return await this.paymentRepository.save(paymentToUpdate);
 				}
 			}
-			console.log('first');
 			const newPayment = Payment.build(paymentData);
 			return await this.paymentRepository.save(newPayment);
 		} catch (error: any) {
@@ -82,6 +81,18 @@ export class PaymentService implements IPaymentService {
 	findAllPaymentByUserId = async (userId: number) => {
 		try {
 			return await this.paymentRepository.findByCondition({ user_id: userId });
+		} catch (error: any) {
+			throw new Error(`Failed to find payment: ${error.message}`);
+		}
+	};
+
+	findOnePaymentNotCheckoutByUserId = async (userId: number) => {
+		try {
+			return await this.paymentRepository.findOnePaymentByCondition({
+				user_id: userId,
+				is_payment: false,
+				// deleteAt: null
+			});
 		} catch (error: any) {
 			throw new Error(`Failed to find payment: ${error.message}`);
 		}
@@ -141,6 +152,12 @@ export class PaymentService implements IPaymentService {
 			if (!startDate && endDate) {
 				whereCondition['createdAt'] = {
 					[Op.between]: [new Date(2020, 1, 1), endDate],
+				};
+			}
+
+			if (startDate && endDate) {
+				whereCondition['createdAt'] = {
+					[Op.between]: [startDate, endDate],
 				};
 			}
 

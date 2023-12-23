@@ -28,3 +28,7 @@ export const validateCreateActor = [
     body('dateOfBirth').optional().isISO8601().withMessage('dateOfBirth must be a valid date'),
     body('description').optional().isString().withMessage('description must be a string'),
 ];
+
+export const validateGetPresignUrlActor = [
+    query('actorId').notEmpty().withMessage('actorId is required').isInt({min:1}).withMessage('actorId must be an integer'),
+];

@@ -211,7 +211,61 @@ export class IndividualController {
 			});
 		}
 	};
+	
+	getPresignUrlToUploadAvatarActor = async (req: Request, res: Response)=>{
+		try {
+			const actorId = req.query.actorId;
+			if(!actorId){
+				return res.status(200).json({
+					message:'actorId is required!',
+				});
+			}
+            const presignUrl = await this.actorService.getPresignUrlToUploadAvatar(Number(actorId));
+			if (!presignUrl) {
+				return res.status(404).json({
+					status: 'Ok!',
+					message: 'Actor not found or is deleted!',
+				});
+			}
+            return res.status(200).json({
+                status: 'Ok!',
+                message: 'Successfully',
+                data: presignUrl,
+            });
+        } catch (error: any) {
+            return res.status(500).json({
+                message: "Server error!"
+            });
+        }
+	}
 
+	getPresignUrlToUploadAvatarDirector = async (req: Request, res: Response)=>{
+		try {
+			const directorId = req.query.directorId;
+			if(!directorId){
+				return res.status(200).json({
+					message:'directorId is required!',
+				});
+			}
+            const presignUrl = await this.directorService.getPresignUrlToUploadAvatar(Number(directorId));
+			if (!presignUrl) {
+				return res.status(404).json({
+					status: 'Ok!',
+					message: 'Director not found or is deleted!',
+				});
+			}
+            return res.status(200).json({
+                status: 'Ok!',
+                message: 'Successfully',
+                data: presignUrl,
+            });
+        } catch (error: any) {
+			console.log(error);
+            return res.status(500).json({
+                message: "Server error!"
+            });
+        }
+	}
 	// getPopularActors = async (req: Request, res: Response)=>{
 	// 	try {
     //         const data = await this.actorService.getPopularActors(1,5);
