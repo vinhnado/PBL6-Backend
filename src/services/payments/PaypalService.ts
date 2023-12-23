@@ -108,7 +108,7 @@ export class PaypalService {
 					null,
 					payment.getDataValue('subscriptionInfoId')
 				);
-				return await this.paymentService.findPaymentByTransactionId(token);
+				return await this.paymentService.findOneByTransactionId(token);
 			} else {
 				return null;
 			}

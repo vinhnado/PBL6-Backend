@@ -71,6 +71,20 @@ export class PaymentService implements IPaymentService {
 		}
 	};
 
+	findOneByTransactionId = async (
+		transactionId: string
+	): Promise<Payment | null> => {
+		try {
+			const payment = await this.paymentRepository.findOnePaymentByCondition({
+				transactionId: transactionId,
+			});
+
+			return payment || null;
+		} catch (error: any) {
+			throw new Error(`Failed to find payment: ${error.message}`);
+		}
+	};
+
 	findAllPaymentByUserId = async (userId: number) => {
 		try {
 			return await this.paymentRepository.findByCondition({ user_id: userId });

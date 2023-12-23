@@ -259,6 +259,7 @@ export class PaymentController {
 				});
 			}
 			const data = await this.paypalService.captureOrder(token.toString());
+			console.log(data);
 			if (data) {
 				return res.status(200).json({
 					status: 'OK',
