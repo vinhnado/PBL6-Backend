@@ -1,7 +1,6 @@
 import { Movie } from './../models/Movie';
 import { User } from '../models/User';
 import Container, { Inject, Service } from 'typedi';
-import { UserRepository } from '../repository/UserRepository';
 import { IUserRepository } from '../repository/Interfaces/IUserRepository';
 import { UserDTO } from '../dto/UserDTO';
 import { WatchHistoryRepository } from '../repository/WatchHistorRepository';
@@ -19,6 +18,7 @@ import { IWatchLaterRepository } from '../repository/Interfaces/IWatchLaterRepos
 import { IUserService } from './Interfaces/IUserService';
 import { IUserSearchOption } from './Interfaces/IUserSearchOption';
 import { Op } from 'sequelize';
+import { UserRepository } from '../repository/UserRepository';
 
 @Service()
 export class UserService implements IUserService {
@@ -66,48 +66,41 @@ export class UserService implements IUserService {
 		pageSize: number
 	): Promise<{
 		users: User[];
-		totalCount: number;
+		count: number;
 	}> => {
 		try {
 			const { search, gender, subscriptionType, sort, sortType } = options;
-
+			console.log(sort, sortType);
 			const whereConditions: any = {};
 			const whereSubTypeCons: any = {};
-			const whereAccConditions: any = {};
 
 			if (search) {
 				if (search) {
-					whereConditions['email'] = {
-						[Op.iLike]: `%${search}%`,
-					};
-					whereAccConditions['username'] = {
-						[Op.iLike]: `%${search}`,
-					};
+					whereConditions[Op.or] = [
+						{ email: { [Op.like]: `%${search}%` } },
+						{ '$account.username$': { [Op.like]: `%${search}%` } },
+					];
 				}
 			}
-			// else {
-			// 	const search = '';
-			// }
 
 			if (gender) {
 				whereConditions['gender'] = gender;
 			}
 
 			if (subscriptionType) {
-				if (subscriptionType == '1') {
-					whereSubTypeCons['subscription_type_id'] = 1;
-				} else if (subscriptionType == '2') {
-					whereSubTypeCons['subscription_type_id'] = 2;
-				} else if (subscriptionType == '3') {
-					whereSubTypeCons['subscription_type_id'] = 3;
-				} else if (subscriptionType == '2,3') {
-					whereSubTypeCons['subscription_type_id'] = [2, 3];
-				}
+				const mapping: Record<string, number | number[]> = {
+					'1': 1,
+					'2': 2,
+					'3': 3,
+					'2,3': [2, 3],
+				};
+
+				whereSubTypeCons['subscription_type_id'] = mapping[subscriptionType];
 			}
 
 			const sortFieldMap = {
 				createdAt: 'createdAt',
-				subscriptionType: 'subscription_type_id',
+				subscriptionType: '$subscription.subscription_type_id',
 			};
 
 			let sortField = 'user_id';
@@ -121,7 +114,6 @@ export class UserService implements IUserService {
 
 			return await this.userRepository.searchUsers(
 				whereConditions,
-				whereAccConditions,
 				whereSubTypeCons,
 				(page = page),
 				(pageSize = pageSize),
@@ -135,12 +127,13 @@ export class UserService implements IUserService {
 
 	updateUser = async (userData: Partial<User>) => {
 		try {
-			if (userData.userId) {
-				const userToUpdate = await this.userRepository.findById(
-					userData.userId
-				);
+			const data = Object.fromEntries(
+				Object.entries(userData).filter(([_, value]) => value !== undefined)
+			);
+			if (data.userId) {
+				const userToUpdate = await this.userRepository.findById(data.userId);
 				if (userToUpdate) {
-					await userToUpdate.update(userData);
+					await userToUpdate.update(data);
 					return await this.userRepository.save(userToUpdate);
 				} else {
 					throw new Error('User not found for the given ID');
@@ -348,15 +341,17 @@ export class UserService implements IUserService {
 	};
 
 	async getPresignUrlToUploadAvatar(userId: number): Promise<string> {
-        try{
+		try {
 			const data: Partial<User> = {};
 			data.userId = userId;
-			data.avatarURL = 'users/'+userId+'/avatar.jpg';
+			data.avatarURL = 'users/' + userId + '/avatar.jpg';
 			await this.updateUser(data);
-            return await this.s3Service.generatePresignedUrlUpdate(data.avatarURL,'image/jpeg');
-        }catch(error) {
-            throw(error);
-        }
-    }
-
+			return await this.s3Service.generatePresignedUrlUpdate(
+				data.avatarURL,
+				'image/jpeg'
+			);
+		} catch (error) {
+			throw error;
+		}
+	}
 }
