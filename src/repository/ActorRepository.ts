@@ -14,6 +14,7 @@ export class ActorRepository
 	constructor() {
 		super(Actor);
 	}
+	
 	findActorInfomation = async (actorId: number) => {
 		try {
 			let data = await Actor.findOne({

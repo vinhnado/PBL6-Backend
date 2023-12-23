@@ -1436,6 +1436,8 @@ paths:
         - home
       summary: Get movies recommender for user
       description: Get moives recommender for user
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: successful operation
