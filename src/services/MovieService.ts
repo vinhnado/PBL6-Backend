@@ -385,7 +385,7 @@ export class MovieService implements IMovieService {
 					'movies/'.concat(movie.movieId.toString(), '/background.jpg')
 				);
 			}
-			await this.redis.set(cacheKey, JSON.stringify(movies), 'EX', 600);
+			await this.redis.set(cacheKey, JSON.stringify(movies), 'EX', 60*60);
 			return movies;
 		} catch (error) {
 			console.log(error);
@@ -396,8 +396,14 @@ export class MovieService implements IMovieService {
 	async getAllNations():Promise<string[]>
 	{
 		try {
-			const nations = await this.movieRepository.getAllNations() as any;
+			const cacheKey = 'getAllNations';
+			const cachedResult = await this.redis.get(cacheKey);
+			if (cachedResult) {
+				return JSON.parse(cachedResult);
+			}
 
+			const nations = await this.movieRepository.getAllNations() as any;
+			await this.redis.set(cacheKey, JSON.stringify(nations), 'EX', 60*60);
 			return nations;
 		} catch (error) {
 			console.log(error);
@@ -408,7 +414,15 @@ export class MovieService implements IMovieService {
 	async getAllReleaseYears(): Promise<number[]>
 	{
 		try {
-			return await this.movieRepository.getAllReleaseDates();
+			const cacheKey = 'getAllReleaseYears';
+			const cachedResult = await this.redis.get(cacheKey);
+			if (cachedResult) {
+				return JSON.parse(cachedResult);
+			}
+
+			const years = await this.movieRepository.getAllReleaseDates();
+			await this.redis.set(cacheKey, JSON.stringify(years), 'EX', 60*60);
+			return years;
 		} catch (error) {
 			console.log(error);
 			throw(error);

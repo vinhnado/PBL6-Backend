@@ -83,7 +83,8 @@ export class EpisodeService implements IEpisodeService {
 			}
 			return episode;
 		} catch (error) {
-			throw new Error('Can not get episode.');
+			console.log(error);
+			throw(error);
 		}
 	}
 
@@ -141,7 +142,8 @@ export class EpisodeService implements IEpisodeService {
 			}
 			return comments;
 		} catch (error) {
-			throw new Error('Err get comment of episode.');
+			console.log(error);
+			throw(error);
 		}
 	}
 
@@ -274,6 +276,7 @@ export class EpisodeService implements IEpisodeService {
 			}
 			return quality;
 		}catch(error){
+			console.log(error);
 			throw(error);
 		}
 	}
