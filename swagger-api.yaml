@@ -1430,7 +1430,7 @@ paths:
         '400':
           description: Error while get movies trending
 
-  /movies/home/recommend:
+  /movies/recommend/get:
     get:
       tags:
         - home
