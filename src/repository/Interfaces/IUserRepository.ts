@@ -7,7 +7,6 @@ export interface IUserRepository extends BaseInterface {
 	findOneUser(searchConditions: any): Promise<User>;
 	searchUsers(
 		whereConditions: any,
-		whereAccConditions: any,
 		whereSubTypeCons: any,
 		page: number,
 		pageSize: number,
@@ -15,7 +14,7 @@ export interface IUserRepository extends BaseInterface {
 		sortBy: string
 	): Promise<{
 		users: User[];
-		totalCount: number;
+		count: number;
 	}>;
 	createNewUser(
 		newUser: User,

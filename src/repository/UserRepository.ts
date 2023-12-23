@@ -3,16 +3,9 @@ import { User } from '../models/User';
 import { Account } from '../models/Account';
 import { Op } from 'sequelize';
 import { IUserRepository } from './Interfaces/IUserRepository';
-import { MovieFavorite } from '../models/MovieFavorite';
-import { WatchHistory } from '../models/WatchHistory';
 import { BaseRepository } from './BaseRepository';
 import { Service } from 'typedi';
 import { SubscriptionType } from '../models/SubscriptionType';
-import { Movie } from '../models/Movie';
-import { Episode } from '../models/Episode';
-import { Genre } from '../models/Genre';
-import { SubscriptionInfo } from '../models/SubscriptionInfo';
-import { Duration } from '../models/Duration';
 
 @Service()
 export class UserRepository
@@ -95,7 +88,6 @@ export class UserRepository
 
 	async searchUsers(
 		whereConditions: any,
-		whereAccConditions: any,
 		whereSubTypeCons: any,
 		page: number,
 		pageSize: number,
@@ -103,10 +95,13 @@ export class UserRepository
 		sortBy: string
 	): Promise<{
 		users: User[];
-		totalCount: number;
+		count: number;
 	}> {
 		try {
-			const users = await User.findAll({
+			console.log(sortField);
+			console.log(sortBy);
+
+			const { rows: users, count } = await User.findAndCountAll({
 				where: whereConditions,
 				offset: (page - 1) * pageSize,
 				limit: pageSize,
@@ -115,9 +110,6 @@ export class UserRepository
 						model: Account,
 						attributes: ['username'],
 						required: true,
-						...(Object.keys(whereAccConditions).length > 0
-							? { where: whereAccConditions }
-							: {}),
 					},
 					{
 						model: Subscription,
@@ -138,7 +130,7 @@ export class UserRepository
 				],
 				order: [[`${sortField}`, `${sortBy}`]],
 			});
-			return { users, totalCount: 1 };
+			return { users, count };
 		} catch (error: any) {
 			throw new Error('Không thể lấy danh sách user ' + error.message);
 		}
