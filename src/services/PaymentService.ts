@@ -1,11 +1,4 @@
-import { User } from '../models/User';
-import { Account } from '../models/Account';
-import Authentication from '../utils/Authentication';
-import { UserRepository } from '../repository/UserRepository';
-import { IAuthenticationService } from './Interfaces/IAuthenticationService';
 import Container, { Inject, Service } from 'typedi';
-import { IUserRepository } from '../repository/Interfaces/IUserRepository';
-import { Subscription } from '../models/Subscription';
 import { PaymentRepository } from '../repository/PaymentRepository';
 import { Payment } from '../models/Payment';
 import express, { Request } from 'express';
@@ -30,6 +23,7 @@ export class PaymentService implements IPaymentService {
 	addOrEditPayment = async (paymentData: Partial<Payment>) => {
 		try {
 			const { transactionId } = paymentData;
+			console.log(paymentData);
 			if (transactionId) {
 				const paymentToUpdate = await this.paymentRepository.findOneByCondition(
 					{
@@ -41,7 +35,6 @@ export class PaymentService implements IPaymentService {
 					return await this.paymentRepository.save(paymentToUpdate);
 				}
 			}
-
 			const newPayment = Payment.build(paymentData);
 			return await this.paymentRepository.save(newPayment);
 		} catch (error: any) {
@@ -78,6 +71,20 @@ export class PaymentService implements IPaymentService {
 		}
 	};
 
+	findOneByTransactionId = async (
+		transactionId: string
+	): Promise<Payment | null> => {
+		try {
+			const payment = await this.paymentRepository.findOnePaymentByCondition({
+				transactionId: transactionId,
+			});
+
+			return payment || null;
+		} catch (error: any) {
+			throw new Error(`Failed to find payment: ${error.message}`);
+		}
+	};
+
 	findAllPaymentByUserId = async (userId: number) => {
 		try {
 			return await this.paymentRepository.findByCondition({ user_id: userId });
@@ -86,14 +93,13 @@ export class PaymentService implements IPaymentService {
 		}
 	};
 
-
 	findOnePaymentNotCheckoutByUserId = async (userId: number) => {
 		try {
-			return await this.paymentRepository.findOnePaymentByCondition({ 
+			return await this.paymentRepository.findOnePaymentByCondition({
 				user_id: userId,
-				is_payment:false,
+				is_payment: false,
 				// deleteAt: null
-			 });
+			});
 		} catch (error: any) {
 			throw new Error(`Failed to find payment: ${error.message}`);
 		}

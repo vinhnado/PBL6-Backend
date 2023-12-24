@@ -1,5 +1,5 @@
 import { UserController } from '../controller/UserController';
-import { auth } from '../middleware/AuthMiddleware';
+import { auth, authAdmin } from '../middleware/AuthMiddleware';
 import BaseRoutes from '../route/Base/BaseRouter';
 class UserRoutes extends BaseRoutes {
 	constructor() {
@@ -10,8 +10,13 @@ class UserRoutes extends BaseRoutes {
 		this.router.get('/get-all-users', this.controller.searchUsers);
 		this.router.get('/get-user', this.controller.getUser);
 		this.router.get('/get-self-information', auth, this.controller.getSelfInfo);
-		this.router.put('/update-user', this.controller.createOrUpdateUser);
-		this.router.post('/create-user', this.controller.createOrUpdateUser);
+		this.router.get(
+			'/update-self-information',
+			auth,
+			this.controller.updateSelfInfo
+		);
+		this.router.put('/update-user', authAdmin, this.controller.updateUser);
+		this.router.post('/create-user', authAdmin, this.controller.createUser);
 		this.router.delete('/delete-user', this.controller.deleteUser);
 
 		this.router.get(

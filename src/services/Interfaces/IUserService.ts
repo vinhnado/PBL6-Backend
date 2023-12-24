@@ -11,7 +11,7 @@ export interface IUserService {
 		searchConditions: any,
 		page: number,
 		pageSize: number
-	) => Promise<{ users: User[]; totalCount: number }>;
+	) => Promise<{ users: User[]; count: number }>;
 	updateUser: (userData: Partial<User>) => Promise<void>;
 	deleteUser: (userId: number) => Promise<void>;
 	saveMovieFavorite: (userId: number, movieId: number) => Promise<void>;
@@ -32,5 +32,4 @@ export interface IUserService {
 	deleteWatchLater: (userId: number, movieId: number) => Promise<void>;
 	findAllWatchLater: (userId: number) => Promise<MovieDTO>;
 	getPresignUrlToUploadAvatar: (userId: number) => Promise<string>;
-
 }

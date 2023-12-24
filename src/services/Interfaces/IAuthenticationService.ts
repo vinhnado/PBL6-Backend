@@ -12,7 +12,7 @@ export interface IAuthenticationService {
 		email: string,
 		token?: string | null,
 		password?: string | null
-	) => Promise<string>;
+	) => Promise<any>;
 	changePassword: (
 		userId: number,
 		oldPassword: string,

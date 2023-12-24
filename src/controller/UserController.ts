@@ -34,7 +34,6 @@ export class UserController {
 
 	getSelfInfo = async (req: Request, res: Response) => {
 		try {
-			console.log(req.payload.userId);
 			const searchConditions = {
 				userId: req.payload.userId,
 			};
@@ -46,58 +45,90 @@ export class UserController {
 		}
 	};
 
-	searchUsers = async (req: Request, res: Response) => {
+	updateSelfInfo = async (req: Request, res: Response) => {
 		try {
-			let { username, email, gender } = req.query;
-			const page = Number(req.query.page) || 1; // Trang mặc định là 1
-			const pageSize = Number(req.query.pageSize) || 10; // Số lượng kết quả trên mỗi trang mặc định là 10
+			const userId = req.payload.userId;
 
-			const searchConditions = {
-				username,
-				email,
+			const { dateOfBirth, gender } = req.body;
+
+			const data: Partial<User> = {
+				userId,
+				dateOfBirth,
 				gender,
 			};
-			const { users, totalCount } = await this.userService.searchUsers(
-				searchConditions,
-				Number(page),
-				Number(pageSize)
-			);
-			// return res.json(users);
-			return res.json({
-				status: 'success',
-				totalCount: totalCount,
-				page: page,
-				pageSize: pageSize,
-				totalPage: Math.ceil(totalCount / pageSize),
-				data: users,
-			}) as any;
+			await this.userService.updateUser(data);
+
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully',
+			});
 		} catch (error: any) {
 			console.log(error);
-			return res.status(500).json({ error: 'Lỗi khi lấy danh sách user' });
+			return res.status(500).json({ error: 'Lỗi khi tìm kiếm user' });
 		}
 	};
 
-	createOrUpdateUser = async (req: Request, res: Response) => {
+	searchUsers = async (req: Request, res: Response) => {
 		try {
-			const { userId, email, dateOfBirth, gender, username, password } =
-				req.body;
+			const options = {
+				search: req.query.search?.toString(),
+				gender: req.query.gender?.toString(),
+				subscriptionType: req.query.subscriptionType?.toString(),
+				sort: req.query.sort?.toString(),
+				sortType: req.query.sortType?.toString(),
+			};
 
-			const data: Partial<User> = {};
-			if (userId) {
-				if (userId !== undefined) data.userId = userId;
-				if (email !== undefined) data.email = email;
-				if (dateOfBirth !== undefined) data.dateOfBirth = dateOfBirth;
-				if (gender !== undefined) data.gender = gender;
-				await this.userService.updateUser(data);
-			} else {
-				await this.authenticationService.register(
-					email,
-					dateOfBirth,
-					gender,
-					username,
-					password
-				);
-			}
+			const page = Number(req.query.page) || 1;
+			const pageSize = Number(req.query.pageSize) || 5;
+
+			const { users, count } = await this.userService.searchUsers(
+				options,
+				Number(page),
+				Number(pageSize)
+			);
+			return res.status(200).json({
+				message: 'Successful',
+				totalCount: count,
+				totalPage: Math.ceil(count / pageSize),
+				data: users,
+			});
+		} catch (error: any) {
+			console.log(error);
+			return res.status(500).json({ error: 'Lỗi khi lấy danh sách user.' });
+		}
+	};
+
+	updateUser = async (req: Request, res: Response) => {
+		try {
+			const { userId, email, dateOfBirth, gender } = req.body;
+
+			const data: Partial<User> = {
+				userId,
+				email,
+				dateOfBirth,
+				gender,
+			};
+			await this.userService.updateUser(data);
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully',
+			});
+		} catch (error: any) {
+			console.log(error);
+			return res.status(500).json({ error: 'Lỗi :' + error.message });
+		}
+	};
+
+	createUser = async (req: Request, res: Response) => {
+		try {
+			const { email, dateOfBirth, gender, username, password } = req.body;
+			await this.authenticationService.register(
+				email,
+				dateOfBirth,
+				gender,
+				username,
+				password
+			);
 			return res.status(200).json({
 				status: 'Ok!',
 				message: 'Successfully',
@@ -292,7 +323,7 @@ export class UserController {
 	getPresignUrlToUploadAvatar = async (req: Request, res: Response) => {
 		try {
 			const userId = req.payload.userId;
-			if(!userId){
+			if (!userId) {
 				return res.status(404).json({
 					message: 'Faild!, Login to update avatar',
 				});

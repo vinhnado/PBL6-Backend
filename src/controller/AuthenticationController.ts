@@ -76,6 +76,7 @@ export class AuthenticationController {
 
 	registerAdmin = async (req: Request, res: Response) => {
 		try {
+			console.log(req.payload.userId);
 			const { email, dateOfBirth, gender, username, password } = req.body;
 
 			await this.authenticationService.register(
@@ -153,7 +154,6 @@ export class AuthenticationController {
 				message: 'Success',
 			});
 		} catch (error: any) {
-			console.log(error);
 			if (error.name === 'OldPasswordError') {
 				return res.status(400).json({
 					status: 'Bad Request',
