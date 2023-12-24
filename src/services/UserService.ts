@@ -92,7 +92,7 @@ export class UserService implements IUserService {
 					'1': 1,
 					'2': 2,
 					'3': 3,
-					'2,3': [2, 3],
+					'0': [2, 3],
 				};
 
 				whereSubTypeCons['subscription_type_id'] = mapping[subscriptionType];

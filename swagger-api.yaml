@@ -1217,7 +1217,7 @@ paths:
                   format: int32
       security:
         - bearerAuth: []
-  /ratings:   
+  /ratings:
     put:
       tags:
         - rating
@@ -1489,7 +1489,7 @@ paths:
 
   /user/get-all-users:
     get:
-      summary: Get all users
+      summary: Get all users and search user
       parameters:
         - name: page
           in: query
@@ -1503,8 +1503,25 @@ paths:
           required: true
           schema:
             type: integer
+        - name: search
+          in: query
+          description: Search string for find user by username and email
+          schema:
+            type: string
+        - name: subscriptionType
+          in: query
+          description: Find Subscription Type (Value 0 for VIP,1 for guest, 2 3 for VipType)
+          schema:
+            type: string
+        - name: sortType
+          in: query
+          description: ASC or DESC by userId
+          schema:
+            type: string
       tags:
         - user
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Successful response
@@ -1514,6 +1531,8 @@ paths:
       summary: Get user by username, email, or userId
       tags:
         - user
+      security:
+        - bearerAuth: []
       parameters:
         - name: username
           in: query
@@ -1571,6 +1590,8 @@ paths:
       summary: Create a new user
       tags:
         - user
+      security:
+        - bearerAuth: []
       requestBody:
         description: User data for registration
         required: true
@@ -1767,7 +1788,7 @@ paths:
   /user/get-presign-url-to-upload-avatar:
     get:
       summary: Get presign to upload avatar
-      description : Get presign to upload avatar user to S3
+      description: Get presign to upload avatar user to S3
       tags:
         - user
       security:
@@ -1806,10 +1827,10 @@ paths:
       security:
         - bearerAuth: []
   /user/reserves/{movieId}:
-    delete: 
+    delete:
       tags:
         - user
-      summary: Delete reserve movies of user   
+      summary: Delete reserve movies of user
       parameters:
         - name: movieId
           in: path
@@ -1823,7 +1844,7 @@ paths:
         '200':
           description: successful operation
       security:
-        - bearerAuth: []   
+        - bearerAuth: []
   /individuals/actors:
     get:
       summary: Get actors
@@ -2359,9 +2380,9 @@ paths:
               type: boolean
               enum:
                 - Unpaid
-                - Completed   
-                - Processing        
-                - Failed        
+                - Completed
+                - Processing
+                - Failed
         - name: subscriptionInfoId
           in: query
           description: Id of subscription to find
@@ -2389,7 +2410,7 @@ paths:
           schema:
             type: string
           description: End date
-          example: 2024-01-01      
+          example: 2024-01-01
         - name: page
           in: query
           description: Use to pagination, default page = 1

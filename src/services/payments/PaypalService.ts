@@ -64,7 +64,7 @@ export class PaypalService {
 
 			const partialObject: Partial<Payment> = {
 				type: 'paypal',
-				price: Number(price),
+				price: Number(priceString),
 				transactionId: id,
 				status: 'Not checkout',
 				userId: userId,
