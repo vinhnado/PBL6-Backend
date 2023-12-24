@@ -1520,6 +1520,8 @@ paths:
             type: string
       tags:
         - user
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Successful response
@@ -1529,6 +1531,8 @@ paths:
       summary: Get user by username, email, or userId
       tags:
         - user
+      security:
+        - bearerAuth: []
       parameters:
         - name: username
           in: query
@@ -1586,6 +1590,8 @@ paths:
       summary: Create a new user
       tags:
         - user
+      security:
+        - bearerAuth: []
       requestBody:
         description: User data for registration
         required: true
@@ -1821,10 +1827,10 @@ paths:
       security:
         - bearerAuth: []
   /user/reserves/{movieId}:
-    delete: 
+    delete:
       tags:
         - user
-      summary: Delete reserve movies of user   
+      summary: Delete reserve movies of user
       parameters:
         - name: movieId
           in: path
@@ -1838,7 +1844,7 @@ paths:
         '200':
           description: successful operation
       security:
-        - bearerAuth: []   
+        - bearerAuth: []
   /individuals/actors:
     get:
       summary: Get actors
