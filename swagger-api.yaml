@@ -1216,7 +1216,7 @@ paths:
                   format: int32
       security:
         - bearerAuth: []
-  /ratings:   
+  /ratings:
     put:
       tags:
         - rating
@@ -1488,7 +1488,7 @@ paths:
 
   /user/get-all-users:
     get:
-      summary: Get all users
+      summary: Get all users and search user
       parameters:
         - name: page
           in: query
@@ -1502,6 +1502,21 @@ paths:
           required: true
           schema:
             type: integer
+        - name: search
+          in: query
+          description: Search string for find user by username and email
+          schema:
+            type: string
+        - name: subscriptionType
+          in: query
+          description: Find Subscription Type (Value 0 for VIP,1 for guest, 2 3 for VipType)
+          schema:
+            type: string
+        - name: sortType
+          in: query
+          description: ASC or DESC by userId
+          schema:
+            type: string
       tags:
         - user
       responses:
@@ -1766,7 +1781,7 @@ paths:
   /user/get-presign-url-to-upload-avatar:
     get:
       summary: Get presign to upload avatar
-      description : Get presign to upload avatar user to S3
+      description: Get presign to upload avatar user to S3
       tags:
         - user
       security:
@@ -2310,9 +2325,9 @@ paths:
               type: boolean
               enum:
                 - Unpaid
-                - Completed   
-                - Processing        
-                - Failed        
+                - Completed
+                - Processing
+                - Failed
         - name: subscriptionInfoId
           in: query
           description: Id of subscription to find
@@ -2340,7 +2355,7 @@ paths:
           schema:
             type: string
           description: End date
-          example: 2024-01-01      
+          example: 2024-01-01
         - name: page
           in: query
           description: Use to pagination, default page = 1
