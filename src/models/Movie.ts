@@ -23,6 +23,7 @@ import { WatchHistory } from './WatchHistory';
 import { WatchLater } from './WatchLater';
 import { Home } from './Home';
 import { Rating } from './Rating';
+import { Reserve } from './Reserve';
 // import {ListTrend} from "./ListTrend";
 
 @Table({
@@ -148,4 +149,7 @@ export class Movie extends Model {
 
 	@BelongsToMany(() => User, () => Rating)
 	ratings!: User[];
+
+	@BelongsToMany(() => User, () => Reserve)
+	reserves!: User[];
 }

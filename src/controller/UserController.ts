@@ -6,14 +6,18 @@ import { UserService } from './../services/UserService';
 import { Request, Response } from 'express';
 
 import Container from 'typedi';
+import { MovieService } from '../services/MovieService';
+import { IMovieService } from '../services/Interfaces/IMovieService';
 
 export class UserController {
 	private userService: IUserService;
 	private authenticationService: IAuthenticationService;
+	private movieService: IMovieService;
 
 	constructor() {
 		this.userService = Container.get(UserService);
 		this.authenticationService = Container.get(AuthenticationService);
+		this.movieService = Container.get(MovieService);
 	}
 
 	getUser = async (req: Request, res: Response) => {
@@ -341,4 +345,64 @@ export class UserController {
 			return res.status(500).json({ error: 'Server error' });
 		}
 	};
+
+	getReserveMovieOfUser= async(req: Request, res: Response) => {
+		try {
+			const userId = req.payload.userId;
+			const reserves = await this.movieService.getReserveMovieOfUser(Number(userId));
+			res.status(200).json({
+				message: "successful",
+				data:reserves
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
+
+	getMoviesReserveOfUser= async(req: Request, res: Response) => {
+		try {
+			const userId = req.payload.userId;
+			const reserves = await this.movieService.getMoviesReserveOfUser(Number(userId));
+			res.status(200).json({
+				message: "successful",
+				data:reserves
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
+
+	addReserve= async(req: Request, res: Response) => {
+		try {
+			const reserves = await this.movieService.addReserve(req);
+			res.status(200).json({
+				message: "successful",
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
+
+	deleteReserve= async(req: Request, res: Response) => {
+		try {
+			const reserves = await this.movieService.deleteReserve(req);
+			res.status(200).json({
+				message: "successful",
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
 }
