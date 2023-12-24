@@ -21,6 +21,7 @@ import { Payment } from './Payment';
 import { SubComment } from './SubComment';
 import { Comment } from './Comment';
 import { Rating } from './Rating';
+import { Reserve } from './Reserve';
 
 @Table({
 	tableName: User.USER_TABLE_NAME,
@@ -120,6 +121,12 @@ export class User extends Model {
 		as: 'watchHistoryList',
 	})
 	watchHistoryList!: Episode[];
+
+	@BelongsToMany(() => Movie, {
+		through: () => Reserve,
+		as: 'reserveList',
+	})
+	reserveList!: Movie[];
 
 	@BelongsToMany(() => Movie, {
 		through: () => WatchLater,

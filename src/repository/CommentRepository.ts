@@ -40,7 +40,8 @@ export class CommentRepository extends BaseRepository<Comment> implements IComme
                                 model: User,
                                 attributes: ['user_id','email', 'gender', 'avatar_url'],
                             },
-                        ]
+                        ],
+                        order: [['createdAt', 'DESC']],
                     },
                 ],
                 limit: pageSize, // Số lượng kết quả trên mỗi trang
