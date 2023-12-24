@@ -365,7 +365,7 @@ module.exports = {
 			{
 				//22
 				title:
-					"Liên Minh Công Lý Của Zack Snyder - Zack Snyder's Justice League",
+					"Liên Minh Công Lý Của Zack Snyder",
 				description:
 					'“Zack Snyders Justice League” (2021) là một trong  những bộ phim khoa học viễn tưởng hay nhất Hollywood với dàn diễn viên siêu chất lượng. Ngoài các tình tiết “chất” như các tựa phim siêu anh hùng khác, “Liên minh công lý của Zack Snyder” còn bổ sung thêm một số chi tiết trong phim mới mẻ và chăm chút nhiều về khâu âm thanh giúp cho các fan cảm nhận được độ chân thực của phim. Nếu bạn là fan của các siêu anh hùng như Superman, Batman, Wonder Woman… thì không nên bỏ qua phim này nhé.',
 				release_date: new Date('2021-01-01'),
@@ -849,7 +849,7 @@ module.exports = {
 			},
 			{
 				//49
-				title: "Pororo: Cuộc Phiêu Lưu Đến Dinh Thự Rồng - Pororo: Dragon Castle Adventure",
+				title: "Pororo: Cuộc Phiêu Lưu Đến Dinh Thự Rồng",
 				description:"Chim cánh cụt đáng yêu Pororo sẽ trở lại vào dịp Tết này với một chuyến phiêu lưu mới. Lần này là cuộc phiêu lưu đến Dinh Thự Rồng. Tên phù thủy xấu xa Gad đang tìm cách đánh cắp 'Trái tim Rồng', một viên ngọc được phong ấn bằng sức mạnh to lớn của vua rồng nhỏ Arthur. Trong khi đó, Crong, người đã vô tình hấp thụ sức mạnh của 'Trái tim rồng', biến thành một Crong khổng lồ và khiến Pororo và những người bạn của cậu gặp nguy hiểm. Arthur, Pororo và những người bạn phải đến Dinh Thự Rồng tham gia vào trận chiến để lấy lại sức mạnh từ tay phù thủy độc ác. Liệu Pororo có thể bảo vệ Dinh Thự Rồng và cứu lấy những người bạn của mình?",
 				release_date: new Date(2024,2,2),
 				nation: 'Nhật Bản',
@@ -917,7 +917,7 @@ module.exports = {
 			},
 			{
 				//53
-				title: "Cuộc Phiêu Lưu Của Mr. Peabody & Cậu Bé Sherman - Mr. Peabody & Sherman",
+				title: "Cuộc Phiêu Lưu Của Mr. Peabody & Cậu Bé Sherman",
 				description:'Cuộc Phiêu Lưu Của Mr. Peabody & Cậu Bé Sherman - Mr. Peabody & Sherman kể về ông Peabody - người được xem là một doanh nhân vĩ đại, nhà khoa học, nhà phát minh, tay ăn uống tài',
 				release_date: new Date(2024,2,2),
 				nation: 'Mỹ',
