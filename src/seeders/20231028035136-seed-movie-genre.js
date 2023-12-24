@@ -1272,6 +1272,30 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
+			{
+				movie_id: 63,
+				genre_id: 3,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 63,
+				genre_id: 6,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 63,
+				genre_id: 1,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				movie_id: 63,
+				genre_id: 10,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
 		]);
 	},
 

@@ -5,7 +5,7 @@ module.exports = {
 	async up(queryInterface, Sequelize) {
 		// Generate seed data
 		const seedData = [];
-		for (let movie_id = 1; movie_id <= 62; movie_id++) {
+		for (let movie_id = 1; movie_id <= 63; movie_id++) {
 			// Each movie will have at least one actor
 			const director_id = Math.floor(Math.random() * 20) + 1;
 			const createdAt = new Date();
