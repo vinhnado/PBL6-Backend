@@ -663,10 +663,11 @@ paths:
           description: successful operation
       security:
         - bearerAuth: []
+
   /episode/{id}:
     get:
       tags:
-        - episode
+        - movie
       summary: Returns details episode of movie
       description: Returns details episode of movie
       parameters:
@@ -1774,7 +1775,55 @@ paths:
       responses:
         '200':
           description: Successful response
-
+  /user/reserves:
+    get:
+      tags:
+        - user
+      summary: Returns reserve movies of user
+      description: Returns reserve movies of user
+      responses:
+        '200':
+          description: successful operation
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - user
+      summary: Add reserve movies of user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                movieId:
+                  type: integer
+                  format: int64
+                  default: 1
+      responses:
+        '200':
+          description: successful operation
+      security:
+        - bearerAuth: []
+  /user/reserves/{movieId}:
+    delete: 
+      tags:
+        - user
+      summary: Delete reserve movies of user   
+      parameters:
+        - name: movieId
+          in: path
+          description: commentId to delete
+          required: true
+          explode: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+      security:
+        - bearerAuth: []   
   /individuals/actors:
     get:
       summary: Get actors
