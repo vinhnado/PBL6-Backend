@@ -68,7 +68,8 @@ export class Mail {
 		try {
 			const replacements = {
 				username: username,
-				replaceLink: 'https://example.com/active-user/' + token,
+				replaceLink:
+					'https://example.com/active-user?token=' + token + '&email=' + to,
 			};
 
 			let htmlContent = fs.readFileSync('src/utils/ActiveAccount.html', 'utf8');

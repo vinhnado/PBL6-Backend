@@ -48,19 +48,7 @@ export class AuthenticationController {
 				message: 'Successfully registerd users!',
 			});
 		} catch (error: any) {
-			if (
-				error instanceof UsernameValidDuplicate ||
-				error instanceof EmailValidDuplicate
-			) {
-				return res.status(error.statusCode).json({
-					status: 'Conflict',
-					message: error.message,
-				});
-			}
-			return res.status(500).json({
-				status: 'Internal server Error!',
-				message: 'Internal server Error!',
-			});
+			handleErrorController(error, res);
 		}
 	};
 
@@ -82,23 +70,7 @@ export class AuthenticationController {
 				message: 'Successfully registered admin!',
 			});
 		} catch (error: any) {
-			if (error.name === 'UsernameValidError') {
-				return res.status(400).json({
-					status: 'Bad Request',
-					message: error.message,
-				});
-			}
-			if (error.name === 'EmailValidError') {
-				return res.status(400).json({
-					status: 'Bad Request',
-					message: error.message,
-				});
-			}
-
-			return res.status(500).json({
-				status: 'Internal server Error!',
-				message: 'Internal server Error!',
-			});
+			handleErrorController(error, res);
 		}
 	};
 
@@ -121,10 +93,7 @@ export class AuthenticationController {
 				message: data,
 			});
 		} catch (error) {
-			return res.status(500).json({
-				status: 'Internal server Error!',
-				message: 'Internal server Error!',
-			});
+			handleErrorController(error, res);
 		}
 	};
 
@@ -143,17 +112,7 @@ export class AuthenticationController {
 				message: 'Success',
 			});
 		} catch (error: any) {
-			if (error.name === 'OldPasswordError') {
-				return res.status(400).json({
-					status: 'Bad Request',
-					message: error.message,
-				});
-			}
-
-			return res.status(500).json({
-				status: 'Internal server Error!',
-				message: 'Internal server Error!',
-			});
+			handleErrorController(error, res);
 		}
 	};
 
@@ -167,11 +126,7 @@ export class AuthenticationController {
 				message: data,
 			});
 		} catch (error) {
-			console.log(error);
-			return res.status(500).json({
-				status: 'Internal server Error!',
-				message: 'Internal server Error!',
-			});
+			handleErrorController(error, res);
 		}
 	};
 
@@ -195,11 +150,7 @@ export class AuthenticationController {
 				result: res_token,
 			});
 		} catch (error) {
-			console.log(error);
-			return res.status(500).json({
-				status: 'Internal server Error!',
-				message: 'Internal server Error!',
-			});
+			handleErrorController(error, res);
 		}
 	};
 
@@ -239,11 +190,7 @@ export class AuthenticationController {
 				});
 			}
 		} catch (error) {
-			console.log(error);
-			return res.status(500).json({
-				status: 'Internal server Error!',
-				message: 'Internal server Error!',
-			});
+			handleErrorController(error, res);
 		}
 	};
 }
