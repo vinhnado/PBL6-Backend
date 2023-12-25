@@ -71,6 +71,12 @@ export class ServerError extends CustomError {
 	}
 }
 
+export class EmptyDataError extends CustomError {
+	constructor(message: string = 'Empty data') {
+		super(message, 400, 'Bad Request');
+	}
+}
+
 export function handleErrorController(error: any, res: Response) {
 	const status = error.statusCode || 500;
 	const statusText = error.statusText || 'Internal Server Error';
