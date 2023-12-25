@@ -32,3 +32,17 @@ export class TokenError extends Error {
 		this.name = 'TokenError';
 	}
 }
+
+export class PasswordNotMatch extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = 'TokenError';
+	}
+}
+
+export class NotFound extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = 'NotFound';
+	}
+}
