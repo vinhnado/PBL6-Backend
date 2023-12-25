@@ -9,7 +9,7 @@ import {
 	validategetPresignUrlToUpload
 } from '../validators/MovieValidator';
 import { validate } from '../validators/Validator';
-import { auth, authUser } from '../middleware/AuthMiddleware';
+import { auth, authAdmin, authUser } from '../middleware/AuthMiddleware';
 class MovieRoutes extends BaseRoutes {
 	constructor() {
 		super(new MovieController());
@@ -22,23 +22,23 @@ class MovieRoutes extends BaseRoutes {
 		this.router.get('/home/trending', this.controller.getMoviesTrending);
 		this.router.get('/home/upcoming', this.controller.getMoviesUpcoming);
 		this.router.get('/home/vip', this.controller.getMoviesForVip);
-		this.router.delete('/', validateDeleteMovieById, validate, this.controller.deleteMovieById);
-		this.router.post('/', validateCreateMovie, validate, this.controller.createMovie);
-		this.router.put('/:id', validateUpdateMovie, validate, this.controller.updateMovie);
+		this.router.delete('/',authAdmin, validateDeleteMovieById, validate, this.controller.deleteMovieById);
+		this.router.post('/',authAdmin, validateCreateMovie, validate, this.controller.createMovie);
+		this.router.put('/:id',authAdmin, validateUpdateMovie, validate, this.controller.updateMovie);
 		this.router.get('/recommend/get',authUser, this.controller.getMoviesRecommender);
 		this.router.get('/recommend/test',auth, this.controller.test);
 
 		this.router.get('/get/nations', this.controller.getAllNations);
 		this.router.get('/get/years', this.controller.getAllReleaseYears);
-		this.router.get('/get/presign-url', validategetPresignUrlToUpload, validate, this.controller.getPresignUrlToUpload);
-		this.router.post('/movie-actor', this.controller.addActorForMovie);
-		this.router.delete('/movie-actor', this.controller.deleteActorOfMovie);
+		this.router.get('/get/presign-url',authAdmin, validategetPresignUrlToUpload, validate, this.controller.getPresignUrlToUpload);
+		this.router.post('/movie-actor',authAdmin, this.controller.addActorForMovie);
+		this.router.delete('/movie-actor',authAdmin, this.controller.deleteActorOfMovie);
 
-		this.router.post('/movie-director', this.controller.addDirectorsForMovie);
-		this.router.delete('/movie-director', this.controller.deleteDirectorsOfMovie);
+		this.router.post('/movie-director',authAdmin, this.controller.addDirectorsForMovie);
+		this.router.delete('/movie-director',authAdmin, this.controller.deleteDirectorsOfMovie);
 
-		this.router.post('/movie-genre', this.controller.addGenresForMovie);
-		this.router.delete('/movie-genre', this.controller.deleteGenresOfMovie);
+		this.router.post('/movie-genre',authAdmin, this.controller.addGenresForMovie);
+		this.router.delete('/movie-genre',authAdmin, this.controller.deleteGenresOfMovie);
 	}
 }
 
