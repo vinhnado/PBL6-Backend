@@ -18,3 +18,10 @@ export class OldPasswordError extends Error {
 		this.name = 'OldPasswordError';
 	}
 }
+
+export class NotActiveAccountError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = 'NotActiveAccountError';
+	}
+}

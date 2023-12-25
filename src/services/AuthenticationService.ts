@@ -44,10 +44,11 @@ export class AuthenticationService implements IAuthenticationService {
 			password,
 			user.account.password
 		);
-		console.log(compare);
 
 		// generate token
 		if (compare) {
+			if (!user.active) {
+			}
 			return {
 				accessToken: Authentication.generateAccessToken(
 					user.userId,
