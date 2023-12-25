@@ -1,48 +1,57 @@
-export class UsernameValidError extends Error {
-	constructor(message: string) {
+export class CustomError extends Error {
+	public statusCode: number;
+
+	constructor(message: string, statusCode: number) {
 		super(message);
-		this.name = 'UsernameValidError';
+		this.name = this.constructor.name;
+		this.statusCode = statusCode;
 	}
 }
 
-export class EmailValidError extends Error {
+export class UsernameValidError extends CustomError {
 	constructor(message: string) {
-		super(message);
-		this.name = 'EmailValidError';
+		super(message, 400); // Bad Request
 	}
 }
 
-export class OldPasswordError extends Error {
+export class EmailValidError extends CustomError {
 	constructor(message: string) {
-		super(message);
-		this.name = 'OldPasswordError';
+		super(message, 400); // Bad Request
 	}
 }
 
-export class NotActiveAccountError extends Error {
+export class OldPasswordError extends CustomError {
 	constructor(message: string) {
-		super(message);
-		this.name = 'NotActiveAccountError';
+		super(message, 400); // Bad Request
 	}
 }
 
-export class TokenError extends Error {
+export class NotActiveAccountError extends CustomError {
 	constructor(message: string) {
-		super(message);
-		this.name = 'TokenError';
+		super(message, 401);
 	}
 }
 
-export class PasswordNotMatch extends Error {
+export class TokenError extends CustomError {
 	constructor(message: string) {
-		super(message);
-		this.name = 'TokenError';
+		super(message, 401);
 	}
 }
 
-export class NotFound extends Error {
+export class PasswordNotMatch extends CustomError {
 	constructor(message: string) {
-		super(message);
-		this.name = 'NotFound';
+		super(message, 400);
+	}
+}
+
+export class NotFound extends CustomError {
+	constructor(message: string) {
+		super(message, 404);
+	}
+}
+
+export class NotEnoughSubscription extends CustomError {
+	constructor(message: string) {
+		super(message, 403);
 	}
 }
