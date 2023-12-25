@@ -220,7 +220,9 @@ export class MovieService implements IMovieService {
 
 	async getAllMovies(): Promise<Movie[]> {
 		try {
-			return await this.movieRepository.getAllMovies();
+			
+			 const movies= await this.movieRepository.getAllMovies();
+			 return movies;
 		} catch (error) {
 			console.log(error);
 			throw(error);

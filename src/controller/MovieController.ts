@@ -83,11 +83,53 @@ export class MovieController {
 	getAllMovies = async (req: Request, res: Response) => {
 		try {
 			const movies = await this.movieService.getAllMovies();
-			return res.json(movies);
+			let genresMap: { [key: number]: string } = {}; // Thêm chữ ký chỉ số
+			let text = '';
+			for (const movie of movies) {
+				let genres ='';
+				let actors ='';
+				let directors ='';
+				let infors = '';
+				let isSeries = 'Ngắn tập';
+				if(movie.isSeries){
+					isSeries = 'Dài tập';
+				}
+				infors = infors+ 'MovieID: '+movie.movieId+'. ';
+				infors = infors+ ' Tên Phim: '+movie.title+'. ';
+				infors = infors+ ' Mô tả: '+movie.description+'. ';
+				infors = infors+ ' Quốc gia: '+movie.nation+'. ';
+				infors = infors+ ' Ngày phát hành: '+movie.releaseDate+'. ';
+				infors = infors+ ' Đánh giá trung bình: '+movie.averageRating+'. ';
+				infors = infors+ ' Phim: '+isSeries+'. ';
+				infors = infors+ ' Số lượt yêu thích: '+movie.numFavorite+'. ';
+
+
+				for (const genre of movie.genres) {
+					genres= genres+', '+genre.name;
+				}
+				for (const actor of movie.actors) {
+					actors= actors+', '+actor.name;
+				}
+				for (const director of movie.directors) {
+					directors= directors+', '+director.name;
+				}
+				infors = infors+ ' Thể loại: '+genres+'. ';
+				infors = infors+ ' Diễn viên: '+actors+'. ';
+				infors = infors+ ' Đạo diễn: '+directors+'. ';
+
+				genresMap[movie.movieId] = infors;
+			}
+			return res.json({
+				message: 'successful',
+				genres_map: genresMap,
+				movies: movies
+			});
 		} catch (error) {
 			return res.status(500).json({ error: 'Không thể lấy danh sách phim' });
 		}
 	};
+	
+	
 
 	deleteMovieById = async (req: Request, res: Response) => {
 		const { id } = req.query;

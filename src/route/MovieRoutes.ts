@@ -18,7 +18,7 @@ class MovieRoutes extends BaseRoutes {
 		this.router.get('/', validateSearchMovies, validate, this.controller.searchMovies);
 		this.router.get('/get/qrcode', this.controller.getQRCodeOfMovie);
 		this.router.get('/:id',authUser, validateGetMovieById, validate, this.controller.getMovieById);
-		this.router.get('/all', this.controller.getAllMovies);
+		this.router.get('/data-chat/all-movies', this.controller.getAllMovies);
 		this.router.get('/home/trending', this.controller.getMoviesTrending);
 		this.router.get('/home/upcoming', this.controller.getMoviesUpcoming);
 		this.router.get('/home/vip', this.controller.getMoviesForVip);
