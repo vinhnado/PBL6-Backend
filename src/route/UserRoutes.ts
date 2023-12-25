@@ -1,6 +1,7 @@
 import { UserController } from '../controller/UserController';
 import { auth, authAdmin } from '../middleware/AuthMiddleware';
 import BaseRoutes from '../route/Base/BaseRouter';
+import { validateGetUserWithCustom } from '../validators/UserValidator';
 class UserRoutes extends BaseRoutes {
 	constructor() {
 		super(new UserController());
@@ -8,7 +9,12 @@ class UserRoutes extends BaseRoutes {
 
 	public routes(): void {
 		this.router.get('/get-all-users', authAdmin, this.controller.searchUsers);
-		this.router.get('/get-user', authAdmin, this.controller.getUser);
+		this.router.get(
+			'/get-user',
+			authAdmin,
+			validateGetUserWithCustom,
+			this.controller.getUser
+		);
 		this.router.get('/get-self-information', auth, this.controller.getSelfInfo);
 		this.router.get(
 			'/update-self-information',
