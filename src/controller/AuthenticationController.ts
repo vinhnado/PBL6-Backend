@@ -1,4 +1,8 @@
-import { EmailValidError, UsernameValidError } from './../error/CustomErrors';
+import {
+	EmailValidDuplicate,
+	UsernameValidDuplicate,
+	handleError,
+} from './../error/CustomErrors';
 import { Request, Response } from 'express';
 import Container, { Inject, Service } from 'typedi';
 import { IAuthenticationService } from '../services/Interfaces/IAuthenticationService';
@@ -16,12 +20,6 @@ export class AuthenticationController {
 		try {
 			const { username, password } = req.body;
 			const token = await this.authenticationService.login(username, password);
-			if (!token) {
-				return res.status(400).json({
-					status: 'Bad Request!',
-					message: 'Wrong email or password!',
-				});
-			}
 			const res_token = { type: 'Bearer', token: token };
 			return res.status(200).json({
 				status: 'Ok!',
@@ -29,11 +27,7 @@ export class AuthenticationController {
 				result: res_token,
 			});
 		} catch (error) {
-			console.log(error);
-			return res.status(500).json({
-				status: 'Internal server Error!',
-				message: 'Internal server Error!',
-			});
+			handleError(error, res);
 		}
 	};
 
@@ -54,19 +48,15 @@ export class AuthenticationController {
 				message: 'Successfully registerd users!',
 			});
 		} catch (error: any) {
-			if (error.name === 'UsernameValidError') {
-				return res.status(400).json({
-					status: 'Bad Request',
+			if (
+				error instanceof UsernameValidDuplicate ||
+				error instanceof EmailValidDuplicate
+			) {
+				return res.status(error.statusCode).json({
+					status: 'Conflict',
 					message: error.message,
 				});
 			}
-			if (error.name === 'EmailValidError') {
-				return res.status(400).json({
-					status: 'Bad Request',
-					message: error.message,
-				});
-			}
-
 			return res.status(500).json({
 				status: 'Internal server Error!',
 				message: 'Internal server Error!',
@@ -76,7 +66,6 @@ export class AuthenticationController {
 
 	registerAdmin = async (req: Request, res: Response) => {
 		try {
-			console.log(req.payload.userId);
 			const { email, dateOfBirth, gender, username, password } = req.body;
 
 			await this.authenticationService.register(

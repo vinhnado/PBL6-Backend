@@ -1,57 +1,77 @@
+import { Request, Response, NextFunction } from 'express';
 export class CustomError extends Error {
 	public statusCode: number;
+	public statusText: string;
 
-	constructor(message: string, statusCode: number) {
+	constructor(message: string, statusCode: number, statusText: string) {
 		super(message);
 		this.name = this.constructor.name;
 		this.statusCode = statusCode;
+		this.statusText = statusText;
 	}
 }
 
-export class UsernameValidError extends CustomError {
+export class UsernameValidDuplicate extends CustomError {
 	constructor(message: string) {
-		super(message, 400); // Bad Request
+		super(message, 409, 'Conflict');
 	}
 }
 
-export class EmailValidError extends CustomError {
+export class EmailValidDuplicate extends CustomError {
 	constructor(message: string) {
-		super(message, 400); // Bad Request
+		super(message, 409, 'Conflict');
 	}
 }
 
 export class OldPasswordError extends CustomError {
 	constructor(message: string) {
-		super(message, 400); // Bad Request
+		super(message, 400, 'Bad Request');
 	}
 }
 
 export class NotActiveAccountError extends CustomError {
 	constructor(message: string) {
-		super(message, 401);
+		super(message, 401, 'Unauthorized');
 	}
 }
 
 export class TokenError extends CustomError {
 	constructor(message: string) {
-		super(message, 401);
+		super(message, 401, 'Unauthorized');
 	}
 }
 
 export class PasswordNotMatch extends CustomError {
 	constructor(message: string) {
-		super(message, 400);
+		super(message, 400, 'Bad Request');
 	}
 }
 
 export class NotFound extends CustomError {
 	constructor(message: string) {
-		super(message, 404);
+		super(message, 404, 'Not Found');
 	}
 }
 
 export class NotEnoughSubscription extends CustomError {
 	constructor(message: string) {
-		super(message, 403);
+		super(message, 403, 'Forbidden');
 	}
+}
+
+export class ServerError extends CustomError {
+	constructor(message: string) {
+		super(message, 500, 'Internal Server Error');
+	}
+}
+
+export function handleError(error: any, res: Response) {
+	const status = error.statusCode || 500;
+	const statusText = error.statusText || 'Internal Server Error';
+	const message = error.message || 'Something went wrong';
+
+	res.status(status).json({
+		status: statusText,
+		message: message,
+	});
 }
