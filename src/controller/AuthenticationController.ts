@@ -1,7 +1,7 @@
 import {
 	EmailValidDuplicate,
 	UsernameValidDuplicate,
-	handleError,
+	handleErrorController,
 } from './../error/CustomErrors';
 import { Request, Response } from 'express';
 import Container, { Inject, Service } from 'typedi';
@@ -27,7 +27,7 @@ export class AuthenticationController {
 				result: res_token,
 			});
 		} catch (error) {
-			handleError(error, res);
+			handleErrorController(error, res);
 		}
 	};
 

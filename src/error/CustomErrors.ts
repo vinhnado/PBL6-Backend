@@ -41,6 +41,12 @@ export class TokenError extends CustomError {
 	}
 }
 
+export class InvalidUserNameOrPassword extends CustomError {
+	constructor(message: string) {
+		super(message, 401, 'Unauthorized');
+	}
+}
+
 export class PasswordNotMatch extends CustomError {
 	constructor(message: string) {
 		super(message, 400, 'Bad Request');
@@ -65,7 +71,7 @@ export class ServerError extends CustomError {
 	}
 }
 
-export function handleError(error: any, res: Response) {
+export function handleErrorController(error: any, res: Response) {
 	const status = error.statusCode || 500;
 	const statusText = error.statusText || 'Internal Server Error';
 	const message = error.message || 'Something went wrong';
@@ -74,4 +80,12 @@ export function handleError(error: any, res: Response) {
 		status: statusText,
 		message: message,
 	});
+}
+
+export function handleErrorFunction(error: any): never {
+	if (error instanceof CustomError) {
+		throw error;
+	} else {
+		throw new ServerError(error.message);
+	}
 }

@@ -12,12 +12,14 @@ import { Token } from '../utils/Token';
 import {
 	CustomError,
 	EmailValidDuplicate,
+	InvalidUserNameOrPassword,
 	NotActiveAccountError,
 	NotFound,
 	OldPasswordError,
 	PasswordNotMatch,
 	ServerError,
 	UsernameValidDuplicate,
+	handleErrorFunction,
 } from '../error/CustomErrors';
 import { IAccountRepository } from '../repository/Interfaces/IAccountRepository';
 
@@ -43,7 +45,7 @@ export class AuthenticationService implements IAuthenticationService {
 			const user = await this.userRepository.findOneUser(searchConditions);
 
 			if (!user) {
-				throw new NotFound('User not found');
+				throw new InvalidUserNameOrPassword('Invalid username or password');
 			}
 			// check password
 			let compare = await Authentication.passwordCompare(
@@ -68,14 +70,10 @@ export class AuthenticationService implements IAuthenticationService {
 					),
 				};
 			} else {
-				throw new PasswordNotMatch('Password does not match');
+				throw new InvalidUserNameOrPassword('Invalid username or password');
 			}
 		} catch (error: any) {
-			if (error instanceof CustomError) {
-				throw error;
-			} else {
-				throw new ServerError(error.message);
-			}
+			handleErrorFunction(error);
 		}
 	};
 
@@ -119,14 +117,7 @@ export class AuthenticationService implements IAuthenticationService {
 			);
 			return 'Create user successfully';
 		} catch (error: any) {
-			if (
-				error instanceof UsernameValidDuplicate ||
-				error instanceof EmailValidDuplicate
-			) {
-				throw error;
-			} else {
-				throw new Error('Error registering user: ' + error.message);
-			}
+			handleErrorFunction(error);
 		}
 	};
 
@@ -164,7 +155,7 @@ export class AuthenticationService implements IAuthenticationService {
 				}
 			}
 		} catch (error: any) {
-			throw new Error('Error!' + error.message);
+			handleErrorFunction(error);
 		}
 	};
 
@@ -198,11 +189,7 @@ export class AuthenticationService implements IAuthenticationService {
 				throw new OldPasswordError('Wrong old password');
 			}
 		} catch (error: any) {
-			if (error instanceof OldPasswordError) {
-				throw error;
-			} else {
-				throw new Error('Error change password: ' + error.message);
-			}
+			handleErrorFunction(error);
 		}
 	};
 
@@ -232,7 +219,7 @@ export class AuthenticationService implements IAuthenticationService {
 				}
 			}
 		} catch (error: any) {
-			throw new Error('Error!' + error.message);
+			handleErrorFunction(error);
 		}
 	};
 
@@ -259,7 +246,7 @@ export class AuthenticationService implements IAuthenticationService {
 				return '';
 			}
 		} catch (error: any) {
-			throw new Error('Error!' + error.message);
+			handleErrorFunction(error);
 		}
 	};
 
@@ -274,7 +261,7 @@ export class AuthenticationService implements IAuthenticationService {
 				return false;
 			}
 		} catch (error: any) {
-			throw new Error('Error!' + error.message);
+			handleErrorFunction(error);
 		}
 	};
 
@@ -289,7 +276,11 @@ export class AuthenticationService implements IAuthenticationService {
 				return false;
 			}
 		} catch (error: any) {
-			throw new Error('Error!' + error.message);
+			if (error instanceof CustomError) {
+				throw error;
+			} else {
+				throw new ServerError(error.message);
+			}
 		}
 	};
 }
