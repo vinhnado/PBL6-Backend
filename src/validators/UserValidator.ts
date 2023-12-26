@@ -1,44 +1,13 @@
 import {
-	ValidationChain,
 	body,
-	param,
 	query,
-	validationResult,
 } from 'express-validator';
 
-import { Request, Response, NextFunction } from 'express';
-import { EmptyDataError, handleErrorController } from '../error/CustomErrors';
-
-const customValidation = (
-	req: Request,
-	res: Response,
-	next: NextFunction
-): void | Response<any> => {
-	const validationResults = validationResult(req).array();
-
-	// Check if at least one parameter is provided
-	console.log('first');
-	const { username, email, userId } = req.query;
-	if (!username && !email && !userId) {
-		handleErrorController(new EmptyDataError('Query cannot be empty'), res);
-	}
-
-	return next();
-};
-
-export const validateGetUser: ValidationChain[] = [
-	query('username')
-		.optional()
-		.isString()
-		.withMessage('Username must be a string'),
-	query('email').optional().isEmail().withMessage('Invalid email format'),
-	query('userId').optional().isInt().withMessage('User ID must be an integer'),
+export const validateGetUser = [
+  query('username').optional().isString().withMessage('Username must be a string'),
+  query('email').optional().isEmail().withMessage('email must be a correct format '),
+  query('pageSize').optional().isInt({ min: 1 }).withMessage('PageSize must be a positive integer'),
 ];
-
-export const validateGetUserWithCustom: (
-	| ValidationChain
-	| ((req: Request, res: Response, next: NextFunction) => void | Response<any>)
-)[] = [...validateGetUser, customValidation];
 
 export const validateUpdateSelfInfo = [
 	body('dateOfBirth')
@@ -59,8 +28,8 @@ export const validateSearchUsers = [
 		.withMessage('Gender must be Male, Female, or Other'),
 	query('subscriptionType')
 		.optional()
-		.isString()
-		.withMessage('Subscription type must be a string'),
+		.isInt()
+		.withMessage('Subscription type must be a integer'),
 	query('sort').optional().isString().withMessage('Sort must be a string'),
 	query('sortType')
 		.optional()
@@ -87,17 +56,37 @@ export const validateUpdateUser = [
 ];
 
 export const validateCreateUser = [
-	body('email').isEmail().withMessage('Invalid email format'),
-	body('dateOfBirth')
+	body('email').notEmpty().withMessage("Email is required").isEmail().withMessage('Invalid email format'),
+	body('dateOfBirth').notEmpty().withMessage("Date Of birth is required")
 		.isISO8601()
 		.withMessage('Date of birth must be a valid date'),
-	body('gender')
+	body('gender').notEmpty().withMessage("Gender is required")
 		.isIn(['Male', 'Female', 'Other'])
 		.withMessage('Gender must be Male, Female, or Other'),
-	body('username').isString().withMessage('Username must be a string'),
-	body('password').isString().withMessage('Password must be a string'),
+	body('username').notEmpty().withMessage("Username is required").isString().withMessage('Username must be a string'),
+	body('password').notEmpty().withMessage("Password is required").isString().withMessage('Password must be a string'),
 ];
 
 export const validateDeleteUser = [
-	query('userId').isInt().withMessage('User ID must be an integer'),
+	query('userId').notEmpty().withMessage("User Id is required").isInt().withMessage('User ID must be an integer'),
 ];
+
+
+export const favoriteMovie = [
+	query('movieId').notEmpty().withMessage("Movie Id is required").isInt().withMessage('Movie ID must be an integer'),
+];
+
+export const addMovieHistory = [
+	query('episodeId').notEmpty().withMessage("Episode Id is required").isInt().withMessage('Movie ID must be an integer'),
+	query('duration').notEmpty().withMessage("Duration Id  required").isInt().withMessage('Duration must be an integer'),
+];
+
+export const deleteMovieHistory = [
+	query('episodeId').notEmpty().withMessage("Episode Id is required").isInt().withMessage('Movie ID must be an integer'),
+];
+
+
+export const watchLater = [
+	query('movieId').notEmpty().withMessage("Movie Id is required").isInt().withMessage('Movie ID must be an integer'),
+];
+
