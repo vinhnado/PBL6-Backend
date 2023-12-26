@@ -8,9 +8,9 @@ class StatisticalRoutes extends BaseRoutes {
 		super(new StatisticalController());
 	}
 	public routes(): void {
-		this.router.get('/revenues',authAdmin,validateStatistical, validate, this.controller.getRevenueStatistics);
-		this.router.get('/movies-by-genres',authAdmin, this.controller.getStatisticsMoviesByGenres);
-		this.router.get('/comments',authAdmin,validateStatisticalComments, validate, this.controller.getStatisticsComments);
+		this.router.get('/revenues',auth, authAdmin,validateStatistical, validate, this.controller.getRevenueStatistics);
+		this.router.get('/movies-by-genres',auth, authAdmin, this.controller.getStatisticsMoviesByGenres);
+		this.router.get('/comments',auth, authAdmin,validateStatisticalComments, validate, this.controller.getStatisticsComments);
 	}
 }
 

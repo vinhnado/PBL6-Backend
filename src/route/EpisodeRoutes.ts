@@ -10,10 +10,10 @@ class EpisodeRoutes extends BaseRoutes {
 	public routes(): void {
 		this.router.get('/:id',authUser, validateGetEpisodeById, validate, this.controller.getEpisode);
 		this.router.get('/:id/comments', this.controller.getCommentsOfEpisode);
-		this.router.post('/create',authAdmin, validateCreateEpisode, validate, this.controller.createEpisode);
-		this.router.put('/update/:episodeId', authAdmin,validateUpdateEpisode, validate, this.controller.updateEpisode);
-		this.router.delete('/delete/:episodeId',authAdmin,validateDeleteEpisodeById, validate, this.controller.deleteEpisode);
-		this.router.get('/presignURL/upload',authAdmin, validateGetPresignURL, validate, this.controller.getPresignUrlToUploadPosterAndMovie);
+		this.router.post('/create',auth, authAdmin, validateCreateEpisode, validate, this.controller.createEpisode);
+		this.router.put('/update/:episodeId', auth, authAdmin,validateUpdateEpisode, validate, this.controller.updateEpisode);
+		this.router.delete('/delete/:episodeId',auth, authAdmin,validateDeleteEpisodeById, validate, this.controller.deleteEpisode);
+		this.router.get('/presignURL/upload',auth, authAdmin, validateGetPresignURL, validate, this.controller.getPresignUrlToUploadPosterAndMovie);
 		this.router.get('/qualities/:episodeId',auth, validateGetQuality, validate, this.controller.getQuality);
 	}
 }

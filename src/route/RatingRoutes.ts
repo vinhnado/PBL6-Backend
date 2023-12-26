@@ -9,8 +9,8 @@ class RatingRoutes extends BaseRoutes {
 	}
 	public routes(): void {
 		this.router.post('/create',auth,validateAddRating, validate, this.controller.addRating);
-		this.router.put('/',authAdmin, validateUpdateRating, validate, this.controller.updateRating);
-		this.router.delete('/',authAdmin, validateDeleteRating, validate, this.controller.deleteRating);
+		this.router.put('/',auth, authAdmin, validateUpdateRating, validate, this.controller.updateRating);
+		this.router.delete('/',auth, authAdmin, validateDeleteRating, validate, this.controller.deleteRating);
 	}
 }
 
