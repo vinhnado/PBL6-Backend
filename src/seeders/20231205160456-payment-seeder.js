@@ -37,6 +37,21 @@ module.exports = {
 			};
 			paymentsData.push(payment);
 		}
+		for (let i = 0; i < 10; i++) {
+			const payment = {
+				payment_type: 'VN Pay',
+				price: Math.random() * 100, // Replace with your logic for generating random prices
+				order_info: `Order ${i + 1}`,
+				transaction_id: `Transaction${i + 1}`,
+				status: 'Completed',
+				subscription_info_id: 3,
+				is_payment: true,
+				user_id: 3, // Replace with the actual user ID
+				createdAt: new Date('2022-12-12'),
+				updatedAt: new Date(),
+			};
+			paymentsData.push(payment);
+		}
 
 		// Use queryInterface.bulkInsert to seed the data
 		await queryInterface.bulkInsert('payments', paymentsData, {});

@@ -574,7 +574,7 @@ paths:
     post:
       tags:
         - movie
-      summary: Add actors for movie
+      summary: Add directors for movie
       responses:
         '200':
           description: Successful
@@ -983,20 +983,27 @@ paths:
 
       security:
         - bearerAuth: []
+  /genres/{genreId}:
     put:
       tags:
         - genre
       summary: Update genre information
       description: Update genre information
+      parameters:
+        - name: genreId
+          in: path
+          description: genreId to update
+          required: true
+          explode: true
+          schema:
+            type: integer
+            format: int64
       requestBody:
         content:
           application/json:
             schema:
               type: object
               properties:
-                genreId:
-                  type: integer
-                  format: int64
                 name:
                   type: string
                   default: 'Name of genre to update'
@@ -1017,16 +1024,15 @@ paths:
         - genre
       summary: Delete a genre
       description: Delete a genre by genreId
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                genreId:
-                  type: number
-                  format: int64
-                  default: 1
+      parameters:
+        - name: genreId
+          in: path
+          description: genreId to delete
+          required: true
+          explode: true
+          schema:
+            type: integer
+            format: int64
       responses:
         '204':
           description: successful
@@ -1891,7 +1897,7 @@ paths:
       tags:
         - individuals
       parameters:
-        - name: directorId
+        - name: actorId
           in: query
           description: id of the actor
           required: true

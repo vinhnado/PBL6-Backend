@@ -10,8 +10,8 @@ class GenreRoutes extends BaseRoutes {
 	public routes(): void {
 		this.router.get('/', this.controller.getAllGenres);
 		this.router.post('/',authAdmin, validateCreateGenre, validate, this.controller.createGenre);
-		this.router.put('/',authAdmin, validateUpdateGenre, validate, this.controller.updateGenre);
-		this.router.delete('/',authAdmin, validateDeleteGenre, validate, this.controller.deleteGenre);
+		this.router.put('/:genreId',authAdmin, validateUpdateGenre, validate, this.controller.updateGenre);
+		this.router.delete('/:genreId',authAdmin, validateDeleteGenre, validate, this.controller.deleteGenre);
 	}
 }
 
