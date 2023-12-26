@@ -1,4 +1,8 @@
-import { EmailValidError, UsernameValidError } from './../error/CustomErrors';
+import {
+	EmailValidDuplicate,
+	UsernameValidDuplicate,
+	handleErrorController,
+} from './../error/CustomErrors';
 import { Request, Response } from 'express';
 import Container, { Inject, Service } from 'typedi';
 import { IAuthenticationService } from '../services/Interfaces/IAuthenticationService';
@@ -16,12 +20,6 @@ export class AuthenticationController {
 		try {
 			const { username, password } = req.body;
 			const token = await this.authenticationService.login(username, password);
-			if (!token) {
-				return res.status(400).json({
-					status: 'Bad Request!',
-					message: 'Wrong email or password!',
-				});
-			}
 			const res_token = { type: 'Bearer', token: token };
 			return res.status(200).json({
 				status: 'Ok!',
@@ -29,11 +27,7 @@ export class AuthenticationController {
 				result: res_token,
 			});
 		} catch (error) {
-			console.log(error);
-			return res.status(500).json({
-				status: 'Internal server Error!',
-				message: 'Internal server Error!',
-			});
+			handleErrorController(error, res);
 		}
 	};
 
@@ -54,29 +48,12 @@ export class AuthenticationController {
 				message: 'Successfully registerd users!',
 			});
 		} catch (error: any) {
-			if (error.name === 'UsernameValidError') {
-				return res.status(400).json({
-					status: 'Bad Request',
-					message: error.message,
-				});
-			}
-			if (error.name === 'EmailValidError') {
-				return res.status(400).json({
-					status: 'Bad Request',
-					message: error.message,
-				});
-			}
-
-			return res.status(500).json({
-				status: 'Internal server Error!',
-				message: 'Internal server Error!',
-			});
+			handleErrorController(error, res);
 		}
 	};
 
 	registerAdmin = async (req: Request, res: Response) => {
 		try {
-			console.log(req.payload.userId);
 			const { email, dateOfBirth, gender, username, password } = req.body;
 
 			await this.authenticationService.register(
@@ -93,23 +70,7 @@ export class AuthenticationController {
 				message: 'Successfully registered admin!',
 			});
 		} catch (error: any) {
-			if (error.name === 'UsernameValidError') {
-				return res.status(400).json({
-					status: 'Bad Request',
-					message: error.message,
-				});
-			}
-			if (error.name === 'EmailValidError') {
-				return res.status(400).json({
-					status: 'Bad Request',
-					message: error.message,
-				});
-			}
-
-			return res.status(500).json({
-				status: 'Internal server Error!',
-				message: 'Internal server Error!',
-			});
+			handleErrorController(error, res);
 		}
 	};
 
@@ -132,10 +93,7 @@ export class AuthenticationController {
 				message: data,
 			});
 		} catch (error) {
-			return res.status(500).json({
-				status: 'Internal server Error!',
-				message: 'Internal server Error!',
-			});
+			handleErrorController(error, res);
 		}
 	};
 
@@ -154,40 +112,21 @@ export class AuthenticationController {
 				message: 'Success',
 			});
 		} catch (error: any) {
-			if (error.name === 'OldPasswordError') {
-				return res.status(400).json({
-					status: 'Bad Request',
-					message: error.message,
-				});
-			}
-
-			return res.status(500).json({
-				status: 'Internal server Error!',
-				message: 'Internal server Error!',
-			});
+			handleErrorController(error, res);
 		}
 	};
 
 	activeUser = async (req: Request, res: Response) => {
 		try {
 			const { email, token } = req.body;
-			let data;
-			if (token == null) {
-				data = await this.authenticationService.activeUser(email);
-			} else {
-				data = await this.authenticationService.activeUser(email, token);
-			}
+			let data = await this.authenticationService.activeUser(email, token);
 
 			return res.status(200).json({
 				status: 'Ok!',
 				message: data,
 			});
 		} catch (error) {
-			console.log(error);
-			return res.status(500).json({
-				status: 'Internal server Error!',
-				message: 'Internal server Error!',
-			});
+			handleErrorController(error, res);
 		}
 	};
 
@@ -211,11 +150,7 @@ export class AuthenticationController {
 				result: res_token,
 			});
 		} catch (error) {
-			console.log(error);
-			return res.status(500).json({
-				status: 'Internal server Error!',
-				message: 'Internal server Error!',
-			});
+			handleErrorController(error, res);
 		}
 	};
 
@@ -255,11 +190,7 @@ export class AuthenticationController {
 				});
 			}
 		} catch (error) {
-			console.log(error);
-			return res.status(500).json({
-				status: 'Internal server Error!',
-				message: 'Internal server Error!',
-			});
+			handleErrorController(error, res);
 		}
 	};
 }

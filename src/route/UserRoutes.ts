@@ -1,14 +1,20 @@
 import { UserController } from '../controller/UserController';
 import { auth, authAdmin } from '../middleware/AuthMiddleware';
 import BaseRoutes from '../route/Base/BaseRouter';
+import { validateGetUserWithCustom } from '../validators/UserValidator';
 class UserRoutes extends BaseRoutes {
 	constructor() {
 		super(new UserController());
 	}
 
 	public routes(): void {
-		this.router.get('/get-all-users', this.controller.searchUsers);
-		this.router.get('/get-user', this.controller.getUser);
+		this.router.get('/get-all-users', authAdmin, this.controller.searchUsers);
+		this.router.get(
+			'/get-user',
+			authAdmin,
+			validateGetUserWithCustom,
+			this.controller.getUser
+		);
 		this.router.get('/get-self-information', auth, this.controller.getSelfInfo);
 		this.router.get(
 			'/update-self-information',
@@ -17,7 +23,7 @@ class UserRoutes extends BaseRoutes {
 		);
 		this.router.put('/update-user', authAdmin, this.controller.updateUser);
 		this.router.post('/create-user', authAdmin, this.controller.createUser);
-		this.router.delete('/delete-user', this.controller.deleteUser);
+		this.router.delete('/delete-user', authAdmin, this.controller.deleteUser);
 
 		this.router.get(
 			'/get-presign-url-to-upload-avatar',
@@ -72,9 +78,13 @@ class UserRoutes extends BaseRoutes {
 			this.controller.getWatchHistory
 		);
 
-		this.router.get('/reserves',auth, this.controller.getMoviesReserveOfUser);
-		this.router.post('/reserves/',auth, this.controller.addReserve);
-		this.router.delete('/reserves/:movieId',auth, this.controller.deleteReserve);
+		this.router.get('/reserves', auth, this.controller.getMoviesReserveOfUser);
+		this.router.post('/reserves/', auth, this.controller.addReserve);
+		this.router.delete(
+			'/reserves/:movieId',
+			auth,
+			this.controller.deleteReserve
+		);
 	}
 }
 
