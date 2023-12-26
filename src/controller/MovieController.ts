@@ -32,9 +32,10 @@ export class MovieController {
 				year: req.query.year,
 				isSeries: req.query.isSeries,
 				sort: req.query.sort,
+				level: req.query.level,
 			  };
 			const page = Number(req.query.page) || 1; // Trang mặc định là 1
-			const pageSize = Number(req.query.pageSize) || 5; // Số lượng kết quả trên mỗi trang mặc định là 10
+			const pageSize = Number(req.query.pageSize) || 10; // Số lượng kết quả trên mỗi trang mặc định là 10
 
 			const { movies, totalCount } = await this.movieService.searchMovies(
 				options,
@@ -60,7 +61,7 @@ export class MovieController {
 			
 			const movie = await this.movieService.getMovieById(Number(id));
 			if (!movie) {
-				return res.status(404).json({ error: 'Can not find movie.' });
+				return res.status(404).json({ error: 'Movie not found or deleted' });
 			}
 			const userId = req.payload!.userId!;
 			let rating =0;
