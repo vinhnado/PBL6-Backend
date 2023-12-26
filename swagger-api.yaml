@@ -170,7 +170,6 @@ paths:
         - movie
       summary: Get all movies or by filter
       description: Get and search movies API
-      operationId: findPetsByStatus
       parameters:
         - name: search
           in: query
@@ -212,6 +211,18 @@ paths:
           explode: true
           schema:
             type: number
+        - name: level
+          in: query
+          description: Choose level to filter
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: number
+              enum:
+                - 0
+                - 1
         - name: sort
           in: query
           description: Choose addition to sort
@@ -247,7 +258,7 @@ paths:
             type: number
         - name: pageSize
           in: query
-          description: Use to pagination, default pageSize = 6
+          description: Use to pagination, default pageSize = 10
           required: false
           explode: true
           schema:

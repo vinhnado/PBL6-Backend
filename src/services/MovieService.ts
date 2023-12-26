@@ -83,7 +83,7 @@ export class MovieService implements IMovieService {
 			if (cachedResult) {
 				return JSON.parse(cachedResult);
 			}
-			const { search, genre, nation, year, isSeries, sort, sortType } = options;
+			const { search, genre, nation, year, isSeries, sort, sortType ,level} = options;
 
 			const whereCondition: any = {};
 			const whereConditionGenre: any = {};
@@ -113,6 +113,10 @@ export class MovieService implements IMovieService {
 
 			if (isSeries !== undefined) {
 				whereCondition['isSeries'] = isSeries;
+			}
+
+			if (level) {
+				whereCondition['level'] = level;
 			}
 
 			const sortFieldMap = {
@@ -220,7 +224,9 @@ export class MovieService implements IMovieService {
 
 	async getAllMovies(): Promise<Movie[]> {
 		try {
-			return await this.movieRepository.getAllMovies();
+			
+			 const movies= await this.movieRepository.getAllMovies();
+			 return movies;
 		} catch (error) {
 			console.log(error);
 			throw(error);
