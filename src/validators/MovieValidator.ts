@@ -11,6 +11,8 @@ export const validateSearchMovies = [
     query('isSeries').optional().isBoolean().withMessage('isSeries must be a boolean'),
     query('sort').optional().isIn(['highRated', 'newest', 'highFavorited']).withMessage('Sort must be one of: highRated, newest, highFavorited'),
     query('sortType').optional().isIn(['ASC', 'DESC']).withMessage('SortType must be one of: ASC, DESC'),
+    query('level').optional().isIn([0, 1]).withMessage('level must be one of: 0, 1'),
+
 ];
 
 export const validateGetMovieById = [
