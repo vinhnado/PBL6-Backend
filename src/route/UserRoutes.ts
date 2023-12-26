@@ -8,7 +8,7 @@ class UserRoutes extends BaseRoutes {
 	}
 
 	public routes(): void {
-		this.router.get('/get-all-users', authAdmin, this.controller.searchUsers);
+		this.router.get('/get-all-users',auth, authAdmin, this.controller.searchUsers);
 		this.router.get(
 			'/get-user',
 			authAdmin,
@@ -21,9 +21,9 @@ class UserRoutes extends BaseRoutes {
 			auth,
 			this.controller.updateSelfInfo
 		);
-		this.router.put('/update-user', authAdmin, this.controller.updateUser);
-		this.router.post('/create-user', authAdmin, this.controller.createUser);
-		this.router.delete('/delete-user', authAdmin, this.controller.deleteUser);
+		this.router.put('/update-user', auth, authAdmin, this.controller.updateUser);
+		this.router.post('/create-user', auth, authAdmin, this.controller.createUser);
+		this.router.delete('/delete-user', auth, authAdmin, this.controller.deleteUser);
 
 		this.router.get(
 			'/get-presign-url-to-upload-avatar',
