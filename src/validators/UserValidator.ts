@@ -1,9 +1,6 @@
 import {
-	ValidationChain,
 	body,
-	param,
 	query,
-	validationResult,
 } from 'express-validator';
 
 export const validateGetUser = [
