@@ -61,7 +61,7 @@ export class MovieController {
 			
 			const movie = await this.movieService.getMovieById(Number(id));
 			if (!movie) {
-				return res.status(404).json({ error: 'Can not find movie.' });
+				return res.status(404).json({ error: 'Movie not found or deleted' });
 			}
 			const userId = req.payload!.userId!;
 			let rating =0;

@@ -1897,7 +1897,7 @@ paths:
       tags:
         - individuals
       parameters:
-        - name: directorId
+        - name: actorId
           in: query
           description: id of the actor
           required: true
