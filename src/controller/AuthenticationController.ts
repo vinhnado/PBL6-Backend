@@ -31,6 +31,21 @@ export class AuthenticationController {
 		}
 	};
 
+	loginAdmin = async (req: Request, res: Response) => {
+		try {
+			const { username, password } = req.body;
+			const token = await this.authenticationService.loginAdmin(username, password);
+			const res_token = { type: 'Bearer', token: token };
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully login!',
+				result: res_token,
+			});
+		} catch (error) {
+			handleErrorController(error, res);
+		}
+	};
+
 	register = async (req: Request, res: Response) => {
 		try {
 			const { email, dateOfBirth, gender, username, password } = req.body;

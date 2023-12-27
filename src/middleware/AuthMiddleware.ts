@@ -28,7 +28,7 @@ export const authRoot = async (
 				return next();
 			}
 		}
-		return res.status(403).send('Not permission!');
+		return res.status(403).send('No permission!');
 	} catch (err) {
 		return res.send(err);
 	}
@@ -49,7 +49,7 @@ export const authAdmin = async (
 				return next();
 			}
 		}
-		return res.status(403).send('Not permission!');
+		return res.status(403).send('No permission!');
 	} catch (err) {
 		return res.send(err);
 	}

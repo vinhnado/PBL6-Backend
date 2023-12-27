@@ -60,6 +60,28 @@ paths:
         '500':
           description: Internal server error
 
+  /auth/login-admin:
+    post:
+      summary: Admin login
+      tags:
+        - authentication
+      requestBody:
+        description: Admin credentials for login
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCredentials'
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '403':
+          description: No Permission
+        '500':
+          description: Internal server error
+
   /auth/register:
     post:
       summary: User registration
