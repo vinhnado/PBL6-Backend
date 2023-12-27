@@ -40,10 +40,7 @@ export class AuthenticationService implements IAuthenticationService {
 
 	login = async (username: string, password: string): Promise<any> => {
 		try {
-			const searchConditions = {
-				username,
-			};
-			const user = await this.userRepository.findOneUser(searchConditions);
+			const user = await this.userRepository.findOneUserByUsername(username);
 
 			if (!user) {
 				throw new InvalidUserNameOrPassword('Invalid username or password');
