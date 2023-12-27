@@ -1102,6 +1102,23 @@ module.exports = {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
+			{
+				//64
+				title: "Người Nhện 2",
+				description:"Người Nhện 2 (tựa gốc tiếng Anh: Spider-Man 2) là phim điện ảnh siêu anh hùng của Mỹ năm 2004 do Sam Raimi đạo diễn và Alvin Sargent viết kịch bản từ đầu truyện của Alfred Gough, Miles Millar và Michael Chabon. Là phần tiếp nối của phim Người Nhện năm 2002, tác phẩm là phần thứ hai trong trilogy Người Nhện, dựa trên nhân vật truyện tranh giả tưởng cùng tên của Marvel Comics. Các diễn viên Tobey Maguire, Kirsten Dunst, James Franco và Rosemary Harris lần lượt đảm nhận những vai diễn tương ứng của họ ở phần đầu tiên, trong khi Alfred Molina và Donna Murphy mới gia nhập dàn diễn viên trong phim.",
+				release_date: new Date(2023,1,1),
+				nation: 'Mỹ',
+				poster_url: 'movies/64/poster.jpg',
+				trailer_url: 'movies/64/trailer.mp4',
+				background_url: 'movies/64/background.jpg',
+				average_rating: '5.0',
+				episodes: 1,
+				level: 1,
+				num_favorite: 948323,
+				is_series: false,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
 			// Add more movie records as needed
 		]);
 	},
