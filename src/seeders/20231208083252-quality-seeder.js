@@ -25,7 +25,7 @@ module.exports = {
           const quanlity = {
             episode_id: countEpisodeId,
             video_quality: '1080p',
-            video_url: 'movies/'+i+'/episodes/'+j+'/movie_1080.mp4',
+            video_url: 'movies/'+i+'/episodes/'+j+'/movie_1080p.mp4',
             createdAt: new Date(),
             updatedAt: new Date(),
           };
@@ -45,7 +45,7 @@ module.exports = {
         const quanlity = {
           episode_id: countEpisodeId,
           video_quality: '1080p',
-          video_url: 'movies/'+i+'/episodes/'+1+'/movie_1080.mp4',
+          video_url: 'movies/'+i+'/episodes/'+1+'/movie_1080p.mp4',
           createdAt: new Date(),
           updatedAt: new Date(),
         };
