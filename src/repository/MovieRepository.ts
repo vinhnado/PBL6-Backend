@@ -131,30 +131,27 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 				include: [
 					{
 						model: Genre,
-						attributes: ['genre_id', 'name'],
+						attributes: {
+							exclude: ['deletedAt', 'updatedAt', 'createdAt'],
+						},
 						through: { attributes: [] },
 					},
 					{
 						model: Actor,
-						attributes: ['actor_id', 'name'],
+						attributes: {
+							exclude: ['deletedAt', 'updatedAt', 'createdAt'],
+						},
 						through: { attributes: [] },
 					},
 					{
 						model: Director,
-						attributes: ['director_id', 'name'],
+						attributes: {
+							exclude: ['deletedAt', 'updatedAt', 'createdAt'],
+						},
 						through: { attributes: [] },
 					},
-					{
-						model: Episode,
-						attributes: [
-							'episode_id',
-							'episode_no',
-							'movie_url',
-							'episodeTitle',
-						],
-					},
 				],
-				order: [['release_date', 'DESC']],
+				order: [['movie_id', 'ASC']],
 			});
 			return movies;
 		} catch (error) {

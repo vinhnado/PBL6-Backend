@@ -60,6 +60,28 @@ paths:
         '500':
           description: Internal server error
 
+  /auth/login-admin:
+    post:
+      summary: Admin login
+      tags:
+        - authentication
+      requestBody:
+        description: Admin credentials for login
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCredentials'
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '403':
+          description: No Permission
+        '500':
+          description: Internal server error
+
   /auth/register:
     post:
       summary: User registration
@@ -170,7 +192,6 @@ paths:
         - movie
       summary: Get all movies or by filter
       description: Get and search movies API
-      operationId: findPetsByStatus
       parameters:
         - name: search
           in: query
@@ -212,6 +233,18 @@ paths:
           explode: true
           schema:
             type: number
+        - name: level
+          in: query
+          description: Choose level to filter
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: number
+              enum:
+                - 0
+                - 1
         - name: sort
           in: query
           description: Choose addition to sort
@@ -247,7 +280,7 @@ paths:
             type: number
         - name: pageSize
           in: query
-          description: Use to pagination, default pageSize = 6
+          description: Use to pagination, default pageSize = 10
           required: false
           explode: true
           schema:
@@ -271,9 +304,7 @@ paths:
         '405':
           description: Invalid input
       security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
@@ -339,6 +370,8 @@ paths:
           description: Invalid ID supplied
         '404':
           description: Movie not found
+      security:
+        - bearerAuth: []
 
   '/movies/{id}':
     get:
@@ -532,6 +565,8 @@ paths:
                 actorIds:
                   type: array
                   default: [1, 2, 3]
+      security:
+        - bearerAuth: []
   '/movies/movie-director':
     delete:
       tags:
@@ -563,7 +598,7 @@ paths:
     post:
       tags:
         - movie
-      summary: Add actors for movie
+      summary: Add directors for movie
       responses:
         '200':
           description: Successful
@@ -580,6 +615,8 @@ paths:
                 directorIds:
                   type: array
                   default: [1, 2, 3]
+      security:
+        - bearerAuth: []
   '/movies/movie-genre':
     delete:
       tags:
@@ -628,6 +665,8 @@ paths:
                 genreIds:
                   type: array
                   default: [1, 2, 3]
+      security:
+        - bearerAuth: []
   /movies/get/presign-url:
     get:
       tags:
@@ -663,10 +702,11 @@ paths:
           description: successful operation
       security:
         - bearerAuth: []
+
   /episode/{id}:
     get:
       tags:
-        - episode
+        - movie
       summary: Returns details episode of movie
       description: Returns details episode of movie
       parameters:
@@ -971,20 +1011,27 @@ paths:
 
       security:
         - bearerAuth: []
+  /genres/{genreId}:
     put:
       tags:
         - genre
       summary: Update genre information
       description: Update genre information
+      parameters:
+        - name: genreId
+          in: path
+          description: genreId to update
+          required: true
+          explode: true
+          schema:
+            type: integer
+            format: int64
       requestBody:
         content:
           application/json:
             schema:
               type: object
               properties:
-                genreId:
-                  type: integer
-                  format: int64
                 name:
                   type: string
                   default: 'Name of genre to update'
@@ -1005,16 +1052,15 @@ paths:
         - genre
       summary: Delete a genre
       description: Delete a genre by genreId
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                genreId:
-                  type: number
-                  format: int64
-                  default: 1
+      parameters:
+        - name: genreId
+          in: path
+          description: genreId to delete
+          required: true
+          explode: true
+          schema:
+            type: integer
+            format: int64
       responses:
         '204':
           description: successful
@@ -1216,7 +1262,7 @@ paths:
                   format: int32
       security:
         - bearerAuth: []
-  /ratings:   
+  /ratings:
     put:
       tags:
         - rating
@@ -1430,12 +1476,14 @@ paths:
         '400':
           description: Error while get movies trending
 
-  /movies/home/recommend:
+  /movies/recommend/get:
     get:
       tags:
         - home
       summary: Get movies recommender for user
       description: Get moives recommender for user
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: successful operation
@@ -1486,7 +1534,7 @@ paths:
 
   /user/get-all-users:
     get:
-      summary: Get all users
+      summary: Get all users and search user
       parameters:
         - name: page
           in: query
@@ -1500,8 +1548,25 @@ paths:
           required: true
           schema:
             type: integer
+        - name: search
+          in: query
+          description: Search string for find user by username and email
+          schema:
+            type: string
+        - name: subscriptionType
+          in: query
+          description: Find Subscription Type (Value 0 for VIP,1 for guest, 2 3 for VipType)
+          schema:
+            type: string
+        - name: sortType
+          in: query
+          description: ASC or DESC by userId
+          schema:
+            type: string
       tags:
         - user
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Successful response
@@ -1511,6 +1576,8 @@ paths:
       summary: Get user by username, email, or userId
       tags:
         - user
+      security:
+        - bearerAuth: []
       parameters:
         - name: username
           in: query
@@ -1568,6 +1635,8 @@ paths:
       summary: Create a new user
       tags:
         - user
+      security:
+        - bearerAuth: []
       requestBody:
         description: User data for registration
         required: true
@@ -1764,7 +1833,7 @@ paths:
   /user/get-presign-url-to-upload-avatar:
     get:
       summary: Get presign to upload avatar
-      description : Get presign to upload avatar user to S3
+      description: Get presign to upload avatar user to S3
       tags:
         - user
       security:
@@ -1772,7 +1841,55 @@ paths:
       responses:
         '200':
           description: Successful response
-
+  /user/reserves:
+    get:
+      tags:
+        - user
+      summary: Returns reserve movies of user
+      description: Returns reserve movies of user
+      responses:
+        '200':
+          description: successful operation
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - user
+      summary: Add reserve movies of user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                movieId:
+                  type: integer
+                  format: int64
+                  default: 1
+      responses:
+        '200':
+          description: successful operation
+      security:
+        - bearerAuth: []
+  /user/reserves/{movieId}:
+    delete:
+      tags:
+        - user
+      summary: Delete reserve movies of user
+      parameters:
+        - name: movieId
+          in: path
+          description: commentId to delete
+          required: true
+          explode: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+      security:
+        - bearerAuth: []
   /individuals/actors:
     get:
       summary: Get actors
@@ -1801,6 +1918,19 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
+  /user/payments:
+    get:
+      tags:
+        - user
+      summary: Returns payments of user
+      description: Returns payments movies of user
+      responses:
+        '200':
+          description: successful operation
+      security:
+        - bearerAuth: []
   /individuals/actors/get-presign-url/avatar:
     get:
       summary: Get presign url to upload avatar actor
@@ -1808,7 +1938,7 @@ paths:
       tags:
         - individuals
       parameters:
-        - name: directorId
+        - name: actorId
           in: query
           description: id of the actor
           required: true
@@ -1817,6 +1947,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
     post:
       summary: Create a new actor
       description: Create a new actor
@@ -1844,6 +1976,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
 
   /individuals/actors/{actorId}:
     get:
@@ -1862,6 +1996,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
     delete:
       summary: Delete actor
       description: Delete actor
@@ -1878,6 +2014,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
     put:
       summary: Update actor informations
       description: Update actor informations
@@ -1891,6 +2029,8 @@ paths:
           schema:
             type: number
             format: int64
+      security:
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
@@ -1941,6 +2081,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
   /individuals/directors/get-presign-url/avatar:
     get:
       summary: Get presign url to upload avatar actor
@@ -1957,6 +2099,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
     post:
       summary: Create a new director
       description: Create a new director
@@ -1981,6 +2125,8 @@ paths:
                 description:
                   type: string
                   default: New actor description
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Successful response
@@ -2002,6 +2148,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
     delete:
       summary: Delete a director
       description: Delete a director by directorId
@@ -2018,6 +2166,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
     put:
       summary: Update director informations
       description: Update director informations
@@ -2031,6 +2181,8 @@ paths:
           schema:
             type: number
             format: int64
+      security:
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
@@ -2075,6 +2227,8 @@ paths:
                   format: date-time
                 subscriptionInfoId:
                   type: integer
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: OK
@@ -2106,6 +2260,8 @@ paths:
               example:
                 status: Ok!
                 message: Successfully
+      security:
+        - bearerAuth: []
 
   /subscription/update-subscription-type:
     put:
@@ -2125,6 +2281,8 @@ paths:
                   type: number
                 subscriptionTypeId:
                   type: integer
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: OK
@@ -2148,6 +2306,8 @@ paths:
                 status: Ok!
                 message: Successfully
                 data: []
+      security:
+        - bearerAuth: []
 
   /subscription/delete-subscription-type:
     delete:
@@ -2168,6 +2328,8 @@ paths:
               example:
                 status: Ok!
                 message: Successfully
+      security:
+        - bearerAuth: []
 
   /subscription/create-subscription-info:
     post:
@@ -2187,6 +2349,8 @@ paths:
                   type: number
                 discount:
                   type: number
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: OK
@@ -2224,6 +2388,8 @@ paths:
               example:
                 status: Ok!
                 message: Successfully
+      security:
+        - bearerAuth: []
 
   /subscription/get-all-subscription-info:
     get:
@@ -2239,6 +2405,8 @@ paths:
                 status: Ok!
                 message: Successfully
                 data: []
+      security:
+        - bearerAuth: []
 
   /subscription/delete-subscription-info:
     delete:
@@ -2259,6 +2427,8 @@ paths:
               example:
                 status: Ok!
                 message: Successfully
+      security:
+        - bearerAuth: []
   /payments:
     get:
       tags:
@@ -2308,9 +2478,9 @@ paths:
               type: boolean
               enum:
                 - Unpaid
-                - Completed   
-                - Processing        
-                - Failed        
+                - Completed
+                - Processing
+                - Failed
         - name: subscriptionInfoId
           in: query
           description: Id of subscription to find
@@ -2338,7 +2508,7 @@ paths:
           schema:
             type: string
           description: End date
-          example: 2024-01-01      
+          example: 2024-01-01
         - name: page
           in: query
           description: Use to pagination, default page = 1
@@ -2364,6 +2534,8 @@ paths:
                   $ref: '#/components/schemas/Pet'
         '400':
           description: Khong the lay danh sach phim
+      security:
+        - bearerAuth: []
   /payments/vn-pay:
     post:
       tags:

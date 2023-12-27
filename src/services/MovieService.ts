@@ -20,6 +20,9 @@ import { ParamsDictionary } from 'express-serve-static-core';
 import { ParsedQs } from 'qs';
 import { MovieDirector } from '../models/MovieDirector';
 import { MovieGenre } from '../models/MovieGenre';
+import { ResrveRepository } from '../repository/ReserveRepository';
+import { IReserveRepository } from '../repository/Interfaces/IReserveRepository';
+import { Reserve } from '../models/Reserve';
 
 @Service()
 export class MovieService implements IMovieService {
@@ -34,6 +37,9 @@ export class MovieService implements IMovieService {
 
 	@Inject(() => MovieGenreRepository)
 	private movieGenreRepository!: IMovieGenreRepository;
+
+	@Inject(() => ResrveRepository)
+	private reserveRepository!: IReserveRepository;
 
 	@Inject(() => S3Service)
 	private s3Service!: S3Service;
@@ -77,7 +83,7 @@ export class MovieService implements IMovieService {
 			if (cachedResult) {
 				return JSON.parse(cachedResult);
 			}
-			const { search, genre, nation, year, isSeries, sort, sortType } = options;
+			const { search, genre, nation, year, isSeries, sort, sortType ,level} = options;
 
 			const whereCondition: any = {};
 			const whereConditionGenre: any = {};
@@ -107,6 +113,10 @@ export class MovieService implements IMovieService {
 
 			if (isSeries !== undefined) {
 				whereCondition['isSeries'] = isSeries;
+			}
+
+			if (level) {
+				whereCondition['level'] = level;
 			}
 
 			const sortFieldMap = {
@@ -214,7 +224,9 @@ export class MovieService implements IMovieService {
 
 	async getAllMovies(): Promise<Movie[]> {
 		try {
-			return await this.movieRepository.getAllMovies();
+			
+			 const movies= await this.movieRepository.getAllMovies();
+			 return movies;
 		} catch (error) {
 			console.log(error);
 			throw(error);
@@ -385,7 +397,7 @@ export class MovieService implements IMovieService {
 					'movies/'.concat(movie.movieId.toString(), '/background.jpg')
 				);
 			}
-			await this.redis.set(cacheKey, JSON.stringify(movies), 'EX', 600);
+			await this.redis.set(cacheKey, JSON.stringify(movies), 'EX', 60*60);
 			return movies;
 		} catch (error) {
 			console.log(error);
@@ -396,8 +408,14 @@ export class MovieService implements IMovieService {
 	async getAllNations():Promise<string[]>
 	{
 		try {
-			const nations = await this.movieRepository.getAllNations() as any;
+			const cacheKey = 'getAllNations';
+			const cachedResult = await this.redis.get(cacheKey);
+			if (cachedResult) {
+				return JSON.parse(cachedResult);
+			}
 
+			const nations = await this.movieRepository.getAllNations() as any;
+			await this.redis.set(cacheKey, JSON.stringify(nations), 'EX', 60*60);
 			return nations;
 		} catch (error) {
 			console.log(error);
@@ -408,7 +426,15 @@ export class MovieService implements IMovieService {
 	async getAllReleaseYears(): Promise<number[]>
 	{
 		try {
-			return await this.movieRepository.getAllReleaseDates();
+			const cacheKey = 'getAllReleaseYears';
+			const cachedResult = await this.redis.get(cacheKey);
+			if (cachedResult) {
+				return JSON.parse(cachedResult);
+			}
+
+			const years = await this.movieRepository.getAllReleaseDates();
+			await this.redis.set(cacheKey, JSON.stringify(years), 'EX', 60*60);
+			return years;
 		} catch (error) {
 			console.log(error);
 			throw(error);
@@ -538,4 +564,59 @@ export class MovieService implements IMovieService {
 		}
 	}
 	// async updatePosterMovie()
+	
+	async getReserveMovieOfUser(userId: number): Promise<Reserve[]> {
+		try {
+			return this.reserveRepository.getReserveMovieOfUser(userId);
+		} catch (error) {
+			throw(error);
+		}
+	}
+
+	async getMoviesReserveOfUser(userId: number): Promise<Movie[]> {
+		try {
+			const movies =await this.reserveRepository.getMoviesReserveOfUser(userId);
+			for (const movie of movies) {
+				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
+				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
+				movie.backgroundURL = await this.s3Service.getObjectUrl(
+					'movies/'.concat(movie.movieId.toString(), '/background.jpg')
+				);
+			}
+			return movies;
+		} catch (error) {
+			throw(error);
+		}
+	}
+
+	async addReserve(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<Reserve> {
+		try {
+			const userId = req.payload.userId;
+			const movieId = req.body.movieId;
+			const reserved = await this.reserveRepository.findOneByCondition({
+				userId,movieId
+			});
+			if(reserved){
+				return reserved;
+			}
+			return await this.reserveRepository.addReserve({
+				userId, movieId
+			});
+		} catch (error) {
+			throw(error);
+		}
+	}
+
+	async deleteReserve(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<void> {
+		try {
+			const userId = req.payload.userId;
+			const movieId = req.params.movieId;
+			const reserve = await this.reserveRepository.findOneByCondition({movieId, userId});
+			if(reserve){
+				return await this.reserveRepository.delete(reserve,true);
+			}
+		} catch (error) {
+			throw(error);
+		}
+	}
 }

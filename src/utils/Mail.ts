@@ -66,16 +66,13 @@ export class Mail {
 		token: string
 	): Promise<void> => {
 		try {
-			console.log(token);
 			const replacements = {
 				username: username,
-				replaceLink: 'https://example.com/reset-password/' + token,
+				replaceLink:
+					'https://example.com/active-user?token=' + token + '&email=' + to,
 			};
 
-			let htmlContent = fs.readFileSync(
-				'src/utils/ForgotPasswordMail.html',
-				'utf8'
-			);
+			let htmlContent = fs.readFileSync('src/utils/ActiveAccount.html', 'utf8');
 
 			Object.entries(replacements).forEach(([key, value]) => {
 				const regex = new RegExp(`{{${key}}}`, 'g');

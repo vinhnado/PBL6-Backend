@@ -1,5 +1,6 @@
 export interface IAuthenticationService {
 	login(username: string, password: string): Promise<string>;
+	loginAdmin(username: string, password: string): Promise<string>;
 	register(
 		email: string,
 		dateOfBirth: Date,
@@ -12,7 +13,7 @@ export interface IAuthenticationService {
 		email: string,
 		token?: string | null,
 		password?: string | null
-	) => Promise<string>;
+	) => Promise<any>;
 	changePassword: (
 		userId: number,
 		oldPassword: string,

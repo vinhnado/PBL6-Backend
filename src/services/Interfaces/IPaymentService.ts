@@ -8,8 +8,10 @@ export interface IPaymentService {
 	findPaymentByTransactionId: (
 		transactionId: string
 	) => Promise<Payment | null>;
+	findOneByTransactionId: (transactionId: string) => Promise<Payment | null>;
 	findAllPaymentByUserId: (userId: number) => Promise<Payment[]>;
 	getPayments: (
 		req: Request
 	) => Promise<{ payments: Payment[]; totalCount: number }>;
+	
 }

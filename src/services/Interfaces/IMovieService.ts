@@ -3,6 +3,7 @@ import express, { Request, Response, Router } from 'express';
 import { MovieActor } from '../../models/MovieActor';
 import { MovieDirector } from '../../models/MovieDirector';
 import { MovieGenre } from '../../models/MovieGenre';
+import { Reserve } from '../../models/Reserve';
 
 export interface IMovieService {
 	searchMovies(
@@ -35,4 +36,9 @@ export interface IMovieService {
 	addGenresForMovie(req: Request): Promise<MovieGenre[]>;
 	deleteGenresOfMovie(req: Request): Promise<number>;
 
+	getReserveMovieOfUser(userId: number): Promise<Reserve[]>;
+	getMoviesReserveOfUser(userId: number): Promise<Movie[]>;
+
+    addReserve(req: Request): Promise<Reserve>;
+	deleteReserve(req: Request): Promise<void>
 }
