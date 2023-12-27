@@ -42,7 +42,7 @@ module.exports = {
 				{
 					date_of_birth: new Date(),
 					gender: 'Male',
-					email: 'user1@gmail.com',
+					email: 'root@gmail.com',
 					role: 0,
 					subscription_id: 1,
 					avatar_url: `users/1/avatar.jpg`,
@@ -54,7 +54,7 @@ module.exports = {
 				{
 					date_of_birth: new Date(),
 					gender: 'Female',
-					email: 'user2@gmail.com',
+					email: 'admin@gmail.com',
 					role: 1,
 					subscription_id: 2,
 					active: true,
