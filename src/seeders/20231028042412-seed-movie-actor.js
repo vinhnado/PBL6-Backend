@@ -68,8 +68,9 @@ module.exports = {
 			61: [87, 67, 37, 21],
 			62: [11, 82, 54, 27],
 			63: [30, 96, 17, 44],
+			64: [100,101,102],
 		  };
-		const totalMovies = 63;
+		const totalMovies = 64;
 		const seedData = [];
 		for (let movie_id = 1; movie_id <= totalMovies; movie_id++) {
 			// Each movie will have at least one actor
