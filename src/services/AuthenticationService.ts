@@ -14,6 +14,7 @@ import {
 	EmailValidDuplicate,
 	InvalidUserNameOrPassword,
 	NotActiveAccountError,
+	NotEnoughAuthority,
 	NotFound,
 	OldPasswordError,
 	PasswordNotMatch,
@@ -46,6 +47,50 @@ export class AuthenticationService implements IAuthenticationService {
 
 			if (!user) {
 				throw new InvalidUserNameOrPassword('Invalid username or password');
+			}
+			// check password
+			let compare = await Authentication.passwordCompare(
+				password,
+				user.account.password
+			);
+
+			// generate token
+			if (compare) {
+				if (!user.active) {
+					throw new NotActiveAccountError('Account is not active');
+				}
+				return {
+					accessToken: Authentication.generateAccessToken(
+						user.userId,
+						user.role,
+						user.account.username,
+						user.subscription.subscriptionTypeId
+					),
+					refreshToken: Authentication.generateRefreshToken(
+						user.account.username
+					),
+				};
+			} else {
+				throw new InvalidUserNameOrPassword('Invalid username or password');
+			}
+		} catch (error: any) {
+			handleErrorFunction(error);
+		}
+	};
+
+	loginAdmin= async (username: string, password: string): Promise<any> => {
+		try {
+			const searchConditions = {
+				username,
+			};
+			const user = await this.userRepository.findOneUser(searchConditions);
+
+			if (!user) {
+				throw new InvalidUserNameOrPassword('Invalid username or password');
+			}
+
+			if(user.role!==0 && user.role!==1){
+				throw new NotEnoughAuthority("No Permission")
 			}
 			// check password
 			let compare = await Authentication.passwordCompare(
