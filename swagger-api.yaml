@@ -282,9 +282,7 @@ paths:
         '405':
           description: Invalid input
       security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
