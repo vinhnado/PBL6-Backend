@@ -95,14 +95,13 @@ export class MovieController {
 				if(movie.isSeries){
 					isSeries = 'Dài tập';
 				}
-				infors = infors+ 'MovieID: '+movie.movieId+'. ';
-				infors = infors+ ' Tên Phim: '+movie.title+'. ';
-				infors = infors+ ' Mô tả: '+movie.description+'. ';
-				infors = infors+ ' Quốc gia: '+movie.nation+'. ';
-				infors = infors+ ' Ngày phát hành: '+movie.releaseDate+'. ';
-				infors = infors+ ' Đánh giá trung bình: '+movie.averageRating+'. ';
-				infors = infors+ ' Phim: '+isSeries+'. ';
-				infors = infors+ ' Số lượt yêu thích: '+movie.numFavorite+'. ';
+				infors = infors+ ' Tên Phim: '+movie.title+'. '+'\n';
+				infors = infors+ ' Mô tả: '+movie.description+'. '+'\n';
+				infors = infors+ ' Quốc gia: '+movie.nation+'. '+'\n';
+				infors = infors+ ' Ngày phát hành: '+movie.releaseDate+'. '+'\n';
+				infors = infors+ ' Đánh giá trung bình: '+movie.averageRating+'. '+'\n';
+				infors = infors+ ' Loại Phim: '+isSeries+'. '+'\n';
+				infors = infors+ ' Số lượt yêu thích: '+movie.numFavorite+'. '+'\n';
 
 
 				for (const genre of movie.genres) {
@@ -114,11 +113,13 @@ export class MovieController {
 				for (const director of movie.directors) {
 					directors= directors+', '+director.name;
 				}
-				infors = infors+ ' Thể loại: '+genres+'. ';
-				infors = infors+ ' Diễn viên: '+actors+'. ';
-				infors = infors+ ' Đạo diễn: '+directors+'. ';
+				infors = infors+ ' Thể loại: '+genres.slice(2)+'. '+'\n';
+				infors = infors+ ' Diễn viên: '+actors.slice(2)+'. '+'\n';
+				infors = infors+ ' Đạo diễn: '+directors.slice(2)+'. '+'\n';
 
 				genresMap[movie.movieId] = infors;
+				console.log(infors);
+				
 			}
 			return res.json({
 				message: 'successful',
