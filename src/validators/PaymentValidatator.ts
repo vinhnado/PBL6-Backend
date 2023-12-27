@@ -13,16 +13,3 @@ export const validateGetPayments = [
     query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
     query('pageSize').optional().isInt({ min: 1 }).withMessage('Page size must be a positive integer'),
 ];
-
-
-export const validateCreatePaypalOrder = [
-  body('subscriptionInfoId').notEmpty().withMessage('SubscriptionInfoId is required').isInt({ min: 2 }).withMessage('SubscriptionInfoId must be a positive integer'),
-];
-
-export const validateCancelPaypalOrder = [
-  query('token').notEmpty().withMessage('Token is required'),
-];
-
-export const validateCapturePaypalOrder = [
-  body('order_id').notEmpty().withMessage('Order_id is required'),
-];

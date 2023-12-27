@@ -1,19 +1,17 @@
 import { SubscriptionController } from '../controller/SubscriptionController';
 import BaseRoutes from './Base/BaseRouter';
-import { validateCreateSubscriptionInfo, validateCreateSubscriptionType, validateDeleteSubscriptionInfo, validateDeleteSubscriptionType, validateUpdateSubscription, validateUpdateSubscriptionInfo, validateUpdateSubscriptionType } from '../validators/SubscriptionValidator';
-import { validate } from '../validators/Validator';
 class SubscriptionRoutes extends BaseRoutes {
 	constructor() {
 		super(new SubscriptionController());
 	}
 	public routes(): void {
-		this.router.put('/update-subscription',validateUpdateSubscription,validate, this.controller.updateSubscription);
+		this.router.put('/update-subscription', this.controller.updateSubscription);
 		this.router.post(
-			'/create-subscription-type',validateCreateSubscriptionType,validate,
+			'/create-subscription-type',
 			this.controller.createSubscriptionType
 		);
 		this.router.put(
-			'/update-subscription-type',validateUpdateSubscriptionType,validate,
+			'/update-subscription-type',
 			this.controller.updateSubscriptionType
 		);
 		this.router.get(
@@ -21,7 +19,7 @@ class SubscriptionRoutes extends BaseRoutes {
 			this.controller.getAllSubscriptionType
 		);
 		this.router.delete(
-			'/delete-subscription-type',validateDeleteSubscriptionType,validate,
+			'/delete-subscription-type',
 			this.controller.deleteSubscriptionType
 		);
 		this.router.get(
@@ -29,15 +27,15 @@ class SubscriptionRoutes extends BaseRoutes {
 			this.controller.getAllSubscriptionInfo
 		);
 		this.router.post(
-			'/create-subscription-info',validateCreateSubscriptionInfo,validate,
+			'/create-subscription-info',
 			this.controller.createSubscriptionInfo
 		);
 		this.router.put(
-			'/update-subscription-info',validateUpdateSubscriptionInfo,validate,
+			'/update-subscription-info',
 			this.controller.updateSubscriptionInfo
 		);
 		this.router.delete(
-			'/delete-subscription-info',validateDeleteSubscriptionInfo,validate,
+			'/delete-subscription-info',
 			this.controller.deleteSubscriptionInfo
 		);
 	}
