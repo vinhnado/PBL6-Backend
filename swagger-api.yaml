@@ -1890,6 +1890,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
   /individuals/actors/get-presign-url/avatar:
     get:
       summary: Get presign url to upload avatar actor
@@ -1906,6 +1908,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
     post:
       summary: Create a new actor
       description: Create a new actor
@@ -1933,6 +1937,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
 
   /individuals/actors/{actorId}:
     get:
@@ -1951,6 +1957,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
     delete:
       summary: Delete actor
       description: Delete actor
@@ -1967,6 +1975,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
     put:
       summary: Update actor informations
       description: Update actor informations
@@ -1980,6 +1990,8 @@ paths:
           schema:
             type: number
             format: int64
+      security:
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
@@ -2030,6 +2042,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
   /individuals/directors/get-presign-url/avatar:
     get:
       summary: Get presign url to upload avatar actor
@@ -2046,6 +2060,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
     post:
       summary: Create a new director
       description: Create a new director
@@ -2070,6 +2086,8 @@ paths:
                 description:
                   type: string
                   default: New actor description
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Successful response
@@ -2091,6 +2109,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
     delete:
       summary: Delete a director
       description: Delete a director by directorId
@@ -2107,6 +2127,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
     put:
       summary: Update director informations
       description: Update director informations
@@ -2120,6 +2142,8 @@ paths:
           schema:
             type: number
             format: int64
+      security:
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
