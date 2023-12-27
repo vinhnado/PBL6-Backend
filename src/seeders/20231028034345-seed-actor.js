@@ -853,7 +853,7 @@ module.exports = {
 			},
 			{
 				//78
-				name: 'Han Suk Gyu',
+				name: 'Mạnh Tử Nghĩa',
 				description: '',
 				gender: 'Nữ',
 				date_of_birth: new Date('1955-05-18'),
