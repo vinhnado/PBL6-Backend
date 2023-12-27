@@ -1,6 +1,6 @@
 import { PaymentController } from '../controller/PaymentController';
 import { auth, authAdmin } from '../middleware/AuthMiddleware';
-import { validateGetPayments } from '../validators/PaymentValidatator';
+import { validateCancelPaypalOrder, validateCapturePaypalOrder, validateCreatePaypalOrder, validateGetPayments } from '../validators/PaymentValidatator';
 import { validate } from '../validators/Validator';
 import BaseRoutes from './Base/BaseRouter';
 class PaymentRoutes extends BaseRoutes {
@@ -8,15 +8,15 @@ class PaymentRoutes extends BaseRoutes {
 		super(new PaymentController());
 	}
 	public routes(): void {
-		this.router.post('/paypal', auth, this.controller.createPaypalOrder);
+		this.router.post('/paypal', auth,validateCreatePaypalOrder,validate, this.controller.createPaypalOrder);
 		this.router.post(
 			'/paypal/capture',
-			auth,
+			auth,validateCancelPaypalOrder,validate,
 			this.controller.capturePaypalOrder
 		);
 		this.router.delete(
 			'/paypal/cancel',
-			auth,
+			auth,validateCapturePaypalOrder,validate,
 			this.controller.cancelPaypalOrder
 		);
 		this.router.post('/vn-pay', auth, this.controller.getVNPayPaymentURL);

@@ -14,3 +14,14 @@ export const validateGetPayments = [
     query('pageSize').optional().isInt({ min: 1 }).withMessage('Page size must be a positive integer'),
 ];
 
+export const validateCreatePaypalOrder = [
+  body('subscriptionInfoId').notEmpty().withMessage('SubscriptionInfoId is required').isInt({ min: 1 }).withMessage('SubscriptionInfoId must be a positive integer'),
+];
+
+export const validateCancelPaypalOrder = [
+  query('token').notEmpty().withMessage('Token is required'),
+];
+
+export const validateCapturePaypalOrder = [
+  body('order_id').notEmpty().withMessage('Order_id is required'),
+];
