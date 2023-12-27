@@ -13,3 +13,4 @@ export const validateGetPayments = [
     query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
     query('pageSize').optional().isInt({ min: 1 }).withMessage('Page size must be a positive integer'),
 ];
+
