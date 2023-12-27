@@ -304,9 +304,7 @@ paths:
         '405':
           description: Invalid input
       security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
@@ -372,6 +370,8 @@ paths:
           description: Invalid ID supplied
         '404':
           description: Movie not found
+      security:
+        - bearerAuth: []
 
   '/movies/{id}':
     get:
@@ -565,6 +565,8 @@ paths:
                 actorIds:
                   type: array
                   default: [1, 2, 3]
+      security:
+        - bearerAuth: []
   '/movies/movie-director':
     delete:
       tags:
@@ -613,6 +615,8 @@ paths:
                 directorIds:
                   type: array
                   default: [1, 2, 3]
+      security:
+        - bearerAuth: []
   '/movies/movie-genre':
     delete:
       tags:
@@ -661,6 +665,8 @@ paths:
                 genreIds:
                   type: array
                   default: [1, 2, 3]
+      security:
+        - bearerAuth: []
   /movies/get/presign-url:
     get:
       tags:
@@ -2210,6 +2216,8 @@ paths:
                   format: date-time
                 subscriptionInfoId:
                   type: integer
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: OK
@@ -2241,6 +2249,8 @@ paths:
               example:
                 status: Ok!
                 message: Successfully
+      security:
+        - bearerAuth: []
 
   /subscription/update-subscription-type:
     put:
@@ -2260,6 +2270,8 @@ paths:
                   type: number
                 subscriptionTypeId:
                   type: integer
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: OK
@@ -2283,6 +2295,8 @@ paths:
                 status: Ok!
                 message: Successfully
                 data: []
+      security:
+        - bearerAuth: []
 
   /subscription/delete-subscription-type:
     delete:
@@ -2303,6 +2317,8 @@ paths:
               example:
                 status: Ok!
                 message: Successfully
+      security:
+        - bearerAuth: []
 
   /subscription/create-subscription-info:
     post:
@@ -2322,6 +2338,8 @@ paths:
                   type: number
                 discount:
                   type: number
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: OK
@@ -2359,6 +2377,8 @@ paths:
               example:
                 status: Ok!
                 message: Successfully
+      security:
+        - bearerAuth: []
 
   /subscription/get-all-subscription-info:
     get:
@@ -2374,6 +2394,8 @@ paths:
                 status: Ok!
                 message: Successfully
                 data: []
+      security:
+        - bearerAuth: []
 
   /subscription/delete-subscription-info:
     delete:
@@ -2394,6 +2416,8 @@ paths:
               example:
                 status: Ok!
                 message: Successfully
+      security:
+        - bearerAuth: []
   /payments:
     get:
       tags:
@@ -2499,6 +2523,8 @@ paths:
                   $ref: '#/components/schemas/Pet'
         '400':
           description: Khong the lay danh sach phim
+      security:
+        - bearerAuth: []
   /payments/vn-pay:
     post:
       tags:
