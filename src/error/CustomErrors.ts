@@ -59,6 +59,12 @@ export class NotFound extends CustomError {
 	}
 }
 
+export class NotEnoughAuthority extends CustomError {
+	constructor(message: string) {
+		super(message, 403, 'Forbidden');
+	}
+}
+
 export class NotEnoughSubscription extends CustomError {
 	constructor(message: string) {
 		super(message, 403, 'Forbidden');

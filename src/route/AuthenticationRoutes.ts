@@ -10,6 +10,7 @@ class AuthenticationRoutes extends BaseRoutes {
 	}
 	routes(): void {
 		this.router.post('/login',validateLogin,validate, this.controller.login);
+		this.router.post('/login-admin',validateLogin,validate, this.controller.loginAdmin);
 		this.router.post('/register',validateRegister,validate ,this.controller.register);
 		this.router.get('/valid-register', validateValidRegister,validate,this.controller.validRegister);
 		this.router.post('/forgot-password',validateForgotPassword,validate, this.controller.forgotPassword);
