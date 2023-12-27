@@ -88,6 +88,11 @@ class UserRoutes extends BaseRoutes {
 			auth,
 			this.controller.deleteReserve
 		);
+		this.router.get(
+			'/payments',
+			auth,
+			this.controller.getPaymentsOfUser
+		);
 	}
 }
 

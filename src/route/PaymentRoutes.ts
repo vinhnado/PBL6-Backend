@@ -1,5 +1,5 @@
 import { PaymentController } from '../controller/PaymentController';
-import { auth } from '../middleware/AuthMiddleware';
+import { auth, authAdmin } from '../middleware/AuthMiddleware';
 import { validateCancelPaypalOrder, validateCreatePaypalOrder, validateGetPayments } from '../validators/PaymentValidatator';
 import { validate } from '../validators/Validator';
 import BaseRoutes from './Base/BaseRouter';
@@ -29,6 +29,8 @@ class PaymentRoutes extends BaseRoutes {
 		);
 		this.router.get(
 			'/',
+			auth,
+			authAdmin,
 			validateGetPayments,
 			validate,
 			this.controller.getPayments

@@ -10,21 +10,21 @@ module.exports = {
 			false, false, false, false, false, false, false, true, true, false,
 			false, false, false, false, false, true, true, true, true, true, true,
 			true, true, true, true, false, false, false, false, false, false, false,
-			false, false, false, false, false, false, false, false, false, false, false
+			false, false, false, false, false, false, false, false, false, false, false, false
 		  ];
 		  const numericSequence = [
 			30, 40, 45, 50, 1, 1, 1, 1, 35, 20, 1, 1, 1, 1, 1, 1, 55, 25, 1, 1,
 			1, 1, 1, 1, 1, 1, 10, 10, 1, 1, 1, 1, 1, 1, 35, 46, 21, 25, 35, 40,
-			30, 30, 30, 30, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1
+			30, 30, 30, 30, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1,1
 		  ];
-		for (let movieId = 1; movieId <= 63; movieId++) {
+		for (let movieId = 1; movieId <= 64; movieId++) {
 			if(booleanSequence[movieId-1] ===true){
 				for (let episodeNo = 1; episodeNo <= numericSequence[movieId-1]; episodeNo++) {
 					episodesData.push({
 						movie_id: movieId,
 						title: 'Tập '.concat(episodeNo),
 						release_date: new Date(),
-						poster_url: 'movies/'+movieId+'/episodes/'.concat(episodeNo, '/poster.ipg'),
+						poster_url: 'movies/'+movieId+'/poster.jpg',
 						movie_url: 'movies/'+movieId+'/episodes/'.concat(episodeNo, '/movie.mp4'),
 						num_view: Math.floor(Math.random() * (10000 + 1)),
 						duration: Math.floor(Math.random() * (100 - 1 + 1)) + 1,
@@ -38,7 +38,7 @@ module.exports = {
 					movie_id: movieId,
 					title: 'Tập '.concat(1),
 					release_date: new Date(),
-					poster_url: 'movies/'+movieId+'/episodes/'.concat(1, '/poster.ipg'),
+					poster_url: 'movies/'+movieId+'/poster.jpg',
 					movie_url: 'movies/'+movieId+'/episodes/'.concat(1, '/movie.mp4'),
 					num_view: Math.floor(Math.random() * (10000 + 1)),
 					duration: Math.floor(Math.random() * (100 - 1 + 1)) + 1,

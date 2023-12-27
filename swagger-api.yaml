@@ -304,9 +304,7 @@ paths:
         '405':
           description: Invalid input
       security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
@@ -372,6 +370,8 @@ paths:
           description: Invalid ID supplied
         '404':
           description: Movie not found
+      security:
+        - bearerAuth: []
 
   '/movies/{id}':
     get:
@@ -565,6 +565,8 @@ paths:
                 actorIds:
                   type: array
                   default: [1, 2, 3]
+      security:
+        - bearerAuth: []
   '/movies/movie-director':
     delete:
       tags:
@@ -613,6 +615,8 @@ paths:
                 directorIds:
                   type: array
                   default: [1, 2, 3]
+      security:
+        - bearerAuth: []
   '/movies/movie-genre':
     delete:
       tags:
@@ -661,6 +665,8 @@ paths:
                 genreIds:
                   type: array
                   default: [1, 2, 3]
+      security:
+        - bearerAuth: []
   /movies/get/presign-url:
     get:
       tags:
@@ -1912,6 +1918,19 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
+  /user/payments:
+    get:
+      tags:
+        - user
+      summary: Returns payments of user
+      description: Returns payments movies of user
+      responses:
+        '200':
+          description: successful operation
+      security:
+        - bearerAuth: []
   /individuals/actors/get-presign-url/avatar:
     get:
       summary: Get presign url to upload avatar actor
@@ -1928,6 +1947,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
     post:
       summary: Create a new actor
       description: Create a new actor
@@ -1955,6 +1976,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
 
   /individuals/actors/{actorId}:
     get:
@@ -1973,6 +1996,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
     delete:
       summary: Delete actor
       description: Delete actor
@@ -1989,6 +2014,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
     put:
       summary: Update actor informations
       description: Update actor informations
@@ -2002,6 +2029,8 @@ paths:
           schema:
             type: number
             format: int64
+      security:
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
@@ -2052,6 +2081,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
   /individuals/directors/get-presign-url/avatar:
     get:
       summary: Get presign url to upload avatar actor
@@ -2068,6 +2099,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
     post:
       summary: Create a new director
       description: Create a new director
@@ -2092,6 +2125,8 @@ paths:
                 description:
                   type: string
                   default: New actor description
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Successful response
@@ -2113,6 +2148,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
     delete:
       summary: Delete a director
       description: Delete a director by directorId
@@ -2129,6 +2166,8 @@ paths:
       responses:
         '200':
           description: Successful response
+      security:
+        - bearerAuth: []
     put:
       summary: Update director informations
       description: Update director informations
@@ -2142,6 +2181,8 @@ paths:
           schema:
             type: number
             format: int64
+      security:
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
@@ -2186,6 +2227,8 @@ paths:
                   format: date-time
                 subscriptionInfoId:
                   type: integer
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: OK
@@ -2217,6 +2260,8 @@ paths:
               example:
                 status: Ok!
                 message: Successfully
+      security:
+        - bearerAuth: []
 
   /subscription/update-subscription-type:
     put:
@@ -2236,6 +2281,8 @@ paths:
                   type: number
                 subscriptionTypeId:
                   type: integer
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: OK
@@ -2259,6 +2306,8 @@ paths:
                 status: Ok!
                 message: Successfully
                 data: []
+      security:
+        - bearerAuth: []
 
   /subscription/delete-subscription-type:
     delete:
@@ -2279,6 +2328,8 @@ paths:
               example:
                 status: Ok!
                 message: Successfully
+      security:
+        - bearerAuth: []
 
   /subscription/create-subscription-info:
     post:
@@ -2298,6 +2349,8 @@ paths:
                   type: number
                 discount:
                   type: number
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: OK
@@ -2335,6 +2388,8 @@ paths:
               example:
                 status: Ok!
                 message: Successfully
+      security:
+        - bearerAuth: []
 
   /subscription/get-all-subscription-info:
     get:
@@ -2350,6 +2405,8 @@ paths:
                 status: Ok!
                 message: Successfully
                 data: []
+      security:
+        - bearerAuth: []
 
   /subscription/delete-subscription-info:
     delete:
@@ -2370,6 +2427,8 @@ paths:
               example:
                 status: Ok!
                 message: Successfully
+      security:
+        - bearerAuth: []
   /payments:
     get:
       tags:
@@ -2475,6 +2534,8 @@ paths:
                   $ref: '#/components/schemas/Pet'
         '400':
           description: Khong the lay danh sach phim
+      security:
+        - bearerAuth: []
   /payments/vn-pay:
     post:
       tags:

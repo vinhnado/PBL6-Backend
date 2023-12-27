@@ -34,6 +34,7 @@ export class ResrveRepository extends BaseRepository<Reserve> implements IReserv
 
     async getMoviesReserveOfUser(userId: number): Promise<Movie[]> {
         try {
+            this.getReservesToSendMail();
             const reserveList = await User.findOne({
 				where: { userId: userId },
 				attributes: ['userId'],
@@ -68,5 +69,62 @@ export class ResrveRepository extends BaseRepository<Reserve> implements IReserv
         }
     }
 
+    async getReservesToSendMail(): Promise<Reserve[]> {
+        try {
+            const ids = this.getListMovieReserve();
+
+            const reserveList = await this.model.findAll({
+				include: [
+					{
+						model: Movie,
+                        where: {
+                            movieId: {
+                              [Op.in]: ids,
+                            },
+                          },
+						attributes: {
+							exclude: ['createdAt', 'updatedAt', 'deletedAt'],
+						},
+					},
+				],
+                
+			});
+            console.log(reserveList);
+            if(!reserveList){
+                return [];
+            }
+            return reserveList;
+        } catch (error) {
+            console.log(error);
+            throw(error);
+        }
+    }
+
+    async getListMovieReserve(): Promise<number[]>{
+        try {
+            const Ids = [];
+    
+            // Lấy ngày của ngày mai
+            const ngayHienTai = new Date();
+            ngayHienTai.setDate(ngayHienTai.getDate() + 1);
+            
+            // Lọc theo ngày
+            const movies = await Movie.findAll({
+              where: {
+                releaseDate: literal(`DATE(release_date) = DATE('${ngayHienTai.toISOString()}')`)
+              },
+              attributes: ['movie_id']
+            });
+
+            for (const movie of movies) {
+              Ids.push(movie.getDataValue('movie_id'));
+            }
+        
+            console.log(Ids);
+            return Ids;
+        } catch (error) {
+            throw (error);
+        }
+    }
     
 }

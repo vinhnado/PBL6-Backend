@@ -853,7 +853,7 @@ module.exports = {
 			},
 			{
 				//78
-				name: 'Han Suk Gyu',
+				name: 'Mạnh Tử Nghĩa',
 				description: '',
 				gender: 'Nữ',
 				date_of_birth: new Date('1955-05-18'),
@@ -1020,7 +1020,7 @@ module.exports = {
 				//93
 				name: 'Vương Sở Nhiên',
 				description: '',
-				gender: 'Nữ',
+				gender: 'Nam',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/93/avatar.jpg',
 				poster: 'default/actor/poster_default.jpg',
@@ -1031,7 +1031,7 @@ module.exports = {
 				//94
 				name: 'Nhậm Mẫn',
 				description: '',
-				gender: 'Nữ',
+				gender: 'Nam',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/94/avatar.jpg',
 				poster: 'default/actor/poster_default.jpg',
@@ -1042,7 +1042,7 @@ module.exports = {
 				//95
 				name: 'Phương Dật Luân',
 				description: '',
-				gender: 'Nữ',
+				gender: 'Nam',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/95/avatar.jpg',
 				poster: 'default/actor/poster_default.jpg',
@@ -1084,11 +1084,44 @@ module.exports = {
 			},
 			{
 				//99
-				name: ' Dương Tử',
+				name: 'Dương Tử',
 				description: '',
 				gender: 'Nữ',
 				date_of_birth: new Date('1955-05-18'),
 				avatar: 'actors/99/avatar.jpg',
+				poster: 'default/actor/poster_default.jpg',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				//100
+				name: 'Tobey Maguire',
+				description: '',
+				gender: 'Nam',
+				date_of_birth: new Date('1955-05-18'),
+				avatar: 'actors/100/avatar.jpg',
+				poster: 'default/actor/poster_default.jpg',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				//101
+				name: 'Kirsten Dunst',
+				description: '',
+				gender: 'Nữ',
+				date_of_birth: new Date('1955-05-18'),
+				avatar: 'actors/101/avatar.jpg',
+				poster: 'default/actor/poster_default.jpg',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				//102
+				name: 'James Edward Franco',
+				description: '',
+				gender: 'Nam',
+				date_of_birth: new Date('1955-05-18'),
+				avatar: 'actors/102/avatar.jpg',
 				poster: 'default/actor/poster_default.jpg',
 				createdAt: new Date(),
 				updatedAt: new Date(),
