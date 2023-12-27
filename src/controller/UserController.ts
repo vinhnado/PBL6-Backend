@@ -8,16 +8,20 @@ import { Request, Response } from 'express';
 import Container from 'typedi';
 import { MovieService } from '../services/MovieService';
 import { IMovieService } from '../services/Interfaces/IMovieService';
+import { PaymentService } from '../services/PaymentService';
+import { IPaymentService } from '../services/Interfaces/IPaymentService';
 
 export class UserController {
 	private userService: IUserService;
 	private authenticationService: IAuthenticationService;
 	private movieService: IMovieService;
+	private paymentService: IPaymentService;
 
 	constructor() {
 		this.userService = Container.get(UserService);
 		this.authenticationService = Container.get(AuthenticationService);
 		this.movieService = Container.get(MovieService);
+		this.paymentService= Container.get(PaymentService);
 	}
 
 	getUser = async (req: Request, res: Response) => {
@@ -405,4 +409,17 @@ export class UserController {
 			});
 		}
 	}
+
+	getPaymentsOfUser = async (req: Request, res: Response) => {
+		try {
+			const userId = Number(req.payload.userId);
+			const payments = await this.paymentService.findAllPaymentByUserId(userId);
+			return res.json({
+				message: 'Success',
+				data: payments,
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	};
 }
