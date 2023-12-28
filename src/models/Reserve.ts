@@ -18,6 +18,7 @@ export class Reserve extends Model {
 	private static TABLE_NAME = 'reserves' as string;
 	private static USER_ID = 'user_id' as string;
 	private static MOVIE_ID = 'movie_id' as string;
+	private static IS_NOTIFICATION = "notification" as string;
 
 	@ForeignKey(() => User)
 	@Column({
@@ -32,6 +33,13 @@ export class Reserve extends Model {
 		field: Reserve.MOVIE_ID,
 	})
 	movieId!: number;
+
+	@Column({
+		type: DataType.BOOLEAN,
+		field: Reserve.IS_NOTIFICATION,
+		defaultValue: false,
+	})
+	notification!: boolean;
 
 	@DeletedAt
 	deletedAt!: Date;
