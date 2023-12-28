@@ -12,4 +12,6 @@ export interface IEpisodeService {
     getPresignUrlToUploadPosterAndMovie(req: Request): Promise<{ key: string, value: string }[]>;
     checkMovieIsSeries(movieId: number): Promise<boolean>;
     getQualityMovie(req: Request): Promise<Quality|null>;
+    getQualityMovie(req: Request): Promise<Quality|null>;
+    clearCacheCloudFrontEpisodes(req: Request): Promise<void>;
 }

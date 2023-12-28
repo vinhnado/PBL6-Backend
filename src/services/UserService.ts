@@ -346,6 +346,7 @@ export class UserService implements IUserService {
 			data.userId = userId;
 			data.avatarURL = 'users/' + userId + '/avatar.jpg';
 			await this.updateUser(data);
+			await await this.s3Service.clearCacheCloudFront(data.avatarURL);
 			return await this.s3Service.generatePresignedUrlUpdate(
 				data.avatarURL,
 				'image/jpeg'

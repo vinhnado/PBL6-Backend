@@ -1,7 +1,7 @@
 import { IndividualController } from '../controller/IndividualController';
 import { auth, authAdmin } from '../middleware/AuthMiddleware';
 import { validateCreateActor, validateDeleteActor, validateGetActorDetails, validateGetActors, validateUpdateActor,validateGetPresignUrlActor } from '../validators/ActorValidator';
-import { validateCreateDirector, validateDeleteDirector, validateGetDirectorDetails, validateGetDirectors, validateUpdateDirector,validateGetPresignUrlDirector } from '../validators/DirectorValidate';
+import { validateCreateDirector, validateDeleteDirector, validateGetDirectorDetails, validateGetDirectors, validateUpdateDirector,validateGetPresignUrlDirector, validateClearCloudFront } from '../validators/DirectorValidate';
 import { validate } from '../validators/Validator';
 import BaseRoutes from './Base/BaseRouter';
 class IndividualRoutes extends BaseRoutes {
@@ -23,6 +23,7 @@ class IndividualRoutes extends BaseRoutes {
 		this.router.put('/directors/:directorId',auth, authAdmin, validateUpdateDirector, validate, this.controller.updateDirector);
 		this.router.post('/directors',auth, authAdmin, validateCreateDirector, validate, this.controller.createDirector);
 		this.router.get('/directors/get-presign-url/avatar',auth, authAdmin, validateGetPresignUrlDirector, validate, this.controller.getPresignUrlToUploadAvatarDirector);
+		this.router.post('/cloudfront/clear-cache',auth, authAdmin, validateClearCloudFront, validate, this.controller.clearCacheCloudFrontIndividual);
 
 	}
 }

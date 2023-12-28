@@ -702,6 +702,35 @@ paths:
           description: successful operation
       security:
         - bearerAuth: []
+  /movies/cloudfront/clear-cache:
+    post:
+      tags:
+        - movie
+      summary:  Clear cache cloud front
+      description: Clear cache cloud front for movies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                movieId:
+                  type: integer
+                  format: int64
+                  default: 1
+                option:
+                  type: string
+                  enum:
+                    - poster
+                    - background
+                    - trailer
+                    - all
+                  default: 'poster'
+      responses:
+        '200':
+          description: successful operation
+      security:
+        - bearerAuth: []
 
   /episode/{id}:
     get:
@@ -968,6 +997,41 @@ paths:
       responses:
         '200':
           description: successful operation
+      security:
+        - bearerAuth: []
+  /episode/cloudfront/clear-cache:
+    post:
+      tags:
+        - episode
+      summary: Update episode
+      description: Update episode
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                movieId:
+                  type: integer
+                  format: int64
+                  default: 1
+                episodeNum:
+                  type: integer
+                  format: int64
+                  default: 1
+                quality:
+                  type: string
+                  default: '720p or 1080p or 4k'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
       security:
         - bearerAuth: []
   /genres:
@@ -2205,6 +2269,33 @@ paths:
       responses:
         '200':
           description: Successful response
+  /individuals/cloudfront/clear-cache:
+    post:
+      summary: Get directors
+      description: Get directors, include search parameters by name
+      tags:
+        - individuals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: int64
+                  default: 1
+                option:
+                  type: string
+                  enum:
+                    - directors
+                    - actors
+                  default: 'actors'
+      responses:
+        '200':
+          description: Successful response
+      security:
+        - bearerAuth: []
   /subscription/update-subscription:
     put:
       tags:
