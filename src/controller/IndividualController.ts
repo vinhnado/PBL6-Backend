@@ -6,14 +6,18 @@ import { Actor } from '../models/Actor';
 import { Director } from '../models/Director';
 import { IActorService } from '../services/Interfaces/IActorService';
 import IDirectorService from '../services/Interfaces/IDirectorService';
+import { S3Service } from '../services/S3Service';
 
 export class IndividualController {
 	private actorService: IActorService;
 	private directorService: IDirectorService;
+	private s3Service: S3Service;
+
 
 	constructor() {
 		this.actorService = Container.get(ActorService);
 		this.directorService = Container.get(DirectorService);
+		this.s3Service= Container.get(S3Service);
 	}
 
 	createActor = async (req: Request, res: Response) => {
@@ -265,6 +269,23 @@ export class IndividualController {
                 message: "Server error!"
             });
         }
+	}
+
+	clearCacheCloudFrontIndividual= async(req: Request, res: Response) => {
+		try {
+			const id = req.body.id;
+			const option = req.body.option;
+
+			await this.s3Service.clearCacheCloudFront(option+'/'+id+'/avatar.jpg');
+			res.status(200).json({
+				message: "successful",
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
 	}
 	// getPopularActors = async (req: Request, res: Response)=>{
 	// 	try {
