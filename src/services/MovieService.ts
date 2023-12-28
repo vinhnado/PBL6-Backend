@@ -150,7 +150,7 @@ export class MovieService implements IMovieService {
 				);
 			}
 
-			await this.redis.set(cacheKey, JSON.stringify({ movies, totalCount }), 'EX', 60);
+			await this.redis.set(cacheKey, JSON.stringify({ movies, totalCount }), 'EX', 60*5);
 
 			return {
 				movies,
