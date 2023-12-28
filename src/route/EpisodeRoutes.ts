@@ -8,7 +8,7 @@ class EpisodeRoutes extends BaseRoutes {
 		super(new EpisodeController());
 	}
 	public routes(): void {
-		this.router.get('/:id',authUser, validateGetEpisodeById, validate, this.controller.getEpisode);
+		this.router.get('/:id',auth, validateGetEpisodeById, validate, this.controller.getEpisode);
 		this.router.get('/:id/comments', this.controller.getCommentsOfEpisode);
 		this.router.post('/create',auth, authAdmin, validateCreateEpisode, validate, this.controller.createEpisode);
 		this.router.put('/update/:episodeId', auth, authAdmin,validateUpdateEpisode, validate, this.controller.updateEpisode);
