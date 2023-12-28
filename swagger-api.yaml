@@ -702,6 +702,35 @@ paths:
           description: successful operation
       security:
         - bearerAuth: []
+  /movies/cloudfront/clear-cache:
+    post:
+      tags:
+        - movie
+      summary:  Clear cache cloud front
+      description: Clear cache cloud front for movies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                movieId:
+                  type: integer
+                  format: int64
+                  default: 1
+                option:
+                  type: string
+                  enum:
+                    - poster
+                    - background
+                    - trailer
+                    - all
+                  default: 'poster'
+      responses:
+        '200':
+          description: successful operation
+      security:
+        - bearerAuth: []
 
   /episode/{id}:
     get:

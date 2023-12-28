@@ -371,6 +371,21 @@ export class MovieController {
 		}
 	}
 
+	clearCacheCloudFrontMovie= async(req: Request, res: Response) => {
+		try {
+			
+			await this.movieService.clearCacheCloudFrontMovie(req);
+			res.status(200).json({
+				message: "successful",
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
+
 	test= async(req: Request, res: Response) => {
 		try {
 			const userId = Number(req.payload.userId);
