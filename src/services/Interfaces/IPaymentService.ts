@@ -13,4 +13,5 @@ export interface IPaymentService {
 	getPayments: (
 		req: Request
 	) => Promise<{ payments: Payment[]; totalCount: number }>;
+	
 }

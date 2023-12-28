@@ -1920,6 +1920,17 @@ paths:
           description: Successful response
       security:
         - bearerAuth: []
+  /user/payments:
+    get:
+      tags:
+        - user
+      summary: Returns payments of user
+      description: Returns payments movies of user
+      responses:
+        '200':
+          description: successful operation
+      security:
+        - bearerAuth: []
   /individuals/actors/get-presign-url/avatar:
     get:
       summary: Get presign url to upload avatar actor

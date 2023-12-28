@@ -309,4 +309,5 @@ export class PaymentController {
 			console.log(error);
 		}
 	};
+
 }
