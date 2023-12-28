@@ -101,7 +101,7 @@ export class S3Service {
     private BUCKET_NAME = process.env.AWS_BUCKET_NAME || 'movies-data-pbl6';
     private EXPIRATION = 24 * 60 * 60;
     // Thời gian expire được sửa thành 1 phút (60 giây)
-    private expireTime = 60*60 * 1000; // 5 phut *60 giây * 1000 milliseconds
+    private expireTime = 24*60*60 * 1000; // 5 phut *60 giây * 1000 milliseconds
     private expires = new Date(Date.now() + this.expireTime);
     // Get link Object 
     getObjectUrl = async (objectName: string, bucketName: string = this.BUCKET_NAME, expiration: number = this.EXPIRATION) => {
