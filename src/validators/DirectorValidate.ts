@@ -32,3 +32,8 @@ export const validateCreateDirector = [
 export const validateGetPresignUrlDirector = [
     query('directorId').notEmpty().withMessage('directorId is required').isInt({min:1}).withMessage('directorId must be an integer'),
 ];
+
+export const validateClearCloudFront = [
+    body('id').notEmpty().withMessage('id is required').isInt({min:1}).withMessage('id must be an integer'),
+    body('option').notEmpty().isIn(['actors', 'directors']).withMessage("option is required and in 'actors', 'directors'"),
+];
