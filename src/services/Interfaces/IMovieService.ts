@@ -41,4 +41,5 @@ export interface IMovieService {
 
     addReserve(req: Request): Promise<Reserve>;
 	deleteReserve(req: Request): Promise<void>
+	clearCacheCloudFrontMovie(req: Request) :Promise<void>;
 }

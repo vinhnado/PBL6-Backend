@@ -1,6 +1,5 @@
-node_modules/
 .env
 build/
 postgres-data/
 storage/
-src/ssl/
+node_modules/

@@ -5,8 +5,8 @@
 // export class S3Service {
 
 //     private static s3Client = new S3({
-//         accessKeyId: process.env.MINIO_ACCESS_KEY || 'ftpFjHO7fVotfgaDiO5A',
-//         secretAccessKey: process.env.MINIO_SECRET_KEY || 'Jx89z4nsbGevSOMDWemErKu3zplNmo03b0WZz1ri',
+//         accessKeyId: process.env.AWS_ACCESS_KEY || 'ftpFjHO7fVotfgaDiO5A',
+//         secretAccessKey: process.env.AWS_SECRET_KEY || 'Jx89z4nsbGevSOMDWemErKu3zplNmo03b0WZz1ri',
 //         region: process.env.AWS_REGION||'ap-southeast-1', // Thay thế bằng khu vực AWS của bạn
 //         // endpoint: 'https://d1ipxaj41eq65.cloudfront.net',
 //     });
@@ -50,8 +50,8 @@
 //         endPoint: process.env.MINIO_END_POINT || 'localhost',  
 //         port: Number(process.env.MINIO_PORT) || 9000,              
 //         useSSL: false,                 
-//         accessKey: process.env.MINIO_ACCESS_KEY || 'ftpFjHO7fVotfgaDiO5A',
-//         secretKey: process.env.MINIO_SECRET_KEY || 'Jx89z4nsbGevSOMDWemErKu3zplNmo03b0WZz1ri',
+//         accessKey: process.env.AWS_ACCESS_KEY || 'ftpFjHO7fVotfgaDiO5A',
+//         secretKey: process.env.AWS_SECRET_KEY || 'Jx89z4nsbGevSOMDWemErKu3zplNmo03b0WZz1ri',
 //     });;
 
 //     private BUCKET_NAME ='movies';
@@ -85,23 +85,28 @@
 
 
 import { S3 } from 'aws-sdk';
+import AWS from 'aws-sdk';
 import { Service } from 'typedi';
 import { getSignedUrl } from '@aws-sdk/cloudfront-signer';
+import { CloudFrontClient, CreateInvalidationCommand } from '@aws-sdk/client-cloudfront';
+
 
 @Service()
 export class S3Service {
 
     private static s3Client = new S3({
-        accessKeyId: process.env.MINIO_ACCESS_KEY || 'ftpFjHO7fVotfgaDiO5A',
-        secretAccessKey: process.env.MINIO_SECRET_KEY || 'Jx89z4nsbGevSOMDWemErKu3zplNmo03b0WZz1ri',
+        accessKeyId: process.env.AWS_ACCESS_KEY || 'ftpFjHO7fVotfgaDiO5A',
+        secretAccessKey: process.env.AWS_SECRET_KEY || 'Jx89z4nsbGevSOMDWemErKu3zplNmo03b0WZz1ri',
         region: process.env.AWS_REGION || 'ap-southeast-1', // Thay thế bằng khu vực AWS của bạn
     });
+
+    private cloudfrontDistributionId = process.env.CLOUDFRONT_DISTRIBUTION_ID || 'EGZQ2Z6SRLE1A'
 
     private cloudFrontDomain =process.env.CLOUDFRONT_DOMAIN|| 'https://d3h2k6w8gpk1ys.cloudfront.net'; // Thay thế bằng tên miền CloudFront của bạn
     private BUCKET_NAME = process.env.AWS_BUCKET_NAME || 'movies-data-pbl6';
     private EXPIRATION = 24 * 60 * 60;
     // Thời gian expire được sửa thành 1 phút (60 giây)
-    private expireTime = 24*60*60 * 1000; // 5 phut *60 giây * 1000 milliseconds
+    private expireTime = 24*60*60 * 1000; // 60 phut *60 giây * 1000 milliseconds
     private expires = new Date(Date.now() + this.expireTime);
     // Get link Object 
     getObjectUrl = async (objectName: string, bucketName: string = this.BUCKET_NAME, expiration: number = this.EXPIRATION) => {
@@ -135,4 +140,36 @@ export class S3Service {
             throw error; // Rethrow the error for handling later
         }
     }
+
+    clearCacheCloudFront = async (path: string) => {
+        try{
+            AWS.config.update({
+                accessKeyId: process.env.AWS_ACCESS_KEY,
+                secretAccessKey: process.env.AWS_SECRET_KEY,
+                region: process.env.AWS_REGION || 'ap-southeast-1'
+              });
+            var cloudfront = new AWS.CloudFront();
+
+            var params = {
+                DistributionId: 'EGZQ2Z6SRLE1A', /* required */
+                InvalidationBatch: { /* required */
+                  CallerReference: String(new Date().getTime()), /* required */
+                  Paths: { /* required */
+                    Quantity: 1, /* required */
+                    Items: [
+                      '/'+path
+                    ]
+                  }
+                }
+              };
+              cloudfront.createInvalidation(params, function(err, data) {
+                if (err) console.log(err, err.stack); // an error occurred
+                else     console.log(data);           // successful response
+              });
+        }catch(error){
+            console.log(error);
+        }
+    }
+      
+
 }

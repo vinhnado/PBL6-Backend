@@ -150,7 +150,7 @@ export class MovieService implements IMovieService {
 				);
 			}
 
-			await this.redis.set(cacheKey, JSON.stringify({ movies, totalCount }), 'EX', 60);
+			await this.redis.set(cacheKey, JSON.stringify({ movies, totalCount }), 'EX', 60*5);
 
 			return {
 				movies,
@@ -615,6 +615,35 @@ export class MovieService implements IMovieService {
 			if(reserve){
 				return await this.reserveRepository.delete(reserve,true);
 			}
+		} catch (error) {
+			throw(error);
+		}
+	}
+
+	async clearCacheCloudFrontMovie(req: Request) :Promise<void>
+	{
+		try {
+			const movieId = req.body.movieId;
+			const option = req.body.option;
+			if(option==='poster'){
+				return await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/poster.jpg');
+			}
+
+			if(option==='background'){
+				return await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/background.jpg');
+			}
+
+			if(option==='trailer'){
+				return await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/trailer.mp4');
+			}
+
+			if(option==='all'){
+				 await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/trailer.mp4');
+				 await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/poster.jpg');
+				 await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/background.jpg');
+				return;
+			}
+			return;
 		} catch (error) {
 			throw(error);
 		}

@@ -5,6 +5,7 @@ import { BaseInterface } from './BaseInterface';
 
 export interface IUserRepository extends BaseInterface {
 	findOneUser(searchConditions: any): Promise<User>;
+	findOneUserByUsername(username: string): Promise<User>
 	searchUsers(
 		whereConditions: any,
 		whereSubTypeCons: any,

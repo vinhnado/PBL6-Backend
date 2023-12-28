@@ -6,7 +6,8 @@ import {
 	validateDeleteMovieById,
 	validateCreateMovie,
 	validateUpdateMovie,
-	validategetPresignUrlToUpload
+	validategetPresignUrlToUpload,
+	validateClearCacheCloudFront
 } from '../validators/MovieValidator';
 import { validate } from '../validators/Validator';
 import { auth, authAdmin, authUser } from '../middleware/AuthMiddleware';
@@ -39,6 +40,7 @@ class MovieRoutes extends BaseRoutes {
 
 		this.router.post('/movie-genre',auth, authAdmin, this.controller.addGenresForMovie);
 		this.router.delete('/movie-genre',auth, authAdmin, this.controller.deleteGenresOfMovie);
+		this.router.post('/cloudfront/clear-cache',auth, authAdmin, validateClearCacheCloudFront, validate, this.controller.clearCacheCloudFrontMovie);
 	}
 }
 
