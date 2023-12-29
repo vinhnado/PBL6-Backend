@@ -125,21 +125,46 @@ export class S3Service {
     }
 
     // Create temp URL to upload object to S3
+    // generatePresignedUrlUpdate = async (objectName: string, contentType: string , expiration: number = this.EXPIRATION) => {
+    //     try {
+    //         const params = {
+    //             Bucket: this.BUCKET_NAME,
+    //             Key: objectName,
+    //             ContentType: contentType,
+    //             Expires: expiration
+    //         };
+    //         const url = await S3Service.s3Client.getSignedUrl('putObject', params);
+    //         return url;
+    //     } catch (error) {
+    //         console.error('Error generating pre-signed URL:', error);
+    //         throw error; // Rethrow the error for handling later
+    //     }
+    // }
+
     generatePresignedUrlUpdate = async (objectName: string, contentType: string , expiration: number = this.EXPIRATION) => {
         try {
-            const params = {
-                Bucket: this.BUCKET_NAME,
-                Key: objectName,
-                ContentType: contentType,
-                Expires: expiration
-            };
-            const url = await S3Service.s3Client.getSignedUrl('putObject', params);
-            return url;
+            AWS.config.update({
+                accessKeyId: process.env.AWS_ACCESS_KEY,
+                secretAccessKey: process.env.AWS_SECRET_KEY,
+                region: process.env.AWS_REGION || 'ap-southeast-1'
+              });
+            
+            var s3 = new AWS.S3();
+            s3.getSignedUrl('putObject', {
+                Bucket: 'myBucket',
+                Expires: 60*60,
+                Key: 'myKey',
+                ContentType: 'image/jpeg',
+            }, function (err, url) {
+                console.log(url);
+                return url;
+            });
         } catch (error) {
             console.error('Error generating pre-signed URL:', error);
             throw error; // Rethrow the error for handling later
         }
     }
+
 
     clearCacheCloudFront = async (path: string) => {
         try{
