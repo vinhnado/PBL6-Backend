@@ -88,7 +88,6 @@ import { S3 } from 'aws-sdk';
 import AWS from 'aws-sdk';
 import { Service } from 'typedi';
 import { getSignedUrl } from '@aws-sdk/cloudfront-signer';
-import { CloudFrontClient, CreateInvalidationCommand } from '@aws-sdk/client-cloudfront';
 import { DeleteObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
 
@@ -100,6 +99,7 @@ export class S3Service {
         accessKeyId: process.env.AWS_ACCESS_KEY || 'ftpFjHO7fVotfgaDiO5A',
         secretAccessKey: process.env.AWS_SECRET_KEY || 'Jx89z4nsbGevSOMDWemErKu3zplNmo03b0WZz1ri',
         region: process.env.AWS_REGION || 'ap-southeast-1', // Thay thế bằng khu vực AWS của bạn
+        signatureVersion: 'v4'
     });
 
     private cloudfrontDistributionId = process.env.CLOUDFRONT_DISTRIBUTION_ID || 'EGZQ2Z6SRLE1A'
@@ -127,6 +127,22 @@ export class S3Service {
     }
 
     // Create temp URL to upload object to S3
+    // generatePresignedUrlUpdate = async (objectName: string, contentType: string , expiration: number = this.EXPIRATION) => {
+    //     try {
+    //         const params = {
+    //             Bucket: this.BUCKET_NAME,
+    //             Key: objectName,
+    //             ContentType: contentType,
+    //             Expires: expiration
+    //         };
+    //         const url = await S3Service.s3Client.getSignedUrl('putObject', params);
+    //         return url;
+    //     } catch (error) {
+    //         console.error('Error generating pre-signed URL:', error);
+    //         throw error; // Rethrow the error for handling later
+    //     }
+    // }
+
     generatePresignedUrlUpdate = async (objectName: string, contentType: string , expiration: number = this.EXPIRATION) => {
         try {
             const params = {
@@ -135,7 +151,8 @@ export class S3Service {
                 ContentType: contentType,
                 Expires: expiration
             };
-            const url = await S3Service.s3Client.getSignedUrl('putObject', params);
+            const url = await S3Service.s3Client.getSignedUrlPromise('putObject', params)
+            // const url = await S3Service.s3Client.getSignedUrl('putObject', params);
             return url;
         } catch (error) {
             console.error('Error generating pre-signed URL:', error);
