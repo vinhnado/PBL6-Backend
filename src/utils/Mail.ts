@@ -99,7 +99,8 @@ export class Mail {
 				username: username,
 				movieName: movie.title,
 				posterUrl: movie.posterURL,
-				movieUrl: this.client_url+'/#/movie/'+movie.movieId+'/1'
+				date: movie.releaseDate.toISOString(),
+				movieUrl: this.client_url+'/movie/'+movie.movieId+'/1'
 			};
 
 			let htmlContent = fs.readFileSync('src/utils/ReserveMail.html', 'utf8');
