@@ -25,6 +25,8 @@ import { Reserve } from '../models/Reserve';
 import { ParsedQs } from 'qs';
 import { ParamsDictionary } from 'express-serve-static-core';
 import Mail from '../utils/Mail';
+import { MovieService } from './MovieService';
+import { IMovieService } from './Interfaces/IMovieService';
 
 @Service()
 export class UserService implements IUserService {
@@ -45,6 +47,9 @@ export class UserService implements IUserService {
 
 	@Inject(() => ReserveRepository)
 	private reserveRepository!: IReserveRepository;
+
+	@Inject(() => MovieService)
+	private movieService!: IMovieService;
 
 	@Inject(() => Mail)
 	private mail!: Mail;
@@ -365,7 +370,7 @@ export class UserService implements IUserService {
 		}
 	}
 
-	async sendMailForReserveMovie(userId: number,movieId:number): Promise<any> {
+	async sendMailForReserveMovie(): Promise<any> {
 		try {
 			const movieIdList = await this.reserveRepository.getListMovieReserve();
 			for (let i = 0; i < movieIdList.length; i++) {
@@ -374,9 +379,14 @@ export class UserService implements IUserService {
 				for (let i = 0; i < reverseList.length; i++) {
 					const movieId = movieIdList[i];
 					const reverseList = await this.reserveRepository.findByCondition({movieId:movieId})
-					// for(reverse:reverseList){
+					for (const reserve of reverseList) {
+						const user = await this.findOneUser({userId:reserve.userId})
+						const movie = await this.movieService.getMovieById(reserve.movieId)
+						console.log(user)
+						console.log(movie)
 
-					// }
+					}
+
 				}
 			}
 		} catch (error) {
