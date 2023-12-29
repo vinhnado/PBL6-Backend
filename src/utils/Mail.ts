@@ -1,6 +1,7 @@
 import * as nodemailer from 'nodemailer';
 import * as fs from 'fs';
 import { Service } from 'typedi';
+import { Movie } from '../models/Movie';
 
 @Service()
 export class Mail {
@@ -80,6 +81,31 @@ export class Mail {
 			});
 
 			return await this.sendEmail(to, 'Xác nhận người dùng', htmlContent);
+		} catch (error) {
+			console.error('Error sending email:', error);
+		}
+	};
+
+	reserveMovie = async (
+		username: string,
+		to: string,
+		movie: Movie
+	): Promise<void> => {
+		try {
+			const replacements = {
+				username: username,
+				// replaceLink:
+				// 	'https://example.com/active-user?token=' + token + '&email=' + to,
+			};
+
+			let htmlContent = fs.readFileSync('src/utils/ActiveAccount.html', 'utf8');
+
+			Object.entries(replacements).forEach(([key, value]) => {
+				const regex = new RegExp(`{{${key}}}`, 'g');
+				htmlContent = htmlContent.replace(regex, value);
+			});
+
+			return await this.sendEmail(to, 'Phim mới này bạn ơi', htmlContent);
 		} catch (error) {
 			console.error('Error sending email:', error);
 		}

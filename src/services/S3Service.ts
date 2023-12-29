@@ -89,6 +89,8 @@ import AWS from 'aws-sdk';
 import { Service } from 'typedi';
 import { getSignedUrl } from '@aws-sdk/cloudfront-signer';
 import { CloudFrontClient, CreateInvalidationCommand } from '@aws-sdk/client-cloudfront';
+import { DeleteObjectCommand, S3Client } from "@aws-sdk/client-s3";
+
 
 
 @Service()
@@ -141,8 +143,32 @@ export class S3Service {
         }
     }
 
+    deleteObject = async(objectName: string)=>{
+        try {
+            const client = new S3Client({
+                region: process.env.AWS_REGION || 'ap-southeast-1',
+                credentials: {
+                  accessKeyId:  process.env.AWS_ACCESS_KEY || '', // Thay thế bằng access key của bạn
+                  secretAccessKey: process.env.AWS_SECRET_KEY || '', // Thay thế bằng secret access key của bạn
+                },
+              });
+          const command = new DeleteObjectCommand({
+            Bucket: this.BUCKET_NAME,
+            Key: objectName,
+          });
+        
+            const response = await client.send(command);
+            console.log(response);
+      
+          } catch (err) {
+            console.log( err);
+          }
+    }
+    
+
     clearCacheCloudFront = async (path: string) => {
         try{
+            this.deleteObject('ok')
             AWS.config.update({
                 accessKeyId: process.env.AWS_ACCESS_KEY,
                 secretAccessKey: process.env.AWS_SECRET_KEY,

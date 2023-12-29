@@ -1,9 +1,12 @@
 import { MovieDTO } from '../../dto/MovieDTO';
 import { UserDTO } from '../../dto/UserDTO';
+import { Movie } from '../../models/Movie';
 import { MovieFavorite } from '../../models/MovieFavorite';
+import { Reserve } from '../../models/Reserve';
 import { User } from '../../models/User';
 import { WatchHistory } from '../../models/WatchHistory';
 import { WatchLater } from '../../models/WatchLater';
+import express, { Request, Response, Router } from 'express';
 
 export interface IUserService {
 	findOneUser: (searchConditions: any) => Promise<UserDTO>;
@@ -32,4 +35,11 @@ export interface IUserService {
 	deleteWatchLater: (userId: number, movieId: number) => Promise<void>;
 	findAllWatchLater: (userId: number) => Promise<MovieDTO>;
 	getPresignUrlToUploadAvatar: (userId: number) => Promise<string>;
+	getReserveMovieOfUser(userId: number): Promise<Reserve[]>;
+	getMoviesReserveOfUser(userId: number): Promise<Movie[]>;
+
+    addReserve(req: Request): Promise<Reserve>;
+	deleteReserve(req: Request): Promise<void>;
+	clearCacheCloudFrontAvatarUser(req: Request) :Promise<void>;
+	removeAvatar: (userId: number) => Promise<void>;
 }
