@@ -14,13 +14,11 @@ import { IPaymentService } from '../services/Interfaces/IPaymentService';
 export class UserController {
 	private userService: IUserService;
 	private authenticationService: IAuthenticationService;
-	private movieService: IMovieService;
 	private paymentService: IPaymentService;
 
 	constructor() {
 		this.userService = Container.get(UserService);
 		this.authenticationService = Container.get(AuthenticationService);
-		this.movieService = Container.get(MovieService);
 		this.paymentService= Container.get(PaymentService);
 	}
 
@@ -352,9 +350,7 @@ export class UserController {
 
 	sendMailForReserveMovie= async(req: Request, res: Response) => {
 		try {
-			const userId = req.query.userId;
-			const movieId = req.query.movieId;
-			const reserves = await this.userService.sendMailForReserveMovie(Number(userId),Number(movieId));
+			const reserves = await this.userService.sendMailForReserveMovie();
 			res.status(200).json({
 				message: "successful",
 				data:reserves
