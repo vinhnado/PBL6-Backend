@@ -38,12 +38,15 @@ export class AuthenticationService implements IAuthenticationService {
 	@Inject(() => Token)
 	private token!: Token;
 
-	login = async (username: string, password: string): Promise<any> => {
+	login = async (loginIdentifier: string, password: string): Promise<any> => {
 		try {
-			const user = await this.userRepository.findOneUserByUsername(username);
+			let user = await this.userRepository.findOneUserByUsername(loginIdentifier);
 
 			if (!user) {
-				throw new InvalidUserNameOrPassword('Invalid username or password');
+				user = await this.userRepository.findOneUserByEmail(loginIdentifier);
+				if(!user){
+					throw new InvalidUserNameOrPassword('Invalid username/email or password');
+				}
 			}
 			// check password
 			let compare = await Authentication.passwordCompare(
@@ -68,7 +71,7 @@ export class AuthenticationService implements IAuthenticationService {
 					),
 				};
 			} else {
-				throw new InvalidUserNameOrPassword('Invalid username or password');
+				throw new InvalidUserNameOrPassword('Invalid username/email or password');
 			}
 		} catch (error: any) {
 			handleErrorFunction(error);

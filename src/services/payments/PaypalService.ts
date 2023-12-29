@@ -3,7 +3,8 @@ import { PaymentService } from '../PaymentService';
 import { Payment } from '../../models/Payment';
 import { SubscriptionService } from '../SubscriptionService';
 import axios from 'axios';
-import CronJob from '../../utils/CronJob';
+import { transferRate } from '../../utils/ScheduleTask';
+
 @Service()
 export class PaypalService {
 	@Inject(() => PaymentService)
@@ -29,7 +30,7 @@ export class PaypalService {
 				subscriptionInfoId
 			);
 			if (!PaypalService.transferRate) {
-				await CronJob.getExchangeRates();
+				await transferRate();
 			}
 			const priceString = (price / PaypalService.transferRate).toFixed(2);
 			const order = {

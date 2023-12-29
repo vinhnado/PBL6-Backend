@@ -25,8 +25,8 @@ import { Reserve } from '../models/Reserve';
 import { ParsedQs } from 'qs';
 import { ParamsDictionary } from 'express-serve-static-core';
 import Mail from '../utils/Mail';
-import { MovieService } from './MovieService';
-import { IMovieService } from './Interfaces/IMovieService';
+import { MovieRepository } from '../repository/MovieRepository';
+import { IMovieRepository } from '../repository/Interfaces/IMovieRepository';
 
 @Service()
 export class UserService implements IUserService {
@@ -48,8 +48,8 @@ export class UserService implements IUserService {
 	@Inject(() => ReserveRepository)
 	private reserveRepository!: IReserveRepository;
 
-	@Inject(() => MovieService)
-	private movieService!: IMovieService;
+	@Inject(() => MovieRepository)
+	private movieRepository!: IMovieRepository;
 
 	@Inject(() => Mail)
 	private mail!: Mail;
@@ -369,31 +369,6 @@ export class UserService implements IUserService {
 		}
 	}
 
-	async sendMailForReserveMovie(): Promise<any> {
-		try {
-			const movieIdList = await this.reserveRepository.getListMovieReserve();
-			for (let i = 0; i < movieIdList.length; i++) {
-    			const movieId = movieIdList[i];
-  				const reverseList = await this.reserveRepository.findByCondition({movieId:movieId})
-				for (let i = 0; i < reverseList.length; i++) {
-					const movieId = movieIdList[i];
-					const reverseList = await this.reserveRepository.findByCondition({movieId:movieId})
-					for (const reserve of reverseList) {
-						const user = await this.findOneUser({userId:reserve.userId})
-						const movie = await this.movieService.getMovieById(reserve.movieId)
-						console.log(user)
-						console.log(movie)
-
-					}
-
-				}
-			}
-		} catch (error) {
-			throw(error);
-		}
-	}
-
-
 	async getReserveMovieOfUser(userId: number): Promise<Reserve[]> {
 		try {
 			return this.reserveRepository.getReserveMovieOfUser(userId);
@@ -448,8 +423,25 @@ export class UserService implements IUserService {
 			throw(error);
 		}
 	}
+	async sendMailForReserveMovie(): Promise<any> {
+		try {
+			const movieIdList = await this.reserveRepository.getListMovieReserve();
+			for (let i = 0; i < movieIdList.length; i++) {
+    			const movieId = movieIdList[i];
+  				const reverseList = await this.reserveRepository.findByCondition({movieId:movieId})	
+				let movie = await this.movieRepository.findById(Number(movieId));
+				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
+				for (const reserve of reverseList) {
+					const user = await this.findOneUser({userId:reserve.userId})
+					await this.mail.reserveMovie(user.username,user.email,movie)
+				}
+			}
+		} catch (error) {	
+			throw(error);
+		}
+	}
 
-	async clearCacheCloudFrontAvatarUser(req: Request) :Promise<void>
+		async clearCacheCloudFrontAvatarUser(req: Request) :Promise<void>
 	{
 		try {
 			const userId = req.payload.userId;
@@ -474,4 +466,5 @@ export class UserService implements IUserService {
 			throw(error);
 		}
 	}
+
 }
