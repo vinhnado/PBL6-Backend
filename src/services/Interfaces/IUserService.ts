@@ -35,9 +35,9 @@ export interface IUserService {
 	deleteWatchLater: (userId: number, movieId: number) => Promise<void>;
 	findAllWatchLater: (userId: number) => Promise<MovieDTO>;
 	getPresignUrlToUploadAvatar: (userId: number) => Promise<string>;
+	sendMailForReserveMovie(userId: number,movieId:number): Promise<any>
 	getReserveMovieOfUser(userId: number): Promise<Reserve[]>;
 	getMoviesReserveOfUser(userId: number): Promise<Movie[]>;
-
     addReserve(req: Request): Promise<Reserve>;
 	deleteReserve(req: Request): Promise<void>
 }

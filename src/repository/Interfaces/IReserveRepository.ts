@@ -9,6 +9,6 @@ export interface IReserveRepository extends BaseInterface {
     getReserveMovieOfUser(userId: number): Promise<Reserve[]>;
     getMoviesReserveOfUser(userId: number): Promise<Movie[]>;
     getReservesToSendMail(userId: number): Promise<Reserve[]>;
-
+    getListMovieReserve(): Promise<Number[]>;
     addReserve(data: any): Promise<Reserve>;
 }
