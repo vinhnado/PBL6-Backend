@@ -22,7 +22,7 @@ export class UserRepository
 
 		if (email) {
 			whereConditions.email = {
-				[Op.iLike]: `%${email}%`,
+				[Op.eq]: `%${email}%`,
 			};
 		}
 
@@ -64,6 +64,33 @@ export class UserRepository
 		});
 		return user!;
 	}
+
+		async findOneUserByUsername(username: string): Promise<User> {
+		const user = await User.findOne({
+			include: [
+				{
+					model: Account,
+					where: {
+						username: {
+							[Op.eq]: username,
+						},
+					},
+				},
+				{
+					model: Subscription,
+					// attributes: ['closeAt'],
+					include: [
+						{
+							model: SubscriptionType,
+							attributes: ['subscription_type_id', 'name'],
+						},
+					],
+				},
+			],
+		});
+		return user!;
+	}
+
 	async createNewUser(
 		newUser: User,
 		newAccount: Account,

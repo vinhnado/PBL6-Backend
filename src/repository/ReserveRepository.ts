@@ -11,7 +11,7 @@ const db = Database.getInstance();
 
 
 @Service()
-export class ResrveRepository extends BaseRepository<Reserve> implements IReserveRepository {
+export class ReserveRepository extends BaseRepository<Reserve> implements IReserveRepository {
 	
 	constructor(){
 		super(Reserve);

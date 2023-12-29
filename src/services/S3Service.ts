@@ -109,11 +109,11 @@ export class S3Service {
     private expireTime = 24*60*60 * 1000; // 60 phut *60 giây * 1000 milliseconds
     private expires = new Date(Date.now() + this.expireTime);
     // Get link Object 
-    getObjectUrl = async (objectName: string, bucketName: string = this.BUCKET_NAME, expiration: number = this.EXPIRATION) => {
+    getObjectUrl = async (objectName: string, expiration: Date = this.expires) => {
         try {
             const url = await getSignedUrl({
                 url: this.cloudFrontDomain+"/"+objectName,
-                dateLessThan: this.expires+'',
+                dateLessThan: expiration+'',
                 privateKey: process.env.CLOUDFRONT_PRIVATE_KEY||'',
                 keyPairId:process.env.CLOUDFRONT_KEY_PAIR_ID||'KFPL4RLZO6EP1'
             });
