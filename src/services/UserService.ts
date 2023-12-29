@@ -11,7 +11,7 @@ import { WatchHistory } from '../models/WatchHistory';
 import { WatchLater } from '../models/WatchLater';
 import { MovieDTO } from '../dto/MovieDTO';
 import { S3Service } from './S3Service';
-import { AuthenticationService } from './AuthenticationService';
+import express, { Request, Response } from 'express';
 import { IMovieFavoriteRepository } from '../repository/Interfaces/IMovieFavoriteRepository';
 import { IWatchHistoryRepository } from '../repository/Interfaces/IWatchHistorRepository';
 import { IWatchLaterRepository } from '../repository/Interfaces/IWatchLaterRepository';
@@ -19,6 +19,11 @@ import { IUserService } from './Interfaces/IUserService';
 import { IUserSearchOption } from './Interfaces/IUserSearchOption';
 import { Op } from 'sequelize';
 import { UserRepository } from '../repository/UserRepository';
+import { ReserveRepository } from '../repository/ReserveRepository';
+import { IReserveRepository } from '../repository/Interfaces/IReserveRepository';
+import { Reserve } from '../models/Reserve';
+import { ParsedQs } from 'qs';
+import { ParamsDictionary } from 'express-serve-static-core';
 
 @Service()
 export class UserService implements IUserService {
@@ -37,8 +42,8 @@ export class UserService implements IUserService {
 	@Inject(() => S3Service)
 	private s3Service!: S3Service;
 
-	@Inject(() => AuthenticationService)
-	private authenticationService!: AuthenticationService;
+	@Inject(() => ReserveRepository)
+	private reserveRepository!: IReserveRepository;
 
 	findOneUser = async (searchConditions: any): Promise<UserDTO> => {
 		try {
@@ -355,4 +360,60 @@ export class UserService implements IUserService {
 			throw error;
 		}
 	}
+
+	async getReserveMovieOfUser(userId: number): Promise<Reserve[]> {
+		try {
+			return this.reserveRepository.getReserveMovieOfUser(userId);
+		} catch (error) {
+			throw(error);
+		}
+	}
+
+	async getMoviesReserveOfUser(userId: number): Promise<Movie[]> {
+		try {
+			const movies =await this.reserveRepository.getMoviesReserveOfUser(userId);
+			for (const movie of movies) {
+				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
+				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
+				movie.backgroundURL = await this.s3Service.getObjectUrl(
+					'movies/'.concat(movie.movieId.toString(), '/background.jpg')
+				);
+			}
+			return movies;
+		} catch (error) {
+			throw(error);
+		}
+	}
+	
+	async addReserve(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<Reserve> {
+		try {
+			const userId = req.payload.userId;
+			const movieId = req.body.movieId;
+			const reserved = await this.reserveRepository.findOneByCondition({
+				userId,movieId
+			});
+			if(reserved){
+				return reserved;
+			}
+			return await this.reserveRepository.addReserve({
+				userId, movieId
+			});
+		} catch (error) {
+			throw(error);
+		}
+	}
+
+	async deleteReserve(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<void> {
+		try {
+			const userId = req.payload.userId;
+			const movieId = req.params.movieId;
+			const reserve = await this.reserveRepository.findOneByCondition({movieId, userId});
+			if(reserve){
+				return await this.reserveRepository.delete(reserve,true);
+			}
+		} catch (error) {
+			throw(error);
+		}
+	}
+
 }
