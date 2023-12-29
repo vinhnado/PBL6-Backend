@@ -24,6 +24,7 @@ import { IReserveRepository } from '../repository/Interfaces/IReserveRepository'
 import { Reserve } from '../models/Reserve';
 import { ParsedQs } from 'qs';
 import { ParamsDictionary } from 'express-serve-static-core';
+import Mail from '../utils/Mail';
 
 @Service()
 export class UserService implements IUserService {
@@ -44,6 +45,9 @@ export class UserService implements IUserService {
 
 	@Inject(() => ReserveRepository)
 	private reserveRepository!: IReserveRepository;
+
+	@Inject(() => Mail)
+	private mail!: Mail;
 
 	findOneUser = async (searchConditions: any): Promise<UserDTO> => {
 		try {
