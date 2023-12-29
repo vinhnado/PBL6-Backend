@@ -353,7 +353,7 @@ export class UserController {
 	getReserveMovieOfUser= async(req: Request, res: Response) => {
 		try {
 			const userId = req.payload.userId;
-			const reserves = await this.movieService.getReserveMovieOfUser(Number(userId));
+			const reserves = await this.userService.getReserveMovieOfUser(Number(userId));
 			res.status(200).json({
 				message: "successful",
 				data:reserves
@@ -369,7 +369,7 @@ export class UserController {
 	getMoviesReserveOfUser= async(req: Request, res: Response) => {
 		try {
 			const userId = req.payload.userId;
-			const reserves = await this.movieService.getMoviesReserveOfUser(Number(userId));
+			const reserves = await this.userService.getMoviesReserveOfUser(Number(userId));
 			res.status(200).json({
 				message: "successful",
 				data:reserves
@@ -384,7 +384,7 @@ export class UserController {
 
 	addReserve= async(req: Request, res: Response) => {
 		try {
-			const reserves = await this.movieService.addReserve(req);
+			const reserves = await this.userService.addReserve(req);
 			res.status(200).json({
 				message: "successful",
 			});
@@ -398,7 +398,7 @@ export class UserController {
 
 	deleteReserve= async(req: Request, res: Response) => {
 		try {
-			const reserves = await this.movieService.deleteReserve(req);
+			const reserves = await this.userService.deleteReserve(req);
 			res.status(200).json({
 				message: "successful",
 			});

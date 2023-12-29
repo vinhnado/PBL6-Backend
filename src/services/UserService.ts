@@ -361,6 +361,26 @@ export class UserService implements IUserService {
 		}
 	}
 
+	async sendMailForReserveMovie(userId: number,movieId:number): Promise<Movie[]> {
+		try {
+			const reserveMovie = await this.findReserveByUserIdAndMovieId(userId,movieId);
+			return reserveMovie;
+		} catch (error) {
+			throw(error);
+		}
+	}
+
+	async findReserveByUserIdAndMovieId(userId: number,movieId:number): Promise<Movie[]> {
+		try {
+			const reserveMovie = await this.reserveRepository.findOneByCondition({
+				userId,movieId
+			});
+			return reserveMovie;
+		} catch (error) {
+			throw(error);
+		}
+	}
+
 	async getReserveMovieOfUser(userId: number): Promise<Reserve[]> {
 		try {
 			return this.reserveRepository.getReserveMovieOfUser(userId);
