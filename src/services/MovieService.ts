@@ -533,7 +533,7 @@ export class MovieService implements IMovieService {
 			return n;
 		} catch (error) {
 			throw(error);
-		} 
+		}
 	}
 	async addGenresForMovie(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<MovieGenre[]> {
 		try {
