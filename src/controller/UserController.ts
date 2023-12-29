@@ -350,10 +350,27 @@ export class UserController {
 		}
 	};
 
+	sendMailForReserveMovie= async(req: Request, res: Response) => {
+		try {
+			const userId = req.query.userId;
+			const movieId = req.query.movieId;
+			const reserves = await this.userService.sendMailForReserveMovie(Number(userId),Number(movieId));
+			res.status(200).json({
+				message: "successful",
+				data:reserves
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
+
 	getReserveMovieOfUser= async(req: Request, res: Response) => {
 		try {
 			const userId = req.payload.userId;
-			const reserves = await this.movieService.getReserveMovieOfUser(Number(userId));
+			const reserves = await this.userService.getReserveMovieOfUser(Number(userId));
 			res.status(200).json({
 				message: "successful",
 				data:reserves
@@ -369,7 +386,7 @@ export class UserController {
 	getMoviesReserveOfUser= async(req: Request, res: Response) => {
 		try {
 			const userId = req.payload.userId;
-			const reserves = await this.movieService.getMoviesReserveOfUser(Number(userId));
+			const reserves = await this.userService.getMoviesReserveOfUser(Number(userId));
 			res.status(200).json({
 				message: "successful",
 				data:reserves
@@ -384,7 +401,7 @@ export class UserController {
 
 	addReserve= async(req: Request, res: Response) => {
 		try {
-			const reserves = await this.movieService.addReserve(req);
+			await this.userService.addReserve(req);
 			res.status(200).json({
 				message: "successful",
 			});
@@ -398,7 +415,7 @@ export class UserController {
 
 	deleteReserve= async(req: Request, res: Response) => {
 		try {
-			const reserves = await this.movieService.deleteReserve(req);
+			const reserves = await this.userService.deleteReserve(req);
 			res.status(200).json({
 				message: "successful",
 			});

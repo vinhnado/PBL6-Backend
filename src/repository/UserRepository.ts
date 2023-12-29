@@ -22,7 +22,7 @@ export class UserRepository
 
 		if (email) {
 			whereConditions.email = {
-				[Op.eq]: `%${email}%`,
+				[Op.eq]: email,
 			};
 		}
 

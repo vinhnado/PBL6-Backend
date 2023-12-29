@@ -6,12 +6,13 @@ import { IReserveRepository } from './Interfaces/IReserveRepository';
 import { Reserve } from '../models/Reserve';
 import { Movie } from '../models/Movie';
 import { User } from '../models/User';
+import { Account } from '../models/Account';
 
 const db = Database.getInstance();
 
 
 @Service()
-export class ResrveRepository extends BaseRepository<Reserve> implements IReserveRepository {
+export class ReserveRepository extends BaseRepository<Reserve> implements IReserveRepository {
 	
 	constructor(){
 		super(Reserve);
@@ -106,8 +107,10 @@ export class ResrveRepository extends BaseRepository<Reserve> implements IReserv
     
             // Lấy ngày của ngày mai
             const ngayHienTai = new Date();
-            ngayHienTai.setDate(ngayHienTai.getDate() + 1);
-            
+            ngayHienTai.setDate(ngayHienTai.getDate());
+            // ngayHienTai.setDate(ngayHienTai.getDate() + 1);
+
+            console.log(ngayHienTai)
             // Lọc theo ngày
             const movies = await Movie.findAll({
               where: {
@@ -119,12 +122,10 @@ export class ResrveRepository extends BaseRepository<Reserve> implements IReserv
             for (const movie of movies) {
               Ids.push(movie.getDataValue('movie_id'));
             }
-        
-            console.log(Ids);
+            console.log(Ids)
             return Ids;
         } catch (error) {
             throw (error);
         }
     }
-    
 }
