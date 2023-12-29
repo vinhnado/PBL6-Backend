@@ -77,7 +77,7 @@ export class MovieService implements IMovieService {
 			if (cachedResult) {
 				return JSON.parse(cachedResult);
 			}
-			const { search, genre, nation, year, isSeries, sort, sortType } = options;
+			const { search, genre, nation, year, isSeries, sort, sortType ,level} = options;
 
 			const whereCondition: any = {};
 			const whereConditionGenre: any = {};
@@ -107,6 +107,10 @@ export class MovieService implements IMovieService {
 
 			if (isSeries !== undefined) {
 				whereCondition['isSeries'] = isSeries;
+			}
+
+			if (level) {
+				whereCondition['level'] = level;
 			}
 
 			const sortFieldMap = {
@@ -140,7 +144,7 @@ export class MovieService implements IMovieService {
 				);
 			}
 
-			await this.redis.set(cacheKey, JSON.stringify({ movies, totalCount }), 'EX', 60);
+			await this.redis.set(cacheKey, JSON.stringify({ movies, totalCount }), 'EX', 60*5);
 
 			return {
 				movies,
@@ -170,14 +174,14 @@ export class MovieService implements IMovieService {
 					'movies/'.concat(movie.movieId.toString(), '/background.jpg')
 				);
 				for (const episode of movie.episodes) {
-					if (episode.posterURL) {
-						episode.posterURL = await this.s3Service.getObjectUrl(
-							episode.posterURL
-						);
+					if (episode.getDataValue('poster_url')) {
+						episode.setDataValue('poster_url',await this.s3Service.getObjectUrl(
+							episode.getDataValue('poster_url')
+						)) ;
 					} else {
-						episode.posterURL = await this.s3Service.getObjectUrl(
+						episode.setDataValue('poster_url',await this.s3Service.getObjectUrl(
 							'default/poster_default.jpg'
-						);
+						)) ;
 					}
 				}
 
@@ -214,7 +218,9 @@ export class MovieService implements IMovieService {
 
 	async getAllMovies(): Promise<Movie[]> {
 		try {
-			return await this.movieRepository.getAllMovies();
+			
+			 const movies= await this.movieRepository.getAllMovies();
+			 return movies;
 		} catch (error) {
 			console.log(error);
 			throw(error);
@@ -385,7 +391,7 @@ export class MovieService implements IMovieService {
 					'movies/'.concat(movie.movieId.toString(), '/background.jpg')
 				);
 			}
-			await this.redis.set(cacheKey, JSON.stringify(movies), 'EX', 600);
+			await this.redis.set(cacheKey, JSON.stringify(movies), 'EX', 60*60);
 			return movies;
 		} catch (error) {
 			console.log(error);
@@ -396,8 +402,14 @@ export class MovieService implements IMovieService {
 	async getAllNations():Promise<string[]>
 	{
 		try {
-			const nations = await this.movieRepository.getAllNations() as any;
+			const cacheKey = 'getAllNations';
+			const cachedResult = await this.redis.get(cacheKey);
+			if (cachedResult) {
+				return JSON.parse(cachedResult);
+			}
 
+			const nations = await this.movieRepository.getAllNations() as any;
+			await this.redis.set(cacheKey, JSON.stringify(nations), 'EX', 60*60);
 			return nations;
 		} catch (error) {
 			console.log(error);
@@ -408,7 +420,15 @@ export class MovieService implements IMovieService {
 	async getAllReleaseYears(): Promise<number[]>
 	{
 		try {
-			return await this.movieRepository.getAllReleaseDates();
+			const cacheKey = 'getAllReleaseYears';
+			const cachedResult = await this.redis.get(cacheKey);
+			if (cachedResult) {
+				return JSON.parse(cachedResult);
+			}
+
+			const years = await this.movieRepository.getAllReleaseDates();
+			await this.redis.set(cacheKey, JSON.stringify(years), 'EX', 60*60);
+			return years;
 		} catch (error) {
 			console.log(error);
 			throw(error);
@@ -513,7 +533,7 @@ export class MovieService implements IMovieService {
 			return n;
 		} catch (error) {
 			throw(error);
-		} 
+		}
 	}
 	async addGenresForMovie(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<MovieGenre[]> {
 		try {
@@ -538,4 +558,34 @@ export class MovieService implements IMovieService {
 		}
 	}
 	// async updatePosterMovie()
+
+
+	async clearCacheCloudFrontMovie(req: Request) :Promise<void>
+	{
+		try {
+			const movieId = req.body.movieId;
+			const option = req.body.option;
+			if(option==='poster'){
+				return await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/poster.jpg');
+			}
+
+			if(option==='background'){
+				return await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/background.jpg');
+			}
+
+			if(option==='trailer'){
+				return await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/trailer.mp4');
+			}
+
+			if(option==='all'){
+				 await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/trailer.mp4');
+				 await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/poster.jpg');
+				 await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/background.jpg');
+				return;
+			}
+			return;
+		} catch (error) {
+			throw(error);
+		}
+	}
 }

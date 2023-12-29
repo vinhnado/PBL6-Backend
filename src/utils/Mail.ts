@@ -1,10 +1,14 @@
 import * as nodemailer from 'nodemailer';
 import * as fs from 'fs';
 import { Service } from 'typedi';
+import { Movie } from '../models/Movie';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 @Service()
 export class Mail {
 	private transporter: nodemailer.Transporter;
+	client_url = process.env.CLIENT_URL?.toString();
 
 	constructor() {
 		this.transporter = nodemailer.createTransport({
@@ -23,7 +27,7 @@ export class Mail {
 	): Promise<void> => {
 		try {
 			await this.transporter.sendMail({
-				from: `"Fukin Website" <${process.env.EMAIL_USER}>`,
+				from: `"MoveTime Website" <${process.env.EMAIL_USER}>`,
 				to,
 				subject,
 				html,
@@ -42,7 +46,7 @@ export class Mail {
 			const replacements = {
 				username: username,
 				replaceLink:
-					'https://example.com/reset-password?token=' + token + '&email=' + to,
+					this.client_url+'/reset-password?token=' + token + '&email=' + to,
 			};
 			let htmlContent = fs.readFileSync(
 				'src/utils/ForgotPasswordMail.html',
@@ -66,16 +70,13 @@ export class Mail {
 		token: string
 	): Promise<void> => {
 		try {
-			console.log(token);
 			const replacements = {
 				username: username,
-				replaceLink: 'https://example.com/reset-password/' + token,
+				replaceLink:
+					this.client_url+'/active-user?token=' + token + '&email=' + to,
 			};
 
-			let htmlContent = fs.readFileSync(
-				'src/utils/ForgotPasswordMail.html',
-				'utf8'
-			);
+			let htmlContent = fs.readFileSync('src/utils/ActiveAccount.html', 'utf8');
 
 			Object.entries(replacements).forEach(([key, value]) => {
 				const regex = new RegExp(`{{${key}}}`, 'g');
@@ -83,6 +84,33 @@ export class Mail {
 			});
 
 			return await this.sendEmail(to, 'Xác nhận người dùng', htmlContent);
+		} catch (error) {
+			console.error('Error sending email:', error);
+		}
+	};
+
+	reserveMovie = async (
+		username: string,
+		to: string,
+		movie: Movie
+	): Promise<void> => {
+		try {
+			const replacements = {
+				username: username,
+				movieName: movie.title,
+				posterUrl: movie.posterURL,
+				date: movie.releaseDate.toLocaleString(),
+				movieUrl: this.client_url+'/movie/'+movie.movieId+'/1'
+			};
+
+			let htmlContent = fs.readFileSync('src/utils/ReserveMail.html', 'utf8');
+
+			Object.entries(replacements).forEach(([key, value]) => {
+				const regex = new RegExp(`{{${key}}}`, 'g');
+				htmlContent = htmlContent.replace(regex, value);
+			});
+
+			return await this.sendEmail(to, 'Phim mới này bạn ơi', htmlContent);
 		} catch (error) {
 			console.error('Error sending email:', error);
 		}

@@ -14,6 +14,7 @@ export class ActorRepository
 	constructor() {
 		super(Actor);
 	}
+	
 	findActorInfomation = async (actorId: number) => {
 		try {
 			let data = await Actor.findOne({
@@ -42,7 +43,7 @@ export class ActorRepository
 			const data = await Actor.findAndCountAll({
 				where: {
 					name: {
-						[Op.like]: `%${search}%`,
+						[Op.iLike]: `%${search}%`,
 					},
 				},
 				offset: (page - 1) * pageSize,

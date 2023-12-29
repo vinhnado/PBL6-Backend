@@ -1,7 +1,6 @@
 import { Movie } from './../models/Movie';
 import { User } from '../models/User';
 import Container, { Inject, Service } from 'typedi';
-import { UserRepository } from '../repository/UserRepository';
 import { IUserRepository } from '../repository/Interfaces/IUserRepository';
 import { UserDTO } from '../dto/UserDTO';
 import { WatchHistoryRepository } from '../repository/WatchHistorRepository';
@@ -12,11 +11,22 @@ import { WatchHistory } from '../models/WatchHistory';
 import { WatchLater } from '../models/WatchLater';
 import { MovieDTO } from '../dto/MovieDTO';
 import { S3Service } from './S3Service';
-import { AuthenticationService } from './AuthenticationService';
+import express, { Request, Response } from 'express';
 import { IMovieFavoriteRepository } from '../repository/Interfaces/IMovieFavoriteRepository';
 import { IWatchHistoryRepository } from '../repository/Interfaces/IWatchHistorRepository';
 import { IWatchLaterRepository } from '../repository/Interfaces/IWatchLaterRepository';
 import { IUserService } from './Interfaces/IUserService';
+import { IUserSearchOption } from './Interfaces/IUserSearchOption';
+import { Op } from 'sequelize';
+import { UserRepository } from '../repository/UserRepository';
+import { ReserveRepository } from '../repository/ReserveRepository';
+import { IReserveRepository } from '../repository/Interfaces/IReserveRepository';
+import { Reserve } from '../models/Reserve';
+import { ParsedQs } from 'qs';
+import { ParamsDictionary } from 'express-serve-static-core';
+import Mail from '../utils/Mail';
+import { MovieRepository } from '../repository/MovieRepository';
+import { IMovieRepository } from '../repository/Interfaces/IMovieRepository';
 
 @Service()
 export class UserService implements IUserService {
@@ -35,8 +45,14 @@ export class UserService implements IUserService {
 	@Inject(() => S3Service)
 	private s3Service!: S3Service;
 
-	@Inject(() => AuthenticationService)
-	private authenticationService!: AuthenticationService;
+	@Inject(() => ReserveRepository)
+	private reserveRepository!: IReserveRepository;
+
+	@Inject(() => MovieRepository)
+	private movieRepository!: IMovieRepository;
+
+	@Inject(() => Mail)
+	private mail!: Mail;
 
 	findOneUser = async (searchConditions: any): Promise<UserDTO> => {
 		try {
@@ -59,15 +75,65 @@ export class UserService implements IUserService {
 	};
 
 	searchUsers = async (
-		searchConditions: any,
+		options: IUserSearchOption,
 		page: number,
 		pageSize: number
 	): Promise<{
 		users: User[];
-		totalCount: number;
+		count: number;
 	}> => {
 		try {
-			return this.userRepository.searchUsers(searchConditions, page, pageSize);
+			const { search, gender, subscriptionType, sort, sortType } = options;
+			console.log(sort, sortType);
+			const whereConditions: any = {};
+			const whereSubTypeCons: any = {};
+
+			if (search) {
+				if (search) {
+					whereConditions[Op.or] = [
+						{ email: { [Op.like]: `%${search}%` } },
+						{ '$account.username$': { [Op.like]: `%${search}%` } },
+					];
+				}
+			}
+
+			if (gender) {
+				whereConditions['gender'] = gender;
+			}
+
+			if (subscriptionType) {
+				const mapping: Record<string, number | number[]> = {
+					'1': 1,
+					'2': 2,
+					'3': 3,
+					'0': [2, 3],
+				};
+
+				whereSubTypeCons['subscription_type_id'] = mapping[subscriptionType];
+			}
+
+			const sortFieldMap = {
+				createdAt: 'createdAt',
+				subscriptionType: '$subscription.subscription_type_id',
+			};
+
+			let sortField = 'user_id';
+			let sortBy = 'DESC';
+			if (sort) {
+				sortField = sortFieldMap[sort];
+			}
+			if (sortType) {
+				sortBy = sortType || 'ASC';
+			}
+
+			return await this.userRepository.searchUsers(
+				whereConditions,
+				whereSubTypeCons,
+				(page = page),
+				(pageSize = pageSize),
+				sortField,
+				sortBy
+			);
 		} catch (err: any) {
 			throw new Error(err.message);
 		}
@@ -75,12 +141,13 @@ export class UserService implements IUserService {
 
 	updateUser = async (userData: Partial<User>) => {
 		try {
-			if (userData.userId) {
-				const userToUpdate = await this.userRepository.findById(
-					userData.userId
-				);
+			const data = Object.fromEntries(
+				Object.entries(userData).filter(([_, value]) => value !== undefined)
+			);
+			if (data.userId) {
+				const userToUpdate = await this.userRepository.findById(data.userId);
 				if (userToUpdate) {
-					await userToUpdate.update(userData);
+					await userToUpdate.update(data);
 					return await this.userRepository.save(userToUpdate);
 				} else {
 					throw new Error('User not found for the given ID');
@@ -286,4 +353,118 @@ export class UserService implements IUserService {
 			throw new Error(error.message);
 		}
 	};
+
+	async getPresignUrlToUploadAvatar(userId: number): Promise<string> {
+		try {
+			const data: Partial<User> = {};
+			data.userId = userId;
+			data.avatarURL = 'users/' + userId + '/avatar.jpg';
+			await this.updateUser(data);
+			return await this.s3Service.generatePresignedUrlUpdate(
+				data.avatarURL,
+				'image/jpeg'
+			);
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getReserveMovieOfUser(userId: number): Promise<Reserve[]> {
+		try {
+			return this.reserveRepository.getReserveMovieOfUser(userId);
+		} catch (error) {
+			throw(error);
+		}
+	}
+
+	async getMoviesReserveOfUser(userId: number): Promise<Movie[]> {
+		try {
+			const movies =await this.reserveRepository.getMoviesReserveOfUser(userId);
+			for (const movie of movies) {
+				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
+				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
+				movie.backgroundURL = await this.s3Service.getObjectUrl(
+					'movies/'.concat(movie.movieId.toString(), '/background.jpg')
+				);
+			}
+			return movies;
+		} catch (error) {
+			throw(error);
+		}
+	}
+	
+	async addReserve(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<Reserve> {
+		try {
+			const userId = req.payload.userId;
+			const movieId = req.body.movieId;
+			const reserved = await this.reserveRepository.findOneByCondition({
+				userId,movieId
+			});
+			if(reserved){
+				return reserved;
+			}
+			return await this.reserveRepository.addReserve({
+				userId, movieId
+			});
+		} catch (error) {
+			throw(error);
+		}
+	}
+
+	async deleteReserve(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<void> {
+		try {
+			const userId = req.payload.userId;
+			const movieId = req.params.movieId;
+			const reserve = await this.reserveRepository.findOneByCondition({movieId, userId});
+			if(reserve){
+				return await this.reserveRepository.delete(reserve,true);
+			}
+		} catch (error) {
+			throw(error);
+		}
+	}
+	async sendMailForReserveMovie(): Promise<any> {
+		try {
+			const movieIdList = await this.reserveRepository.getListMovieReserve();
+			for (let i = 0; i < movieIdList.length; i++) {
+    			const movieId = movieIdList[i];
+  				const reverseList = await this.reserveRepository.findByCondition({movieId:movieId})	
+				let movie = await this.movieRepository.findById(Number(movieId));
+				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
+				for (const reserve of reverseList) {
+					const user = await this.findOneUser({userId:reserve.userId})
+					await this.mail.reserveMovie(user.username,user.email,movie)
+				}
+			}
+		} catch (error) {	
+			throw(error);
+		}
+	}
+
+		async clearCacheCloudFrontAvatarUser(req: Request) :Promise<void>
+	{
+		try {
+			const userId = req.payload.userId;
+
+			const avatarURL = 'users/' + userId + '/avatar.jpg';
+			return await this.s3Service.clearCacheCloudFront(avatarURL);
+		} catch (error) {
+			throw(error);
+		}
+	}
+
+	async removeAvatar (userId: number): Promise<void>
+	{
+		try {
+			const avatarURL = 'users/' + userId + '/avatar.jpg';
+			// const data: Partial<User> = {
+			// 	avatarURL: undefined,
+			// };
+			// await this.updateUser(data);
+			await  this.s3Service.deleteObject(avatarURL);
+		} catch (error) {
+			throw(error);
+		}
+	}
+
 }

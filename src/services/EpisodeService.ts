@@ -83,7 +83,8 @@ export class EpisodeService implements IEpisodeService {
 			}
 			return episode;
 		} catch (error) {
-			throw new Error('Can not get episode.');
+			console.log(error);
+			throw(error);
 		}
 	}
 
@@ -141,7 +142,8 @@ export class EpisodeService implements IEpisodeService {
 			}
 			return comments;
 		} catch (error) {
-			throw new Error('Err get comment of episode.');
+			console.log(error);
+			throw(error);
 		}
 	}
 
@@ -274,8 +276,33 @@ export class EpisodeService implements IEpisodeService {
 			}
 			return quality;
 		}catch(error){
+			console.log(error);
 			throw(error);
 		}
 	}
  
+	async clearCacheCloudFrontEpisodes(req: Request) :Promise<void>
+	{
+		try {
+			const movieId = req.body.movieId;
+			const episodeNum = req.body.episodeNum;
+			const quality = req.body.quality
+
+			if(quality==='720p'){
+				return await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/episodes/'+episodeNum+'/movie.mp4');
+			}
+
+			if(quality==='1080p'){
+				return await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/episodes/'+episodeNum+'/movie_1080p.mp4');
+			}
+
+			if(quality==='4k'){
+				return await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/episodes/'+episodeNum+'/movie_4k.webm');
+			}
+
+			return;
+		} catch (error) {
+			throw(error);
+		}
+	}
 }

@@ -133,5 +133,24 @@ export class DirectorService implements IDirectorService {
 		} catch (error: any) {
 			throw new Error(error.message);
 		}
-	};
+	}
+
+	async getPresignUrlToUploadAvatar(directorId: number): Promise<string|null> {
+        try{
+			const directorData: Partial<Director> = {};
+			directorData.directorId = directorId;
+			directorData.avatar = 'directors/'+directorId+'/avatar.jpg';
+			const directorToUpdate = await this.directorRepository.findById(directorId);
+
+			if (directorToUpdate) {
+				await directorToUpdate.update(directorData);
+				await this.directorRepository.save(directorToUpdate);
+				return await this.s3Service.generatePresignedUrlUpdate(directorData.avatar,'image/jpeg');
+			} else {
+				return null;
+			}
+        }catch(error) {
+            throw(error);
+        }
+    }
 }

@@ -35,4 +35,5 @@ export interface IMovieService {
 	addGenresForMovie(req: Request): Promise<MovieGenre[]>;
 	deleteGenresOfMovie(req: Request): Promise<number>;
 
+	clearCacheCloudFrontMovie(req: Request) :Promise<void>;
 }

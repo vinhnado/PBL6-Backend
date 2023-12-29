@@ -6,14 +6,18 @@ import { Actor } from '../models/Actor';
 import { Director } from '../models/Director';
 import { IActorService } from '../services/Interfaces/IActorService';
 import IDirectorService from '../services/Interfaces/IDirectorService';
+import { S3Service } from '../services/S3Service';
 
 export class IndividualController {
 	private actorService: IActorService;
 	private directorService: IDirectorService;
+	private s3Service: S3Service;
+
 
 	constructor() {
 		this.actorService = Container.get(ActorService);
 		this.directorService = Container.get(DirectorService);
+		this.s3Service= Container.get(S3Service);
 	}
 
 	createActor = async (req: Request, res: Response) => {
@@ -211,7 +215,78 @@ export class IndividualController {
 			});
 		}
 	};
+	
+	getPresignUrlToUploadAvatarActor = async (req: Request, res: Response)=>{
+		try {
+			const actorId = req.query.actorId;
+			if(!actorId){
+				return res.status(200).json({
+					message:'actorId is required!',
+				});
+			}
+            const presignUrl = await this.actorService.getPresignUrlToUploadAvatar(Number(actorId));
+			if (!presignUrl) {
+				return res.status(404).json({
+					status: 'Ok!',
+					message: 'Actor not found or is deleted!',
+				});
+			}
+            return res.status(200).json({
+                status: 'Ok!',
+                message: 'Successfully',
+                data: presignUrl,
+            });
+        } catch (error: any) {
+            return res.status(500).json({
+                message: "Server error!"
+            });
+        }
+	}
 
+	getPresignUrlToUploadAvatarDirector = async (req: Request, res: Response)=>{
+		try {
+			const directorId = req.query.directorId;
+			if(!directorId){
+				return res.status(200).json({
+					message:'directorId is required!',
+				});
+			}
+            const presignUrl = await this.directorService.getPresignUrlToUploadAvatar(Number(directorId));
+			if (!presignUrl) {
+				return res.status(404).json({
+					status: 'Ok!',
+					message: 'Director not found or is deleted!',
+				});
+			}
+            return res.status(200).json({
+                status: 'Ok!',
+                message: 'Successfully',
+                data: presignUrl,
+            });
+        } catch (error: any) {
+			console.log(error);
+            return res.status(500).json({
+                message: "Server error!"
+            });
+        }
+	}
+
+	clearCacheCloudFrontIndividual= async(req: Request, res: Response) => {
+		try {
+			const id = req.body.id;
+			const option = req.body.option;
+
+			await this.s3Service.clearCacheCloudFront(option+'/'+id+'/avatar.jpg');
+			res.status(200).json({
+				message: "successful",
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
 	// getPopularActors = async (req: Request, res: Response)=>{
 	// 	try {
     //         const data = await this.actorService.getPopularActors(1,5);

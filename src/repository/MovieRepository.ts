@@ -49,19 +49,6 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 				attributes: ['director_id', 'name'],
 				through: { attributes: [] },
 			},
-			{
-				model: Episode,
-				attributes: [
-					'episode_id',
-					'episode_no',
-					'movie_url',
-					'title',
-				],
-				order: [
-					// We start the order array with the model we want to sort
-					[Episode, 'episode_id', 'ASC']
-				]
-			},
 
 		  ],
 		  order:[
@@ -120,6 +107,10 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 					{
 						model: Episode,
 						attributes: ['episode_id', 'movie_id', 'poster_url', 'title', 'release_date', 'num_view', 'duration', 'episode_no'],
+						order: [
+							// We start the order array with the model we want to sort
+							[Episode, 'episode_id', 'ASC']
+						]
 					},
 		
 				  ],
@@ -140,30 +131,27 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 				include: [
 					{
 						model: Genre,
-						attributes: ['genre_id', 'name'],
+						attributes: {
+							exclude: ['deletedAt', 'updatedAt', 'createdAt'],
+						},
 						through: { attributes: [] },
 					},
 					{
 						model: Actor,
-						attributes: ['actor_id', 'name'],
+						attributes: {
+							exclude: ['deletedAt', 'updatedAt', 'createdAt'],
+						},
 						through: { attributes: [] },
 					},
 					{
 						model: Director,
-						attributes: ['director_id', 'name'],
+						attributes: {
+							exclude: ['deletedAt', 'updatedAt', 'createdAt'],
+						},
 						through: { attributes: [] },
 					},
-					{
-						model: Episode,
-						attributes: [
-							'episode_id',
-							'episode_no',
-							'movie_url',
-							'episodeTitle',
-						],
-					},
 				],
-				order: [['release_date', 'DESC']],
+				order: [['movie_id', 'ASC']],
 			});
 			return movies;
 		} catch (error) {
@@ -282,14 +270,14 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 		const numLimit = 15;
 		const startDate = new Date(); // Current date
 		const endDate = new Date();
-		endDate.setMonth(endDate.getMonth() + 1); // One month ago
+		endDate.setMonth(endDate.getMonth() + 12); // One month ago
 		const movies = await Movie.findAll({
 			attributes: {
 			  exclude: ['deletedAt', 'createdAt', 'updatedAt'],
 			},
 			where: {
 				release_date: {
-				  [Op.between]: [endDate, startDate],
+				  [Op.gt]: startDate,
 				},
 			},
 			order: [
@@ -297,7 +285,7 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 			  ],
 			limit: numLimit
 		  });
-		
+		console.log(movies);
 		return movies;
 	}
 

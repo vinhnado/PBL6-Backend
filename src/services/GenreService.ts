@@ -41,7 +41,7 @@ export class GenreService implements IGenreService {
     async updateGenre(req: Request): Promise<Genre> {
         try {
             const name = req.body.name;
-            const genreId = req.body.genreId;
+            const genreId = Number(req.params.genreId);
             return await this.genreRepository.updateGenre(genreId, name);
         } catch (error) {
             throw(error);
@@ -49,7 +49,7 @@ export class GenreService implements IGenreService {
     }
     async deleteGenre(req: Request): Promise<boolean> {
         try {
-            const genreId = req.body.genreId;
+            const genreId =  Number(req.params.genreId);
             const genre = await this.genreRepository.findById(genreId);
             if (!genre) {
                 return false;

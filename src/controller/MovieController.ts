@@ -32,9 +32,10 @@ export class MovieController {
 				year: req.query.year,
 				isSeries: req.query.isSeries,
 				sort: req.query.sort,
+				level: req.query.level,
 			  };
 			const page = Number(req.query.page) || 1; // Trang mặc định là 1
-			const pageSize = Number(req.query.pageSize) || 5; // Số lượng kết quả trên mỗi trang mặc định là 10
+			const pageSize = Number(req.query.pageSize) || 10; // Số lượng kết quả trên mỗi trang mặc định là 10
 
 			const { movies, totalCount } = await this.movieService.searchMovies(
 				options,
@@ -60,7 +61,7 @@ export class MovieController {
 			
 			const movie = await this.movieService.getMovieById(Number(id));
 			if (!movie) {
-				return res.status(404).json({ error: 'Can not find movie.' });
+				return res.status(404).json({ error: 'Movie not found or deleted' });
 			}
 			const userId = req.payload!.userId!;
 			let rating =0;
@@ -83,11 +84,54 @@ export class MovieController {
 	getAllMovies = async (req: Request, res: Response) => {
 		try {
 			const movies = await this.movieService.getAllMovies();
-			return res.json(movies);
+			let genresMap: { [key: number]: string } = {}; // Thêm chữ ký chỉ số
+			let text = '';
+			for (const movie of movies) {
+				let genres ='';
+				let actors ='';
+				let directors ='';
+				let infors = '';
+				let isSeries = 'Ngắn tập';
+				if(movie.isSeries){
+					isSeries = 'Dài tập';
+				}
+				infors = infors+ ' Tên Phim: '+movie.title+'. '+'\n';
+				infors = infors+ ' Mô tả: '+movie.description+'. '+'\n';
+				infors = infors+ ' Quốc gia: '+movie.nation+'. '+'\n';
+				infors = infors+ ' Ngày phát hành: '+movie.releaseDate+'. '+'\n';
+				infors = infors+ ' Đánh giá trung bình: '+movie.averageRating+'. '+'\n';
+				infors = infors+ ' Loại Phim: '+isSeries+'. '+'\n';
+				infors = infors+ ' Số lượt yêu thích: '+movie.numFavorite+'. '+'\n';
+
+
+				for (const genre of movie.genres) {
+					genres= genres+', '+genre.name;
+				}
+				for (const actor of movie.actors) {
+					actors= actors+', '+actor.name;
+				}
+				for (const director of movie.directors) {
+					directors= directors+', '+director.name;
+				}
+				infors = infors+ ' Thể loại: '+genres.slice(2)+'. '+'\n';
+				infors = infors+ ' Diễn viên: '+actors.slice(2)+'. '+'\n';
+				infors = infors+ ' Đạo diễn: '+directors.slice(2)+'. '+'\n';
+
+				genresMap[movie.movieId] = infors;
+				console.log(infors);
+				
+			}
+			return res.json({
+				message: 'successful',
+				genres_map: genresMap,
+				movies: movies
+			});
 		} catch (error) {
 			return res.status(500).json({ error: 'Không thể lấy danh sách phim' });
 		}
 	};
+	
+	
 
 	deleteMovieById = async (req: Request, res: Response) => {
 		const { id } = req.query;
@@ -171,13 +215,12 @@ export class MovieController {
 	getMoviesRecommender = async (req: Request, res: Response) => {
 		try {
 			const page = Number(req.query.page) || 1; // Trang mặc định là 1
-			const pageSize = Number(req.query.pageSize) || 5; // Số lượng kết quả trên mỗi trang mặc định là 10
+			const pageSize = Number(req.query.pageSize) || 10; // Số lượng kết quả trên mỗi trang mặc định là 10
 			// const searchConditions = {
 			// 	userId: req.payload.userId,
 			// };
 			// const user = await this.userService.findOneUser(searchConditions);
 			const userId = Number(req.payload.userId);
-			
 			if(!userId){
 				const movies = await this.movieService.getMoviesRecommender();
 				return res.json(movies);
@@ -316,6 +359,37 @@ export class MovieController {
 		try {
 			const url = req.query.url!.toString();
 			const results =  await this.qrCodeService.createQRCode(url);
+			res.status(200).json({
+				message: "successful",
+				qrCode:results
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
+
+	clearCacheCloudFrontMovie= async(req: Request, res: Response) => {
+		try {
+			
+			await this.movieService.clearCacheCloudFrontMovie(req);
+			res.status(200).json({
+				message: "successful",
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
+
+	test= async(req: Request, res: Response) => {
+		try {
+			const userId = Number(req.payload.userId);
+			const results =  await this.recommenderService.testData(userId);
 			res.status(200).json({
 				message: "successful",
 				qrCode:results

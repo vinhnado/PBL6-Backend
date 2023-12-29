@@ -179,5 +179,20 @@ export class EpisodeController{
 			})	
 		}
 	}
+
+	clearCacheCloudFrontEpisodes = async(req: Request, res: Response) =>{
+		try {
+			
+			await this.episodeService.clearCacheCloudFrontEpisodes(req);
+			res.status(200).json({
+				message: "successful",
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
  
 }

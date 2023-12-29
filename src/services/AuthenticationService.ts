@@ -10,9 +10,17 @@ import { Subscription } from '../models/Subscription';
 import Mail from '../utils/Mail';
 import { Token } from '../utils/Token';
 import {
-	EmailValidError,
+	CustomError,
+	EmailValidDuplicate,
+	InvalidUserNameOrPassword,
+	NotActiveAccountError,
+	NotEnoughAuthority,
+	NotFound,
 	OldPasswordError,
-	UsernameValidError,
+	PasswordNotMatch,
+	ServerError,
+	UsernameValidDuplicate,
+	handleErrorFunction,
 } from '../error/CustomErrors';
 import { IAccountRepository } from '../repository/Interfaces/IAccountRepository';
 
@@ -31,36 +39,84 @@ export class AuthenticationService implements IAuthenticationService {
 	private token!: Token;
 
 	login = async (username: string, password: string): Promise<any> => {
-		const searchConditions = {
-			username,
-		};
-		const user = await this.userRepository.findOneUser(searchConditions);
+		try {
+			const user = await this.userRepository.findOneUserByUsername(username);
 
-		if (!user) {
-			throw new Error('User not found');
+			if (!user) {
+				throw new InvalidUserNameOrPassword('Invalid username or password');
+			}
+			// check password
+			let compare = await Authentication.passwordCompare(
+				password,
+				user.account.password
+			);
+
+			// generate token
+			if (compare) {
+				if (!user.active) {
+					throw new NotActiveAccountError('Account is not active');
+				}
+				return {
+					accessToken: Authentication.generateAccessToken(
+						user.userId,
+						user.role,
+						user.account.username,
+						user.subscription.subscriptionTypeId
+					),
+					refreshToken: Authentication.generateRefreshToken(
+						user.account.username
+					),
+				};
+			} else {
+				throw new InvalidUserNameOrPassword('Invalid username or password');
+			}
+		} catch (error: any) {
+			handleErrorFunction(error);
 		}
-		// check password
-		let compare = await Authentication.passwordCompare(
-			password,
-			user.account.password
-		);
-		console.log(compare);
+	};
 
-		// generate token
-		if (compare) {
-			return {
-				accessToken: Authentication.generateAccessToken(
-					user.userId,
-					user.role,
-					user.account.username,
-					user.subscription.subscriptionTypeId
-				),
-				refreshToken: Authentication.generateRefreshToken(
-					user.account.username
-				),
+	loginAdmin= async (username: string, password: string): Promise<any> => {
+		try {
+			const searchConditions = {
+				username,
 			};
+			const user = await this.userRepository.findOneUser(searchConditions);
+
+			if (!user) {
+				throw new InvalidUserNameOrPassword('Invalid username or password');
+			}
+
+			if(user.role!==0 && user.role!==1){
+				throw new NotEnoughAuthority("No Permission")
+			}
+			// check password
+			let compare = await Authentication.passwordCompare(
+				password,
+				user.account.password
+			);
+
+			// generate token
+			if (compare) {
+				if (!user.active) {
+					throw new NotActiveAccountError('Account is not active');
+				}
+				return {
+					accessToken: Authentication.generateAccessToken(
+						user.userId,
+						user.role,
+						user.account.username,
+						user.subscription.subscriptionTypeId
+					),
+					refreshToken: Authentication.generateRefreshToken(
+						user.account.username
+					),
+				};
+			} else {
+				throw new InvalidUserNameOrPassword('Invalid username or password');
+			}
+		} catch (error: any) {
+			handleErrorFunction(error);
 		}
-		return null;
 	};
 
 	register = async (
@@ -73,10 +129,10 @@ export class AuthenticationService implements IAuthenticationService {
 	) => {
 		try {
 			if (await this.checkUsername(username)) {
-				throw new UsernameValidError('Invalid Username');
+				throw new UsernameValidDuplicate('Invalid Username');
 			}
 			if (await this.checkEmail(email)) {
-				throw new EmailValidError('Invalid Email');
+				throw new EmailValidDuplicate('Invalid Email');
 			}
 			const hashedPassword: string = await Authentication.passwordHash(
 				password
@@ -103,19 +159,12 @@ export class AuthenticationService implements IAuthenticationService {
 			);
 			return 'Create user successfully';
 		} catch (error: any) {
-			if (
-				error instanceof UsernameValidError ||
-				error instanceof EmailValidError
-			) {
-				throw error;
-			} else {
-				throw new Error('Error registering user: ' + error.message);
-			}
+			handleErrorFunction(error);
 		}
 	};
 
 	forgotPassword = async (
-		email: string,
+		email: string | null,
 		token: string | null = null,
 		password: string | null = null
 	) => {
@@ -123,7 +172,7 @@ export class AuthenticationService implements IAuthenticationService {
 			const searchConditions = {
 				email,
 			};
-			if (token == null) {
+			if (token == null && email) {
 				const user = await this.userRepository.findOneUser(searchConditions);
 				await this.mail.forgotPassword(
 					user.account.username,
@@ -131,9 +180,9 @@ export class AuthenticationService implements IAuthenticationService {
 					await this.token.generateToken(email)
 				);
 				return 'Hãy kiểm tra email';
-			} else {
+			} else if (token) {
 				const data = await this.token.verifyToken(token);
-				if (data != null && data?.email == email && password) {
+				if (data != null && password) {
 					const account = (
 						await this.userRepository.findOneUser(searchConditions)
 					).account;
@@ -148,7 +197,7 @@ export class AuthenticationService implements IAuthenticationService {
 				}
 			}
 		} catch (error: any) {
-			throw new Error('Error!' + error.message);
+			handleErrorFunction(error);
 		}
 	};
 
@@ -182,11 +231,7 @@ export class AuthenticationService implements IAuthenticationService {
 				throw new OldPasswordError('Wrong old password');
 			}
 		} catch (error: any) {
-			if (error instanceof OldPasswordError) {
-				throw error;
-			} else {
-				throw new Error('Error change password: ' + error.message);
-			}
+			handleErrorFunction(error);
 		}
 	};
 
@@ -216,7 +261,7 @@ export class AuthenticationService implements IAuthenticationService {
 				}
 			}
 		} catch (error: any) {
-			throw new Error('Error!' + error.message);
+			handleErrorFunction(error);
 		}
 	};
 
@@ -243,7 +288,7 @@ export class AuthenticationService implements IAuthenticationService {
 				return '';
 			}
 		} catch (error: any) {
-			throw new Error('Error!' + error.message);
+			handleErrorFunction(error);
 		}
 	};
 
@@ -258,7 +303,7 @@ export class AuthenticationService implements IAuthenticationService {
 				return false;
 			}
 		} catch (error: any) {
-			throw new Error('Error!' + error.message);
+			handleErrorFunction(error);
 		}
 	};
 
@@ -273,7 +318,11 @@ export class AuthenticationService implements IAuthenticationService {
 				return false;
 			}
 		} catch (error: any) {
-			throw new Error('Error!' + error.message);
+			if (error instanceof CustomError) {
+				throw error;
+			} else {
+				throw new ServerError(error.message);
+			}
 		}
 	};
 }

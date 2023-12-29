@@ -20,14 +20,14 @@ module.exports = {
 	async up(queryInterface, Sequelize) {
 		await queryInterface.bulkInsert('accounts', [
 			{
-				username: 'username1',
+				username: 'root',
 				password:
 					'$2b$10$D69VoJEoIijwminkjAo.recens0qA/NXN1.PiVy.S8j6ou29G4WlW',
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
 			{
-				username: 'username2',
+				username: 'admin',
 				password:
 					'$2b$10$D69VoJEoIijwminkjAo.recens0qA/NXN1.PiVy.S8j6ou29G4WlW',
 				createdAt: new Date(),
@@ -84,6 +84,76 @@ module.exports = {
 			},
 			{
 				username: 'username10',
+				password:
+					'$2b$10$D69VoJEoIijwminkjAo.recens0qA/NXN1.PiVy.S8j6ou29G4WlW',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				username: 'username11',
+				password:
+					'$2b$10$D69VoJEoIijwminkjAo.recens0qA/NXN1.PiVy.S8j6ou29G4WlW',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				username: 'username12',
+				password:
+					'$2b$10$D69VoJEoIijwminkjAo.recens0qA/NXN1.PiVy.S8j6ou29G4WlW',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				username: 'username13',
+				password:
+					'$2b$10$D69VoJEoIijwminkjAo.recens0qA/NXN1.PiVy.S8j6ou29G4WlW',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				username: 'username14',
+				password:
+					'$2b$10$D69VoJEoIijwminkjAo.recens0qA/NXN1.PiVy.S8j6ou29G4WlW',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				username: 'username15',
+				password:
+					'$2b$10$D69VoJEoIijwminkjAo.recens0qA/NXN1.PiVy.S8j6ou29G4WlW',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				username: 'username16',
+				password:
+					'$2b$10$D69VoJEoIijwminkjAo.recens0qA/NXN1.PiVy.S8j6ou29G4WlW',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				username: 'username17',
+				password:
+					'$2b$10$D69VoJEoIijwminkjAo.recens0qA/NXN1.PiVy.S8j6ou29G4WlW',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				username: 'username18',
+				password:
+					'$2b$10$D69VoJEoIijwminkjAo.recens0qA/NXN1.PiVy.S8j6ou29G4WlW',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				username: 'username19',
+				password:
+					'$2b$10$D69VoJEoIijwminkjAo.recens0qA/NXN1.PiVy.S8j6ou29G4WlW',
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+			{
+				username: 'username20',
 				password:
 					'$2b$10$D69VoJEoIijwminkjAo.recens0qA/NXN1.PiVy.S8j6ou29G4WlW',
 				createdAt: new Date(),

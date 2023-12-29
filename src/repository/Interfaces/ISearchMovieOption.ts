@@ -6,4 +6,5 @@ export interface ISearchMovieOption {
 	isSeries?: boolean;
 	sort?: 'highRated' | 'newest' | 'highFavorited';
 	sortType?: 'ASC'|'DESC';
+	level?:number;
 }

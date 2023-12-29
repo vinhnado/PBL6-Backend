@@ -42,3 +42,9 @@ export const validateGetQuality = [
     query('quality').notEmpty().isString().withMessage('quality is must be an string').isIn(['4k', '1080p']).withMessage('quality must be one of: 4k, 1080p'),
 
 ];
+
+export const validateClearCloudFront = [
+    body('movieId').notEmpty().isInt({min:1}).withMessage('Movie ID is required and must be an integer'),
+    body('episodeNum').notEmpty().isInt({min:1}).withMessage('episodeNum is required and must be an integer'),
+    body('quality').notEmpty().isIn(['720p', '1080p','4k']).withMessage("option is required and in '720p', '1080p','4k'"),
+]

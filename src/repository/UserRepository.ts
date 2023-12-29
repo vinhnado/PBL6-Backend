@@ -3,16 +3,9 @@ import { User } from '../models/User';
 import { Account } from '../models/Account';
 import { Op } from 'sequelize';
 import { IUserRepository } from './Interfaces/IUserRepository';
-import { MovieFavorite } from '../models/MovieFavorite';
-import { WatchHistory } from '../models/WatchHistory';
 import { BaseRepository } from './BaseRepository';
 import { Service } from 'typedi';
 import { SubscriptionType } from '../models/SubscriptionType';
-import { Movie } from '../models/Movie';
-import { Episode } from '../models/Episode';
-import { Genre } from '../models/Genre';
-import { SubscriptionInfo } from '../models/SubscriptionInfo';
-import { Duration } from '../models/Duration';
 
 @Service()
 export class UserRepository
@@ -29,7 +22,7 @@ export class UserRepository
 
 		if (email) {
 			whereConditions.email = {
-				[Op.iLike]: `%${email}%`,
+				[Op.eq]: email,
 			};
 		}
 
@@ -71,6 +64,33 @@ export class UserRepository
 		});
 		return user!;
 	}
+
+		async findOneUserByUsername(username: string): Promise<User> {
+		const user = await User.findOne({
+			include: [
+				{
+					model: Account,
+					where: {
+						username: {
+							[Op.eq]: username,
+						},
+					},
+				},
+				{
+					model: Subscription,
+					// attributes: ['closeAt'],
+					include: [
+						{
+							model: SubscriptionType,
+							attributes: ['subscription_type_id', 'name'],
+						},
+					],
+				},
+			],
+		});
+		return user!;
+	}
+
 	async createNewUser(
 		newUser: User,
 		newAccount: Account,
@@ -94,37 +114,21 @@ export class UserRepository
 	}
 
 	async searchUsers(
-		searchConditions: any,
+		whereConditions: any,
+		whereSubTypeCons: any,
 		page: number,
-		pageSize: number
-	):Promise<{
+		pageSize: number,
+		sortField: string,
+		sortBy: string
+	): Promise<{
 		users: User[];
-		totalCount: number;
-	  }> {
+		count: number;
+	}> {
 		try {
-			const { username, email, gender } = searchConditions;
-			let user_name: string;
-			const whereConditions: { [key: string]: any } = {};
+			console.log(sortField);
+			console.log(sortBy);
 
-			if (email) {
-				whereConditions.email = {
-					[Op.iLike]: `%${email}%`,
-				};
-			}
-
-			if (username) {
-				user_name = username;
-			} else {
-				user_name = '';
-			}
-
-			if (gender) {
-				whereConditions.nation = {
-					[Op.eq]: gender,
-				};
-			}
-
-			const users = await User.findAll({
+			const { rows: users, count } = await User.findAndCountAll({
 				where: whereConditions,
 				offset: (page - 1) * pageSize,
 				limit: pageSize,
@@ -132,31 +136,28 @@ export class UserRepository
 					{
 						model: Account,
 						attributes: ['username'],
-						where: {
-							username: {
-								[Op.like]: `%${user_name}%`,
-							},
-						},
+						required: true,
 					},
-				],
-			});
-
-			const totalCount = await User.count({ 
-				where: whereConditions,
-				include: [
 					{
-						model: Account,
-						attributes: ['username'],
-						where: {
-							username: {
-								[Op.like]: `%${user_name}%`,
-							},
+						model: Subscription,
+						attributes: {
+							exclude: ['createdAt', 'updatedAt', 'deletedAt'],
 						},
+						required: true,
+						...(Object.keys(whereSubTypeCons).length > 0
+							? { where: whereSubTypeCons }
+							: {}),
+						include: [
+							{
+								model: SubscriptionType,
+								attributes: ['name'],
+							},
+						],
 					},
 				],
+				order: [[`${sortField}`, `${sortBy}`]],
 			});
-
-			return {users, totalCount};
+			return { users, count };
 		} catch (error: any) {
 			throw new Error('Không thể lấy danh sách user ' + error.message);
 		}

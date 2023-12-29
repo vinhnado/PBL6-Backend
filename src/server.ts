@@ -16,6 +16,10 @@ import GenreRouter from './route/GenreRoutes';
 import CommentRouter from './route/CommentRoutes';
 import RatingRouter from './route/RatingRoutes';
 import StatisticalRouter from './route/StatisticalRoutes';
+import * as fs from 'fs';
+import * as https from 'https';
+import ChatRoutes from './route/ChatRoutes';
+import { setupSchedule } from './utils/ScheduleTask';
 
 class App {
 	public app: Application;
@@ -25,6 +29,7 @@ class App {
 		this.databaseSync();
 		this.plugins();
 		this.routes();
+		this.initSchedule();
 	}
 
 	private databaseSync(): void {
@@ -55,6 +60,7 @@ class App {
 		this.app.use('/api/comments', CommentRouter);
 		this.app.use('/api/ratings', RatingRouter);
 		this.app.use('/api/statisticals', StatisticalRouter);
+		this.app.use('/api/chat', ChatRoutes);
 	}
 
 	private plugins(): void {
@@ -64,6 +70,11 @@ class App {
 		// Enable CORS for all routes
 		this.app.use(cors()); // Use the cors middleware here
 	}
+
+	private initSchedule(): void {
+		// Khởi tạo cron job
+		setupSchedule()
+	}
 }
 
 const port: number = 8000;
@@ -72,6 +83,21 @@ const app = new App().app;
 app.listen(port, () => {
 	console.log(`✅ Server started successfully at Port: ${port}`);
 });
+
+// var path = require('path');
+// var options = {
+// 	key: fs.readFileSync(path.resolve('src/ssl/key.pem')),
+// 	cert: fs.readFileSync(path.resolve('src/ssl/cert.pem')),
+// };
+
+// // Tích hợp SSL/TLS với server
+// const httpsServer = https.createServer(options, app);
+
+// Lắng nghe trên cổng 4000 (hoặc bất kỳ cổng bạn muốn sử dụng)
+// const httpsPort: number = 8000;
+// httpsServer.listen(httpsPort, () => {
+// 	console.log(`✅ Server started successfully at Port: ${httpsPort}`);
+// });
 
 // if (cluster.isPrimary === true) {
 // 	const CPUS: any = cpus();
