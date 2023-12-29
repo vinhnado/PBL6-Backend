@@ -15,6 +15,8 @@ export class PaypalService {
 	environment = process.env.ENVIRONMENT;
 	client_id = process.env.CLIENT_ID?.toString();
 	client_secret = process.env.CLIENT_SECRET?.toString();
+	client_url = process.env.CLIENT_URL?.toString();
+
 	endpoint_url =
 		this.environment === 'sandbox'
 			? 'https://api-m.sandbox.paypal.com'
@@ -45,8 +47,8 @@ export class PaypalService {
 					brand_name: 'MOVTIME',
 					landing_page: 'LOGIN',
 					user_action: 'PAY_NOW',
-					return_url: 'http://localhost:3000/bill',
-					cancel_url: 'http://localhost:3000/bill/cancel',
+					return_url: this.client_url+'/bill' || 'http://localhost:3000/bill',
+					cancel_url: this.client_url+'/bill' || 'http://localhost:3000/bill/cancel',
 				},
 			};
 

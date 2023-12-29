@@ -365,25 +365,25 @@ export class UserService implements IUserService {
 		}
 	}
 
-	async sendMailForReserveMovie(userId: number,movieId:number): Promise<Movie[]> {
+	async sendMailForReserveMovie(userId: number,movieId:number): Promise<any> {
 		try {
-			const reserveMovie = await this.findReserveByUserIdAndMovieId(userId,movieId);
-			return reserveMovie;
+			const movieIdList = await this.reserveRepository.getListMovieReserve();
+			for (let i = 0; i < movieIdList.length; i++) {
+    			const movieId = movieIdList[i];
+  				const reverseList = await this.reserveRepository.findByCondition({movieId:movieId})
+				for (let i = 0; i < reverseList.length; i++) {
+					const movieId = movieIdList[i];
+					const reverseList = await this.reserveRepository.findByCondition({movieId:movieId})
+					// for(reverse:reverseList){
+
+					// }
+				}
+			}
 		} catch (error) {
 			throw(error);
 		}
 	}
 
-	async findReserveByUserIdAndMovieId(userId: number,movieId:number): Promise<Movie[]> {
-		try {
-			const reserveMovie = await this.reserveRepository.findOneByCondition({
-				userId,movieId
-			});
-			return reserveMovie;
-		} catch (error) {
-			throw(error);
-		}
-	}
 
 	async getReserveMovieOfUser(userId: number): Promise<Reserve[]> {
 		try {
