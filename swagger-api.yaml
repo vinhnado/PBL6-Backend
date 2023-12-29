@@ -2012,6 +2012,16 @@ paths:
           description: successful operation
       security:
         - bearerAuth: []
+  /user/remove-avatar:
+    delete:
+      tags:
+        - user
+      summary: Delete avatar of user
+      responses:
+        '200':
+          description: successful operation
+      security:
+        - bearerAuth: []
   /individuals/actors:
     get:
       summary: Get actors
@@ -2048,6 +2058,16 @@ paths:
         - user
       summary: Returns payments of user
       description: Returns payments movies of user
+      responses:
+        '200':
+          description: successful operation
+      security:
+        - bearerAuth: []
+  /user/cloudfront/clear-cache:
+    post:
+      tags:
+        - user
+      summary: Clear cache cloudfront for avatar user
       responses:
         '200':
           description: successful operation

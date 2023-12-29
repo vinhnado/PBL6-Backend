@@ -93,6 +93,15 @@ class UserRoutes extends BaseRoutes {
 			auth,
 			this.controller.getPaymentsOfUser
 		);
+		this.router.post(
+			'/cloudfront/clear-cache',
+			auth,
+			this.controller.clearCacheCloudFrontAvatarUser
+		);
+
+		this.router.delete(
+			'/remove-avatar',auth, this.controller.removeAvatar
+		);
 	}
 }
 
