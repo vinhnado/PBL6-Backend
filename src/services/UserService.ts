@@ -360,7 +360,6 @@ export class UserService implements IUserService {
 			data.userId = userId;
 			data.avatarURL = 'users/' + userId + '/avatar.jpg';
 			await this.updateUser(data);
-			await await this.s3Service.clearCacheCloudFront(data.avatarURL);
 			return await this.s3Service.generatePresignedUrlUpdate(
 				data.avatarURL,
 				'image/jpeg'
@@ -450,4 +449,29 @@ export class UserService implements IUserService {
 		}
 	}
 
+	async clearCacheCloudFrontAvatarUser(req: Request) :Promise<void>
+	{
+		try {
+			const userId = req.payload.userId;
+
+			const avatarURL = 'users/' + userId + '/avatar.jpg';
+			return await this.s3Service.clearCacheCloudFront(avatarURL);
+		} catch (error) {
+			throw(error);
+		}
+	}
+
+	async removeAvatar (userId: number): Promise<void>
+	{
+		try {
+			const avatarURL = 'users/' + userId + '/avatar.jpg';
+			// const data: Partial<User> = {
+			// 	avatarURL: undefined,
+			// };
+			// await this.updateUser(data);
+			await  this.s3Service.deleteObject(avatarURL);
+		} catch (error) {
+			throw(error);
+		}
+	}
 }
