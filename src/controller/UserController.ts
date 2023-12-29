@@ -422,4 +422,35 @@ export class UserController {
 			console.log(error);
 		}
 	};
+
+	clearCacheCloudFrontAvatarUser = async(req: Request, res: Response) =>{
+		try {
+			
+			await this.userService.clearCacheCloudFrontAvatarUser(req);
+			res.status(200).json({
+				message: "successful",
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
+
+	removeAvatar = async(req: Request, res: Response) =>{
+		try {
+			const userId = req.payload.userId;
+			await this.userService.removeAvatar(userId);
+			await this.userService.clearCacheCloudFrontAvatarUser(req);
+			res.status(204).json({
+				message: "successful",
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
 }

@@ -89,6 +89,8 @@ import AWS from 'aws-sdk';
 import { Service } from 'typedi';
 import { getSignedUrl } from '@aws-sdk/cloudfront-signer';
 import { CloudFrontClient, CreateInvalidationCommand } from '@aws-sdk/client-cloudfront';
+import { DeleteObjectCommand, S3Client } from "@aws-sdk/client-s3";
+
 
 
 @Service()
@@ -109,11 +111,11 @@ export class S3Service {
     private expireTime = 24*60*60 * 1000; // 60 phut *60 giây * 1000 milliseconds
     private expires = new Date(Date.now() + this.expireTime);
     // Get link Object 
-    getObjectUrl = async (objectName: string, expiration: Date = this.expires) => {
+    getObjectUrl = async (objectName: string, bucketName: string = this.BUCKET_NAME, expiration: number = this.EXPIRATION) => {
         try {
             const url = await getSignedUrl({
                 url: this.cloudFrontDomain+"/"+objectName,
-                dateLessThan: expiration+'',
+                dateLessThan: this.expires+'',
                 privateKey: process.env.CLOUDFRONT_PRIVATE_KEY||'',
                 keyPairId:process.env.CLOUDFRONT_KEY_PAIR_ID||'KFPL4RLZO6EP1'
             });
@@ -125,49 +127,48 @@ export class S3Service {
     }
 
     // Create temp URL to upload object to S3
-    // generatePresignedUrlUpdate = async (objectName: string, contentType: string , expiration: number = this.EXPIRATION) => {
-    //     try {
-    //         const params = {
-    //             Bucket: this.BUCKET_NAME,
-    //             Key: objectName,
-    //             ContentType: contentType,
-    //             Expires: expiration
-    //         };
-    //         const url = await S3Service.s3Client.getSignedUrl('putObject', params);
-    //         return url;
-    //     } catch (error) {
-    //         console.error('Error generating pre-signed URL:', error);
-    //         throw error; // Rethrow the error for handling later
-    //     }
-    // }
-
     generatePresignedUrlUpdate = async (objectName: string, contentType: string , expiration: number = this.EXPIRATION) => {
         try {
-            AWS.config.update({
-                accessKeyId: process.env.AWS_ACCESS_KEY,
-                secretAccessKey: process.env.AWS_SECRET_KEY,
-                region: process.env.AWS_REGION || 'ap-southeast-1'
-              });
-            
-            var s3 = new AWS.S3();
-            s3.getSignedUrl('putObject', {
-                Bucket: 'myBucket',
-                Expires: 60*60,
-                Key: 'myKey',
-                ContentType: 'image/jpeg',
-            }, function (err, url) {
-                console.log(url);
-                return url;
-            });
+            const params = {
+                Bucket: this.BUCKET_NAME,
+                Key: objectName,
+                ContentType: contentType,
+                Expires: expiration
+            };
+            const url = await S3Service.s3Client.getSignedUrl('putObject', params);
+            return url;
         } catch (error) {
             console.error('Error generating pre-signed URL:', error);
             throw error; // Rethrow the error for handling later
         }
     }
 
+    deleteObject = async(objectName: string)=>{
+        try {
+            const client = new S3Client({
+                region: process.env.AWS_REGION || 'ap-southeast-1',
+                credentials: {
+                  accessKeyId:  process.env.AWS_ACCESS_KEY || '', // Thay thế bằng access key của bạn
+                  secretAccessKey: process.env.AWS_SECRET_KEY || '', // Thay thế bằng secret access key của bạn
+                },
+              });
+          const command = new DeleteObjectCommand({
+            Bucket: this.BUCKET_NAME,
+            Key: objectName,
+          });
+        
+            const response = await client.send(command);
+            console.log(response);
+      
+          } catch (err) {
+            console.log( err);
+          }
+    }
+    
 
     clearCacheCloudFront = async (path: string) => {
         try{
+            this.deleteObject('ok')
             AWS.config.update({
                 accessKeyId: process.env.AWS_ACCESS_KEY,
                 secretAccessKey: process.env.AWS_SECRET_KEY,

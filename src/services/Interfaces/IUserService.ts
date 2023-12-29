@@ -39,5 +39,7 @@ export interface IUserService {
 	getMoviesReserveOfUser(userId: number): Promise<Movie[]>;
 
     addReserve(req: Request): Promise<Reserve>;
-	deleteReserve(req: Request): Promise<void>
+	deleteReserve(req: Request): Promise<void>;
+	clearCacheCloudFrontAvatarUser(req: Request) :Promise<void>;
+	removeAvatar: (userId: number) => Promise<void>;
 }
