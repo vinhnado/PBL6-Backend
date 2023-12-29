@@ -99,7 +99,7 @@ export class Mail {
 				username: username,
 				movieName: movie.title,
 				posterUrl: movie.posterURL,
-				date: movie.releaseDate.toISOString(),
+				date: movie.releaseDate.toLocaleString(),
 				movieUrl: this.client_url+'/movie/'+movie.movieId+'/1'
 			};
 

@@ -370,25 +370,6 @@ export class UserService implements IUserService {
 		}
 	}
 
-	async sendMailForReserveMovie(): Promise<any> {
-		try {
-			const movieIdList = await this.reserveRepository.getListMovieReserve();
-			for (let i = 0; i < movieIdList.length; i++) {
-    			const movieId = movieIdList[i];
-  				const reverseList = await this.reserveRepository.findByCondition({movieId:movieId})	
-				let movie = await this.movieRepository.findById(Number(movieId));
-				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
-				for (const reserve of reverseList) {
-					const user = await this.findOneUser({userId:reserve.userId})
-					await this.mail.reserveMovie(user.username,user.email,movie)
-				}
-			}
-		} catch (error) {	
-			throw(error);
-		}
-	}
-
-
 	async getReserveMovieOfUser(userId: number): Promise<Reserve[]> {
 		try {
 			return this.reserveRepository.getReserveMovieOfUser(userId);
@@ -443,5 +424,21 @@ export class UserService implements IUserService {
 			throw(error);
 		}
 	}
-
+	async sendMailForReserveMovie(): Promise<any> {
+		try {
+			const movieIdList = await this.reserveRepository.getListMovieReserve();
+			for (let i = 0; i < movieIdList.length; i++) {
+    			const movieId = movieIdList[i];
+  				const reverseList = await this.reserveRepository.findByCondition({movieId:movieId})	
+				let movie = await this.movieRepository.findById(Number(movieId));
+				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
+				for (const reserve of reverseList) {
+					const user = await this.findOneUser({userId:reserve.userId})
+					await this.mail.reserveMovie(user.username,user.email,movie)
+				}
+			}
+		} catch (error) {	
+			throw(error);
+		}
+	}
 }

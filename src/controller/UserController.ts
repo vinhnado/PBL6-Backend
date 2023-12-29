@@ -14,13 +14,11 @@ import { IPaymentService } from '../services/Interfaces/IPaymentService';
 export class UserController {
 	private userService: IUserService;
 	private authenticationService: IAuthenticationService;
-	private movieService: IMovieService;
 	private paymentService: IPaymentService;
 
 	constructor() {
 		this.userService = Container.get(UserService);
 		this.authenticationService = Container.get(AuthenticationService);
-		this.movieService = Container.get(MovieService);
 		this.paymentService= Container.get(PaymentService);
 	}
 

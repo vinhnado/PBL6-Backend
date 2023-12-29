@@ -19,7 +19,7 @@ import StatisticalRouter from './route/StatisticalRoutes';
 import * as fs from 'fs';
 import * as https from 'https';
 import ChatRoutes from './route/ChatRoutes';
-import CronJob from './utils/CronJob';
+import { setupSchedule } from './utils/ScheduleTask';
 
 class App {
 	public app: Application;
@@ -29,7 +29,7 @@ class App {
 		this.databaseSync();
 		this.plugins();
 		this.routes();
-		this.initCronJob();
+		this.initSchedule();
 	}
 
 	private databaseSync(): void {
@@ -71,9 +71,9 @@ class App {
 		this.app.use(cors()); // Use the cors middleware here
 	}
 
-	private initCronJob(): void {
+	private initSchedule(): void {
 		// Khởi tạo cron job
-		new CronJob();
+		setupSchedule()
 	}
 }
 
