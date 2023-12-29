@@ -109,8 +109,6 @@ export class ReserveRepository extends BaseRepository<Reserve> implements IReser
             const ngayHienTai = new Date();
             ngayHienTai.setDate(ngayHienTai.getDate());
             // ngayHienTai.setDate(ngayHienTai.getDate() + 1);
-
-            console.log(ngayHienTai)
             // Lọc theo ngày
             const movies = await Movie.findAll({
               where: {
@@ -122,7 +120,6 @@ export class ReserveRepository extends BaseRepository<Reserve> implements IReser
             for (const movie of movies) {
               Ids.push(movie.getDataValue('movie_id'));
             }
-            console.log(Ids)
             return Ids;
         } catch (error) {
             throw (error);
