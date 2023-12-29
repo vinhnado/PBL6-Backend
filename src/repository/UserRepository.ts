@@ -91,6 +91,28 @@ export class UserRepository
 		return user!;
 	}
 
+	async findOneUserByEmail(email: string): Promise<User > {
+	const user = await User.findOne({
+		where: { email: email },
+		include: [
+		{
+			model: Account,
+		},
+		{
+			model: Subscription,
+			include: [
+			{
+				model: SubscriptionType,
+				attributes: ['subscription_type_id', 'name'],
+			},
+			],
+		},
+		],
+	});
+
+	return user! ;
+	}
+
 	async createNewUser(
 		newUser: User,
 		newAccount: Account,
