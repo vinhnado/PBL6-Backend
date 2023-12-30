@@ -8,6 +8,7 @@ import Container, { Inject, Service } from 'typedi';
 import { IAuthenticationService } from '../services/Interfaces/IAuthenticationService';
 import { AuthenticationService } from '../services/AuthenticationService';
 import { CloudHSM } from 'aws-sdk';
+import passport from 'passport';
 
 export class AuthenticationController {
 	private authenticationService: IAuthenticationService;
@@ -199,6 +200,40 @@ export class AuthenticationController {
 					message: 'Check param please',
 				});
 			}
+		} catch (error) {
+			handleErrorController(error, res);
+		}
+	};
+
+	googleLogin = async (req: Request, res: Response) => {
+		try {
+		passport.authenticate('google', { scope: ['profile', 'email'], session: false }, (err, user) => {
+		if (err || !user) {
+			return res.status(401).json({ error: 'Authentication failed' });
+		}
+
+		// Tại đây, bạn có thể tạo mã thông báo (token) và trả về cho người dùng
+		// Ví dụ sử dụng JWT
+		const token = 'your_generated_token_here';
+
+		return res.json({ token });
+    })(req, res);
+		} catch (error) {
+			handleErrorController(error, res);
+		}
+	};
+
+	googleCallback = async (req: Request, res: Response) => {
+		try {
+			passport.authenticate('google', { failureRedirect: '/' })(req, res, () => {
+    		const token = "await this.authenticationService.login(username, password)";
+			const res_token = { type: 'Bearer', token: token };
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully login!',
+				result: res_token,
+			});
+		});
 		} catch (error) {
 			handleErrorController(error, res);
 		}
