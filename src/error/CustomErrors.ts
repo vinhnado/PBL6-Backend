@@ -53,9 +53,9 @@ export class PasswordNotMatch extends CustomError {
 	}
 }
 
-export class NotFound extends CustomError {
+export class ContentNotFound extends CustomError {
 	constructor(message: string) {
-		super(message, 404, 'Not Found');
+		super(message, 204, 'Content Not Found');
 	}
 }
 

@@ -92,16 +92,11 @@ export class AuthenticationController {
 	forgotPassword = async (req: Request, res: Response) => {
 		try {
 			const { email, token, password } = req.body;
-			let data;
-			if (token == null) {
-				data = await this.authenticationService.forgotPassword(email);
-			} else {
-				data = await this.authenticationService.forgotPassword(
+			let data = await this.authenticationService.forgotPassword(
 					email,
 					token,
 					password
 				);
-			}
 
 			return res.status(200).json({
 				status: 'Ok!',
