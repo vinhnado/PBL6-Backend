@@ -10,6 +10,7 @@ import { Subscription } from '../models/Subscription';
 import Mail from '../utils/Mail';
 import { Token } from '../utils/Token';
 import {
+	ContentNotFound,
 	CustomError,
 	EmailValidDuplicate,
 	InvalidUserNameOrPassword,
@@ -178,7 +179,7 @@ export class AuthenticationService implements IAuthenticationService {
 			if (token == null && email) {
 				const user = await this.userRepository.findOneUser(searchConditions);
 				if(!user){
-
+					throw new ContentNotFound("Email not exist")
 				}
 				await this.mail.forgotPassword(
 					user.account.username,
@@ -324,11 +325,7 @@ export class AuthenticationService implements IAuthenticationService {
 				return false;
 			}
 		} catch (error: any) {
-			if (error instanceof CustomError) {
-				throw error;
-			} else {
-				throw new ServerError(error.message);
-			}
+			handleErrorFunction(error);
 		}
 	};
 }
