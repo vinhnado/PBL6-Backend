@@ -1628,6 +1628,24 @@ paths:
                   $ref: '#/components/schemas/Pet'
         '400':
           description: Error while get movies recommender
+  /movies/recommend/related-movies:
+    get:
+      tags:
+        - movie
+      summary: Get related-movies 
+      parameters:
+        - name: movieId
+          in: query
+          description: Enter value of movieId
+          required: true
+          explode: true
+          schema:
+            type: number      
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Error while get movies recommender
 
   /movies/home/upcoming:
     get:
