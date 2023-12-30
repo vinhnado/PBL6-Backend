@@ -101,6 +101,9 @@ export class RecommenderSerivce implements IRecommenderService {
         }
     }
 
+    /**
+     * Create full matrix between movies and genres
+     */
     public async createMatrix(): Promise<{ [x: number]: number[]; }[]> {
         try {
             const matrix: number[][] = [];
@@ -175,6 +178,10 @@ export class RecommenderSerivce implements IRecommenderService {
     //     }
     // }
 
+    /**
+     * Get the rest matrix from the matrix and movieIds
+     * Function will remove movies with movie_id in movieIds array 
+     */
     public async getTheRestMatrix(matrix: { [x: number]: number[] }[], movieIds: number[]): Promise<{ [x: number]: number[] }[]> {
         try {
           const userMatrix: { [x: number]: number[] }[] = [];
