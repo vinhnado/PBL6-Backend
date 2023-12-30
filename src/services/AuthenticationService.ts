@@ -177,6 +177,9 @@ export class AuthenticationService implements IAuthenticationService {
 			};
 			if (token == null && email) {
 				const user = await this.userRepository.findOneUser(searchConditions);
+				if(!user){
+
+				}
 				await this.mail.forgotPassword(
 					user.account.username,
 					user.email,
