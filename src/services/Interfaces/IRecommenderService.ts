@@ -7,6 +7,7 @@ export interface IRecommenderService {
     createMatrix(): Promise<{ [x: number]: number[]; }[]>;
     getMoviesRecommend(userId: number,page:number, pageSize: number): Promise<Movie[]>;
     getMovieIdsRecommend(userId: number): Promise<number[]>;
-    testData(userId: number): Promise<User|null>;
+    testData(userId: number): Promise<any>;
+    getRelatedMovies(userId: number,page:number, pageSize: number): Promise<Movie[]> 
 
 }
