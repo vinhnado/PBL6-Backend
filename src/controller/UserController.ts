@@ -14,13 +14,11 @@ import { IPaymentService } from '../services/Interfaces/IPaymentService';
 export class UserController {
 	private userService: IUserService;
 	private authenticationService: IAuthenticationService;
-	private movieService: IMovieService;
 	private paymentService: IPaymentService;
 
 	constructor() {
 		this.userService = Container.get(UserService);
 		this.authenticationService = Container.get(AuthenticationService);
-		this.movieService = Container.get(MovieService);
 		this.paymentService= Container.get(PaymentService);
 	}
 
@@ -350,6 +348,21 @@ export class UserController {
 		}
 	};
 
+	sendMailForReserveMovie= async(req: Request, res: Response) => {
+		try {
+			const reserves = await this.userService.sendMailForReserveMovie();
+			res.status(200).json({
+				message: "successful",
+				data:reserves
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server Error!"
+			});
+		}
+	}
+
 	getReserveMovieOfUser= async(req: Request, res: Response) => {
 		try {
 			const userId = req.payload.userId;
@@ -384,7 +397,7 @@ export class UserController {
 
 	addReserve= async(req: Request, res: Response) => {
 		try {
-			const reserves = await this.userService.addReserve(req);
+			await this.userService.addReserve(req);
 			res.status(200).json({
 				message: "successful",
 			});

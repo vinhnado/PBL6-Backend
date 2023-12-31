@@ -3,7 +3,8 @@ import { PaymentService } from '../PaymentService';
 import { Payment } from '../../models/Payment';
 import { SubscriptionService } from '../SubscriptionService';
 import axios from 'axios';
-import CronJob from '../../utils/CronJob';
+import { transferRate } from '../../utils/ScheduleTask';
+
 @Service()
 export class PaypalService {
 	@Inject(() => PaymentService)
@@ -15,6 +16,8 @@ export class PaypalService {
 	environment = process.env.ENVIRONMENT;
 	client_id = process.env.CLIENT_ID?.toString();
 	client_secret = process.env.CLIENT_SECRET?.toString();
+	client_url = process.env.CLIENT_URL?.toString();
+
 	endpoint_url =
 		this.environment === 'sandbox'
 			? 'https://api-m.sandbox.paypal.com'
@@ -27,7 +30,7 @@ export class PaypalService {
 				subscriptionInfoId
 			);
 			if (!PaypalService.transferRate) {
-				await CronJob.getExchangeRates();
+				await transferRate();
 			}
 			const priceString = (price / PaypalService.transferRate).toFixed(2);
 			const order = {
@@ -45,8 +48,8 @@ export class PaypalService {
 					brand_name: 'MOVTIME',
 					landing_page: 'LOGIN',
 					user_action: 'PAY_NOW',
-					return_url: 'http://localhost:3000/bill',
-					cancel_url: 'http://localhost:3000/bill/cancel',
+					return_url: this.client_url+'/bill' || 'http://localhost:3000/bill',
+					cancel_url: this.client_url+'/bill' || 'http://localhost:3000/bill/cancel',
 				},
 			};
 

@@ -1089,7 +1089,7 @@ module.exports = {
 				//63
 				title: "Avatar: Frontiers of Pandora",
 				description:"Avatar: Frontiers of Pandora là trò chơi hành động phiêu lưu thế giới mở do Massive Entertainment phát triển và Ubisoft phát hành. Bối cảnh trò chơi được đặt trên hành tinh Pandora - hành tinh quá quen thuộc với những game thủ từng xem qua bộ phim Avatar năm 2009 và phiên bản vừa ra mắt cách đây 1 năm, Avatar: Frontiers of Pandora kể câu chuyện về một bộ tộc Na'vi mới chiến đấu chống lại Tập đoàn Phát triển Tài nguyên (RDA), một tập đoàn con người đang khai thác tài nguyên quý giá trên chính quê hương của bộ lạc Na'vi .",
-				release_date: new Date(2024,2,2),
+				release_date: new Date(2024,12,30),
 				nation: 'Mỹ',
 				poster_url: 'movies/63/poster.jpg',
 				trailer_url: 'movies/63/trailer.mp4',
@@ -1106,7 +1106,7 @@ module.exports = {
 				//64
 				title: "Người Nhện 2",
 				description:"Người Nhện 2 (tựa gốc tiếng Anh: Spider-Man 2) là phim điện ảnh siêu anh hùng của Mỹ năm 2004 do Sam Raimi đạo diễn và Alvin Sargent viết kịch bản từ đầu truyện của Alfred Gough, Miles Millar và Michael Chabon. Là phần tiếp nối của phim Người Nhện năm 2002, tác phẩm là phần thứ hai trong trilogy Người Nhện, dựa trên nhân vật truyện tranh giả tưởng cùng tên của Marvel Comics. Các diễn viên Tobey Maguire, Kirsten Dunst, James Franco và Rosemary Harris lần lượt đảm nhận những vai diễn tương ứng của họ ở phần đầu tiên, trong khi Alfred Molina và Donna Murphy mới gia nhập dàn diễn viên trong phim.",
-				release_date: new Date(2023,1,1),
+				release_date: new Date(2023,12,30),
 				nation: 'Mỹ',
 				poster_url: 'movies/64/poster.jpg',
 				trailer_url: 'movies/64/trailer.mp4',

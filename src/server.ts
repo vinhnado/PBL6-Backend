@@ -19,7 +19,8 @@ import StatisticalRouter from './route/StatisticalRoutes';
 import * as fs from 'fs';
 import * as https from 'https';
 import ChatRoutes from './route/ChatRoutes';
-import CronJob from './utils/CronJob';
+import { setupSchedule } from './utils/ScheduleTask';
+import { googleMiddleware } from './middleware/OauthGoogleMiddleware';
 
 class App {
 	public app: Application;
@@ -29,7 +30,7 @@ class App {
 		this.databaseSync();
 		this.plugins();
 		this.routes();
-		this.initCronJob();
+		this.initSchedule();
 	}
 
 	private databaseSync(): void {
@@ -66,14 +67,15 @@ class App {
 	private plugins(): void {
 		this.app.use(express.json());
 		this.app.use(express.urlencoded({ extended: true }));
+		this.app.use(googleMiddleware);
 
 		// Enable CORS for all routes
 		this.app.use(cors()); // Use the cors middleware here
 	}
 
-	private initCronJob(): void {
+	private initSchedule(): void {
 		// Khởi tạo cron job
-		new CronJob();
+		setupSchedule()
 	}
 }
 

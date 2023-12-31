@@ -71,8 +71,8 @@ export const auth = (req: Request, res: Response, next: NextFunction): any => {
 			return next();
 		}
 		return res.status(403).send('Token invalid');
-	} catch (err) {
-		return res.send(err);
+	} catch (err:any) {
+		return res.status(401).send(err);
 	}
 };
 

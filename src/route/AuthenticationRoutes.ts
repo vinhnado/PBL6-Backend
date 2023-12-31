@@ -1,3 +1,4 @@
+import passport from 'passport';
 import { AuthenticationController } from '../controller/AuthenticationController';
 import { auth, authRoot } from '../middleware/AuthMiddleware';
 import { validateActiveUser, validateChangePassword, validateForgotPassword, validateGetAccessToken, validateLogin, validateRegister, validateValidRegister } from '../validators/AuthenticationValidator';
@@ -9,6 +10,9 @@ class AuthenticationRoutes extends BaseRoutes {
 		super(new AuthenticationController());
 	}
 	routes(): void {
+		this.router.post('/login',validateLogin,validate, this.controller.login);
+		this.router.get('/google', this.controller.googleLogin);
+		this.router.get('/google/callback',this.controller.googleCallback),
 		this.router.post('/login',validateLogin,validate, this.controller.login);
 		this.router.post('/login-admin',validateLogin,validate, this.controller.loginAdmin);
 		this.router.post('/register',validateRegister,validate ,this.controller.register);
