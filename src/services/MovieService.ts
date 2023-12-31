@@ -20,6 +20,10 @@ import { ParamsDictionary } from 'express-serve-static-core';
 import { ParsedQs } from 'qs';
 import { MovieDirector } from '../models/MovieDirector';
 import { MovieGenre } from '../models/MovieGenre';
+import { ReserveRepository } from '../repository/ReserveRepository';
+import { QualityRepository } from '../repository/QualityRepository';
+import { IQualityRepository } from '../repository/Interfaces/IQualityRepository';
+import { Quality } from '../models/Quality';
 
 @Service()
 export class MovieService implements IMovieService {
@@ -281,6 +285,7 @@ export class MovieService implements IMovieService {
 			if(genreIds){
 				await this.movieGenreRepository.addGenresForMovie(newMovie.movieId, genreIds);
 			}
+
 			this.clearCache();
 			return newMovie;
 		} catch (error) {
