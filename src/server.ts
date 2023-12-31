@@ -20,7 +20,8 @@ import * as fs from 'fs';
 import * as https from 'https';
 import ChatRoutes from './route/ChatRoutes';
 import { setupSchedule } from './utils/ScheduleTask';
-import { googleMiddleware } from './middleware/OauthGoogleMiddleware';
+import './middleware/passport'
+import passport from 'passport';
 
 class App {
 	public app: Application;
@@ -67,7 +68,7 @@ class App {
 	private plugins(): void {
 		this.app.use(express.json());
 		this.app.use(express.urlencoded({ extended: true }));
-		this.app.use(googleMiddleware);
+		this.app.use(passport.initialize());
 
 		// Enable CORS for all routes
 		this.app.use(cors()); // Use the cors middleware here

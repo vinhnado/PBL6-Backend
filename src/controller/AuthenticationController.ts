@@ -1,14 +1,13 @@
 import {
-	EmailValidDuplicate,
-	UsernameValidDuplicate,
 	handleErrorController,
 } from './../error/CustomErrors';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import Container, { Inject, Service } from 'typedi';
 import { IAuthenticationService } from '../services/Interfaces/IAuthenticationService';
 import { AuthenticationService } from '../services/AuthenticationService';
-import { CloudHSM } from 'aws-sdk';
 import passport from 'passport';
+import Authentication from '../utils/Authentication';
+
 
 export class AuthenticationController {
 	private authenticationService: IAuthenticationService;
@@ -46,6 +45,26 @@ export class AuthenticationController {
 			handleErrorController(error, res);
 		}
 	};
+
+	handleGoogleCallback = async(req: Request, res: Response, next: NextFunction) =>{
+		console.log("Request URL:", req.url);
+			passport.authenticate('google', (err: any, profile: any) => {
+			if (err) {
+				return next(err);
+			}
+			next();
+		})(req, res, next);
+	}
+
+	handleCallbackResponse = async (req: Request, res: Response) =>{
+		const userProfile = req.payload;
+		if(userProfile){
+			const refreshToken = Authentication.generateRefreshToken(userProfile.account.username)
+			res.cookie('refreshToken', refreshToken, { httpOnly: true });
+			return res.redirect(process.env.CLIENT_URL || "localhost:3000");
+		}
+    	return res.status(401).json({message: 'Unauthorized'})
+	}
 
 	register = async (req: Request, res: Response) => {
 		try {
