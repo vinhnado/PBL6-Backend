@@ -6,7 +6,7 @@ const getRandomDate = (start, end) => {
 };
 
 const getRandomGender = () => {
-	const genders = ['Male', 'Female'];
+	const genders = ['Nam', 'Nữ'];
 	return genders[Math.floor(Math.random() * genders.length)];
 };
 
@@ -41,7 +41,7 @@ module.exports = {
 			[
 				{
 					date_of_birth: new Date(),
-					gender: 'Male',
+					gender: 'Nam',
 					email: 'root@gmail.com',
 					role: 0,
 					subscription_id: 1,
@@ -53,7 +53,7 @@ module.exports = {
 				},
 				{
 					date_of_birth: new Date(),
-					gender: 'Female',
+					gender: 'Nữ',
 					email: 'admin@gmail.com',
 					role: 1,
 					subscription_id: 2,
@@ -65,7 +65,7 @@ module.exports = {
 				},
 				{
 					date_of_birth: new Date(),
-					gender: 'Male',
+					gender: 'Nam',
 					email: 'user3@gmail.com',
 					role: 2,
 					subscription_id: 3,
@@ -77,7 +77,7 @@ module.exports = {
 				},
 				{
 					date_of_birth: new Date(),
-					gender: 'Female',
+					gender: 'Nữ',
 					email: 'user4@gmail.com',
 					role: 2,
 					subscription_id: 4,
@@ -89,7 +89,7 @@ module.exports = {
 				},
 				{
 					date_of_birth: new Date(),
-					gender: 'Male',
+					gender: 'Nam',
 					email: 'user5@gmail.com',
 					role: 2,
 					subscription_id: 5,
@@ -101,7 +101,7 @@ module.exports = {
 				},
 				{
 					date_of_birth: new Date(),
-					gender: 'Female',
+					gender: 'Nữ',
 					email: 'user6@gmail.com',
 					active: true,
 					avatar_url: `users/6/avatar.jpg`,
@@ -113,7 +113,7 @@ module.exports = {
 				},
 				{
 					date_of_birth: new Date(),
-					gender: 'Male',
+					gender: 'Nam',
 					email: 'user7@gmail.com',
 					role: 2,
 					subscription_id: 7,
@@ -125,7 +125,7 @@ module.exports = {
 				},
 				{
 					date_of_birth: new Date(),
-					gender: 'Female',
+					gender: 'Nữ',
 					email: 'user8@gmail.com',
 					role: 2,
 					subscription_id: 8,
@@ -137,7 +137,7 @@ module.exports = {
 				},
 				{
 					date_of_birth: new Date(),
-					gender: 'Male',
+					gender: 'Nam',
 					email: 'user9@gmail.com',
 					role: 2,
 					subscription_id: 9,
@@ -149,7 +149,7 @@ module.exports = {
 				},
 				{
 					date_of_birth: new Date(),
-					gender: 'Female',
+					gender: 'Nữ',
 					email: 'user10@gmail.com',
 					role: 2,
 					subscription_id: 10,
@@ -161,7 +161,7 @@ module.exports = {
 				},
 				{
 					date_of_birth: new Date(),
-					gender: 'Female',
+					gender: 'Nữ',
 					email: 'user11@gmail.com',
 					role: 2,
 					subscription_id: 11,
@@ -173,7 +173,7 @@ module.exports = {
 				},
 				{
 					date_of_birth: new Date(),
-					gender: 'Female',
+					gender: 'Nữ',
 					email: 'user12@gmail.com',
 					role: 2,
 					subscription_id: 12,
@@ -185,7 +185,7 @@ module.exports = {
 				},
 				{
 					date_of_birth: new Date(),
-					gender: 'Female',
+					gender: 'Nữ',
 					email: 'user13@gmail.com',
 					role: 2,
 					subscription_id: 13,
@@ -197,7 +197,7 @@ module.exports = {
 				},
 				{
 					date_of_birth: new Date(),
-					gender: 'Female',
+					gender: 'Nữ',
 					email: 'user14@gmail.com',
 					role: 2,
 					subscription_id: 14,
@@ -209,7 +209,7 @@ module.exports = {
 				},
 				{
 					date_of_birth: new Date(),
-					gender: 'Female',
+					gender: 'Nữ',
 					email: 'user15@gmail.com',
 					active: true,
 					avatar_url: `users/15/avatar.jpg`,
@@ -221,7 +221,7 @@ module.exports = {
 				},
 				{
 					date_of_birth: new Date(),
-					gender: 'Female',
+					gender: 'Nữ',
 					email: 'user16@gmail.com',
 					role: 2,
 					subscription_id: 16,
@@ -233,7 +233,7 @@ module.exports = {
 				},
 				{
 					date_of_birth: new Date(),
-					gender: 'Female',
+					gender: 'Nữ',
 					email: 'user17@gmail.com',
 					role: 2,
 					subscription_id: 17,
@@ -245,7 +245,7 @@ module.exports = {
 				},
 				{
 					date_of_birth: new Date(),
-					gender: 'Female',
+					gender: 'Nữ',
 					email: 'user18@gmail.com',
 					role: 2,
 					subscription_id: 18,
@@ -257,7 +257,7 @@ module.exports = {
 				},
 				{
 					date_of_birth: new Date(),
-					gender: 'Female',
+					gender: 'Nữ',
 					email: 'user19@gmail.com',
 					role: 2,
 					subscription_id: 19,
@@ -269,7 +269,7 @@ module.exports = {
 				},
 				{
 					date_of_birth: new Date(),
-					gender: 'Female',
+					gender: 'Nữ',
 					email: 'user20@gmail.com',
 					role: 2,
 					subscription_id: 20,
