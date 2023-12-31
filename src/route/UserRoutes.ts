@@ -18,7 +18,7 @@ class UserRoutes extends BaseRoutes {
 			this.controller.getUser
 		);
 		this.router.get('/get-self-information', auth, this.controller.getSelfInfo);
-		this.router.get(
+		this.router.put(
 			'/update-self-information',
 			auth,
 			validateUpdateSelfInfo,validate,

@@ -14,13 +14,13 @@ module.exports = {
 				},
 				{
 					name: 'Tiêu chuẩn',
-					price: 100000,
+					price: 59000,
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},
 				{
 					name: 'Cao cấp',
-					price: 200000,
+					price: 99000,
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},
