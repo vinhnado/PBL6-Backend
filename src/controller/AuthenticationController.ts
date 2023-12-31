@@ -47,12 +47,12 @@ export class AuthenticationController {
 	};
 
 	handleGoogleCallback = async(req: Request, res: Response, next: NextFunction) =>{
-		console.log("Request URL:", req.url);
-			passport.authenticate('google', (err: any, profile: any) => {
-			if (err) {
-				return next(err);
-			}
-			next();
+		// console.log("Request URL:", req.url);
+		passport.authenticate('google', (err: any, profile: any) => {
+		if (err) {
+			return next(err);
+		}
+		next();
 		})(req, res, next);
 	}
 
