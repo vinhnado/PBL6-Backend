@@ -192,7 +192,7 @@ export class SubscriptionService implements ISubscriptionService {
 			const price =
 				subscriptionInfo!.subscriptionType.price *
 				(1 - subscriptionInfo!.discount);
-			return price;
+			return price*subscriptionInfo!.duration.time;
 		} catch (error: any) {
 			throw new Error(error.message);
 		}

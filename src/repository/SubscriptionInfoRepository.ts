@@ -4,6 +4,7 @@ import { SubscriptionInfo } from '../models/SubscriptionInfo';
 import { SubscriptionType } from '../models/SubscriptionType';
 import { Duration } from '../models/Duration';
 import { ISubscriptionInfoRepository } from './Interfaces/ISubscriptionInfoRepository';
+import sequelize from 'sequelize/types/sequelize';
 
 @Service()
 export class SubscriptionInfoRepository
@@ -18,7 +19,14 @@ export class SubscriptionInfoRepository
 		try {
 			let data = await SubscriptionInfo.findOne({
 				where: { subscription_info_id: id },
-				attributes: ['subscriptionInfoId', 'discount'],
+				attributes: [
+					'subscription_info_id',
+					'discount',
+					[
+					this.db.sequelize!.literal('("subscriptionType"."price" * "duration"."time" * (1 - "SubscriptionInfo"."discount"))'),
+					'price'
+					],
+				],
 				include: [
 					{
 						model: SubscriptionType,
@@ -41,28 +49,40 @@ export class SubscriptionInfoRepository
 	};
 
 	getAllSubscriptionInfo = async () => {
-		try {
-			let data = await SubscriptionInfo.findAll({
-				attributes: ['subscriptionInfoId', 'discount'],
-				include: [
-					{
-						model: SubscriptionType,
-						attributes: {
-							exclude: ['createdAt', 'updatedAt', 'deletedAt'],
-						},
-					},
-					{
-						model: Duration,
-						attributes: {
-							exclude: ['createdAt', 'updatedAt', 'deletedAt'],
-						},
-					},
-				],
-				order: [['subscriptionInfoId', 'ASC']],
-			});
-			return data;
-		} catch (error: any) {
-			throw new Error(error.message);
-		}
+	try {
+		let data = await SubscriptionInfo.findAll({
+		attributes: [
+			'subscription_info_id',
+			'discount',
+			[
+			this.db.sequelize!.literal('("subscriptionType"."price" * "duration"."time" * (1 - "SubscriptionInfo"."discount"))'),
+			'price'
+			],
+		],
+		include: [
+			{
+			model: SubscriptionType,
+			attributes: {
+				exclude: ['createdAt', 'updatedAt', 'deletedAt'],
+			},
+			as: 'subscriptionType',
+			},
+			{
+			model: Duration,
+			attributes: {
+				exclude: ['createdAt', 'updatedAt', 'deletedAt'],
+			},
+			as: 'duration',
+			},
+		],
+		order: [['subscription_info_id', 'ASC']],
+		});
+		return data;
+	} catch (error: any) {
+		throw new Error(error.message);
+	}
 	};
+
+
+
 }
