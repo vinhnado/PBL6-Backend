@@ -35,7 +35,7 @@ export class Subscription extends Model {
 		type: DataType.DATE,
 		field: Subscription.STARTED_AT,
 	})
-	started!: Date;
+	startedAt!: Date;
 
 	@Column({
 		type: DataType.DATE,
