@@ -7,7 +7,8 @@ import {
 	validateCreateMovie,
 	validateUpdateMovie,
 	validategetPresignUrlToUpload,
-	validateClearCacheCloudFront
+	validateClearCacheCloudFront,
+	validateGetRelatedMovies
 } from '../validators/MovieValidator';
 import { validate } from '../validators/Validator';
 import { auth, authAdmin, authUser } from '../middleware/AuthMiddleware';
@@ -27,7 +28,8 @@ class MovieRoutes extends BaseRoutes {
 		this.router.post('/',auth, authAdmin, validateCreateMovie, validate, this.controller.createMovie);
 		this.router.put('/:id',auth, authAdmin, validateUpdateMovie, validate, this.controller.updateMovie);
 		this.router.get('/recommend/get',authUser, this.controller.getMoviesRecommender);
-		this.router.get('/recommend/test',auth, this.controller.test);
+		this.router.get('/recommend/test', this.controller.test);
+		this.router.get('/recommend/related-movies', validateGetRelatedMovies, validate, this.controller.getMoviesRelated);
 
 		this.router.get('/get/nations', this.controller.getAllNations);
 		this.router.get('/get/years', this.controller.getAllReleaseYears);

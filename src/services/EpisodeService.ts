@@ -305,4 +305,29 @@ export class EpisodeService implements IEpisodeService {
 			throw(error);
 		}
 	}
+
+	async getPresignUrlToUploadQuality(req: Request): Promise<string>
+	{
+		try {
+			const movieId = req.body.movieId;
+			const episodeNo = req.body.episodeNo;
+			const quality = req.body.quality
+
+			if(quality==='1080p'){
+				const movie = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episode/'+episodeNo+'/movie_1080p.mp4','video/mp4');
+				return movie;
+			}
+
+			if(quality==='4k'){
+				const movie = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episode/'+episodeNo+'/movie_4k.webm','video/mp4');
+				return movie;
+			}
+			return '';
+
+		} catch (error) {
+			throw(error);
+		}
+	}
+
+	
 }

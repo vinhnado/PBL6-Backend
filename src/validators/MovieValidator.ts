@@ -55,3 +55,7 @@ export const validateClearCacheCloudFront = [
     body('movieId').notEmpty().withMessage('movieId is required').isInt({min:1}).withMessage('movieId must be an integer and min = 1'),
     body('option').notEmpty().isIn(['poster', 'background','trailer','all']).withMessage("option is required and in 'poster', 'background','trailer','all'"),
 ];
+
+export const validateGetRelatedMovies = [
+    query('movieId').notEmpty().withMessage('movieId is required').isInt({min:1}).withMessage('movieId must be an integer and min = 1'),
+];

@@ -1030,6 +1030,44 @@ paths:
           description: successful operation
       security:
         - bearerAuth: []
+  /episode/presignURL/upload/quality:
+    get:
+      tags:
+        - episode
+      summary: Returns presign url to upload quality movie to s3
+      parameters:
+        - name: movieId
+          in: query
+          description: ID of movie
+          required: true
+          explode: true
+          schema:
+            type: integer
+            format: int64
+        - name: episodeNo
+          in: query
+          required: true
+          description: Number of episode of movie
+          explode: true
+          schema:
+            type: number
+        - name: quality
+          in: query
+          required: true
+          description: Option to get
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - 1080p
+                - 4k
+      responses:
+        '200':
+          description: successful operation
+      security:
+        - bearerAuth: []
   /episode/cloudfront/clear-cache:
     post:
       tags:
@@ -1588,6 +1626,24 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Pet'
+        '400':
+          description: Error while get movies recommender
+  /movies/recommend/related-movies:
+    get:
+      tags:
+        - movie
+      summary: Get related-movies 
+      parameters:
+        - name: movieId
+          in: query
+          description: Enter value of movieId
+          required: true
+          explode: true
+          schema:
+            type: number      
+      responses:
+        '200':
+          description: successful operation
         '400':
           description: Error while get movies recommender
 

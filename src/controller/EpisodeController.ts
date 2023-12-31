@@ -194,5 +194,20 @@ export class EpisodeController{
 			});
 		}
 	}
+
+	getPresignUrlToUploadQuality = async (req: Request, res: Response) => {
+		try {
+			const rs = await await this.episodeService.getPresignUrlToUploadQuality(req);
+			res.status(200).json({
+				message: "Successful",
+                data: rs
+            });
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				message: "Server error"
+			})	
+		}
+	}
  
 }

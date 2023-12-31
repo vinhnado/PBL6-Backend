@@ -37,8 +37,40 @@ export class RecommenderSerivce implements IRecommenderService {
     
     async testData(userId: number){
         try{
-            const dataUser = await this.recommenderRepo.getDataMoviesOfUser(userId);
-            return dataUser;
+            const movieId=1;
+            // const dataUser = await this.recommenderRepo.getDataMoviesOfUser(userId);
+            const matrix = await this.createMatrix();
+            const currentMovieMatrix =matrix[movieId];
+            const rowKey = Object.keys(currentMovieMatrix)[0];
+            const rowArray = currentMovieMatrix[Number(rowKey)] as number[]; // Lấy mảng từ hàng
+            const multipliedArray = rowArray.map((value, index) => value * 5);
+            const moviesId =[1];
+            const restMatrix = await this.getTheRestMatrix(matrix,moviesId);
+            const matrixRecommend = await this.getUserMatrixRecommend(restMatrix,multipliedArray);
+            console.log(matrixRecommend);
+            const movieIdsArr: number[] = matrixRecommend.map(([firstElement]) => firstElement);
+            console.log(movieIdsArr);
+            
+            return matrix;
+        }catch(error){
+            console.log(error);
+            throw(error);
+        }
+    }
+
+    async getRelatedIdMovies(movieId: number){
+        try{
+            const matrix = await this.createMatrix(); // Full matrix
+            const currentMovieMatrix =matrix[movieId]; // Vector matrix of current movie
+            const rowKey = Object.keys(currentMovieMatrix)[0];
+            const rowArray = currentMovieMatrix[Number(rowKey)] as number[]; // Lấy mảng từ hàng
+            const multipliedArray = rowArray.map((value, index) => value * 5);
+            const moviesId =[movieId];
+            const restMatrix = await this.getTheRestMatrix(matrix,moviesId);
+            const matrixRecommend = await this.getUserMatrixRecommend(restMatrix,multipliedArray);
+            const movieIdsArr: number[] = matrixRecommend.map(([firstElement]) => firstElement);
+            
+            return movieIdsArr;
         }catch(error){
             console.log(error);
             throw(error);
@@ -101,6 +133,28 @@ export class RecommenderSerivce implements IRecommenderService {
         }
     }
 
+    async getRelatedMovies(movieId: number,page:number, pageSize: number): Promise<Movie[]> {
+        try {
+            const movieIds =await this.getRelatedIdMovies(movieId);
+            const newMovieIds = movieIds.filter(value => value !== 0);;
+            const movies = await this.recommenderRepo.getMoviesRecommendByIds(newMovieIds, page, pageSize);
+            for (const movie of movies) {
+				movie.posterURL = await this.s3Service.getObjectUrl(movie.posterURL);
+				movie.trailerURL = await this.s3Service.getObjectUrl(movie.trailerURL);
+				movie.backgroundURL = await this.s3Service.getObjectUrl(movie.backgroundURL);
+			}
+            return movies;
+
+        } catch (error) {
+            console.log(error);
+            
+            throw(error);
+        }
+    }
+
+    /**
+     * Create full matrix between movies and genres
+     */
     public async createMatrix(): Promise<{ [x: number]: number[]; }[]> {
         try {
             const matrix: number[][] = [];
@@ -175,6 +229,10 @@ export class RecommenderSerivce implements IRecommenderService {
     //     }
     // }
 
+    /**
+     * Get the rest matrix from the matrix and movieIds
+     * Function will remove movies with movie_id in movieIds array 
+     */
     public async getTheRestMatrix(matrix: { [x: number]: number[] }[], movieIds: number[]): Promise<{ [x: number]: number[] }[]> {
         try {
           const userMatrix: { [x: number]: number[] }[] = [];
