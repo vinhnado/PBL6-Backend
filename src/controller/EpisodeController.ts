@@ -4,15 +4,21 @@ import { IEpisodeService } from '../services/Interfaces/IEpisodeService';
 import Container from 'typedi';
 import { IMovieService } from '../services/Interfaces/IMovieService';
 import { MovieService } from '../services/MovieService';
+import { IUserService } from '../services/Interfaces/IUserService';
+import { UserService } from '../services/UserService';
 
 export class EpisodeController{
 	private episodeService: IEpisodeService;
 	private movieService: IMovieService;
+	private userService: IUserService;
+
 
 
 	constructor() {
 		this.episodeService = Container.get(EpisodeService);
 		this.movieService = Container.get(MovieService);
+		this.userService = Container.get(UserService);
+
 	}
 
     getEpisode = async (req: Request, res: Response) => {
@@ -27,18 +33,27 @@ export class EpisodeController{
 			if (!episode || !movie) {
 				return res.status(404).json({ error: 'Can not find episode.' });
 			}
+			const watchHistory = await this.userService.findOneWatchingHistory(userId, Number(episode.getDataValue('episodeId')));
 			
 			if(!userId){
 				episode.movieURL = movie!.trailerURL;
 			}else{
 				if(movie.level===0){
-					return res.status(200).json(episode);
+					return res.status(200).json({
+						message: 'success',
+						watchHistory: watchHistory,
+						episode: episode,
+					});
 				}
 
 				if(movie.level===1){
 					const subscriptionTypeId = req.payload!.subscriptionTypeId!;
 					if(subscriptionTypeId!==1){
-						return res.status(200).json(episode);
+						return res.status(200).json({
+							message: 'success',
+							watchHistory: watchHistory,
+							episode: episode,
+						});
 					}
 					return res.status(403).json({
 						message: "Update your subscription to watch movie!"
@@ -47,7 +62,12 @@ export class EpisodeController{
 				
 			}
 
-			return res.status(200).json(episode);
+
+			return res.status(200).json({
+				message: 'success',
+				watchHistory: watchHistory,
+				episode: episode,
+			});
 		} catch (error) {
 			console.log(error);
 			
