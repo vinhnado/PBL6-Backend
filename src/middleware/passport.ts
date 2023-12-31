@@ -21,8 +21,7 @@ passport.use(
     passReqToCallback: true
     },
     async function (req,accessToken, refreshToken, profile, cb)  {
-        try {
-          
+        try { 
           console.log(accessToken, refreshToken)
             const profileJson = profile._json
             console.log(profileJson)
@@ -34,7 +33,6 @@ passport.use(
               }else{
                 authenticationService.register(profileJson.email,new Date(),"None",profileJson.email,generateRandomString(16))
                 const user = await userService.findOneUserByEmail(profileJson.email);
-                
                 req.payload = user
                 return cb(null,user)
               }
