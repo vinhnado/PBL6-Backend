@@ -20,7 +20,8 @@ export class Subscription extends Model {
 	private static SUBSCRIPTION_TABLE_NAME = 'subscriptions' as string;
 	private static SUBSCRIPTION_ID = 'subscription_id' as string;
 	private static SUBSCRIPTION_TYPE_ID = 'subscription_type_id' as string;
-	private static CLOSED_AT = 'closeAt' as string;
+	private static STARTED_AT = 'startedAt' as string;
+	private static CLOSE_AT = 'closeAt' as string;
 
 	@Column({
 		type: DataType.INTEGER,
@@ -32,7 +33,13 @@ export class Subscription extends Model {
 
 	@Column({
 		type: DataType.DATE,
-		field: Subscription.CLOSED_AT,
+		field: Subscription.STARTED_AT,
+	})
+	started!: Date;
+
+	@Column({
+		type: DataType.DATE,
+		field: Subscription.CLOSE_AT,
 	})
 	closeAt!: Date;
 
