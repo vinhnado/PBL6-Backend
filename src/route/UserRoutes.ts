@@ -81,7 +81,7 @@ class UserRoutes extends BaseRoutes {
 			this.controller.getWatchHistory
 		);
 
-		this.router.get('/reserves', auth, this.controller.getMoviesReserveOfUser);
+		this.router.get('/reserves', auth, this.controller.getReserveMovieOfUser);
 		this.router.post('/reserves/', auth, this.controller.addReserve);
 		this.router.delete(
 			'/reserves/:movieId',
