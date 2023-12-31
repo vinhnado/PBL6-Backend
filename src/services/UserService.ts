@@ -467,4 +467,14 @@ export class UserService implements IUserService {
 		}
 	}
 
+	async findOneWatchingHistory(userId: number, episodeId: number)
+	{
+		try {
+			const data = await this.watchHistoryRepository.findOneByEpisode(userId,episodeId);
+			return data;
+		} catch (error) {
+			throw(error);
+		}
+	}
+
 }

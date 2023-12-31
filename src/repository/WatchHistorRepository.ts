@@ -51,4 +51,20 @@ export class WatchHistoryRepository
 			throw new Error('Cannot get all movie history');
 		}
 	}
+
+	async findOneByEpisode(userId: number, episodeId: number): Promise<WatchHistory|null> {
+		try {
+			const movieHistoryList = await WatchHistory.findOne({
+				where: { 
+					userId: userId ,
+					episodeId: episodeId
+				},
+
+			});
+			return movieHistoryList;
+		} catch (error) {
+			console.log(error);
+			throw (error);
+		}
+	}
 }

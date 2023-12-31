@@ -42,4 +42,5 @@ export interface IUserService {
 	deleteReserve(req: Request): Promise<void>;
 	clearCacheCloudFrontAvatarUser(req: Request) :Promise<void>;
 	removeAvatar: (userId: number) => Promise<void>;
+	findOneWatchingHistory: (userId: number, episodeId: number) => Promise<WatchHistory| null>;
 }
