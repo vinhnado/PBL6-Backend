@@ -167,6 +167,14 @@ export class UserService implements IUserService {
 		}
 	};
 
+	findOneUserByEmail= async (email: string) => {
+		try {
+			return await this.userRepository.findOneUserByEmail(email);
+		} catch (error: any) {
+			throw new Error(error.message);
+		}
+	};
+
 	saveMovieFavorite = async (userId: number, movieId: number) => {
 		try {
 			let movieFavorite = await this.movieFavoriteRepository.findOneByCondition(
