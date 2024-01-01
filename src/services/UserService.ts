@@ -167,6 +167,14 @@ export class UserService implements IUserService {
 		}
 	};
 
+	findOneUserByEmail= async (email: string) => {
+		try {
+			return await this.userRepository.findOneUserByEmail(email);
+		} catch (error: any) {
+			throw new Error(error.message);
+		}
+	};
+
 	saveMovieFavorite = async (userId: number, movieId: number) => {
 		try {
 			let movieFavorite = await this.movieFavoriteRepository.findOneByCondition(
@@ -434,6 +442,7 @@ export class UserService implements IUserService {
 				for (const reserve of reverseList) {
 					const user = await this.findOneUser({userId:reserve.userId})
 					await this.mail.reserveMovie(user.username,user.email,movie)
+					await this.reserveRepository.delete(reserve,true)
 				}
 			}
 		} catch (error) {	
