@@ -278,6 +278,23 @@ export class EpisodeService implements IEpisodeService {
 			if(!episodeId || !qualityFormat){
 				throw new Error('Invalid episode');
 			}
+			if(qualityFormat==='720p'){
+				let quality = new Quality();
+				let episode = await this.episodeRepository.getEpisode(Number(episodeId));
+				if (episode) {
+					
+					if (episode.movieURL) {
+						quality.videoUrl = await this.s3Service.getObjectUrl(
+							episode.movieURL
+						);
+					} else {
+						quality.videoUrl = await this.s3Service.getObjectUrl(
+							'default/movie_default.mp4'
+						);
+					}
+				}
+				return quality;
+			}
 
 			const quality = await this.qualityRepository.getQualityMovie(Number(episodeId), qualityFormat);
 			if(!quality){
