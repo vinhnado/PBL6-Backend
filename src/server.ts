@@ -20,7 +20,7 @@ import * as fs from 'fs';
 import * as https from 'https';
 import ChatRoutes from './route/ChatRoutes';
 import { setupSchedule } from './utils/ScheduleTask';
-import './middleware/passport'
+import './middleware/Passport'
 import passport from 'passport';
 
 class App {

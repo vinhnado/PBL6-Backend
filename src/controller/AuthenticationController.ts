@@ -47,7 +47,7 @@ export class AuthenticationController {
 	};
 
 	handleGoogleCallback = async(req: Request, res: Response, next: NextFunction) =>{
-		// console.log("Request URL:", req.url);
+		console.log("Request URL:", req.url);
 		passport.authenticate('google', (err: any, profile: any) => {
 		if (err) {
 			return next(err);
@@ -60,8 +60,11 @@ export class AuthenticationController {
 		const userProfile = req.payload;
 		if(userProfile){
 			const refreshToken = Authentication.generateRefreshToken(userProfile.account.username)
-			res.cookie('refreshToken', refreshToken, { httpOnly: true });
-			return res.redirect(process.env.CLIENT_URL || "localhost:3000");
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully login!',
+				token: refreshToken,
+			});
 		}
     	return res.status(401).json({message: 'Unauthorized'})
 	}

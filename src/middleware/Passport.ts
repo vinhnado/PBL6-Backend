@@ -17,12 +17,11 @@ passport.use(
     {
     clientID: process.env.GOOGLE_CLIENT_ID!,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    callbackURL: "/api/auth/google/callback",
+    callbackURL: process.env.CLIENT_URL+"/google",
     passReqToCallback: true
     },
     async function (req,accessToken, refreshToken, profile, cb)  {
         try { 
-          console.log(accessToken, refreshToken)
             const profileJson = profile._json
             console.log(profileJson)
             if (profileJson.sub && profileJson.email) {
