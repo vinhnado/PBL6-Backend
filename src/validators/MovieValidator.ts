@@ -40,7 +40,7 @@ export const validateUpdateMovie = [
     body('releaseDate').optional().isISO8601().withMessage('Release date must be a valid date'),
     body('nation').optional().isString().withMessage('Nation must be a string').isIn(['Trung Quốc', 'Việt Nam','Thái Lan','Hàn Quốc','Nhật Bản', 'Mỹ']).withMessage("Nation must be one of: 'Trung Quốc', 'Việt Nam','Thái Lan','Hàn Quốc','Nhật Bản', 'Mỹ'"),
     body('isSeries').optional().isBoolean().withMessage('isSeries is must be boolean'),
-    body('level').optional().isInt().withMessage('Level must be an integer').isIn([1,2,3]),
+    body('level').optional().isInt().withMessage('Level must be an integer').isIn([0,1]),
     body('averageRating').optional().isFloat({min : 0.0}).withMessage('averageRating must be an float'),
     body('episode').optional().isInt().withMessage('Episode must be an integer'),
     body('numFavorite').optional().isInt({min : 0}).withMessage('numFavorite must be an integer'),
