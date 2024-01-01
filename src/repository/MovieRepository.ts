@@ -281,7 +281,7 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 				},
 			},
 			order: [
-				[Sequelize.col('release_date'), 'DESC'], // First sorting condition
+				[Sequelize.col('release_date'), 'ASC'], // First sorting condition
 			  ],
 			limit: numLimit
 		  });
