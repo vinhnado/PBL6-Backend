@@ -52,5 +52,5 @@ export const validateClearCloudFront = [
 export const validateGetPresignURLQuality = [
     query('movieId').notEmpty().isInt({min:1}).withMessage('Movie ID is required and must be an integer'),
     query('episodeNo').notEmpty().isInt({min:1}).withMessage('episodeNo is required and must be an integer'),
-    query('quality').notEmpty().isIn(['1080p', '4k']).withMessage('option is required and in 1080p or 4k'),
+    query('quality').notEmpty().isIn(['1080p', '4k','720p']).withMessage('option is required and in 720p, 1080p or 4k'),
 ];
