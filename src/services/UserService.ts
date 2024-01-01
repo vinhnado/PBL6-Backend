@@ -442,6 +442,7 @@ export class UserService implements IUserService {
 				for (const reserve of reverseList) {
 					const user = await this.findOneUser({userId:reserve.userId})
 					await this.mail.reserveMovie(user.username,user.email,movie)
+					await this.reserveRepository.delete(reserve)
 				}
 			}
 		} catch (error) {	
