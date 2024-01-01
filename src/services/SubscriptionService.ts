@@ -1,4 +1,4 @@
-import { ISubscriptionService } from './Interfaces/ISubscriptionService';
+	import { ISubscriptionService } from './Interfaces/ISubscriptionService';
 import { SubscriptionInfo } from './../models/SubscriptionInfo';
 import { Subscription } from './../models/Subscription';
 import { UserRepository } from '../repository/UserRepository';

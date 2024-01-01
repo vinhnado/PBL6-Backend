@@ -15,6 +15,7 @@ import { IMovieRepository } from '../repository/Interfaces/IMovieRepository';
 import { Quality } from '../models/Quality';
 import { QualityRepository } from '../repository/QualityRepository';
 import { IQualityRepository } from '../repository/Interfaces/IQualityRepository';
+import Redis from 'ioredis';
 
 @Service()
 export class EpisodeService implements IEpisodeService {
@@ -34,6 +35,25 @@ export class EpisodeService implements IEpisodeService {
 	@Inject(() => QualityRepository)
 	private qualityRepository!: IQualityRepository;
 
+	private redis: Redis; // Create a Redis client
+
+	constructor() {
+		this.redis = new Redis({
+			host: 'redis',
+			port: 6379,
+		}); // Initialize the Redis client
+	}
+
+	public clearCache(){
+		this.redis.flushall((err, reply) => {
+			if (err) {
+			  console.error(err);
+			} else {
+			  console.log('Cache cleared:', reply === 'OK');
+			}
+		});
+	}
+	
 	hideEmail(email:string) {
 		const atIndex = email.indexOf('@');
 		
@@ -187,6 +207,7 @@ export class EpisodeService implements IEpisodeService {
 			quality4k.videoUrl = 'movies/'+movieId+'/episodes/'+newEpisode.getDataValue('episodeNo')+'/movie_4k.webm';
 			await this.qualityRepository.save(Quality.build(quality));
 			await this.qualityRepository.save(Quality.build(quality4k));
+			this.clearCache();
 
 			return newEpisode;
 		} catch (error) {
@@ -195,6 +216,7 @@ export class EpisodeService implements IEpisodeService {
 			throw(error);
 		}
 	}
+	
 	async checkMovieIsSeries(movieId: number): Promise<boolean> {
 		try {
 
@@ -215,7 +237,9 @@ export class EpisodeService implements IEpisodeService {
 		try {
 			const episodeId = Number(req.params.episodeId);
 			const updatedData = req.body;
-			return await this.episodeRepository.updateEpisode(episodeId, updatedData);
+			const result = await this.episodeRepository.updateEpisode(episodeId, updatedData);
+			this.clearCache();
+			return result;
 		} catch (error) {
 			console.log(error);
 			throw(error);			
@@ -230,6 +254,7 @@ export class EpisodeService implements IEpisodeService {
 			if(episode){
 				await this.episodeRepository.delete(episode);
 				await this.episodeRepository.updateNumEpisodeInMovie(episode.movieId,-1);
+				this.clearCache();
 				return true;
 			}
 			return false;
