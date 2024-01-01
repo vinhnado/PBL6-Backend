@@ -175,9 +175,23 @@ export class EpisodeService implements IEpisodeService {
 				movieURL: formattedMovieURL,
 			}
 			const newEpisode = await this.episodeRepository.createEpisode(episodeData);
-			
+			// create quality
+			const quality: Partial<Quality> = {};
+			quality.episodeId = newEpisode.getDataValue('episodeId');
+			quality.videoQuality = '1080p';
+			quality.videoUrl = 'movies/'+movieId+'/episodes/'+newEpisode.getDataValue('episodeNo')+'/movie_1080p.mp4';
+
+			const quality4k: Partial<Quality> = {};
+			quality4k.episodeId = newEpisode.getDataValue('episodeId');
+			quality4k.videoQuality = '4k';
+			quality4k.videoUrl = 'movies/'+movieId+'/episodes/'+newEpisode.getDataValue('episodeNo')+'/movie_4k.webm';
+			await this.qualityRepository.save(Quality.build(quality));
+			await this.qualityRepository.save(Quality.build(quality4k));
+
 			return newEpisode;
 		} catch (error) {
+			console.log(error);
+			
 			throw(error);
 		}
 	}
@@ -263,6 +277,23 @@ export class EpisodeService implements IEpisodeService {
 			const qualityFormat = req.query.quality?.toString();
 			if(!episodeId || !qualityFormat){
 				throw new Error('Invalid episode');
+			}
+			if(qualityFormat==='720p'){
+				let quality = new Quality();
+				let episode = await this.episodeRepository.getEpisode(Number(episodeId));
+				if (episode) {
+					
+					if (episode.movieURL) {
+						quality.videoUrl = await this.s3Service.getObjectUrl(
+							episode.movieURL
+						);
+					} else {
+						quality.videoUrl = await this.s3Service.getObjectUrl(
+							'default/movie_default.mp4'
+						);
+					}
+				}
+				return quality;
 			}
 
 			const quality = await this.qualityRepository.getQualityMovie(Number(episodeId), qualityFormat);

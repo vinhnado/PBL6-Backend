@@ -17,6 +17,7 @@ export interface IUserService {
 	) => Promise<{ users: User[]; count: number }>;
 	updateUser: (userData: Partial<User>) => Promise<void>;
 	deleteUser: (userId: number) => Promise<void>;
+	findOneUserByEmail: (email: string) => Promise<User | undefined>;
 	saveMovieFavorite: (userId: number, movieId: number) => Promise<void>;
 	deleteMovieFavorite: (userId: number, movieId: number) => Promise<void>;
 	findAllMovieFavorite: (userId: number) => Promise<MovieDTO>;
