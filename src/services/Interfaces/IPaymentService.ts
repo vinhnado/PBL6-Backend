@@ -1,5 +1,6 @@
 import { Request } from 'express';
 import { Payment } from '../../models/Payment';
+import { SubscriptionType } from '../../models/SubscriptionType';
 
 export interface IPaymentService {
 	addOrEditPayment: (paymentData: Partial<Payment>) => Promise<void>;
@@ -14,4 +15,5 @@ export interface IPaymentService {
 		req: Request
 	) => Promise<{ payments: Payment[]; totalCount: number }>;
 	getRemainingPriceOfUser(userId: number): Promise<number>;
+	getCurrentSubscriptionTypeOfUser(userId: number): Promise<SubscriptionType>;
 }
