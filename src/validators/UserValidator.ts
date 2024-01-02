@@ -16,16 +16,16 @@ export const validateUpdateSelfInfo = [
 		.withMessage('Date of birth must be a valid date'),
 	body('gender')
 		.optional()
-		.isIn(['Nam', 'Nữ', 'Khác'])
-		.withMessage('Gender must be Nam, Nữ, or Khác'),
+		.isIn(['Male', 'Female', 'Other'])
+		.withMessage('Gender must be Male, Female, or Other'),
 ];
 
 export const validateSearchUsers = [
 	query('search').optional().isString().withMessage('Search must be a string'),
 	query('gender')
 		.optional()
-		.isIn(['Nam', 'Nữ', 'Khác'])
-		.withMessage('Gender must be Nam, Nữ, or Khác'),
+		.isIn(['Male', 'Female', 'Other'])
+		.withMessage('Gender must be Male, Female, or Other'),
 	query('subscriptionType')
 		.optional()
 		.isInt()
@@ -51,8 +51,8 @@ export const validateUpdateUser = [
 		.withMessage('Date of birth must be a valid date'),
 	body('gender')
 		.optional()
-		.isIn(['Nam', 'Nữ', 'Khác'])
-		.withMessage('Gender must be Nam, Nữ, or Khác'),
+		.isIn(['Male', 'Female', 'Other'])
+		.withMessage('Gender must be Male, Female, or Other'),
 ];
 
 export const validateCreateUser = [
@@ -61,8 +61,8 @@ export const validateCreateUser = [
 		.isISO8601()
 		.withMessage('Date of birth must be a valid date'),
 	body('gender').notEmpty().withMessage("Gender is required")
-		.isIn(['Nam', 'Nữ', 'Khác'])
-		.withMessage('Gender must be Nam, Nữ, or Khác'),
+		.isIn(['Male', 'Female', 'Other'])
+		.withMessage('Gender must be Male, Female, or Other'),
 	body('username').notEmpty().withMessage("Username is required").isString().withMessage('Username must be a string'),
 	body('password').notEmpty().withMessage("Password is required").isString().withMessage('Password must be a string'),
 ];
