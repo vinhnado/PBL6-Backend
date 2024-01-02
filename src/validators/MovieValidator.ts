@@ -21,7 +21,7 @@ export const validateGetMovieById = [
 ];
 
 export const validateDeleteMovieById = [
-    query('id').notEmpty().withMessage('ID is required').isInt({min:1}).withMessage('ID must be an integer and min = 1'),
+    param('id').notEmpty().withMessage('ID is required').isInt({min:1}).withMessage('ID must be an integer and min = 1'),
 ];
 
 export const validateCreateMovie = [
