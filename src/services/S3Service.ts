@@ -175,6 +175,8 @@ export class S3Service {
           });
         
             const response = await client.send(command);
+            console.log(response);
+      
           } catch (err) {
             console.log( err);
           }
@@ -183,6 +185,7 @@ export class S3Service {
 
     clearCacheCloudFront = async (path: string) => {
         try{
+            this.deleteObject('ok')
             AWS.config.update({
                 accessKeyId: process.env.AWS_ACCESS_KEY,
                 secretAccessKey: process.env.AWS_SECRET_KEY,
