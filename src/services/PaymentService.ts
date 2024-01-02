@@ -5,6 +5,8 @@ import express, { Request } from 'express';
 import { Op } from 'sequelize';
 import { IPaymentRepository } from '../repository/Interfaces/IPaymentRepository';
 import { IPaymentService } from './Interfaces/IPaymentService';
+import { UserRepository } from '../repository/UserRepository';
+import { IUserRepository } from '../repository/Interfaces/IUserRepository';
 
 interface PaymentAttributes {
 	type: string;
@@ -19,6 +21,9 @@ interface PaymentAttributes {
 export class PaymentService implements IPaymentService {
 	@Inject(() => PaymentRepository)
 	private paymentRepository!: IPaymentRepository;
+
+	@Inject(() => UserRepository)
+	private userRepository!: IUserRepository;
 
 	addOrEditPayment = async (paymentData: Partial<Payment>) => {
 		try {
@@ -177,4 +182,37 @@ export class PaymentService implements IPaymentService {
 			throw error;
 		}
 	};
+
+	async getRemainingPriceOfUser(userId: number): Promise<number> {
+		try {
+			const user = await this.userRepository.findOneUser({
+				userId: userId,
+			});
+			if(!user) {
+				throw new Error('User not found');
+			}
+			let subscription = user.subscription;
+			console.log(subscription);
+			const closedAt: Date = subscription.getDataValue('closeAt');
+			const startDate: Date = new Date();
+			const endDate: Date = new Date(closedAt);
+			const price = subscription.subscriptionType.getDataValue('price');
+			const remainingDay = this.diffDate(startDate, endDate);
+			if(remainingDay<=0 || price <=0){
+				return 0;
+			}
+			
+			return remainingDay*price/30*75/100;
+		} catch (error) {
+			console.log(error);
+			throw(error);
+		}
+	}
+
+	diffDate(startDate: Date, endDate: Date): number{
+		const millisecondsPerDay: number = 24 * 60 * 60 * 1000; // Số mili giây trong một ngày
+		const timeDifference: number = endDate.getTime() - startDate.getTime();
+		const numberOfDays = Math.floor(timeDifference / millisecondsPerDay);
+		return numberOfDays;
+	}
 }

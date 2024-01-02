@@ -56,7 +56,7 @@ export class UserRepository
 					include: [
 						{
 							model: SubscriptionType,
-							attributes: ['subscription_type_id', 'name'],
+							attributes: ['subscription_type_id', 'name', 'price'],
 						},
 					],
 				},

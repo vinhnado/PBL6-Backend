@@ -13,5 +13,5 @@ export interface IPaymentService {
 	getPayments: (
 		req: Request
 	) => Promise<{ payments: Payment[]; totalCount: number }>;
-	
+	getRemainingPriceOfUser(userId: number): Promise<number>;
 }

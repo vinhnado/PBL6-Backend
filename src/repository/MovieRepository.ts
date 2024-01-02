@@ -58,7 +58,7 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 		  offset: offset, // Vị trí bắt đầu
 		});
 		    // Truy vấn lấy tổng số phim
-		const { count } = await Movie.findAndCountAll({
+		const { count, rows } = await Movie.findAndCountAll({
 			where: whereCondition,
 			include: [
 				{
@@ -74,7 +74,7 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 		  
 		return {
 			movies,
-			totalCount:count,
+			totalCount:rows.length,
 		  };
 	  }
 
@@ -269,6 +269,7 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 	async getMoviesUpcoming(): Promise<Movie[]> {
 		const numLimit = 15;
 		const startDate = new Date(); // Current date
+		startDate.setHours(0, 0, 0, 0);
 		const endDate = new Date();
 		endDate.setMonth(endDate.getMonth() + 12); // One month ago
 		const movies = await Movie.findAll({
@@ -285,7 +286,6 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 			  ],
 			limit: numLimit
 		  });
-		console.log(movies);
 		return movies;
 	}
 
