@@ -35,6 +35,8 @@ class PaymentRoutes extends BaseRoutes {
 			validate,
 			this.controller.getPayments
 		);
+		this.router.get('/momo/test', this.controller.test);
+
 	}
 }
 

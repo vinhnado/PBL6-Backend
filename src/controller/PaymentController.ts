@@ -310,4 +310,14 @@ export class PaymentController {
 		}
 	};
 
+	test = async (req: Request, res: Response) => {
+		try {
+			const userId =3;
+			const price = await this.paymentService.getRemainingPriceOfUser(userId);
+			res.json(price);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 }
