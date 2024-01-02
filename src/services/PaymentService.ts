@@ -7,6 +7,7 @@ import { IPaymentRepository } from '../repository/Interfaces/IPaymentRepository'
 import { IPaymentService } from './Interfaces/IPaymentService';
 import { UserRepository } from '../repository/UserRepository';
 import { IUserRepository } from '../repository/Interfaces/IUserRepository';
+import { SubscriptionType } from '../models/SubscriptionType';
 
 interface PaymentAttributes {
 	type: string;
@@ -192,17 +193,35 @@ export class PaymentService implements IPaymentService {
 				throw new Error('User not found');
 			}
 			let subscription = user.subscription;
-			console.log(subscription);
 			const closedAt: Date = subscription.getDataValue('closeAt');
 			const startDate: Date = new Date();
 			const endDate: Date = new Date(closedAt);
 			const price = subscription.subscriptionType.getDataValue('price');
+			const subscriptionTypeId = subscription.subscriptionType.getDataValue('subscription_type_id');
+
+			if(subscription.subscriptionType.subscriptionTypeId ===3){
+				return 0;
+			}
 			const remainingDay = this.diffDate(startDate, endDate);
 			if(remainingDay<=0 || price <=0){
 				return 0;
 			}
 			
 			return remainingDay*price/30*75/100;
+		} catch (error) {
+			console.log(error);
+			throw(error);
+		}
+	}
+
+	async getCurrentSubscriptionTypeOfUser(userId: number): Promise<SubscriptionType>
+	{
+		try{		
+			const user = await this.userRepository.findOneUser({
+				userId: userId,
+			});
+			let subscription = user.subscription;
+			return subscription.subscriptionType;
 		} catch (error) {
 			console.log(error);
 			throw(error);
