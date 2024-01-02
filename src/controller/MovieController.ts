@@ -134,7 +134,7 @@ export class MovieController {
 	
 
 	deleteMovieById = async (req: Request, res: Response) => {
-		const { id } = req.query;
+		const { id } = req.params;
 		try {
 			await this.movieService.deleteMovieById(Number(id));
 			return res.status(204).json({ 
