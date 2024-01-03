@@ -261,7 +261,7 @@ export class AuthenticationService implements IAuthenticationService {
 					await this.userRepository.save(user);
 					return 'Thành công';
 				} else {
-					return 'Token hết hiệu lực hoặc không tồn tại';
+					return 'Token hoặc email không tồn tại';
 				}
 			}
 		} catch (error: any) {
