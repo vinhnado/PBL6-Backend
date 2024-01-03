@@ -80,10 +80,12 @@ export class AuthenticationController {
 				username,
 				password
 			);
-
+			let data = await this.authenticationService.activeUser(email,null);
+			
 			return res.status(200).json({
 				status: 'Ok!',
 				message: 'Successfully registerd users!',
+				message_active: data
 			});
 		} catch (error: any) {
 			handleErrorController(error, res);
@@ -103,9 +105,12 @@ export class AuthenticationController {
 				true
 			);
 
+			let data = await this.authenticationService.activeUser(email,null);
+			
 			return res.status(200).json({
-				status: '200',
-				message: 'Successfully registered admin!',
+				status: 'Ok!',
+				message: 'Successfully registerd admin!',
+				message_active: data
 			});
 		} catch (error: any) {
 			handleErrorController(error, res);
@@ -151,8 +156,8 @@ export class AuthenticationController {
 
 	activeUser = async (req: Request, res: Response) => {
 		try {
-			const { email, token } = req.body;
-			let data = await this.authenticationService.activeUser(email, token);
+			const { identifier, token } = req.body;
+			let data = await this.authenticationService.activeUser(identifier,token);
 
 			return res.status(200).json({
 				status: 'Ok!',

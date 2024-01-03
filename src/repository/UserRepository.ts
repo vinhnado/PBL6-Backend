@@ -147,8 +147,6 @@ export class UserRepository
 		count: number;
 	}> {
 		try {
-			console.log(sortField);
-			console.log(sortBy);
 
 			const { rows: users, count } = await User.findAndCountAll({
 				where: whereConditions,

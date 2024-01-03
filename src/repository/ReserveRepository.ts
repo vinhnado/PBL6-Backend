@@ -90,7 +90,6 @@ export class ReserveRepository extends BaseRepository<Reserve> implements IReser
 				],
                 
 			});
-            console.log(reserveList);
             if(!reserveList){
                 return [];
             }

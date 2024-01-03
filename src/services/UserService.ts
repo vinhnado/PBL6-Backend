@@ -84,7 +84,6 @@ export class UserService implements IUserService {
 	}> => {
 		try {
 			const { search, gender, subscriptionType, sort, sortType } = options;
-			console.log(sort, sortType);
 			const whereConditions: any = {};
 			const whereSubTypeCons: any = {};
 

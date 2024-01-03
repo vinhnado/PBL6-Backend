@@ -179,7 +179,6 @@ export class EpisodeService implements IEpisodeService {
 
 					}else{
 						url = userArr.get(0)||'';
-						console.log('ok');
 					}
 					subComment.user.setDataValue('avatar_url',url);
 				}
@@ -247,7 +246,6 @@ export class EpisodeService implements IEpisodeService {
 			const movie = await this.movieRepository.findOneByCondition({
 				movieId: movieId
 			});
-			console.log(movie.isSeries);
 			
 			return movie.isSeries;
 		} catch (error) {
