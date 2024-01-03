@@ -32,7 +32,7 @@ export const validateCreateEpisode = [
 
 export const validateGetPresignURL = [
     query('movieId').notEmpty().isInt({min:1}).withMessage('Movie ID is required and must be an integer'),
-    query('episodeNum').notEmpty().isInt({min:1}).withMessage('episodeNum is required and must be an integer'),
+    query('episodeNo').notEmpty().isInt({min:1}).withMessage('episodeNo is required and must be an integer'),
     query('option').notEmpty().isIn(['onlyMovie', 'onlyPoster','movieAndPoster']).withMessage('option is required and in onlyMovie, onlyPoster, movieAndPoster'),
 
 ];

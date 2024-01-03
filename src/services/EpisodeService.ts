@@ -363,19 +363,19 @@ export class EpisodeService implements IEpisodeService {
 	{
 		try {
 			const movieId = req.body.movieId;
-			const episodeNum = req.body.episodeNum;
+			const episodeNo = req.body.episodeNo;
 			const quality = req.body.quality
 
 			if(quality==='720p'){
-				return await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/episodes/'+episodeNum+'/movie.mp4');
+				return await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/episodes/'+episodeNo+'/movie.mp4');
 			}
 
 			if(quality==='1080p'){
-				return await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/episodes/'+episodeNum+'/movie_1080p.mp4');
+				return await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/episodes/'+episodeNo+'/movie_1080p.mp4');
 			}
 
 			if(quality==='4k'){
-				return await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/episodes/'+episodeNum+'/movie_4k.webm');
+				return await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/episodes/'+episodeNo+'/movie_4k.webm');
 			}
 
 			return;
@@ -387,9 +387,9 @@ export class EpisodeService implements IEpisodeService {
 	async getPresignUrlToUploadQuality(req: Request): Promise<string>
 	{
 		try {
-			const movieId = req.body.movieId;
-			const episodeNo = req.body.episodeNo;
-			const quality = req.body.quality
+			const movieId = req.query.movieId;
+			const episodeNo = req.query.episodeNo;
+			const quality = req.query.quality
 
 			if(quality==='1080p'){
 				const movie = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episode/'+episodeNo+'/movie_1080p.mp4','video/mp4');
