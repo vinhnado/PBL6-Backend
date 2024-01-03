@@ -12,7 +12,7 @@ export class CommentController{
 
     addComment = async (req: Request, res: Response) => {
         try {
-            const comment = this.commentService.addComment(req);
+            const comment = await this.commentService.addComment(req);
             if(comment){
                 res.status(200).json({
                     message: "success",
@@ -76,14 +76,14 @@ export class CommentController{
 
     addSubComment = async (req: Request, res: Response) => {
         try {
-            const comment = this.commentService.addSubComment(req);
+            const comment = await this.commentService.addSubComment(req);
             if(comment){
                 res.status(200).json({
                     message: "success",
                     data: comment
                 })
             }else{
-                res.status(200).json({
+                res.status(404).json({
                     message: "fail",
                     data: comment
                 })  
