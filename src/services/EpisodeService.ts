@@ -115,10 +115,17 @@ export class EpisodeService implements IEpisodeService {
 			const userArr = new Map<number, string>();
 			userArr.set(0, await this.s3Service.getObjectUrl('default/avatar.jpg'));
 			for(let comment of comments){
-				if(comment.user.email){
+				if(!comment.user){
+					let indexToRemove = comments.indexOf(comment);
+					if (indexToRemove !== -1) {
+						comments.splice(indexToRemove, 1);
+					}
+					continue;
+				}
+				if(comment.user.getDataValue('email')){
 					comment.user.setDataValue('email',this.hideEmail(comment.user.getDataValue('email')));
 				}
-				if(!comment.user.avatarURL){
+				if(comment.user.getDataValue('avatar_url')){
 					const id = Number(comment.user.getDataValue('user_id'));
 					if (!userArr.has(id)) {
 						const imageUrl = await this.s3Service.getObjectUrl(comment.user.getDataValue('avatar_url'));
@@ -127,10 +134,17 @@ export class EpisodeService implements IEpisodeService {
 				}
 
 				for(let subComment of comment.subcomments){
-					if(subComment.user.email){
+					if(!subComment.user){
+						let indexToRemove = comment.subcomments.indexOf(subComment);
+						if (indexToRemove !== -1) {
+							comment.subcomments.splice(indexToRemove, 1);
+						}
+						continue;
+					}
+					if(subComment.user.getDataValue('email')){
 						subComment.user.setDataValue('email',this.hideEmail(subComment.user.getDataValue('email')));
 					}
-					if(!subComment.user.avatarURL){
+					if(subComment.user.getDataValue('avatar_url')){
 						const id = Number(subComment.user.getDataValue('user_id'));
 						if (!userArr.has(id)) {
 							const imageUrl = await this.s3Service.getObjectUrl(subComment.user.getDataValue('avatar_url'));
@@ -139,11 +153,19 @@ export class EpisodeService implements IEpisodeService {
 					}
 				}
 			}
-			
 			for(let comment of comments)
 			{
+				if(!comment.user){
+					let indexToRemove = comments.indexOf(comment);
+					if (indexToRemove !== -1) {
+						comments.splice(indexToRemove, 1);
+					}
+					continue;
+				}
 				if(comment.user.getDataValue('avatar_url')){
-					url = userArr.get(comment.user.getDataValue('user_id'))||'';
+					const id = Number(comment.user.getDataValue('user_id'));
+
+					url = userArr.get(id)||'';
 
 				}else{
 					url = userArr.get(0)||'';
@@ -152,10 +174,12 @@ export class EpisodeService implements IEpisodeService {
 
 				for(let subComment of comment.subcomments){
 					if(subComment.user.getDataValue('avatar_url')){
-						url = userArr.get(comment.user.getDataValue('user_id'))||'';
+						const id = Number(subComment.user.getDataValue('user_id'));
+						url = userArr.get(id)||'';
 
 					}else{
 						url = userArr.get(0)||'';
+						console.log('ok');
 					}
 					subComment.user.setDataValue('avatar_url',url);
 				}
