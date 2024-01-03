@@ -96,6 +96,13 @@ export class CommentService implements ICommentService {
             if(!userId){
                 return null;
             }
+
+            const parentComment = await this.commentRepository.findOneByCondition({
+                id: req.body.parentId
+            });
+            if(!parentComment){
+                return null;
+            }
             const data: Partial<SubComment> = {
                 userId: userId,
                 parentId: req.body.parentId,

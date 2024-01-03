@@ -84,7 +84,6 @@ export class UserService implements IUserService {
 	}> => {
 		try {
 			const { search, gender, subscriptionType, sort, sortType } = options;
-			console.log(sort, sortType);
 			const whereConditions: any = {};
 			const whereSubTypeCons: any = {};
 
@@ -161,7 +160,7 @@ export class UserService implements IUserService {
 	deleteUser = async (userId: number) => {
 		try {
 			const user = await this.userRepository.findById(userId);
-			return await this.userRepository.delete(user);
+			return await this.userRepository.delete(user, true);
 		} catch (error: any) {
 			throw new Error(error.message);
 		}
@@ -243,11 +242,11 @@ export class UserService implements IUserService {
 				user_id: userId,
 				episode_id: episodeId,
 			});
-			if (watchHistory != null && watchHistory.deletedAt != null) {
+			if (watchHistory && watchHistory.deletedAt != null) {
 				await this.watchHistoryRepository.restore(watchHistory);
 				watchHistory.duration = duration;
 				return await this.watchHistoryRepository.save(watchHistory);
-			} else if (watchHistory != null && watchHistory.deletedAt == null) {
+			} else if (watchHistory && watchHistory.deletedAt == null) {
 				watchHistory.duration = duration;
 				return await this.watchHistoryRepository.save(watchHistory);
 			}
@@ -259,6 +258,7 @@ export class UserService implements IUserService {
 				})
 			);
 		} catch (error: any) {
+			console.log(error);
 			throw new Error(error.message);
 		}
 	};

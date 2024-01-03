@@ -29,7 +29,6 @@ export class PaymentService implements IPaymentService {
 	addOrEditPayment = async (paymentData: Partial<Payment>) => {
 		try {
 			const { transactionId } = paymentData;
-			console.log(paymentData);
 			if (transactionId) {
 				const paymentToUpdate = await this.paymentRepository.findOneByCondition(
 					{

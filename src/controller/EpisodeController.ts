@@ -91,7 +91,7 @@ export class EpisodeController{
 				comments : comments
 			});
 		} catch (error) {
-			return res.status(500).json({ error: 'Err while get episode.' });
+			return res.status(500).json({ error: 'Err while get comment.' });
 		}
 	}
 
