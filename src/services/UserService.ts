@@ -313,7 +313,7 @@ export class UserService implements IUserService {
 
 	saveWatchLater = async (userId: number, movieId: number) => {
 		try {
-			let watchLater = await this.watchLaterRepository.findByCondition({
+			let watchLater = await this.watchLaterRepository.findOneByCondition({
 				user_id: userId,
 				movie_id: movieId,
 			});
