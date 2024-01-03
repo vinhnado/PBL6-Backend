@@ -84,7 +84,6 @@ export class UserService implements IUserService {
 	}> => {
 		try {
 			const { search, gender, subscriptionType, sort, sortType } = options;
-			console.log(sort, sortType);
 			const whereConditions: any = {};
 			const whereSubTypeCons: any = {};
 
@@ -243,11 +242,11 @@ export class UserService implements IUserService {
 				user_id: userId,
 				episode_id: episodeId,
 			});
-			if (watchHistory != null && watchHistory.deletedAt != null) {
+			if (watchHistory && watchHistory.deletedAt != null) {
 				await this.watchHistoryRepository.restore(watchHistory);
 				watchHistory.duration = duration;
 				return await this.watchHistoryRepository.save(watchHistory);
-			} else if (watchHistory != null && watchHistory.deletedAt == null) {
+			} else if (watchHistory && watchHistory.deletedAt == null) {
 				watchHistory.duration = duration;
 				return await this.watchHistoryRepository.save(watchHistory);
 			}
@@ -313,7 +312,7 @@ export class UserService implements IUserService {
 
 	saveWatchLater = async (userId: number, movieId: number) => {
 		try {
-			let watchLater = await this.watchLaterRepository.findByCondition({
+			let watchLater = await this.watchLaterRepository.findOneByCondition({
 				user_id: userId,
 				movie_id: movieId,
 			});

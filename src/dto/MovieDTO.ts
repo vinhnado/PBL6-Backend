@@ -84,7 +84,6 @@ export class MovieItem {
 				);
 				movieItemList.push(movieItem);
 			}
-			console.log(movieItemList);
 			return movieItemList;
 		} else if (type === 'WatchLater') {
 			user_movie_list = user.watchLaterList;

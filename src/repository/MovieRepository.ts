@@ -269,7 +269,7 @@ export class MovieRepository extends BaseRepository<Movie> implements IMovieRepo
 	async getMoviesUpcoming(): Promise<Movie[]> {
 		const numLimit = 15;
 		const startDate = new Date(); // Current date
-		startDate.setHours(0, 0, 0, 0);
+		startDate.setHours(23, 59, 59, 999);
 		const endDate = new Date();
 		endDate.setMonth(endDate.getMonth() + 12); // One month ago
 		const movies = await Movie.findAll({

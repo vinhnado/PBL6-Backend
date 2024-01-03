@@ -28,22 +28,22 @@ export const validateSearchUsers = [
 		.withMessage('Gender must be Male, Female, or Other'),
 	query('subscriptionType')
 		.optional()
-		.isInt()
+		.isInt({min:1})
 		.withMessage('Subscription type must be a integer'),
 	query('sort').optional().isString().withMessage('Sort must be a string'),
 	query('sortType')
 		.optional()
 		.isString()
 		.withMessage('Sort type must be a string'),
-	query('page').optional().isInt().withMessage('Page must be an integer'),
+	query('page').optional().isInt({min:1}).withMessage('Page must be an integer'),
 	query('pageSize')
 		.optional()
-		.isInt()
+		.isInt({min:1})
 		.withMessage('Page size must be an integer'),
 ];
 
 export const validateUpdateUser = [
-	body('userId').isInt().withMessage('User ID must be an integer'),
+	body('userId').isInt({min:1}).withMessage('User ID must be an integer'),
 	body('email').optional().isEmail().withMessage('Invalid email format'),
 	body('dateOfBirth')
 		.optional()
@@ -68,25 +68,25 @@ export const validateCreateUser = [
 ];
 
 export const validateDeleteUser = [
-	query('userId').notEmpty().withMessage("User Id is required").isInt().withMessage('User ID must be an integer'),
+	query('userId').notEmpty().withMessage("User Id is required").isInt({min:1}).withMessage('User ID must be an integer'),
 ];
 
 
 export const favoriteMovie = [
-	query('movieId').notEmpty().withMessage("Movie Id is required").isInt().withMessage('Movie ID must be an integer'),
+	query('movieId').notEmpty().withMessage("Movie Id is required").isInt({min:1}).withMessage('Movie ID must be an integer'),
 ];
 
 export const addMovieHistory = [
-	query('episodeId').notEmpty().withMessage("Episode Id is required").isInt().withMessage('Movie ID must be an integer'),
-	query('duration').notEmpty().withMessage("Duration Id  required").isInt().withMessage('Duration must be an integer'),
+	query('episodeId').notEmpty().withMessage("Episode Id is required").isInt({min:1}).withMessage('Movie ID must be an integer'),
+	query('duration').notEmpty().withMessage("Duration Id  required").isInt({min:1}).withMessage('Duration must be an integer'),
 ];
 
 export const deleteMovieHistory = [
-	query('episodeId').notEmpty().withMessage("Episode Id is required").isInt().withMessage('Movie ID must be an integer'),
+	query('episodeId').notEmpty().withMessage("Episode Id is required").isInt({min:1}).withMessage('Movie ID must be an integer'),
 ];
 
 
 export const watchLater = [
-	query('movieId').notEmpty().withMessage("Movie Id is required").isInt().withMessage('Movie ID must be an integer'),
+	query('movieId').notEmpty().withMessage("Movie Id is required").isInt({min:1}).withMessage('Movie ID must be an integer'),
 ];
 
