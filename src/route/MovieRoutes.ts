@@ -24,7 +24,7 @@ class MovieRoutes extends BaseRoutes {
 		this.router.get('/home/trending', this.controller.getMoviesTrending);
 		this.router.get('/home/upcoming', this.controller.getMoviesUpcoming);
 		this.router.get('/home/vip', this.controller.getMoviesForVip);
-		this.router.delete('/',auth, authAdmin, validateDeleteMovieById, validate, this.controller.deleteMovieById);
+		this.router.delete('/:id',auth, authAdmin, validateDeleteMovieById, validate, this.controller.deleteMovieById);
 		this.router.post('/',auth, authAdmin, validateCreateMovie, validate, this.controller.createMovie);
 		this.router.put('/:id',auth, authAdmin, validateUpdateMovie, validate, this.controller.updateMovie);
 		this.router.get('/recommend/get',authUser, this.controller.getMoviesRecommender);
