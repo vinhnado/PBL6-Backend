@@ -203,6 +203,7 @@ export class PaymentService implements IPaymentService {
 				return 0;
 			}
 			const remainingDay = this.diffDate(startDate, endDate);
+			console.log(`remainingDay: ${remainingDay}`);
 			if(remainingDay<=0 || price <=0){
 				return 0;
 			}
