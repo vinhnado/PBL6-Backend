@@ -548,12 +548,20 @@ paths:
       security:
         - bearerAuth: []
 
-  '/movies/movie-actor':
+  '/movies/{movieId}/movie-actor':
     delete:
       tags:
         - movie
       summary: Delete actors of movie
       description: Delete actors of movie by actorIds and movieId
+      parameters:
+        - name: movieId
+          in: path
+          description: ID of movie to return
+          required: true
+          schema:
+            type: integer
+            format: int64
       requestBody:
         content:
           application/json:
@@ -576,6 +584,7 @@ paths:
           description: Movie not found
       security:
         - bearerAuth: []
+  '/movies/movie-actor':
     post:
       tags:
         - movie
@@ -599,33 +608,6 @@ paths:
       security:
         - bearerAuth: []
   '/movies/movie-director':
-    delete:
-      tags:
-        - movie
-      summary: Delete directors of movie
-      description: Delete directors of movie by directorIds and movieId
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                movieId:
-                  type: integer
-                  format: int64
-                  default: 1
-                directorIds:
-                  type: array
-                  default: [1, 2, 3]
-      responses:
-        '200':
-          description: successful
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Movie not found
-      security:
-        - bearerAuth: []
     post:
       tags:
         - movie
@@ -639,31 +621,63 @@ paths:
             schema:
               type: object
               properties:
-                movieId:
-                  type: integer
-                  format: int64
-                  default: 1
                 directorIds:
                   type: array
                   default: [1, 2, 3]
       security:
         - bearerAuth: []
-  '/movies/movie-genre':
+  '/movies/{movieId}/movie-director':
     delete:
       tags:
         - movie
-      summary: Delete genres of movie
-      description: Delete genres of movie by genreIds and movieId
+      summary: Delete directors of movie
+      description: Delete directors of movie by directorIds and movieId
+      parameters:
+        - name: movieId
+          in: path
+          description: ID of movie to return
+          required: true
+          schema:
+            type: integer
+            format: int64
       requestBody:
         content:
           application/json:
             schema:
               type: object
               properties:
-                movieId:
-                  type: integer
-                  format: int64
-                  default: 1
+                directorIds:
+                  type: array
+                  default: [1, 2, 3]
+      responses:
+        '200':
+          description: successful
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Movie not found
+      security:
+        - bearerAuth: []
+  '/movies/{movieId}/movie-genre':
+    delete:
+      tags:
+        - movie
+      summary: Delete genres of movie
+      description: Delete genres of movie by genreIds and movieId
+      parameters:
+        - name: movieId
+          in: path
+          description: ID of movie to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
                 genreIds:
                   type: array
                   default: [1, 2, 3]
@@ -676,6 +690,7 @@ paths:
           description: Movie not found
       security:
         - bearerAuth: []
+  '/movies/movie-genre':
     post:
       tags:
         - movie
