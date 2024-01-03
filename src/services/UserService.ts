@@ -161,7 +161,7 @@ export class UserService implements IUserService {
 	deleteUser = async (userId: number) => {
 		try {
 			const user = await this.userRepository.findById(userId);
-			return await this.userRepository.delete(user);
+			return await this.userRepository.delete(user, true);
 		} catch (error: any) {
 			throw new Error(error.message);
 		}
