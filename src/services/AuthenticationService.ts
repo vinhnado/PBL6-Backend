@@ -10,6 +10,7 @@ import { Subscription } from '../models/Subscription';
 import Mail from '../utils/Mail';
 import { Token } from '../utils/Token';
 import {
+	ContentNotFound,
 	CustomError,
 	EmailValidDuplicate,
 	InvalidUserNameOrPassword,
@@ -236,24 +237,26 @@ export class AuthenticationService implements IAuthenticationService {
 		}
 	};
 
-	activeUser = async (email: string, token: string | null = null) => {
+	activeUser = async (identifier: string, token: string | null = null) => {
 		try {
-			const searchConditions = {
-				email,
-			};
 			if (token == null) {
-				const user = await this.userRepository.findOneUser(searchConditions);
+				let user = await this.userRepository.findOneUserByEmail(identifier);
+				if(!user){
+					user = await this.userRepository.findOneUserByUsername(identifier);
+					if(!user){
+						throw new ContentNotFound("User does not exist")
+					}
+				}
 				await this.mail.activeUser(
 					user.account.username,
 					user.email,
-					await this.token.generateToken(email)
+					await this.token.generateToken(user.email)
 				);
 				return 'Hãy kiểm tra email';
 			} else {
 				const data = await this.token.verifyToken(token);
-				console.log(data);
-				if (data != null && data?.email == email) {
-					const user = await this.userRepository.findOneUser(searchConditions);
+				if (data != null && data?.email == identifier) {
+					const user = await this.userRepository.findOneUserByEmail(identifier);
 					user.update({ active: true });
 					await this.userRepository.save(user);
 					return 'Thành công';
