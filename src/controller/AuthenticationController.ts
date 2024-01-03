@@ -151,8 +151,8 @@ export class AuthenticationController {
 
 	activeUser = async (req: Request, res: Response) => {
 		try {
-			const { email, token } = req.body;
-			let data = await this.authenticationService.activeUser(email, token);
+			const { email,username, token } = req.body;
+			let data = await this.authenticationService.activeUser(email,username,token);
 
 			return res.status(200).json({
 				status: 'Ok!',
