@@ -259,6 +259,7 @@ export class UserService implements IUserService {
 				})
 			);
 		} catch (error: any) {
+			console.log(error);
 			throw new Error(error.message);
 		}
 	};
@@ -312,7 +313,7 @@ export class UserService implements IUserService {
 
 	saveWatchLater = async (userId: number, movieId: number) => {
 		try {
-			let watchLater = await this.watchLaterRepository.findOneByCondition({
+			let watchLater = await this.watchLaterRepository.findByCondition({
 				user_id: userId,
 				movie_id: movieId,
 			});
