@@ -1020,7 +1020,7 @@ paths:
           schema:
             type: integer
             format: int64
-        - name: episodeNum
+        - name: episodeNo
           in: query
           required: true
           description: Number of episode of movie
