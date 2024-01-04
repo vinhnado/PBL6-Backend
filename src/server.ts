@@ -83,30 +83,26 @@ class App {
 const port: number = 8000;
 const app = new App().app;
 
-// app.listen(port, () => {
-// 	console.log(`✅ Server started successfully at Port: ${port}`);
-// });
+if (cluster.isPrimary) {
+  const CPUS: any = cpus();
+  CPUS.forEach(() => cluster.fork());
 
+  // Listen for dying workers
+  cluster.on('exit', (worker) => {
+    console.log(`Worker ${worker.id} died. Restarting...`);
+    cluster.fork();
+  });
+} else {
+  var options = {
+    key: process.env.SSL_PRIVATE_KEY,
+    cert: process.env.SSL_ORIGIN_CETIFICATE,
+  };
 
-var options = {
-	key: process.env.SSL_PRIVATE_KEY,
-	cert: process.env.SSL_ORIGIN_CETIFICATE
-};
+  // Tích hợp SSL/TLS với server
+  const httpsServer = https.createServer(options, app);
 
-// Tích hợp SSL/TLS với server
-const httpsServer = https.createServer(options, app);
-
-
-const httpsPort: number = 8000;
-httpsServer.listen(httpsPort, () => {
-	console.log(`✅ Server started successfully at Port: ${httpsPort}`);
-});
-
-// if (cluster.isPrimary === true) {
-// 	const CPUS: any = cpus();
-// 	CPUS.forEach(() => cluster.fork());
-// } else {
-// 	app.listen(port, () => {
-// 		console.log(`✅ Server started successfully at Port: ${port}`);
-// 	});
-// }
+  const httpsPort: number = 8000;
+  httpsServer.listen(httpsPort, () => {
+    console.log(`✅ Server started successfully at Port: ${httpsPort}`);
+  });
+}
