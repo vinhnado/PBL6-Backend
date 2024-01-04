@@ -12,6 +12,8 @@ import { IUserRepository } from '../repository/Interfaces/IUserRepository';
 import { ISubscriptionTypeRepository } from '../repository/Interfaces/ISubscriptionTypeRepository';
 import { ISubscriptionRepository } from '../repository/Interfaces/ISubscriptionRepository';
 import { ISubscriptionInfoRepository } from '../repository/Interfaces/ISubscriptionInfoRepository';
+import { DurationRepository } from '../repository/DurationRepository';
+import { IDurationRepository } from '../repository/Interfaces/IDurationRepository';
 
 @Service()
 export class SubscriptionService implements ISubscriptionService {
@@ -26,6 +28,9 @@ export class SubscriptionService implements ISubscriptionService {
 
 	@Inject(() => UserRepository)
 	private userRepository!: IUserRepository;
+
+	@Inject(()=> DurationRepository)
+	private durationRepository!: IDurationRepository
 
 	updateSubscription = async (
 		userId: number,
@@ -204,6 +209,14 @@ export class SubscriptionService implements ISubscriptionService {
 			return await this.subscriptionInfoRepository.delete(
 				await this.subscriptionInfoRepository.findById(subscriptionInfoId)
 			);
+		} catch (error: any) {
+			throw new Error(error.message);
+		}
+	};
+
+	getAllDuration = async () => {
+		try {
+			return await this.durationRepository.findMany();
 		} catch (error: any) {
 			throw new Error(error.message);
 		}
