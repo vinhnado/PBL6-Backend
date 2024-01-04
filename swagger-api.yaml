@@ -584,7 +584,6 @@ paths:
           description: Movie not found
       security:
         - bearerAuth: []
-  '/movies/movie-actor':
     post:
       tags:
         - movie
@@ -592,40 +591,26 @@ paths:
       responses:
         '200':
           description: Successful
+      parameters:
+        - name: movieId
+          in: path
+          description: ID of movie to return
+          required: true
+          schema:
+            type: integer
+            format: int64
       requestBody:
         content:
           application/json:
             schema:
               type: object
               properties:
-                movieId:
-                  type: integer
-                  format: int64
-                  default: 1
                 actorIds:
                   type: array
                   default: [1, 2, 3]
       security:
         - bearerAuth: []
-  '/movies/movie-director':
-    post:
-      tags:
-        - movie
-      summary: Add directors for movie
-      responses:
-        '200':
-          description: Successful
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                directorIds:
-                  type: array
-                  default: [1, 2, 3]
-      security:
-        - bearerAuth: []
+
   '/movies/{movieId}/movie-director':
     delete:
       tags:
@@ -656,6 +641,32 @@ paths:
           description: Invalid ID supplied
         '404':
           description: Movie not found
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - movie
+      summary: Add directors for movie
+      responses:
+        '200':
+          description: Successful
+      parameters:
+        - name: movieId
+          in: path
+          description: ID of movie to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                directorIds:
+                  type: array
+                  default: [1, 2, 3]
       security:
         - bearerAuth: []
   '/movies/{movieId}/movie-genre':
@@ -690,7 +701,6 @@ paths:
           description: Movie not found
       security:
         - bearerAuth: []
-  '/movies/movie-genre':
     post:
       tags:
         - movie
@@ -698,16 +708,20 @@ paths:
       responses:
         '200':
           description: Successful
+      parameters:
+        - name: movieId
+          in: path
+          description: ID of movie to return
+          required: true
+          schema:
+            type: integer
+            format: int64
       requestBody:
         content:
           application/json:
             schema:
               type: object
               properties:
-                movieId:
-                  type: integer
-                  format: int64
-                  default: 1
                 genreIds:
                   type: array
                   default: [1, 2, 3]

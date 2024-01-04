@@ -34,13 +34,13 @@ class MovieRoutes extends BaseRoutes {
 		this.router.get('/get/nations', this.controller.getAllNations);
 		this.router.get('/get/years', this.controller.getAllReleaseYears);
 		this.router.get('/get/presign-url',auth, authAdmin, validategetPresignUrlToUpload, validate, this.controller.getPresignUrlToUpload);
-		this.router.post('/movie-actor',auth, authAdmin, this.controller.addActorForMovie);
+		this.router.post('/:movieId/movie-actor',auth, authAdmin, this.controller.addActorForMovie);
 		this.router.delete('/:movieId/movie-actor',auth, authAdmin, this.controller.deleteActorOfMovie);
 
-		this.router.post('/movie-director',auth, authAdmin, this.controller.addDirectorsForMovie);
+		this.router.post('/:movieId/movie-director',auth, authAdmin, this.controller.addDirectorsForMovie);
 		this.router.delete('/:movieId/movie-director',auth, authAdmin, this.controller.deleteDirectorsOfMovie);
 
-		this.router.post('/movie-genre',auth, authAdmin, this.controller.addGenresForMovie);
+		this.router.post('/:movieId/movie-genre',auth, authAdmin, this.controller.addGenresForMovie);
 		this.router.delete('/:movieId/movie-genre',auth, authAdmin, this.controller.deleteGenresOfMovie);
 		this.router.post('/cloudfront/clear-cache',auth, authAdmin, validateClearCacheCloudFront, validate, this.controller.clearCacheCloudFrontMovie);
 	}
