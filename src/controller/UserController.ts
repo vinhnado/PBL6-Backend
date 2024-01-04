@@ -10,6 +10,7 @@ import { MovieService } from '../services/MovieService';
 import { IMovieService } from '../services/Interfaces/IMovieService';
 import { PaymentService } from '../services/PaymentService';
 import { IPaymentService } from '../services/Interfaces/IPaymentService';
+import { handleErrorController } from '../error/CustomErrors';
 
 export class UserController {
 	private userService: IUserService;
@@ -154,8 +155,7 @@ export class UserController {
 				message: 'Successfully',
 			});
 		} catch (error: any) {
-			console.log(error);
-			return res.status(500).json({ error: 'Lỗi :' + error.message });
+			handleErrorController(error, res);
 		}
 	};
 
