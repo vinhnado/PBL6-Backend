@@ -31,7 +31,9 @@ class App {
 		this.databaseSync();
 		this.plugins();
 		this.routes();
-		this.initSchedule();
+		if (cluster.isPrimary) {
+			this.initSchedule();
+		}
 	}
 
 	private databaseSync(): void {
@@ -80,9 +82,6 @@ class App {
 	}
 }
 
-const port: number = 8000;
-const app = new App().app;
-
 if (cluster.isPrimary) {
   const CPUS: any = cpus();
   CPUS.forEach(() => cluster.fork());
@@ -93,12 +92,13 @@ if (cluster.isPrimary) {
     cluster.fork();
   });
 } else {
+  const app = new App().app;
+
   var options = {
     key: process.env.SSL_PRIVATE_KEY,
     cert: process.env.SSL_ORIGIN_CETIFICATE,
   };
 
-  // Tích hợp SSL/TLS với server
   const httpsServer = https.createServer(options, app);
 
   const httpsPort: number = 8000;
