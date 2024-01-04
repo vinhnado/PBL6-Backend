@@ -6,6 +6,7 @@ import { User } from "../models/User";
 import Container from "typedi";
 import { UserService } from "../services/UserService";
 import { AuthenticationService } from "../services/AuthenticationService";
+import { rescheduleJob } from "node-schedule";
 const GoogleStrategy = passportGoogle.Strategy;
 
 require('dotenv').config();
@@ -38,6 +39,8 @@ passport.use(
                 req.payload = user
                 return cb(null,user)
               }
+            }else{
+              return cb(null,undefined)
             }
         } catch (error) {
             console.log(error)
