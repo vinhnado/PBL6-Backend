@@ -39,7 +39,7 @@ export const validateGetPresignURL = [
 
 export const validateGetQuality = [
     param('episodeId').notEmpty().isInt({min:1}).withMessage('episodeId is required and must be an integer'),
-    query('quality').notEmpty().isString().withMessage('quality is must be an string').isIn(['4k', '1080p']).withMessage('quality must be one of: 4k, 1080p'),
+    query('quality').notEmpty().isString().withMessage('quality is must be an string').isIn(['4k', '1080p', '720p']).withMessage('quality must be one of: 4k, 1080p, 720p'),
 
 ];
 
