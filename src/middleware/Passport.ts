@@ -23,21 +23,18 @@ passport.use(
     async function (req,accessToken, refreshToken, profile, cb)  {
         try { 
             const profileJson = profile._json
-            console.log(profileJson)
             if (profileJson.sub && profileJson.email) {
               const user = await userService.findOneUserByEmail(profileJson.email);
               if(user){
                 if(!user.active){
-                user.active = true;
-                await userService.updateUser(user)
+                  await userService.activeUser(user.userId)
                 }
                 req.payload = user
                 return cb(null,user)
               }else{
-                await authenticationService.register(profileJson.email,new Date(),"None",profileJson.email,generateRandomString(16))
+                await authenticationService.register(profileJson.email,new Date(),"Other",profileJson.email,generateRandomString(16))
                 let user = await userService.findOneUserByEmail(profileJson.email);
-                user.active = true;
-                await userService.updateUser(user)
+                await userService.activeUser(user.userId)
                 req.payload = user
                 return cb(null,user)
               }
