@@ -27,6 +27,7 @@ import { ParamsDictionary } from 'express-serve-static-core';
 import Mail from '../utils/Mail';
 import { MovieRepository } from '../repository/MovieRepository';
 import { IMovieRepository } from '../repository/Interfaces/IMovieRepository';
+import { ContentNotFound, handleErrorFunction } from '../error/CustomErrors';
 
 @Service()
 export class UserService implements IUserService {
@@ -160,9 +161,12 @@ export class UserService implements IUserService {
 	deleteUser = async (userId: number) => {
 		try {
 			const user = await this.userRepository.findById(userId);
+			if(!user){
+				throw new ContentNotFound("User not found");
+			}
 			return await this.userRepository.delete(user, true);
 		} catch (error: any) {
-			throw new Error(error.message);
+			handleErrorFunction(error);
 		}
 	};
 

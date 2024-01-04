@@ -10,6 +10,8 @@ import {
 	ForeignKey,
 	DeletedAt,
 	BelongsTo,
+	BeforeDestroy,
+	AfterDestroy,
 } from 'sequelize-typescript';
 import { Movie } from './Movie';
 import { MovieFavorite } from './MovieFavorite';
@@ -151,4 +153,27 @@ export class User extends Model {
 
 	@HasMany(() => Comment)
 	comments!: Comment[];
+
+
+	@BeforeDestroy
+	static async beforeDestroyHook(user: User) {
+		await MovieFavorite.destroy({ where: { userId: user.userId }, force: true });
+		await WatchHistory.destroy({ where: { userId: user.userId }, force: true });
+		await Reserve.destroy({ where: { userId: user.userId }, force: true });
+		await WatchLater.destroy({ where: { userId: user.userId }, force: true });
+		await Payment.destroy({ where: { userId: user.userId }, force: true });
+		await Rating.destroy({ where: { userId: user.userId }, force: true });
+		await SubComment.destroy({ where: { userId: user.userId }, force: true });
+		await Comment.destroy({ where: { userId: user.userId }, force: true });
+	}
+	
+	@AfterDestroy
+		static async afterDestroyHook(user: User) {
+		if (user.accountId) {
+			await Account.destroy({ where: { accountId: user.accountId }, force: true });
+		}
+		if (user.subscriptionId) {
+			await Subscription.destroy({ where: { subscriptionId: user.subscriptionId }, force: true });
+		}
+	}
 }

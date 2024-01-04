@@ -27,11 +27,17 @@ passport.use(
             if (profileJson.sub && profileJson.email) {
               const user = await userService.findOneUserByEmail(profileJson.email);
               if(user){
+                if(!user.active){
+                user.active = true;
+                await userService.updateUser(user)
+                }
                 req.payload = user
                 return cb(null,user)
               }else{
-                authenticationService.register(profileJson.email,new Date(),"None",profileJson.email,generateRandomString(16))
-                const user = await userService.findOneUserByEmail(profileJson.email);
+                await authenticationService.register(profileJson.email,new Date(),"None",profileJson.email,generateRandomString(16))
+                let user = await userService.findOneUserByEmail(profileJson.email);
+                user.active = true;
+                await userService.updateUser(user)
                 req.payload = user
                 return cb(null,user)
               }
