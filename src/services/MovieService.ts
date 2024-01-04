@@ -520,7 +520,7 @@ export class MovieService implements IMovieService {
 
 	async addDirectorsForMovie(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<MovieDirector[]> {
 		try {
-			const movieId = Number(req.body.movieId);
+			const movieId = Number(req.params.movieId);
 			const directorIds = req.body.directorIds;
 			const movieActor = await this.movieDirectorRepository.addDirectorsForMovie(movieId, directorIds);
 			this.clearCache();
