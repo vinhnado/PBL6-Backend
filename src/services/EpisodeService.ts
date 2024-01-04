@@ -204,7 +204,7 @@ export class EpisodeService implements IEpisodeService {
 				episodeNo = lastEpisode[0].episodeNo+1
 			}
 			// const formattedPosterURL = `movies/${movieId}/episodes/${episodeNo}/poster.jpg`;
-			const formattedPosterURL = `movies/${movieId}/poster.jpg`;
+			const formattedPosterURL = `movies/${movieId}/background.jpg`;
 			const formattedMovieURL = `movies/${movieId}/episodes/${episodeNo}/movie.mp4`;
 			
 			const episodeData = {
