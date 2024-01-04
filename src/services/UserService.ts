@@ -170,6 +170,19 @@ export class UserService implements IUserService {
 		}
 	};
 
+	activeUser = async (userId: number) => {
+		try {
+			const user = await this.userRepository.findById(userId);
+			if(!user){
+				throw new ContentNotFound("User not found");
+			}
+			user.active= true;
+			return await this.userRepository.save(user);
+		} catch (error: any) {
+			handleErrorFunction(error);
+		}
+	};
+
 	findOneUserByEmail= async (email: string) => {
 		try {
 			return await this.userRepository.findOneUserByEmail(email);
