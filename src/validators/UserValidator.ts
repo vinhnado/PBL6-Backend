@@ -28,8 +28,8 @@ export const validateSearchUsers = [
 		.withMessage('Gender must be Male, Female, or Other'),
 	query('subscriptionType')
 		.optional()
-		.isInt({min:1})
-		.withMessage('Subscription type must be a integer'),
+		.isInt({min:0})
+		.withMessage('Subscription type must be a integer '),
 	query('sort').optional().isString().withMessage('Sort must be a string'),
 	query('sortType')
 		.optional()
