@@ -217,7 +217,7 @@ export class EpisodeController{
 
 	getPresignUrlToUploadQuality = async (req: Request, res: Response) => {
 		try {
-			const rs = await await this.episodeService.getPresignUrlToUploadQuality(req);
+			const rs = await this.episodeService.getPresignUrlToUploadQuality(req);
 			res.status(200).json({
 				message: "Successful",
                 data: rs

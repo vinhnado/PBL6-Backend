@@ -495,7 +495,7 @@ export class MovieService implements IMovieService {
 
 	async addActorForMovie(req: Request): Promise<MovieActor[]> {
 		try {
-			const movieId = Number(req.body.movieId);
+			const movieId = Number(req.params.movieId);
 			const actorIds = req.body.actorIds;
 			const movieActor = await this.movieActorRepository.addActorsForMovie(movieId, actorIds);
 			this.clearCache();
@@ -508,7 +508,7 @@ export class MovieService implements IMovieService {
 	async deleteActorOfMovie(req: Request): Promise<number>
 	{
 		try {
-			const movieId = Number(req.body.movieId);
+			const movieId = Number(req.params.movieId);
 			const actorIds = req.body.actorIds;
 			const n =  await this.movieActorRepository.deleteActorsOfMovie(movieId, actorIds);
 			this.clearCache();
@@ -542,7 +542,7 @@ export class MovieService implements IMovieService {
 	}
 	async addGenresForMovie(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<MovieGenre[]> {
 		try {
-			const movieId = Number(req.body.movieId);
+			const movieId = Number(req.params.movieId);
 			const genreIds = req.body.genreIds;
 			const movieGenre = await this.movieGenreRepository.addGenresForMovie(movieId, genreIds);
 			this.clearCache();
