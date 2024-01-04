@@ -292,20 +292,20 @@ export class EpisodeService implements IEpisodeService {
 			const episodeNo = req.query.episodeNo;
 			const option = req.query.option;
 			if(option==='onlyMovie'){
-				const movie = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episode/'+episodeNo+'/movie.mp4','video/mp4');
+				const movie = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episodes/'+episodeNo+'/movie.mp4','video/mp4');
 				const presignedUrls: { key: string, value: string }[] = [
 					{ key: 'movie', value: movie },
 				];
 				return presignedUrls;
 			}else if(option==='onlyPoster'){
-				const poster = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episode/'+episodeNo+'/poster.jpg','image/jpeg');
+				const poster = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episodes/'+episodeNo+'/poster.jpg','image/jpeg');
 				const presignedUrls: { key: string, value: string }[] = [
 					{ key: 'poster', value: poster },
 				];
 				return presignedUrls;
 			}else{
-				const poster = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episode/'+episodeNo+'/poster.jpg','image/jpeg');
-				const movie = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episode/'+episodeNo+'/movie.mp4','video/mp4');
+				const poster = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episodes/'+episodeNo+'/poster.jpg','image/jpeg');
+				const movie = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episodes/'+episodeNo+'/movie.mp4','video/mp4');
 				const presignedUrls: { key: string, value: string }[] = [
 					{ key: 'poster', value: poster },
 					{ key: 'movie', value: movie },
