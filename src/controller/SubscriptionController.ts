@@ -73,6 +73,7 @@ export class SubscriptionController {
 			res.status(500).json({ error: 'Can not' });
 		}
 	};
+
 	getAllSubscriptionType = async (req: Request, res: Response) => {
 		try {
 			const data = await this.subscriptionService.getAllSubscriptionType();
@@ -110,7 +111,7 @@ export class SubscriptionController {
 				data: data,
 			});
 		} catch (error) {
-			res.status(500).json({ error: 'Can not' });
+			res.status(500).json({ error: 'Can not' + error });
 		}
 	};
 
@@ -181,4 +182,19 @@ export class SubscriptionController {
 			res.status(500).json({ error: 'Can not' });
 		}
 	};
+
+	
+	getAllDuration = async (req: Request, res: Response) => {
+		try {
+			const data = await this.subscriptionService.getAllDuration();
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully',
+				data: data,
+			});
+		} catch (error) {
+			res.status(500).json({ error: 'Can not' });
+		}
+	};
+
 }

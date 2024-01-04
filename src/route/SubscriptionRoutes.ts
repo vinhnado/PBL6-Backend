@@ -41,6 +41,7 @@ class SubscriptionRoutes extends BaseRoutes {
 			'/delete-subscription-info',auth,authAdmin,validateDeleteSubscriptionInfo,validate,
 			this.controller.deleteSubscriptionInfo
 		);
+		this.router.get('/get-all-duration', this.controller.getAllDuration);
 	}
 }
 

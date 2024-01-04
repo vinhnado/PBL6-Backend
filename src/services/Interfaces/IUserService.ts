@@ -17,6 +17,8 @@ export interface IUserService {
 	) => Promise<{ users: User[]; count: number }>;
 	updateUser: (userData: Partial<User>) => Promise<void>;
 	deleteUser: (userId: number) => Promise<void>;
+	activeUser: (userId: number) => Promise<void>;
+	findOneUserByEmail: (email: string) => Promise<User | undefined>;
 	saveMovieFavorite: (userId: number, movieId: number) => Promise<void>;
 	deleteMovieFavorite: (userId: number, movieId: number) => Promise<void>;
 	findAllMovieFavorite: (userId: number) => Promise<MovieDTO>;
@@ -42,4 +44,5 @@ export interface IUserService {
 	deleteReserve(req: Request): Promise<void>;
 	clearCacheCloudFrontAvatarUser(req: Request) :Promise<void>;
 	removeAvatar: (userId: number) => Promise<void>;
+	findOneWatchingHistory: (userId: number, episodeId: number) => Promise<WatchHistory| null>;
 }

@@ -15,6 +15,7 @@ import { IMovieRepository } from '../repository/Interfaces/IMovieRepository';
 import { Quality } from '../models/Quality';
 import { QualityRepository } from '../repository/QualityRepository';
 import { IQualityRepository } from '../repository/Interfaces/IQualityRepository';
+import Redis from 'ioredis';
 
 @Service()
 export class EpisodeService implements IEpisodeService {
@@ -34,6 +35,25 @@ export class EpisodeService implements IEpisodeService {
 	@Inject(() => QualityRepository)
 	private qualityRepository!: IQualityRepository;
 
+	private redis: Redis; // Create a Redis client
+
+	constructor() {
+		this.redis = new Redis({
+			host: 'redis',
+			port: 6379,
+		}); // Initialize the Redis client
+	}
+
+	public clearCache(){
+		this.redis.flushall((err, reply) => {
+			if (err) {
+			  console.error(err);
+			} else {
+			  console.log('Cache cleared:', reply === 'OK');
+			}
+		});
+	}
+	
 	hideEmail(email:string) {
 		const atIndex = email.indexOf('@');
 		
@@ -95,10 +115,17 @@ export class EpisodeService implements IEpisodeService {
 			const userArr = new Map<number, string>();
 			userArr.set(0, await this.s3Service.getObjectUrl('default/avatar.jpg'));
 			for(let comment of comments){
-				if(comment.user.email){
+				if(!comment.user){
+					let indexToRemove = comments.indexOf(comment);
+					if (indexToRemove !== -1) {
+						comments.splice(indexToRemove, 1);
+					}
+					continue;
+				}
+				if(comment.user.getDataValue('email')){
 					comment.user.setDataValue('email',this.hideEmail(comment.user.getDataValue('email')));
 				}
-				if(!comment.user.avatarURL){
+				if(comment.user.getDataValue('avatar_url')){
 					const id = Number(comment.user.getDataValue('user_id'));
 					if (!userArr.has(id)) {
 						const imageUrl = await this.s3Service.getObjectUrl(comment.user.getDataValue('avatar_url'));
@@ -107,10 +134,17 @@ export class EpisodeService implements IEpisodeService {
 				}
 
 				for(let subComment of comment.subcomments){
-					if(subComment.user.email){
+					if(!subComment.user){
+						let indexToRemove = comment.subcomments.indexOf(subComment);
+						if (indexToRemove !== -1) {
+							comment.subcomments.splice(indexToRemove, 1);
+						}
+						continue;
+					}
+					if(subComment.user.getDataValue('email')){
 						subComment.user.setDataValue('email',this.hideEmail(subComment.user.getDataValue('email')));
 					}
-					if(!subComment.user.avatarURL){
+					if(subComment.user.getDataValue('avatar_url')){
 						const id = Number(subComment.user.getDataValue('user_id'));
 						if (!userArr.has(id)) {
 							const imageUrl = await this.s3Service.getObjectUrl(subComment.user.getDataValue('avatar_url'));
@@ -119,11 +153,19 @@ export class EpisodeService implements IEpisodeService {
 					}
 				}
 			}
-			
 			for(let comment of comments)
 			{
+				if(!comment.user){
+					let indexToRemove = comments.indexOf(comment);
+					if (indexToRemove !== -1) {
+						comments.splice(indexToRemove, 1);
+					}
+					continue;
+				}
 				if(comment.user.getDataValue('avatar_url')){
-					url = userArr.get(comment.user.getDataValue('user_id'))||'';
+					const id = Number(comment.user.getDataValue('user_id'));
+
+					url = userArr.get(id)||'';
 
 				}else{
 					url = userArr.get(0)||'';
@@ -132,7 +174,8 @@ export class EpisodeService implements IEpisodeService {
 
 				for(let subComment of comment.subcomments){
 					if(subComment.user.getDataValue('avatar_url')){
-						url = userArr.get(comment.user.getDataValue('user_id'))||'';
+						const id = Number(subComment.user.getDataValue('user_id'));
+						url = userArr.get(id)||'';
 
 					}else{
 						url = userArr.get(0)||'';
@@ -160,7 +203,8 @@ export class EpisodeService implements IEpisodeService {
 			if(lastEpisode.length !==0){
 				episodeNo = lastEpisode[0].episodeNo+1
 			}
-			const formattedPosterURL = `movies/${movieId}/episodes/${episodeNo}/poster.jpg`;
+			// const formattedPosterURL = `movies/${movieId}/episodes/${episodeNo}/poster.jpg`;
+			const formattedPosterURL = `movies/${movieId}/background.jpg`;
 			const formattedMovieURL = `movies/${movieId}/episodes/${episodeNo}/movie.mp4`;
 			
 			const episodeData = {
@@ -175,19 +219,34 @@ export class EpisodeService implements IEpisodeService {
 				movieURL: formattedMovieURL,
 			}
 			const newEpisode = await this.episodeRepository.createEpisode(episodeData);
-			
+			// create quality
+			const quality: Partial<Quality> = {};
+			quality.episodeId = newEpisode.getDataValue('episodeId');
+			quality.videoQuality = '1080p';
+			quality.videoUrl = 'movies/'+movieId+'/episodes/'+newEpisode.getDataValue('episodeNo')+'/movie_1080p.mp4';
+
+			const quality4k: Partial<Quality> = {};
+			quality4k.episodeId = newEpisode.getDataValue('episodeId');
+			quality4k.videoQuality = '4k';
+			quality4k.videoUrl = 'movies/'+movieId+'/episodes/'+newEpisode.getDataValue('episodeNo')+'/movie_4k.webm';
+			await this.qualityRepository.save(Quality.build(quality));
+			await this.qualityRepository.save(Quality.build(quality4k));
+			this.clearCache();
+
 			return newEpisode;
 		} catch (error) {
+			console.log(error);
+			
 			throw(error);
 		}
 	}
+	
 	async checkMovieIsSeries(movieId: number): Promise<boolean> {
 		try {
 
 			const movie = await this.movieRepository.findOneByCondition({
 				movieId: movieId
 			});
-			console.log(movie.isSeries);
 			
 			return movie.isSeries;
 		} catch (error) {
@@ -201,7 +260,9 @@ export class EpisodeService implements IEpisodeService {
 		try {
 			const episodeId = Number(req.params.episodeId);
 			const updatedData = req.body;
-			return await this.episodeRepository.updateEpisode(episodeId, updatedData);
+			const result = await this.episodeRepository.updateEpisode(episodeId, updatedData);
+			this.clearCache();
+			return result;
 		} catch (error) {
 			console.log(error);
 			throw(error);			
@@ -216,6 +277,7 @@ export class EpisodeService implements IEpisodeService {
 			if(episode){
 				await this.episodeRepository.delete(episode);
 				await this.episodeRepository.updateNumEpisodeInMovie(episode.movieId,-1);
+				this.clearCache();
 				return true;
 			}
 			return false;
@@ -231,20 +293,20 @@ export class EpisodeService implements IEpisodeService {
 			const episodeNo = req.query.episodeNo;
 			const option = req.query.option;
 			if(option==='onlyMovie'){
-				const movie = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episode/'+episodeNo+'/movie.mp4','video/mp4');
+				const movie = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episodes/'+episodeNo+'/movie.mp4','video/mp4');
 				const presignedUrls: { key: string, value: string }[] = [
 					{ key: 'movie', value: movie },
 				];
 				return presignedUrls;
 			}else if(option==='onlyPoster'){
-				const poster = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episode/'+episodeNo+'/poster.jpg','image/jpeg');
+				const poster = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episodes/'+episodeNo+'/poster.jpg','image/jpeg');
 				const presignedUrls: { key: string, value: string }[] = [
 					{ key: 'poster', value: poster },
 				];
 				return presignedUrls;
 			}else{
-				const poster = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episode/'+episodeNo+'/poster.jpg','image/jpeg');
-				const movie = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episode/'+episodeNo+'/movie.mp4','video/mp4');
+				const poster = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episodes/'+episodeNo+'/poster.jpg','image/jpeg');
+				const movie = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episodes/'+episodeNo+'/movie.mp4','video/mp4');
 				const presignedUrls: { key: string, value: string }[] = [
 					{ key: 'poster', value: poster },
 					{ key: 'movie', value: movie },
@@ -263,6 +325,23 @@ export class EpisodeService implements IEpisodeService {
 			const qualityFormat = req.query.quality?.toString();
 			if(!episodeId || !qualityFormat){
 				throw new Error('Invalid episode');
+			}
+			if(qualityFormat==='720p'){
+				let quality = new Quality();
+				let episode = await this.episodeRepository.getEpisode(Number(episodeId));
+				if (episode) {
+					
+					if (episode.movieURL) {
+						quality.videoUrl = await this.s3Service.getObjectUrl(
+							episode.movieURL
+						);
+					} else {
+						quality.videoUrl = await this.s3Service.getObjectUrl(
+							'default/movie_default.mp4'
+						);
+					}
+				}
+				return quality;
 			}
 
 			const quality = await this.qualityRepository.getQualityMovie(Number(episodeId), qualityFormat);
@@ -285,19 +364,19 @@ export class EpisodeService implements IEpisodeService {
 	{
 		try {
 			const movieId = req.body.movieId;
-			const episodeNum = req.body.episodeNum;
+			const episodeNo = req.body.episodeNo;
 			const quality = req.body.quality
 
 			if(quality==='720p'){
-				return await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/episodes/'+episodeNum+'/movie.mp4');
+				return await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/episodes/'+episodeNo+'/movie.mp4');
 			}
 
 			if(quality==='1080p'){
-				return await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/episodes/'+episodeNum+'/movie_1080p.mp4');
+				return await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/episodes/'+episodeNo+'/movie_1080p.mp4');
 			}
 
 			if(quality==='4k'){
-				return await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/episodes/'+episodeNum+'/movie_4k.webm');
+				return await this.s3Service.clearCacheCloudFront('movies/'+movieId+'/episodes/'+episodeNo+'/movie_4k.webm');
 			}
 
 			return;
@@ -305,4 +384,29 @@ export class EpisodeService implements IEpisodeService {
 			throw(error);
 		}
 	}
+
+	async getPresignUrlToUploadQuality(req: Request): Promise<string>
+	{
+		try {
+			const movieId = req.query.movieId;
+			const episodeNo = req.query.episodeNo;
+			const quality = req.query.quality
+
+			if(quality==='1080p'){
+				const movie = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episode/'+episodeNo+'/movie_1080p.mp4','video/mp4');
+				return movie;
+			}
+
+			if(quality==='4k'){
+				const movie = await this.s3Service.generatePresignedUrlUpdate('movies/'+movieId+'/episode/'+episodeNo+'/movie_4k.webm','video/mp4');
+				return movie;
+			}
+			return '';
+
+		} catch (error) {
+			throw(error);
+		}
+	}
+
+	
 }

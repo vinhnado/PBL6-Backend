@@ -20,6 +20,10 @@ import { ParamsDictionary } from 'express-serve-static-core';
 import { ParsedQs } from 'qs';
 import { MovieDirector } from '../models/MovieDirector';
 import { MovieGenre } from '../models/MovieGenre';
+import { ReserveRepository } from '../repository/ReserveRepository';
+import { QualityRepository } from '../repository/QualityRepository';
+import { IQualityRepository } from '../repository/Interfaces/IQualityRepository';
+import { Quality } from '../models/Quality';
 
 @Service()
 export class MovieService implements IMovieService {
@@ -281,6 +285,7 @@ export class MovieService implements IMovieService {
 			if(genreIds){
 				await this.movieGenreRepository.addGenresForMovie(newMovie.movieId, genreIds);
 			}
+
 			this.clearCache();
 			return newMovie;
 		} catch (error) {
@@ -490,7 +495,7 @@ export class MovieService implements IMovieService {
 
 	async addActorForMovie(req: Request): Promise<MovieActor[]> {
 		try {
-			const movieId = Number(req.body.movieId);
+			const movieId = Number(req.params.movieId);
 			const actorIds = req.body.actorIds;
 			const movieActor = await this.movieActorRepository.addActorsForMovie(movieId, actorIds);
 			this.clearCache();
@@ -503,7 +508,7 @@ export class MovieService implements IMovieService {
 	async deleteActorOfMovie(req: Request): Promise<number>
 	{
 		try {
-			const movieId = Number(req.body.movieId);
+			const movieId = Number(req.params.movieId);
 			const actorIds = req.body.actorIds;
 			const n =  await this.movieActorRepository.deleteActorsOfMovie(movieId, actorIds);
 			this.clearCache();
@@ -515,7 +520,7 @@ export class MovieService implements IMovieService {
 
 	async addDirectorsForMovie(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<MovieDirector[]> {
 		try {
-			const movieId = Number(req.body.movieId);
+			const movieId = Number(req.params.movieId);
 			const directorIds = req.body.directorIds;
 			const movieActor = await this.movieDirectorRepository.addDirectorsForMovie(movieId, directorIds);
 			this.clearCache();
@@ -526,7 +531,7 @@ export class MovieService implements IMovieService {
 	}
 	async deleteDirectorsOfMovie(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<number> {
 		try {
-			const movieId = Number(req.body.movieId);
+			const movieId = Number(req.params.movieId);
 			const directorIds = req.body.directorIds;
 			const n = await this.movieDirectorRepository.deleteDirectorsOfMovie(movieId, directorIds);
 			this.clearCache();
@@ -537,7 +542,7 @@ export class MovieService implements IMovieService {
 	}
 	async addGenresForMovie(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<MovieGenre[]> {
 		try {
-			const movieId = Number(req.body.movieId);
+			const movieId = Number(req.params.movieId);
 			const genreIds = req.body.genreIds;
 			const movieGenre = await this.movieGenreRepository.addGenresForMovie(movieId, genreIds);
 			this.clearCache();
@@ -548,12 +553,13 @@ export class MovieService implements IMovieService {
 	}
 	async deleteGenresOfMovie(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<number> {
 		try {
-			const movieId = Number(req.body.movieId);
+			const movieId = Number(req.params.movieId);
 			const genreIds = req.body.genreIds;
 			const n = await this.movieGenreRepository.deleteGenresOfMovie(movieId, genreIds);
 			this.clearCache();
 			return n;
 		} catch (error) {
+			console.log(error);
 			throw(error);
 		}
 	}

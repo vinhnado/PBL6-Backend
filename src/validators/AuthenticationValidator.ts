@@ -25,7 +25,7 @@ export const validateChangePassword = [
 ];
 
 export const validateActiveUser = [
-  body('email').notEmpty().withMessage('Email is required').isEmail().withMessage('Invalid email format'),
+  body('identifier').notEmpty().withMessage('Identifier(email/username) is required'),
   body('token').optional().isString().withMessage('Token must be a string'),
 ];
 

@@ -1,13 +1,13 @@
 import {
-	EmailValidDuplicate,
-	UsernameValidDuplicate,
 	handleErrorController,
 } from './../error/CustomErrors';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import Container, { Inject, Service } from 'typedi';
 import { IAuthenticationService } from '../services/Interfaces/IAuthenticationService';
 import { AuthenticationService } from '../services/AuthenticationService';
-import { CloudHSM } from 'aws-sdk';
+import passport from 'passport';
+import Authentication from '../utils/Authentication';
+
 
 export class AuthenticationController {
 	private authenticationService: IAuthenticationService;
@@ -46,6 +46,29 @@ export class AuthenticationController {
 		}
 	};
 
+	handleGoogleCallback = async(req: Request, res: Response, next: NextFunction) =>{
+		console.log("Request URL:", req.url);
+		passport.authenticate('google', (err: any, profile: any) => {
+		if (err) {
+			return next(err);
+		}
+		next();
+		})(req, res, next);
+	}
+
+	handleCallbackResponse = async (req: Request, res: Response) =>{
+		const userProfile = req.payload;
+		if(userProfile){
+			const refreshToken = Authentication.generateRefreshToken(userProfile.account.username)
+			return res.status(200).json({
+				status: 'Ok!',
+				message: 'Successfully login!',
+				token: refreshToken,
+			});
+		}
+    	return res.status(401).json({message: 'Unauthorized'})
+	}
+
 	register = async (req: Request, res: Response) => {
 		try {
 			const { email, dateOfBirth, gender, username, password } = req.body;
@@ -57,10 +80,12 @@ export class AuthenticationController {
 				username,
 				password
 			);
-
+			let data = await this.authenticationService.activeUser(email,null);
+			
 			return res.status(200).json({
 				status: 'Ok!',
 				message: 'Successfully registerd users!',
+				message_active: data
 			});
 		} catch (error: any) {
 			handleErrorController(error, res);
@@ -80,9 +105,12 @@ export class AuthenticationController {
 				true
 			);
 
+			let data = await this.authenticationService.activeUser(email,null);
+			
 			return res.status(200).json({
-				status: '200',
-				message: 'Successfully registered admin!',
+				status: 'Ok!',
+				message: 'Successfully registerd admin!',
+				message_active: data
 			});
 		} catch (error: any) {
 			handleErrorController(error, res);
@@ -92,16 +120,11 @@ export class AuthenticationController {
 	forgotPassword = async (req: Request, res: Response) => {
 		try {
 			const { email, token, password } = req.body;
-			let data;
-			if (token == null) {
-				data = await this.authenticationService.forgotPassword(email);
-			} else {
-				data = await this.authenticationService.forgotPassword(
+			let data = await this.authenticationService.forgotPassword(
 					email,
 					token,
 					password
 				);
-			}
 
 			return res.status(200).json({
 				status: 'Ok!',
@@ -133,8 +156,8 @@ export class AuthenticationController {
 
 	activeUser = async (req: Request, res: Response) => {
 		try {
-			const { email, token } = req.body;
-			let data = await this.authenticationService.activeUser(email, token);
+			const { identifier, token } = req.body;
+			let data = await this.authenticationService.activeUser(identifier,token);
 
 			return res.status(200).json({
 				status: 'Ok!',

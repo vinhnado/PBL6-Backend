@@ -1,4 +1,4 @@
-import { ISubscriptionService } from './Interfaces/ISubscriptionService';
+	import { ISubscriptionService } from './Interfaces/ISubscriptionService';
 import { SubscriptionInfo } from './../models/SubscriptionInfo';
 import { Subscription } from './../models/Subscription';
 import { UserRepository } from '../repository/UserRepository';
@@ -12,6 +12,8 @@ import { IUserRepository } from '../repository/Interfaces/IUserRepository';
 import { ISubscriptionTypeRepository } from '../repository/Interfaces/ISubscriptionTypeRepository';
 import { ISubscriptionRepository } from '../repository/Interfaces/ISubscriptionRepository';
 import { ISubscriptionInfoRepository } from '../repository/Interfaces/ISubscriptionInfoRepository';
+import { DurationRepository } from '../repository/DurationRepository';
+import { IDurationRepository } from '../repository/Interfaces/IDurationRepository';
 
 @Service()
 export class SubscriptionService implements ISubscriptionService {
@@ -27,6 +29,9 @@ export class SubscriptionService implements ISubscriptionService {
 	@Inject(() => UserRepository)
 	private userRepository!: IUserRepository;
 
+	@Inject(()=> DurationRepository)
+	private durationRepository!: IDurationRepository
+
 	updateSubscription = async (
 		userId: number,
 		closeAt: Date | null = null,
@@ -40,27 +45,29 @@ export class SubscriptionService implements ISubscriptionService {
 			if (user) {
 				let subscription = user.subscription;
 				if (subscriptionInfoId !== null) {
-					const subcriptionInfo =
+					const subscriptionInfo =
 						await this.subscriptionInfoRepository.getSubscriptionInfoById(
 							subscriptionInfoId
 						);
-					if (!subcriptionInfo) {
+					if (!subscriptionInfo) {
 						throw new Error('subscriptionInfoId not found for the given ID');
 					}
 					if (subscription.closeAt > new Date()) {
 						subscription.closeAt = addMonths(
 							subscription.closeAt,
-							subcriptionInfo!.duration.time
+							subscriptionInfo!.duration.time
 						);
 					} else {
 						subscription.closeAt = addMonths(
 							new Date(),
-							subcriptionInfo!.duration.time
+							subscriptionInfo!.duration.time
 						);
+						subscription.startedAt =new Date()
 					}
 					subscription.subscriptionTypeId =
-						subcriptionInfo.subscriptionType.subscriptionTypeId;
+						subscriptionInfo.subscriptionType.subscriptionTypeId;
 				} else {
+					subscription.startedAt =new Date()
 					if (subscriptionTypeId !== null) {
 						subscription.subscriptionTypeId = subscriptionTypeId;
 					}
@@ -69,7 +76,6 @@ export class SubscriptionService implements ISubscriptionService {
 						subscription.closeAt = closeAt;
 					}
 				}
-
 				return await this.subscriptionRepository.save(subscription);
 			} else {
 				throw new Error('UserId not found for the given ID');
@@ -192,7 +198,7 @@ export class SubscriptionService implements ISubscriptionService {
 			const price =
 				subscriptionInfo!.subscriptionType.price *
 				(1 - subscriptionInfo!.discount);
-			return price;
+			return price*subscriptionInfo!.duration.time;
 		} catch (error: any) {
 			throw new Error(error.message);
 		}
@@ -203,6 +209,14 @@ export class SubscriptionService implements ISubscriptionService {
 			return await this.subscriptionInfoRepository.delete(
 				await this.subscriptionInfoRepository.findById(subscriptionInfoId)
 			);
+		} catch (error: any) {
+			throw new Error(error.message);
+		}
+	};
+
+	getAllDuration = async () => {
+		try {
+			return await this.durationRepository.findMany();
 		} catch (error: any) {
 			throw new Error(error.message);
 		}

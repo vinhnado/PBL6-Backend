@@ -1,14 +1,20 @@
+import passport from 'passport';
 import { AuthenticationController } from '../controller/AuthenticationController';
 import { auth, authRoot } from '../middleware/AuthMiddleware';
 import { validateActiveUser, validateChangePassword, validateForgotPassword, validateGetAccessToken, validateLogin, validateRegister, validateValidRegister } from '../validators/AuthenticationValidator';
 import { validate } from '../validators/Validator';
 import BaseRoutes from './Base/BaseRouter';
+import { Request, Response, NextFunction } from 'express';
+import Authentication from '../utils/Authentication';
 
 class AuthenticationRoutes extends BaseRoutes {
 	constructor() {
 		super(new AuthenticationController());
 	}
 	routes(): void {
+		this.router.post('/login',validateLogin,validate, this.controller.login);
+		this.router.get('/google',passport.authenticate('google', { scope: ['profile', 'email'], session: false }));
+		this.router.get('/google/callback',this.controller.handleGoogleCallback,this.controller.handleCallbackResponse),
 		this.router.post('/login',validateLogin,validate, this.controller.login);
 		this.router.post('/login-admin',validateLogin,validate, this.controller.loginAdmin);
 		this.router.post('/register',validateRegister,validate ,this.controller.register);

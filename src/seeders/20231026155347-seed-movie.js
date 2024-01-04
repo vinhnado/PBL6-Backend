@@ -383,9 +383,9 @@ module.exports = {
 			},
 			{
 				//23
-				title: 'Avatar 2',
+				title: 'Avatar 2: The Way of Water',
 				description:
-					'“Avatar 2” là tác phẩm điện ảnh thuộc top phim viễn tưởng 2022 hay nhất của đạo diễn James Cameron. Đây là phim khoa học viễn tưởng về tương lai đã làm mưa làm gió tại các phòng vé và có doanh thu cao nhất trong suốt thời gian dài. Phần 2 của bộ phim cho thấy sự khác biệt lớn so với phần 1 khi đạo diễn đã tập trung làm mới bằng những hình ảnh trẻ trung hơn với những đứa trẻ đại diện cho tương lai – một nguồn năng lượng tươi mới. Các fan còn chần chừ gì mà không trải nghiệm ngay tác phẩm phim viễn tưởng hay 2022 này nhé.',
+					'“Avatar 2 - The Way of Water” là tác phẩm điện ảnh thuộc top phim viễn tưởng 2022 hay nhất của đạo diễn James Cameron. Đây là phim khoa học viễn tưởng về tương lai đã làm mưa làm gió tại các phòng vé và có doanh thu cao nhất trong suốt thời gian dài. Phần 2 của bộ phim cho thấy sự khác biệt lớn so với phần 1 khi đạo diễn đã tập trung làm mới bằng những hình ảnh trẻ trung hơn với những đứa trẻ đại diện cho tương lai – một nguồn năng lượng tươi mới. Các fan còn chần chừ gì mà không trải nghiệm ngay tác phẩm phim viễn tưởng hay 2022 này nhé.',
 				release_date: new Date('2022-01-15'),
 				nation: 'Mỹ',
 				poster_url: 'movies/23/poster.jpg',
@@ -422,7 +422,7 @@ module.exports = {
 				title: 'Blue Beetle',
 				description:
 					"Jaime Reyes suddenly finds himself in possession of an ancient relic of alien biotechnology called the Scarab. When the Scarab chooses Jaime to be its symbiotic host, he's bestowed with an incredible suit of armor that's capable of extraordinary and unpredictable powers, forever changing his destiny as he becomes the superhero Blue Beetle.",
-				release_date: new Date(),
+				release_date: new Date('2024-01-15'),
 				nation: 'Mỹ',
 				poster_url: 'movies/25/poster.jpg',
 				trailer_url: 'movies/25/trailer.mp4',
@@ -440,7 +440,7 @@ module.exports = {
 				title: 'Sát Thủ Nhân Tạo Phần 2: Mẫu Vật Còn Lại',
 				description:
 					'Sát Thủ Nhân Tạo Phần 2: Mẫu Vật Còn Lại xoay quanh nhân vật Gu Ja Yoon (do Kim Da Mi đảm nhận) – một cô bé được cứu sống và nhận nuôi bởi đôi vợ chồng già sau khi chạy trốn khỏi một tổ chức đáng sợ. Tuy nhiên 10 năm sau, cuộc sống của Ja Yoon lại một lần nữa bị đảo lộn bởi sự truy đuổi của những kẻ lạ mặt năm xưa. Từ đó mở ra cuộc hành trình ly kỳ của Ja Yoon khi cô phải đối đầu với những mối đe dọa xung quanh. Ja Yoon là một cô bé “dị nhân”, sở hữu một năng lực phi thường khiến cho các kẻ thù của cô phải khiếp sợ.',
-				release_date: new Date(),
+				release_date: new Date('2024-02-20'),
 				nation: 'Hàn Quốc',
 				poster_url: 'movies/26/poster.jpg',
 				trailer_url: 'movies/26/trailer.mp4',

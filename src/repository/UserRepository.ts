@@ -56,7 +56,7 @@ export class UserRepository
 					include: [
 						{
 							model: SubscriptionType,
-							attributes: ['subscription_type_id', 'name'],
+							attributes: ['subscription_type_id', 'name', 'price'],
 						},
 					],
 				},
@@ -89,6 +89,28 @@ export class UserRepository
 			],
 		});
 		return user!;
+	}
+
+	async findOneUserByEmail(email: string): Promise<User > {
+	const user = await User.findOne({
+		where: { email: email },
+		include: [
+		{
+			model: Account,
+		},
+		{
+			model: Subscription,
+			include: [
+			{
+				model: SubscriptionType,
+				attributes: ['subscription_type_id', 'name'],
+			},
+			],
+		},
+		],
+	});
+
+	return user! ;
 	}
 
 	async createNewUser(
@@ -125,8 +147,6 @@ export class UserRepository
 		count: number;
 	}> {
 		try {
-			console.log(sortField);
-			console.log(sortBy);
 
 			const { rows: users, count } = await User.findAndCountAll({
 				where: whereConditions,

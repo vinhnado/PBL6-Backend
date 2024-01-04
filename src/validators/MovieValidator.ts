@@ -21,7 +21,7 @@ export const validateGetMovieById = [
 ];
 
 export const validateDeleteMovieById = [
-    query('id').notEmpty().withMessage('ID is required').isInt({min:1}).withMessage('ID must be an integer and min = 1'),
+    param('id').notEmpty().withMessage('ID is required').isInt({min:1}).withMessage('ID must be an integer and min = 1'),
 ];
 
 export const validateCreateMovie = [
@@ -40,7 +40,7 @@ export const validateUpdateMovie = [
     body('releaseDate').optional().isISO8601().withMessage('Release date must be a valid date'),
     body('nation').optional().isString().withMessage('Nation must be a string').isIn(['Trung Quốc', 'Việt Nam','Thái Lan','Hàn Quốc','Nhật Bản', 'Mỹ']).withMessage("Nation must be one of: 'Trung Quốc', 'Việt Nam','Thái Lan','Hàn Quốc','Nhật Bản', 'Mỹ'"),
     body('isSeries').optional().isBoolean().withMessage('isSeries is must be boolean'),
-    body('level').optional().isInt().withMessage('Level must be an integer').isIn([1,2,3]),
+    body('level').optional().isInt().withMessage('Level must be an integer').isIn([0,1]),
     body('averageRating').optional().isFloat({min : 0.0}).withMessage('averageRating must be an float'),
     body('episode').optional().isInt().withMessage('Episode must be an integer'),
     body('numFavorite').optional().isInt({min : 0}).withMessage('numFavorite must be an integer'),
@@ -54,4 +54,8 @@ export const validategetPresignUrlToUpload = [
 export const validateClearCacheCloudFront = [
     body('movieId').notEmpty().withMessage('movieId is required').isInt({min:1}).withMessage('movieId must be an integer and min = 1'),
     body('option').notEmpty().isIn(['poster', 'background','trailer','all']).withMessage("option is required and in 'poster', 'background','trailer','all'"),
+];
+
+export const validateGetRelatedMovies = [
+    query('movieId').notEmpty().withMessage('movieId is required').isInt({min:1}).withMessage('movieId must be an integer and min = 1'),
 ];

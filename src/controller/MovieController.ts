@@ -134,7 +134,7 @@ export class MovieController {
 	
 
 	deleteMovieById = async (req: Request, res: Response) => {
-		const { id } = req.query;
+		const { id } = req.params;
 		try {
 			await this.movieService.deleteMovieById(Number(id));
 			return res.status(204).json({ 
@@ -227,6 +227,23 @@ export class MovieController {
 			}
 			const movies = await this.recommenderService.getMoviesRecommend(userId,page,pageSize);
 			return res.json(movies);
+		} catch (error) {
+			console.log(error);
+			console.log("Err while get recommend movies");
+		}
+	}
+
+	getMoviesRelated = async (req: Request, res: Response) => {
+		try {
+			const page = Number(req.query.page) || 1; // Trang mặc định là 1
+			const pageSize = Number(req.query.pageSize) || 15; // Số lượng kết quả trên mỗi trang mặc định là 10
+			const movieId = Number(req.query.movieId);
+
+			const movies = await this.recommenderService.getRelatedMovies(movieId,page,pageSize);
+			return res.json({
+				message:"Successfully",
+				data: movies
+			});
 		} catch (error) {
 			console.log(error);
 			console.log("Err while get recommend movies");
@@ -388,8 +405,10 @@ export class MovieController {
 
 	test= async(req: Request, res: Response) => {
 		try {
-			const userId = Number(req.payload.userId);
-			const results =  await this.recommenderService.testData(userId);
+			// const userId = Number(req.payload.userId);
+			// const results =  await this.recommenderService.testData(userId);
+			const results =  await this.recommenderService.testData(1);
+
 			res.status(200).json({
 				message: "successful",
 				qrCode:results

@@ -71,7 +71,7 @@ export class PaymentController {
 				this.dateFormat(new Date(timeGMT7), 'yyyyMMddHHmmss') +
 				(Math.floor(Math.random() * 90000) + 10000).toString();
 			const subscriptionInfoId = req.body.subscriptionInfoId;
-
+			
 			const priceSub =
 				await this.subscriptionService.getPriceBySubscriptionInfoId(
 					subscriptionInfoId
@@ -83,16 +83,50 @@ export class PaymentController {
 					Number(paymentNotCheckout.getDataValue('paymentId'))
 				);
 			}
-
+			const currentSubscriptionType = await this.paymentService.getCurrentSubscriptionTypeOfUser(userId);
+			const currentSubscriptionTypeId = currentSubscriptionType.getDataValue('subscription_type_id');
 			const subInfo = await this.subscriptionService.getSubscriptionInfoById(
 				subscriptionInfoId
 			);
+			const newSubscriptionTypeId = subInfo?.subscriptionType.getDataValue('subscriptionTypeId');
 			const nameSubscription = subInfo?.subscriptionType.getDataValue('name');
+
+			let priceReduction = 0;
+			if(newSubscriptionTypeId > currentSubscriptionTypeId){ // nếu gói mới > gói hiện tại thì giảm giá khi muốn nâng cấp gói
+				let priceReduction = await this.paymentService.getRemainingPriceOfUser(userId);
+				if(!priceReduction || priceReduction <=0){
+					priceReduction = 0;
+				}
+				console.log(priceSub);
+				console.log(priceReduction);
+				let amount = priceSub - priceReduction;
+				if(amount < 0){
+					await this.subscriptionService.updateSubscription(
+						userId,
+						null,
+						null,
+						subscriptionInfoId
+					);
+					return res.status(200).json({
+						message: 'Update subscription successfully!',
+						success: true
+					});
+					
+				}
+			}
+			
+			if(newSubscriptionTypeId < currentSubscriptionTypeId){
+				return res.status(400).json({
+					message: 'New subscription must >= current subscription!',
+					success: true
+				});
+			}
 
 			const timeSubscription = subInfo?.duration.getDataValue('time');
 
+
 			const paymentUrl = await this.vnPayService.buildPaymentUrl({
-				vnp_Amount: priceSub,
+				vnp_Amount: priceSub - priceReduction,
 				vnp_IpAddr: ipAdd,
 				vnp_TxnRef: id,
 				vnp_OrderInfo:
@@ -124,7 +158,7 @@ export class PaymentController {
 			};
 
 			await this.paymentService.addOrEditPayment(partialObject);
-			res.status(200).json({
+			return res.status(200).json({
 				message: 'Successfully',
 				success: true,
 				data: {
@@ -133,7 +167,7 @@ export class PaymentController {
 			});
 		} catch (error) {
 			console.log(error);
-			res.status(500).json({ message: 'Internal Server Error', error: error });
+			return res.status(500).json({ message: 'Internal Server Error', error: error });
 		}
 	};
 
@@ -305,6 +339,16 @@ export class PaymentController {
 				totalCount: totalCount,
 				data: payments,
 			});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	test = async (req: Request, res: Response) => {
+		try {
+			const userId =3;
+			const price = await this.paymentService.getRemainingPriceOfUser(userId);
+			res.json(price);
 		} catch (error) {
 			console.log(error);
 		}

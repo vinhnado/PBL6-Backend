@@ -11,12 +11,12 @@ class PaymentRoutes extends BaseRoutes {
 		this.router.post('/paypal', auth,validateCreatePaypalOrder,validate, this.controller.createPaypalOrder);
 		this.router.post(
 			'/paypal/capture',
-			auth,validateCancelPaypalOrder,validate,
+			auth,validateCapturePaypalOrder,validate,
 			this.controller.capturePaypalOrder
 		);
 		this.router.delete(
 			'/paypal/cancel',
-			auth,validateCapturePaypalOrder,validate,
+			auth,validateCancelPaypalOrder,validate,
 			this.controller.cancelPaypalOrder
 		);
 		this.router.post('/vn-pay', auth, this.controller.getVNPayPaymentURL);
@@ -35,6 +35,8 @@ class PaymentRoutes extends BaseRoutes {
 			validate,
 			this.controller.getPayments
 		);
+		this.router.get('/momo/test', this.controller.test);
+
 	}
 }
 

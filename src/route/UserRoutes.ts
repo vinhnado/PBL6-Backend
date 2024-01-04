@@ -18,7 +18,7 @@ class UserRoutes extends BaseRoutes {
 			this.controller.getUser
 		);
 		this.router.get('/get-self-information', auth, this.controller.getSelfInfo);
-		this.router.get(
+		this.router.put(
 			'/update-self-information',
 			auth,
 			validateUpdateSelfInfo,validate,
@@ -80,8 +80,9 @@ class UserRoutes extends BaseRoutes {
 			auth,
 			this.controller.getWatchHistory
 		);
+
+		this.router.get('/reserves', auth, this.controller.getReserveMovieOfUser);
 		this.router.get('/reserves/mail', this.controller.sendMailForReserveMovie);
-		this.router.get('/reserves', auth, this.controller.getMoviesReserveOfUser);
 		this.router.post('/reserves/', auth, this.controller.addReserve);
 		this.router.delete(
 			'/reserves/:movieId',

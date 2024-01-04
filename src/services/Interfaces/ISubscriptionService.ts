@@ -2,6 +2,7 @@ import { SubscriptionType } from 'aws-sdk/clients/budgets';
 import { SubscriptionInfo } from '../../models/SubscriptionInfo';
 
 export interface ISubscriptionService {
+	getAllDuration(): unknown;
 	updateSubscription: (
 		userId: number,
 		closeAt?: Date | null,

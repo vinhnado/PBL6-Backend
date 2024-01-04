@@ -27,6 +27,7 @@ import { ParamsDictionary } from 'express-serve-static-core';
 import Mail from '../utils/Mail';
 import { MovieRepository } from '../repository/MovieRepository';
 import { IMovieRepository } from '../repository/Interfaces/IMovieRepository';
+import { ContentNotFound, handleErrorFunction } from '../error/CustomErrors';
 
 @Service()
 export class UserService implements IUserService {
@@ -84,7 +85,6 @@ export class UserService implements IUserService {
 	}> => {
 		try {
 			const { search, gender, subscriptionType, sort, sortType } = options;
-			console.log(sort, sortType);
 			const whereConditions: any = {};
 			const whereSubTypeCons: any = {};
 
@@ -161,7 +161,31 @@ export class UserService implements IUserService {
 	deleteUser = async (userId: number) => {
 		try {
 			const user = await this.userRepository.findById(userId);
-			return await this.userRepository.delete(user);
+			if(!user){
+				throw new ContentNotFound("User not found");
+			}
+			return await this.userRepository.delete(user, true);
+		} catch (error: any) {
+			handleErrorFunction(error);
+		}
+	};
+
+	activeUser = async (userId: number) => {
+		try {
+			const user = await this.userRepository.findById(userId);
+			if(!user){
+				throw new ContentNotFound("User not found");
+			}
+			user.active= true;
+			return await this.userRepository.save(user);
+		} catch (error: any) {
+			handleErrorFunction(error);
+		}
+	};
+
+	findOneUserByEmail= async (email: string) => {
+		try {
+			return await this.userRepository.findOneUserByEmail(email);
 		} catch (error: any) {
 			throw new Error(error.message);
 		}
@@ -235,11 +259,11 @@ export class UserService implements IUserService {
 				user_id: userId,
 				episode_id: episodeId,
 			});
-			if (watchHistory != null && watchHistory.deletedAt != null) {
+			if (watchHistory && watchHistory.deletedAt != null) {
 				await this.watchHistoryRepository.restore(watchHistory);
 				watchHistory.duration = duration;
 				return await this.watchHistoryRepository.save(watchHistory);
-			} else if (watchHistory != null && watchHistory.deletedAt == null) {
+			} else if (watchHistory && watchHistory.deletedAt == null) {
 				watchHistory.duration = duration;
 				return await this.watchHistoryRepository.save(watchHistory);
 			}
@@ -251,6 +275,7 @@ export class UserService implements IUserService {
 				})
 			);
 		} catch (error: any) {
+			console.log(error);
 			throw new Error(error.message);
 		}
 	};
@@ -434,6 +459,7 @@ export class UserService implements IUserService {
 				for (const reserve of reverseList) {
 					const user = await this.findOneUser({userId:reserve.userId})
 					await this.mail.reserveMovie(user.username,user.email,movie)
+					await this.reserveRepository.delete(reserve,true)
 				}
 			}
 		} catch (error) {	
@@ -462,6 +488,16 @@ export class UserService implements IUserService {
 			// };
 			// await this.updateUser(data);
 			await  this.s3Service.deleteObject(avatarURL);
+		} catch (error) {
+			throw(error);
+		}
+	}
+
+	async findOneWatchingHistory(userId: number, episodeId: number)
+	{
+		try {
+			const data = await this.watchHistoryRepository.findOneByEpisode(userId,episodeId);
+			return data;
 		} catch (error) {
 			throw(error);
 		}

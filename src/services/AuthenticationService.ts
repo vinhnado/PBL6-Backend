@@ -10,14 +10,13 @@ import { Subscription } from '../models/Subscription';
 import Mail from '../utils/Mail';
 import { Token } from '../utils/Token';
 import {
+	ContentNotFound,
 	CustomError,
 	EmailValidDuplicate,
 	InvalidUserNameOrPassword,
 	NotActiveAccountError,
 	NotEnoughAuthority,
-	NotFound,
 	OldPasswordError,
-	PasswordNotMatch,
 	ServerError,
 	UsernameValidDuplicate,
 	handleErrorFunction,
@@ -38,12 +37,15 @@ export class AuthenticationService implements IAuthenticationService {
 	@Inject(() => Token)
 	private token!: Token;
 
-	login = async (username: string, password: string): Promise<any> => {
+	login = async (loginIdentifier: string, password: string): Promise<any> => {
 		try {
-			const user = await this.userRepository.findOneUserByUsername(username);
+			let user = await this.userRepository.findOneUserByUsername(loginIdentifier);
 
 			if (!user) {
-				throw new InvalidUserNameOrPassword('Invalid username or password');
+				user = await this.userRepository.findOneUserByEmail(loginIdentifier);
+				if(!user){
+					throw new InvalidUserNameOrPassword('Invalid username/email or password');
+				}
 			}
 			// check password
 			let compare = await Authentication.passwordCompare(
@@ -68,7 +70,7 @@ export class AuthenticationService implements IAuthenticationService {
 					),
 				};
 			} else {
-				throw new InvalidUserNameOrPassword('Invalid username or password');
+				throw new InvalidUserNameOrPassword('Invalid username/email or password');
 			}
 		} catch (error: any) {
 			handleErrorFunction(error);
@@ -235,29 +237,31 @@ export class AuthenticationService implements IAuthenticationService {
 		}
 	};
 
-	activeUser = async (email: string, token: string | null = null) => {
+	activeUser = async (identifier: string, token: string | null = null) => {
 		try {
-			const searchConditions = {
-				email,
-			};
 			if (token == null) {
-				const user = await this.userRepository.findOneUser(searchConditions);
+				let user = await this.userRepository.findOneUserByEmail(identifier);
+				if(!user){
+					user = await this.userRepository.findOneUserByUsername(identifier);
+					if(!user){
+						throw new ContentNotFound("User does not exist")
+					}
+				}
 				await this.mail.activeUser(
 					user.account.username,
 					user.email,
-					await this.token.generateToken(email)
+					await this.token.generateToken(user.email)
 				);
 				return 'Hãy kiểm tra email';
 			} else {
 				const data = await this.token.verifyToken(token);
-				console.log(data);
-				if (data != null && data?.email == email) {
-					const user = await this.userRepository.findOneUser(searchConditions);
+				if (data != null && data?.email == identifier) {
+					const user = await this.userRepository.findOneUserByEmail(identifier);
 					user.update({ active: true });
 					await this.userRepository.save(user);
 					return 'Thành công';
 				} else {
-					return 'Token hết hiệu lực hoặc không tồn tại';
+					return 'Token hoặc email không tồn tại';
 				}
 			}
 		} catch (error: any) {
