@@ -106,7 +106,7 @@ export class ReserveRepository extends BaseRepository<Reserve> implements IReser
     
             // Lấy ngày của ngày mai
             const ngayHienTai = new Date();
-            ngayHienTai.setDate(ngayHienTai.getDate());
+            ngayHienTai.setDate(ngayHienTai.getDate()+1);
             // ngayHienTai.setDate(ngayHienTai.getDate() + 1);
             // Lọc theo ngày
             const movies = await Movie.findAll({
