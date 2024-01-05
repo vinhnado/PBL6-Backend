@@ -16,6 +16,8 @@ import GenreRouter from './route/GenreRoutes';
 import CommentRouter from './route/CommentRoutes';
 import RatingRouter from './route/RatingRoutes';
 import StatisticalRouter from './route/StatisticalRoutes';
+import swaggerUi from 'swagger-ui-express';
+import yaml from 'yaml';
 import * as fs from 'fs';
 import * as https from 'https';
 import ChatRoutes from './route/ChatRoutes';
@@ -63,6 +65,10 @@ class App {
 		this.app.use('/api/ratings', RatingRouter);
 		this.app.use('/api/statisticals', StatisticalRouter);
 		this.app.use('/api/chat', ChatRoutes);
+
+		const yamlFile = fs.readFileSync('swagger-api.yaml', 'utf8');
+		const options = yaml.parse(yamlFile);
+		this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(options));
 	}
 
 	private plugins(): void {
