@@ -18,7 +18,7 @@ export const setupSchedule = () => {
 
 export const sendReverseMailJob = {
     schedule: () => {
-        schedule.scheduleJob({hour: 8, minute: 0, dayOfWeek: new schedule.Range(0, 6), tz: 'UTC+7'}, async () => {
+        schedule.scheduleJob({hour: 18, minute: 0, dayOfWeek: new schedule.Range(0, 6), tz: 'UTC+7'}, async () => {
             try {
                 console.log("Gửi mail hằng ngày");
                 const userService = Container.get(UserService);
