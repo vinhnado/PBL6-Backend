@@ -5,9 +5,9 @@ info:
   version: '1.0.0'
   title: PBL6-Movie Website API
   contact:
-    email: phucchp@gmail.com
+    email: example@email.com
 servers:
-  - url: 'http://localhost:8000/api'
+  - url: 'https://movies-app.me/api'
 tags:
   - name: authentication
     description: API for Authentication
