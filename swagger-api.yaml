@@ -60,6 +60,31 @@ paths:
         '500':
           description: Internal server error
 
+  /auth/google:
+    get:
+      tags:
+        - authentication
+      summary: Google Login
+      description: Initiate Google authentication
+      parameters: []
+      responses:
+        '302':
+          description: Redirect to Google authentication page
+
+  /auth/google/callback:
+    get:
+      tags:
+        - authentication
+      summary: Google Callback
+      description: Handle Google authentication callback
+
+      responses:
+        '200':
+          description: Successful authentication callback
+        '401':
+          description: Unauthorized
+
+
   /auth/login-admin:
     post:
       summary: Admin login
@@ -189,6 +214,33 @@ paths:
                   type: string
                   description: New password (required if token is provided).
                   example: new_password
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+
+  /auth/active-user:
+    post:
+      summary: Active user
+      tags:
+        - authentication
+      requestBody:
+        description: Active user
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identifier:
+                  type: string
+                  description: User's email address or username.
+                  example: user@example.com
+                token:
+                  type: string
+                  description: token (optional, use for active).
+                  example: active_token
       responses:
         '200':
           description: Successful response
@@ -2937,6 +2989,69 @@ paths:
               example:
                 status: Ok!
                 message: Successfully
+
+  /payments/paypal:
+    post:
+      tags:
+        - payment
+      summary: Create Paypal Order
+      description: Create a new Paypal order
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subscriptionInfoId:
+                  type: string
+      responses:
+        '200':
+          description: Successful operation
+
+  /payments/paypal/cancel:
+    delete:
+      tags:
+        - payment
+      summary: Cancel Paypal Order
+      description: Cancel an existing Paypal order
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: token
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+
+  /payments/paypal/capture:
+    post:
+      tags:
+        - payment
+      summary: Capture Paypal Order
+      description: Capture funds for an existing Paypal order
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+      responses:
+        '200':
+          description: Successful operation
+
+
+
   '/statisticals/revenues':
     get:
       tags:
